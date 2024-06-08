@@ -1,6 +1,7 @@
-const app = require('../app');
+import { Server } from 'http';
+import app from '../src/app';
 const testPort = 3001;
-let server;
+let server: Server<any>;
 
 beforeAll(done => {
     server = app.listen(testPort, () => {
