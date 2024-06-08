@@ -17,7 +17,6 @@ const AppHead: React.FC<Props> = ({ title, description, url, socialImage }) => (
     <meta key="charset" charSet="utf8" />
     <title>{title}</title>
     <meta name="theme-color" content="#000000" />
-    <link rel="manifest" href="/manifest.json" />
     <meta key="description" name="description" content={description} />
     <meta key="viewport" name="viewport" content="width=device-width, initial-scale=1" />
     <link key="icon" rel="icon" sizes="192x192" href="/touch-icon.png" />
