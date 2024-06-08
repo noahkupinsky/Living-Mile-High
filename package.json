@@ -1,0 +1,13 @@
+{
+  "name": "living-mile-high",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/noahkupinsky/Living-Mile-High.git",
+  "author": "Noah Kupinsky <noah@kupinsky.com>",
+  "private": true,
+  "scripts": {
+    "test:backend": "cd backend && yarn test",
+    "test": "yarn test:backend"
+  },
+  "license": "MIT"
+}
