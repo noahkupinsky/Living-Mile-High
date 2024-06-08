@@ -22,9 +22,14 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Install dependencies
+      - name: Install backend dependencies
         run: |
           cd backend
+          yarn install
+
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
           yarn install
 
       - name: Run tests
