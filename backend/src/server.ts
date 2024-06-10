@@ -1,11 +1,9 @@
 import dotenv from 'dotenv';
 import createApp from './app';
 import MongoDatabase from './database';
+import { MONGODB_ATLAS_URI, PORT } from './config';
 
 dotenv.config();
-
-const PORT = process.env.PORT || 5000;
-const MONGODB_ATLAS_URI = process.env.MONGODB_ATLAS_URI!;
 
 const database = new MongoDatabase(MONGODB_ATLAS_URI);
 

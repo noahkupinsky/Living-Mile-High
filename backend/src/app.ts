@@ -1,10 +1,9 @@
 import express from 'express';
-import dotenv from 'dotenv';
 import createRoutes from './routes';
-import UserService from './services/UserService';
+import AdminService from './services/AdminService';
 import { IDatabase } from './database';
-
-dotenv.config();
+import { AuthService } from './services/AuthService';
+import './config';
 
 const createApp = async (database: IDatabase) => {
     const app = express();
@@ -14,8 +13,9 @@ const createApp = async (database: IDatabase) => {
         await database.connect();
         console.log('Database connected');
 
-        const userService = new UserService();
-        const router = createRoutes(userService);
+        const adminService = new AdminService();
+        const authService = new AuthService(adminService);
+        const router = createRoutes(adminService, authService);
         app.use(router);
 
         return app;

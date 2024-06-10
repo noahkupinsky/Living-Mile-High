@@ -1,12 +1,12 @@
 import { Router } from 'express';
-import UserService from '../services/UserService';
+import { IAdminService } from '../services/AdminService';
 
-const createDevRoutes = (userService: UserService) => {
+const createDevRoutes = (adminService: IAdminService) => {
     const router = Router();
 
     router.post('/admin-check', async (req, res) => {
         const { email } = req.body;
-        const isAdmin = await userService.isAdmin(email);
+        const isAdmin = await adminService.isAdmin(email);
         res.json({ isAdmin });
     });
 
