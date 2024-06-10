@@ -10,11 +10,5 @@
     "test:frontend": "cd frontend && yarn test",
     "test": "yarn test:backend && yarn test:frontend"
   },
-  "license": "MIT",
-  "dependencies": {
-    "@testing-library/jest-dom": "^6.4.5",
-    "@testing-library/react": "^16.0.0",
-    "jest": "^29.7.0",
-    "jest-environment-jsdom": "^29.7.0"
-  }
+  "license": "MIT"
 }
