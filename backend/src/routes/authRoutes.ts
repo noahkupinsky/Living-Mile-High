@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import jwt from 'jsonwebtoken';
 import { IAuthService } from '../services/AuthService';
-import { JWT_SECRET_KEY } from '../config';
+import { JWT_SECRET_KEY } from '../env';
 
 const createAuthRoutes = (authService: IAuthService) => {
     const router = Router();
