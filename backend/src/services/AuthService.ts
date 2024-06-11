@@ -1,7 +1,7 @@
 import { OAuth2Client } from 'google-auth-library';
 import bcrypt from 'bcrypt';
 import { IAdminService } from './AdminService';
-import { GOOGLE_CLIENT_ID, MASTER_PASSWORD_HASH } from '../config';
+import { GOOGLE_CLIENT_ID, MASTER_PASSWORD_HASH } from '../env';
 
 export interface IAuthService {
     verifyMasterPassword(password: string): Promise<boolean>;

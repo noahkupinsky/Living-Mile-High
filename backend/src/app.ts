@@ -3,7 +3,7 @@ import createRoutes from './routes';
 import AdminService from './services/AdminService';
 import { IDatabase } from './database';
 import { AuthService } from './services/AuthService';
-import './config';
+import './env';
 
 const createApp = async (database: IDatabase) => {
     const app = express();

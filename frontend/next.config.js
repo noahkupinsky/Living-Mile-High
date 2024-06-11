@@ -1,16 +1,24 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const webpack = require('webpack')
 
-const dotenvLoad = require('dotenv-load')
+const dotenv = require('dotenv');
+const dotenvExpand = require('dotenv-expand');
+const path = require('path');
 
-const withPlugins = require('next-compose-plugins')
-const withImages = require('next-images')
-const withFonts = require('next-fonts')
+const withPlugins = require('next-compose-plugins');
+const withImages = require('next-images');
+const withFonts = require('next-fonts');
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
-})
+});
 
-dotenvLoad()
+const rootEnvPath = path.resolve(__dirname, '../.env');
+const serviceEnvPath = path.resolve(__dirname, './.env');
+
+const myEnv = dotenv.config({ path: rootEnvPath });
+dotenvExpand.expand(myEnv);
+
+dotenv.config({ path: serviceEnvPath });
 
 // https://securityheaders.com
 const ContentSecurityPolicy = `
@@ -64,6 +72,9 @@ const securityHeaders = [
 
 /** @type {import('next/dist/server/config-shared').NextConfig} */
 const nextConfig = {
+  env: {
+    PORT: process.env.PORT,
+  },
   images: {
     formats: ['image/avif', 'image/webp'],
   },
