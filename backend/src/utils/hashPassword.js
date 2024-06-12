@@ -1,7 +1,21 @@
 const bcrypt = require('bcrypt');
-const password = 'masterpassword';
+const saltRounds = 10;
 
-bcrypt.hash(password, 10, (err, hash) => {
-    if (err) throw err;
-    console.log(hash); // Save this hash in your environment variable
-});
+const hashPassword = async (password) => {
+    try {
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        console.log(`Hashed password: ${hashedPassword}`);
+    } catch (error) {
+        console.error('Error hashing password:', error);
+    }
+};
+
+// Get the password from the command line arguments
+const password = process.argv[2];
+
+if (!password) {
+    console.error('Please provide a password to hash.');
+    process.exit(1);
+}
+
+hashPassword(password);
