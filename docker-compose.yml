@@ -22,6 +22,10 @@ services:
     build: ./backend
     environment:
       - NODE_ENV=development
+      - MASTER_PASSWORD_HASH=${MASTER_PASSWORD_HASH}
+      - MONGODB_ATLAS_URI=${MONGODB_ATLAS_URI}
+      - JWT_SECRET=${JWT_SECRET}
+      - API_PORT=3001
     expose:
       - "3001"
 
