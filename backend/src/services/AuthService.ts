@@ -18,7 +18,7 @@ export class AuthService implements IAuthService {
     }
 
     async verifyMasterPassword(password: string): Promise<boolean> {
-        return bcrypt.compare(password, MASTER_PASSWORD_HASH);
+        return password === MASTER_PASSWORD_HASH;//bcrypt.compare(password, MASTER_PASSWORD_HASH);
     }
 
     async verifyGoogleToken(token: string): Promise<boolean> {

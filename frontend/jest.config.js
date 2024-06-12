@@ -13,10 +13,12 @@ const config = {
   },
   rootDir: '.',
   clearMocks: true,
-  setupFilesAfterEnv: ['<rootDir>/setupTest.ts'],
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   testPathIgnorePatterns: ['/node_modules/', '/.next/'],
-  transformIgnorePatterns: ['/node_modules/'],
-  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/' }),
+  transformIgnorePatterns: ['/node_modules/(?!axios)'],
+  moduleNameMapper: {
+    '^~/(.*)$': '<rootDir>/src/$1',
+  },//pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/' }),
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
 }

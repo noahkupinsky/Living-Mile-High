@@ -2,7 +2,7 @@ import { describe, expect, it } from '@jest/globals'
 import { render } from '@testing-library/react'
 import React from 'react'
 
-import AppBox from './AppBox'
+import AppBox from '../src/ui/AppBox'
 
 describe('<AppBox />', () => {
   const CONTENT = 'Hi I am the content'
