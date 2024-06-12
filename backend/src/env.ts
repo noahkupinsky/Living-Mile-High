@@ -1,14 +1,8 @@
 import dotenv from 'dotenv';
-import dotenvExpand from 'dotenv-expand';
 import path from 'path';
 
-const rootEnvPath = path.resolve(__dirname, '../../.env');
-const serviceEnvPath = path.resolve(__dirname, '../.env');
-
-const myEnv = dotenv.config({ path: rootEnvPath });
-dotenvExpand.expand(myEnv);
-
-dotenv.config({ path: serviceEnvPath });
+const ENV_PATH = path.resolve(__dirname, '../../.env');
+dotenv.config({ path: ENV_PATH });
 
 export const MASTER_PASSWORD_HASH = process.env.MASTER_PASSWORD_HASH!;
 export const MONGODB_ATLAS_URI = process.env.MONGODB_ATLAS_URI!;
