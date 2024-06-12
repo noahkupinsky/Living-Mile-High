@@ -6,9 +6,16 @@
   "author": "Noah Kupinsky <noah@kupinsky.com>",
   "private": true,
   "scripts": {
-    "test:backend": "cd backend && yarn test",
-    "test:frontend": "cd frontend && yarn test",
-    "test": "yarn test:backend && yarn test:frontend"
+    "test:backend": "yarn --cwd backend test",
+    "test:frontend": "yarn --cwd frontend test",
+    "test": "yarn test:backend && yarn test:frontend",
+    "dev:frontend": "yarn --cwd frontend dev",
+    "dev:backend": "yarn --cwd backend dev",
+    "dev": "concurrently \"yarn dev:frontend\" \"yarn dev:backend\"",
+    "start:docker": "./start_docker.sh"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
 }

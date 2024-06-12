@@ -2,7 +2,7 @@ import { describe, expect, it } from '@jest/globals'
 import { render } from '@testing-library/react'
 import React from 'react'
 
-import Text from './Text'
+import Text from '../src/ui/typography/Text'
 
 describe('<Text />', () => {
   it('should render as a paragraph', () => {

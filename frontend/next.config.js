@@ -72,9 +72,6 @@ const securityHeaders = [
 
 /** @type {import('next/dist/server/config-shared').NextConfig} */
 const nextConfig = {
-  env: {
-    PORT: process.env.PORT,
-  },
   images: {
     formats: ['image/avif', 'image/webp'],
   },
@@ -90,6 +87,17 @@ const nextConfig = {
     // Make sure entries are not getting disposed.
     maxInactiveAge: 1000 * 60 * 60,
   },
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: `${process.env.NEXT_PUBLIC_API_URL}/:path*`,
+      }
+    ]
+  },
+  // env: {
+  //   NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || process.env.API_URL,
+  // },
   async headers() {
     return [
       {
@@ -110,6 +118,7 @@ const nextConfig = {
     config.plugins.push(
       new webpack.DefinePlugin({
         __DEV__: JSON.stringify(process.env.NODE_ENV === 'development'),
+        //'process.env.NEXT_PUBLIC_API_URL': JSON.stringify(process.env.NEXT_PUBLIC_API_URL || process.env.API_URL),
       }),
     )
 

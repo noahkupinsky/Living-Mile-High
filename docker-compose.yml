@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=${NODE_ENV}
+    env_file:
+      - ./.env
+      - ./frontend/.env
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+  backend:
+    build: ./backend
+    ports:
+      - "4000:4000"
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - MASTER_PASSWORD_HASH=${MASTER_PASSWORD_HASH}
+    env_file:
+      - ./.env
+      - ./backend/.env
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
