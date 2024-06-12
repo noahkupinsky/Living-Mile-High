@@ -17,7 +17,7 @@ COPY . .
 RUN yarn build
 
 # Expose port
-EXPOSE ${API_PORT}
+EXPOSE 3001
 
 # Define the command to run the application
 CMD ["yarn", "start"]

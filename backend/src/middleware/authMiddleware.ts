@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { JWT_SECRET_KEY } from '../env';
+import { JWT_SECRET } from '../env';
 
 type AuthRequest = Request & { user: any };
 
@@ -10,7 +10,7 @@ export const authMiddleware = (req: AuthRequest, res: Response, next: NextFuncti
         return res.status(401).json({ message: 'No token provided' });
     }
 
-    jwt.verify(token, JWT_SECRET_KEY, (err, decoded) => {
+    jwt.verify(token, JWT_SECRET, (err, decoded) => {
         if (err) {
             return res.status(401).json({ message: 'Failed to authenticate token' });
         }
