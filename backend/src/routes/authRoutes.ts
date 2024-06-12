@@ -19,6 +19,10 @@ const createAuthRoutes = (authService: IAuthService) => {
         res.status(401).json({ success: false });
     });
 
+    router.get('/data', async (req, res) => {
+        res.json({ data: 'hello' });
+    });
+
     return router;
 };
 

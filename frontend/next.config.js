@@ -2,7 +2,6 @@
 const webpack = require('webpack')
 
 const dotenv = require('dotenv');
-const dotenvExpand = require('dotenv-expand');
 const path = require('path');
 
 const withPlugins = require('next-compose-plugins');
@@ -13,12 +12,10 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 });
 
 const rootEnvPath = path.resolve(__dirname, '../.env');
-const serviceEnvPath = path.resolve(__dirname, './.env');
 
-const myEnv = dotenv.config({ path: rootEnvPath });
-dotenvExpand.expand(myEnv);
+dotenv.config({ path: rootEnvPath });
 
-dotenv.config({ path: serviceEnvPath });
+const API_PORT = process.env.API_PORT || 3001;
 
 // https://securityheaders.com
 const ContentSecurityPolicy = `
@@ -72,6 +69,9 @@ const securityHeaders = [
 
 /** @type {import('next/dist/server/config-shared').NextConfig} */
 const nextConfig = {
+  env: {
+    // nothing yet
+  },
   images: {
     formats: ['image/avif', 'image/webp'],
   },
@@ -88,12 +88,17 @@ const nextConfig = {
     maxInactiveAge: 1000 * 60 * 60,
   },
   async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_URL}/:path*`,
-      }
-    ]
+    if (process.env.NODE_ENV === 'development') {
+      return [
+        {
+          source: '/api/:path*',
+          destination: `http://localhost:${API_PORT}/api/:path*`, // Proxy to Backend in Development
+        },
+      ];
+    }
+
+    // No rewrites in production
+    return [];
   },
   // env: {
   //   NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || process.env.API_URL,
@@ -118,7 +123,6 @@ const nextConfig = {
     config.plugins.push(
       new webpack.DefinePlugin({
         __DEV__: JSON.stringify(process.env.NODE_ENV === 'development'),
-        //'process.env.NEXT_PUBLIC_API_URL': JSON.stringify(process.env.NEXT_PUBLIC_API_URL || process.env.API_URL),
       }),
     )
 
