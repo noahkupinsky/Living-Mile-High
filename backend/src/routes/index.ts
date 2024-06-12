@@ -10,7 +10,10 @@ const createRoutes = (adminService: IAdminService, authService: IAuthService) =>
     router.use('/dev', createDevRoutes(adminService));
     router.use('/auth', createAuthRoutes(authService));
 
-    return router;
+    const apiRouter = Router();
+    apiRouter.use('/api', router);
+
+    return apiRouter;
 }
 
 export default createRoutes;
