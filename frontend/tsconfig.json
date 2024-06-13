@@ -23,9 +23,8 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "~/*": [
-        "src/*"
-      ]
+      "~/*": ["src/*"],
+      "@types/*": ["@types/*", "node_modules/@types/living-mile-high/*"]
     },
     "incremental": true
   },

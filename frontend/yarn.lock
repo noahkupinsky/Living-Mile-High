@@ -4571,6 +4571,11 @@ listr2@^3.12.2:
     through "^2.3.8"
     wrap-ansi "^7.0.0"
 
+living-mile-high-types@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/living-mile-high-types/-/living-mile-high-types-1.0.0.tgz#dd5b9c53dd9f7c4e9b97fe3464ef51b5ab0820bf"
+  integrity sha512-acE6QYpD6w112cyTyJe/HnRuUSt5dgVamlvJ7e8zCGjOOUtXmiDpNMw+oNRNHsyKiGNykIJ9tIvkYAQnzYsTPQ==
+
 loader-runner@^4.2.0:
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/loader-runner/-/loader-runner-4.3.0.tgz#c1b4a163b99f614830353b16755e7149ac2314e1"
