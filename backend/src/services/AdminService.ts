@@ -1,4 +1,4 @@
-import Admin from '../models/Admin';
+import AdminModel from '../models/AdminModel';
 
 export interface IAdminService {
     isAdmin(email: string): Promise<boolean>;
@@ -6,7 +6,7 @@ export interface IAdminService {
 
 class AdminService {
     async isAdmin(email: string): Promise<boolean> {
-        const admin = await Admin.findOne({ email });
+        const admin = await AdminModel.findOne({ email });
         return !!admin;
     }
 }

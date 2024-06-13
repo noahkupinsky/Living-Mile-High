@@ -15,7 +15,13 @@
     "types": ["node", "jest"],
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["src/*"],
+      "@shared/*": ["../shared/*", "./shared/*"],
+      "@types/*": ["../@types/*"]
+    },
   },
   "include": ["src/**/*", "tests/**/*"],
   "exclude": ["node_modules"]

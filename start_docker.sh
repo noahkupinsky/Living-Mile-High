@@ -14,4 +14,4 @@ else
 fi
 
 # Run docker-compose
-docker-compose up --build
+docker-compose -f $1 up --build

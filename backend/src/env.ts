@@ -1,8 +1,8 @@
 import dotenv from 'dotenv';
 import path from 'path';
 
-const ENV_PATH = path.resolve(__dirname, '../../.env');
-dotenv.config({ path: ENV_PATH });
+const envFile = path.resolve(__dirname, `../../.env.${process.env.NODE_ENV}`);
+dotenv.config({ path: envFile });
 
 export const MASTER_PASSWORD_HASH = process.env.MASTER_PASSWORD_HASH!;
 export const MONGODB_ATLAS_URI = process.env.MONGODB_ATLAS_URI!;

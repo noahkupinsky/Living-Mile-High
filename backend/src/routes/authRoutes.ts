@@ -8,7 +8,6 @@ const createAuthRoutes = (authService: IAuthService) => {
 
     router.post('/login', async (req, res) => {
         const { password, token } = req.body;
-        console.log(password);
         if (password && await authService.verifyMasterPassword(password)) {
             const userToken = jwt.sign({ role: 'admin' }, JWT_SECRET, { expiresIn: '1h' });
             return res.json({ success: true, token: userToken });
