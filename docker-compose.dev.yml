@@ -15,27 +15,25 @@ services:
 
   frontend:
     build:
-      context: .
-      dockerfile: Dockerfile.frontend
+      context: ./frontend
+      dockerfile: Dockerfile
     volumes:
-      - ./frontend:/app/frontend
-      - ./shared:/app/shared
+      - ./frontend:/app
     ports:
       - "3000:3000"
     env_file:
-      - .env.${NODE_ENV}
+      - .env.development
 
   backend:
     build:
-      context: .
-      dockerfile: Dockerfile.backend
+      context: ./backend
+      dockerfile: Dockerfile
     volumes:
-      - ./backend:/app/backend
-      - ./shared:/app/shared
+      - ./backend:/app
     ports:
       - "3001:3001"
     env_file:
-      - .env.${NODE_ENV}
+      - .env.development
 
 networks:
   default:
