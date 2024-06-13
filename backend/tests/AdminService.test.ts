@@ -1,5 +1,5 @@
 import { getSupertest } from './setup';
-import Admin from '../src/models/Admin';
+import AdminModel from '../src/models/AdminModel';
 
 let request: any;
 
@@ -9,11 +9,11 @@ describe('Admin Service Routes', () => {
     });
 
     beforeEach(async () => {
-        await Admin.deleteMany({});
+        await AdminModel.deleteMany({});
     });
 
     it('should return true for an admin user', async () => {
-        await Admin.create({ email: 'admin@example.com' });
+        await AdminModel.create({ email: 'admin@example.com' });
 
         const response = await request.post('/api/dev/admin-check').send({ email: 'admin@example.com' });
 

@@ -11,9 +11,9 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
 
-const rootEnvPath = path.resolve(__dirname, '../.env');
+const envFile = path.resolve(__dirname, `../.env.${process.env.NODE_ENV}`);
 
-dotenv.config({ path: rootEnvPath });
+dotenv.config({ path: envFile });
 
 const API_PORT = process.env.API_PORT || 3001;
 

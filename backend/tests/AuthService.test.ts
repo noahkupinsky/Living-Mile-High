@@ -2,7 +2,7 @@ import supertest from 'supertest';
 import createServer from '../src/app';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
-import Admin from '../src/models/Admin';
+import AdminModel from '../src/models/AdminModel';
 import { getSupertest } from './setup';
 import { AuthService } from '../src/services/AuthService';
 
@@ -14,7 +14,7 @@ describe('Auth Routes', () => {
     });
 
     beforeEach(async () => {
-        await Admin.deleteMany({});
+        await AdminModel.deleteMany({});
     });
 
     // it('should authenticate with master password and get token', async () => {

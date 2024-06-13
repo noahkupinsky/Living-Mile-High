@@ -23,9 +23,9 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "~/*": [
-        "src/*"
-      ]
+      "~/*": ["src/*"],
+      "@shared/*": ["../shared/*", "./shared/*"],
+      "@types/*": ["../@types/*"]
     },
     "incremental": true
   },

@@ -1,0 +1,24 @@
+FROM node:16-alpine
+
+# Install bash and pm2 globally
+RUN apk add --no-cache bash && npm install -g pm2
+
+WORKDIR /app
+
+# Copy the package.json and yarn.lock files
+COPY backend/package.json backend/yarn.lock ./
+COPY shared ./shared
+
+RUN yarn install
+
+# Copy the rest of the application files
+COPY backend/. .
+
+# Build the application if necessary (optional, depending on your setup)
+RUN yarn build
+
+# Expose the necessary port
+EXPOSE 3001
+
+# Command to run the application
+CMD ["pm2-runtime", "yarn", "--interpreter", "bash", "--name", "backend", "--", "start"]
