@@ -1,0 +1,12 @@
+{
+  "name": "living-mile-high-types",
+  "version": "1.0.0",
+  "description": "Shared types for Living Mile High's website",
+  "main": "index.d.ts",
+  "files": [
+    "*.d.ts"
+  ],
+  "author": "Noah Kupinsky <noah@kupinsky.com>",
+  "license": "MIT",
+  "private": false
+}

@@ -18,6 +18,7 @@
     "express": "^4.19.2",
     "google-auth-library": "^9.10.0",
     "jsonwebtoken": "^9.0.2",
+    "living-mile-high-types": "^1.0.0",
     "mongodb": "^6.7.0",
     "mongoose": "^8.4.1",
     "pm2": "^5.4.0"
