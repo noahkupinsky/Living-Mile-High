@@ -14,4 +14,4 @@ docker-compose -f $COMPOSE_FILE down
 # Start new containers
 docker-compose -f $COMPOSE_FILE up -d --build
 
-echo "Deployment completed."
+echo "Deployment Successful"
