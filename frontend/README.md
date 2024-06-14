@@ -1,113 +1,36 @@
-# Next Starter
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-A starter to bootstrap your **Next** application (nice pun gg)
+## Getting Started
 
-## Usage
+First, run the development server:
 
 ```bash
-$ yarn
-# install dependencies
-
-$ yarn dev
-# launch Next dev script
-
-$ yarn build
-# launch Next build script
-
-$ yarn start
-# launch Next start script
-
-$ yarn test
-# launch test suite
-
-$ yarn ts:check
-# check TypeScript
-
-$ yarn lint
-# run ESLint
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-## Next config
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-It comes already configured with some nice plugin. You can see in `next.config.js` what is
-used. In short, it allows support of importing images files and fonts within webpack.
-It also comes with **NProgress** support by default, so it shows a small loading bar in top of
-the page when loading. You can find the component in `~/components/NProgress.tsx`, and it is used in the
-custom `_app.tsx`
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-## Styled component
+This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-The template comes with [styled-components](https://github.com/styled-components/styled-components).
-Again, you can either choose to not use it, this is a personal choice.
-You can also find a `styles` folder, which contains many related
-styled-components files to keep things organized. It's also includes all themes-related stuff in here.
-It's again a personal convention that I follow, feel free to annihilate this directory if you want 😢
+## Learn More
 
-## Styled system
+To learn more about Next.js, take a look at the following resources:
 
-It also comes with [styled-system](https://github.com/styled-system/styled-system). It is a great way to
-build reusable UI blocks with a great props API and consistent spaces / typography.
-A lot comes from the theme, provided in `~/styles/themes/base.ts` where we define some
-breakpoints, spacings and typography stuff. It allows then the custom `AppBox` component (`~/ui/AppBox`)
-to be aware of your theme and then build something amazing with the primitives.
-By default, this starter provides some basic examples components that uses this pattern, for
-example the `AppNav` component (`~/components/layout/AppNav`).
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-🔥 It also supports and provides autocomplete for props that takes source from the theme (e.g `bg`, `zIndex`, `border`...). 🔥
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-**TypeScript > 4.1** is mandatory because I'm using the new [Template Litteral Types](https://devblogs.microsoft.com/typescript/announcing-typescript-4-1-beta/#template-literal-types) to
-provide autocompletion of the color prop based of the nested `colors` object, so when using
-`bg` prop for exemple, you should have autocompletion for `red.xxx, blue.xxx` or anything defined in your `colors.ts`.
-It supports nested elements with a dot notation! (that's why TS 4.1 is required)
+## Deploy on Vercel
 
-## Framer motion
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Again, personal preference here, but the starter comes with framer motion already configured
-to handle Next pages changes and enable some smooth transitions when navigating. You
-can find the default variant used for the page transitions in `~/common/framer.ts`.
-
-## Testing
-
-[Jest](https://github.com/facebook/jest) and [@testing-library/react](https://github.com/testing-library/react-testing-library) is used to run your tests. It comes preconfigured
-with [ts-jest](https://github.com/kulshekhar/ts-jest) so your tests also checks your types.
-You can look the **jest.config.js** and the file **setupTest.ts** to see what's in there.
-[jest-styled-components](https://github.com/styled-components/jest-styled-components) is also used to have deterministic classNames
-within your styled components that you are testing.
-
-## Aliases
-
-It includes by default support for aliases in `tsconfig.json`.
-They are 1 defaulted alias, ready to use :
-
-```typescript
-// ~ refers to src folder
-import { something } from '~/file'
-```
-
-You can also use for your convenience the global `__DEV__` variable, which is
-injected by webpack with the DefinePlugin (see **next.config.js**).
-
-## @types and extending modules
-
-It also includes a `@types` directory under **src**, so you can easily
-separate your types or extends some external modules. They are also included in the `tsconfig.json`
-For example, if some package named `foo` does not have any types in [DefinitelyTyped](https://definitelytyped.org/), you could
-add a `index.d.ts` under `src/@types/foo/index.d.ts`. It is just my personal convention, so do as you want!
-
-```typescript
-// src/@types/foo/index.d.ts
-
-// to make sure Typescript get the original types from the module (if any)
-import * as foo from 'foo'
-
-declare module 'foo' {
-  declare function foo(bar: string): boolean
-}
-```
-
-Because the `@types` directory is declared in `typeRoots`, Typescript will no longer complain if you imported your package with missing types
-
-## Tooling
-
-The template includes [Prettier](https://prettier.io/), [ESLint](https://eslint.org/) (with [Typescript-eslint](https://github.com/typescript-eslint/typescript-eslint)), [Babel](https://babeljs.io/) and [lint-staged](https://github.com/okonet/lint-staged).
-All their related configurations are in the `*rc` files (except for lint-staged, which is located in the `package.json`).
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

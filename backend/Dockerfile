@@ -1,21 +1,22 @@
-FROM node:16
-
-# Install bash and pm2 globally
-RUN yarn global add pm2
+FROM node:lts-slim
 
 WORKDIR /app
 
 # Copy the package.json and yarn.lock files for the backend
-COPY package*.json .
+COPY ./package*.json ./
 
 # Install dependencies
-RUN yarn
+RUN yarn install
 
 # Copy the rest of the application files for the backend
 COPY . .
+
+RUN yarn build
+
+RUN yarn global add pm2
 
 # Expose the necessary port
 EXPOSE 3001
 
 # Command to run the application
-CMD ["pm2-runtime", "yarn", "--interpreter", "bash", "--name", "backend", "--", "dev"]
+CMD ["pm2-runtime", "yarn", "--interpreter", "bash", "--name", "backend", "--", "start"]

@@ -1,5 +1,5 @@
 import { OAuth2Client } from 'google-auth-library';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { IAdminService } from './AdminService';
 import { GOOGLE_CLIENT_ID, MASTER_PASSWORD_HASH } from '../env';
 
