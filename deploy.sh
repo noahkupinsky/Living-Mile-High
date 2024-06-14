@@ -9,9 +9,9 @@ cd $REPO_DIR
 git pull origin main
 
 # Stop and remove any existing containers
-docker-compose -f $COMPOSE_FILE down
+docker compose -f $COMPOSE_FILE down
 
 # Start new containers
-docker-compose -f $COMPOSE_FILE up -d --build
+docker compose -f $COMPOSE_FILE up -d --build
 
 echo "Deployment Successful"
