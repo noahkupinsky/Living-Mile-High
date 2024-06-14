@@ -8,7 +8,7 @@ on:
 
 jobs:
   deploy:
-    if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy')
+    if: contains(github.event.pull_request.labels.*.name, 'deploy')
     runs-on: ubuntu-latest
 
     steps:
@@ -21,5 +21,7 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Deploy to Droplet
+        env:
+          DROPLET_IP: ${{ secrets.DROPLET_IP }}
         run: |
-          ssh -o StrictHostKeyChecking=no root@<your-droplet-ip> 'bash -s' < ./start_docker.sh docker-compose.prod.yml
+          ssh -o StrictHostKeyChecking=no root@${DROPLET_IP} 'bash -s' < ./deploy.sh
