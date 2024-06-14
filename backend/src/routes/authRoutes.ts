@@ -19,7 +19,7 @@ const createAuthRoutes = (authService: IAuthService) => {
     });
 
     router.get('/data', async (req, res) => {
-        res.json({ data: 'hello' });
+        res.json({ data: 'yo' });
     });
 
     return router;
