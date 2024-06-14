@@ -1,46 +1,19 @@
-import type { DocumentContext } from 'next/document'
-import Document, { Head, Main, Html, NextScript } from 'next/document'
-import * as React from 'react'
-import { ServerStyleSheet } from 'styled-components'
+import Document, { Html, Head, Main, NextScript } from 'next/document';
 
-interface Props {
-  styleTags: Array<React.ReactElement<unknown>>
-}
-
-export default class MyDocument extends Document<Props> {
-  static async getInitialProps(ctx: DocumentContext) {
-    const sheet = new ServerStyleSheet()
-    const originalRenderPage = ctx.renderPage
-    try {
-      ctx.renderPage = () =>
-        originalRenderPage({
-          enhanceApp: App => props => sheet.collectStyles(<App {...props} />),
-        })
-      const initialProps = await Document.getInitialProps(ctx)
-
-      return {
-        ...initialProps,
-        styles: (
-          <>
-            {initialProps.styles}
-            {sheet.getStyleElement()}
-          </>
-        ),
-      }
-    } finally {
-      sheet.seal()
+class MyDocument extends Document {
+    render() {
+        return (
+            <Html>
+                <Head>
+                    {/* Custom head elements can go here */}
+                </Head>
+                <body>
+                    <Main />
+                    <NextScript />
+                </body>
+            </Html>
+        );
     }
-  }
-
-  render() {
-    return (
-      <Html>
-        <Head>{this.props.styleTags}</Head>
-        <body>
-          <Main />
-          <NextScript />
-        </body>
-      </Html>
-    )
-  }
 }
+
+export default MyDocument;

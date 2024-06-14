@@ -1,19 +1,14 @@
-import type { NextPage } from 'next'
+import Link from 'next/link';
 
-import AppHead from '~/components/AppHead'
-import Page from '~/components/layout/Page'
-import AppBox from '~/ui/AppBox'
-import Heading from '~/ui/typography/Heading'
-import Text from '~/ui/typography/Text'
+const Home: React.FC = () => {
+    return (
+        <div>
+            <h1>Home Page</h1>
+            <Link href="/admin">
+                <a>Go to Admin Dashboard</a>
+            </Link>
+        </div>
+    );
+};
 
-const Index: NextPage = () => (
-  <Page>
-    <AppHead title="Homepage" />
-    <Heading as="h1">Index Page</Heading>
-    <AppBox mt={2}>
-      <Text>Hello from index page</Text>
-    </AppBox>
-  </Page>
-)
-
-export default Index
+export default Home;

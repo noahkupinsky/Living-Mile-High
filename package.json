@@ -12,7 +12,7 @@
     "dev:frontend": "yarn --cwd frontend dev",
     "dev:backend": "yarn --cwd backend dev",
     "dev": "concurrently \"yarn dev:frontend\" \"yarn dev:backend\"",
-    "start:docker:dev": "NODE_ENV=development sh ./start_docker.sh docker-compose.dev.yml"
+    "start:docker": "NODE_ENV=production sh ./start_docker.sh docker-compose.yml"
   },
   "license": "MIT",
   "devDependencies": {
