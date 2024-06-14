@@ -24,7 +24,7 @@ services:
     depends_on:
       - backend
     env_file:
-      - .env.production
+      - .env.development
     restart: always
 
   backend:
@@ -36,7 +36,7 @@ services:
     ports:
       - "3001:3001"
     env_file:
-      - .env.production
+      - .env.development
     restart: always
 
 networks:
