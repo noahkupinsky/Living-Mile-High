@@ -1,12 +1,14 @@
 name: CI/CD
 
 on:
-  push:
+  pull_request:
+    types: [labeled]
     branches:
       - main
 
 jobs:
-  build:
+  deploy:
+    if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy')
     runs-on: ubuntu-latest
 
     steps:
