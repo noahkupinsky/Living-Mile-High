@@ -17,7 +17,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     volumes:
-      - ./frontend/:/app
+      - ./frontend/:/usr/src/app
     ports:
       - "3000:3000"
     depends_on:
@@ -31,7 +31,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     volumes:
-      - ./backend/:/app
+      - ./backend/:/usr/src/app
     ports:
       - "3001:3001"
     env_file:
