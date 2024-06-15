@@ -1,4 +1,4 @@
-import { getDatabase } from '../src/app';
+import { getServices } from '../src/app';
 import { getRequest } from './setup';
 
 let request: any;
@@ -11,7 +11,7 @@ describe('Auth Routes', () => {
     })
 
     beforeEach(async () => {
-        const adminService = getDatabase().adminService;
+        const adminService = getServices().adminService;
         await adminService.createUser('admin', 'password123');
     });
 

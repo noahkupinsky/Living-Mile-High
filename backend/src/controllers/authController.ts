@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { ExpressMiddleware } from '../@types';
+import { ExpressMiddleware } from 'src/@types/express';
 import { JWT_SECRET } from '../env';
 import passport from '../config/passport';
 

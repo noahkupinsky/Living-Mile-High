@@ -1,5 +1,7 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import { AdminService, Database, HouseService } from '../../src/@types';
+import { Database } from '../../src/@types';
+import { AdminService } from 'src/@types/admin';
+import { HouseService } from 'src/@types/house';
 import mongoose, { Connection } from 'mongoose';
 import MongoAdminService from '../../src/services/adminService';
 import { MongoHouseService } from '../../src/services/houseService';

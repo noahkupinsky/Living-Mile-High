@@ -1,11 +1,12 @@
 import express from 'express';
 import router from './routes';
-import { AppConfig, Database, ExpressMiddleware } from './@types/index';
+import { IAppServices } from './@types/index';
+import { ExpressMiddleware } from './@types/express';
 import passport from './config/passport';
-import './env';
 import { Server } from 'http';
+import './env';
 
-let appConfig: AppConfig | null = null;
+let services: IAppServices | null = null;
 let app: express.Application;
 
 // Middleware to log requests
@@ -24,22 +25,11 @@ const logResponses: ExpressMiddleware = (req, res, next) => {
     next();
 };
 
-export function initializeAppConfig(conf: AppConfig): AppConfig {
-    if (!appConfig) {
-        appConfig = conf;
-    }
-    return appConfig;
-}
-
-export function getAppConfig(): AppConfig {
-    if (!appConfig) {
+export function getServices(): IAppServices {
+    if (!services) {
         throw new Error('AppConfig has not been initialized. Call initializeAppConfig first.');
     }
-    return appConfig;
-}
-
-export function getDatabase(): Database {
-    return getAppConfig().database;
+    return services;
 }
 
 export function getApp(): express.Application {
@@ -49,18 +39,16 @@ export function getApp(): express.Application {
     return app;
 }
 
-async function setupApp(appConfig: AppConfig): Promise<void> {
-    initializeAppConfig(appConfig);
-    await getDatabase().connect();
-    console.log('Database connected');
-
+async function setupApp(appServices: IAppServices): Promise<void> {
+    services = appServices;
+    await services.connect();
     app = express();
     app.use(express.json());
     app.use(passport.initialize());
     app.use(router);
 }
 
-export async function createApp(appConfig: AppConfig): Promise<express.Application> {
+export async function createApp(appConfig: IAppServices): Promise<express.Application> {
     try {
         await setupApp(appConfig);
         return app;
@@ -71,7 +59,7 @@ export async function createApp(appConfig: AppConfig): Promise<express.Applicati
 };
 
 export async function teardown(server: Server) {
-    await getDatabase().disconnect();
+    await getServices().disconnect();
     if (server) {
         server.close();
     }

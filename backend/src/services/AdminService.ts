@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { AdminService } from 'src/@types';
+import { AdminService } from 'src/@types/admin';
 import AdminModel from '../models/adminModel';
 
 class MongoAdminService implements AdminService {
