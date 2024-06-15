@@ -1,18 +1,18 @@
 import dotenv from 'dotenv';
 import { Server } from 'http';
 import { LocalDatabase } from './utils/LocalDatabase';
-import { teardown } from './utils/testUtils';
-import { AppConfig, Database } from '../src/@types';
-import { createApp } from '../src/app';
+import { AppConfig } from '../src/@types';
+import { createApp, getApp, teardown } from '../src/app';
 import express from 'express';
+import supertest from 'supertest';
 
 dotenv.config();
 
 const TEST_PORT = 3001;
 
-let database: Database;
 let server: Server;
 let app: express.Application;
+let database: LocalDatabase;
 
 const listener = (app: express.Application, port: number) => {
     return app.listen(port, () => {
@@ -29,10 +29,13 @@ beforeAll(async () => {
     server = listener(app, TEST_PORT);
 });
 
-afterAll(async () => {
-    await teardown(database, server);
+beforeEach(async () => {
+    await database.clear();
 });
 
-export const getApp = () => app;
+afterAll(async () => {
+    await teardown(server);
+});
+
 export const getServer = () => server;
-export const getDatabase = () => database;
+export const getRequest = () => supertest(getApp());

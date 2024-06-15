@@ -1,20 +1,19 @@
-import { IDatabase } from "src/database"
 import { NextFunction, Request, Response } from 'express';
 import { User } from 'passport';
 
-declare global {
-    namespace Express {
-        interface User {
-            id: string;
-            role: string;
-            email?: string;
-        }
+// declare global {
+//     namespace Express {
+//         interface User {
+//             id: string;
+//             role: string;
+//             email?: string;
+//         }
 
-        interface Request {
-            user?: User;
-        }
-    }
-}
+//         interface Request {
+//             user?: User;
+//         }
+//     }
+// }
 
 export type ExpressMiddleware<
     Req = Request,
@@ -33,19 +32,33 @@ export type ExpressEndpoint<
     res: Res
 ) => any;
 
+export interface AppConfig {
+    database: Database
+}
+
+export interface Database {
+    connect(): Promise<void>;
+    disconnect(): Promise<void>;
+    adminService: AdminService;
+    houseService: HouseService;
+}
+
 export interface AdminRecord {
-    email: string
+    username: string
+    password: string
 }
 
 export interface HouseRecord {
     address: string
 }
 
-export interface AppConfig {
-    database: IDatabase
+// IAdminService.ts
+export interface AdminService {
+    async getUserByLoginInfo(username: string, password: string): Promise<any>;
+    async createUser(username: string, password: string): Promise<any>;
+    async getUserById(id: string): Promise<any>;
 }
 
-export interface Database {
-    connect(): Promise<void>;
-    disconnect(): Promise<void>;
+export interface HouseService {
+    async getHouseByAddress(address: string): Promise<any>;
 }

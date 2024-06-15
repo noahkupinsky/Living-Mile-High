@@ -4,7 +4,8 @@ import { AdminRecord } from 'src/@types';
 interface AdminDocument extends Document, AdminRecord { }
 
 const AdminSchema = new Schema<AdminDocument>({
-    email: { type: String, required: true, unique: true },
+    username: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
 });
 
 const AdminModel = model<AdminDocument>('Admin', AdminSchema);

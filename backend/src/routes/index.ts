@@ -1,17 +1,12 @@
 import { Router } from 'express';
 import authRouter from './authRoutes';
-import devRouter from './devRoutes';
 
-const createRoutes = () => {
-    const router = Router();
 
-    router.use('/dev', devRouter);
-    router.use('/auth', authRouter);
+const subRouter = Router();
 
-    const apiRouter = Router();
-    apiRouter.use('/api', router);
+subRouter.use('/auth', authRouter);
 
-    return apiRouter;
-}
+const router = Router();
+router.use('/api', subRouter);
 
-export default createRoutes;
+export default router;
