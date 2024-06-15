@@ -19,7 +19,7 @@
     "express-session": "^1.18.0",
     "google-auth-library": "^9.10.0",
     "jsonwebtoken": "^9.0.2",
-    "living-mile-high-types": "^1.0.0",
+    "living-mile-high-types": "^1.0.3",
     "mongodb": "^6.7.0",
     "mongoose": "^8.4.1",
     "passport": "^0.7.0",
