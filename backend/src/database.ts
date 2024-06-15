@@ -1,10 +1,5 @@
 import mongoose, { Connection } from 'mongoose';
 
-export interface IDatabase {
-    connect(): Promise<void>;
-    disconnect(): Promise<void>;
-}
-
 class MongoDatabase {
     private mongoUri: string;
     private connection: Connection;

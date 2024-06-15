@@ -1,5 +1,5 @@
 import { getSupertest } from './setup';
-import AdminModel from '../src/models/AdminModel';
+import AdminModel from '@/models/AdminModel';
 
 let request: any;
 

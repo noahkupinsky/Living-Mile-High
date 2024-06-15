@@ -1,10 +1,10 @@
 import supertest from 'supertest';
-import createServer from '../src/app';
+import createServer from '@/app';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
-import AdminModel from '../src/models/AdminModel';
+import AdminModel from '@/models/AdminModel';
 import { getSupertest } from './setup';
-import { AuthService } from '../src/services/AuthService';
+import { AuthService } from '@/services/AuthService';
 
 let request: any;
 

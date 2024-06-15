@@ -1,11 +1,12 @@
 import express from 'express';
 import createRoutes from './routes';
 import AdminService from './services/AdminService';
-import { IDatabase } from './database';
 import { AuthService } from './services/AuthService';
 import './env';
+import { AppConfig } from './@types/index';
 
-const createApp = async (database: IDatabase) => {
+const createApp = async (appConfig: AppConfig) => {
+    const { database } = appConfig;
     const app = express();
     app.use(express.json());
 
