@@ -1,14 +1,12 @@
 import { Router } from 'express';
-import createDevRoutes from './devRoutes';
-import { IAdminService } from '../services/AdminService';
-import { IAuthService } from '../services/AuthService';
-import createAuthRoutes from './authRoutes';
+import authRouter from './authRoutes';
+import devRouter from './devRoutes';
 
-const createRoutes = (adminService: IAdminService, authService: IAuthService) => {
+const createRoutes = () => {
     const router = Router();
 
-    router.use('/dev', createDevRoutes(adminService));
-    router.use('/auth', createAuthRoutes(authService));
+    router.use('/dev', devRouter);
+    router.use('/auth', authRouter);
 
     const apiRouter = Router();
     apiRouter.use('/api', router);

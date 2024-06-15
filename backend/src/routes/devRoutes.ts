@@ -1,16 +1,12 @@
+import isAdmin from '../services/adminService';
 import { Router } from 'express';
-import { IAdminService } from '../services/AdminService';
 
-const createDevRoutes = (adminService: IAdminService) => {
-    const router = Router();
+const router = Router();
 
-    router.post('/admin-check', async (req, res) => {
-        const { email } = req.body;
-        const isAdmin = await adminService.isAdmin(email);
-        res.json({ isAdmin });
-    });
+router.post('/admin-check', async (req, res) => {
+    const { email } = req.body;
+    const adminVerified = await isAdmin(email);
+    res.json({ adminVerified });
+});
 
-    return router;
-};
-
-export default createDevRoutes;
+export default router;

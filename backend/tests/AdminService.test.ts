@@ -1,11 +1,12 @@
-import { getSupertest } from './setup';
-import AdminModel from '@/models/AdminModel';
+import supertest from 'supertest';
+import AdminModel from '../src/models/AdminModel';
+import { getApp } from './setup';
 
 let request: any;
 
 describe('Admin Service Routes', () => {
     beforeAll(async () => {
-        request = getSupertest();
+        request = supertest(getApp());
     });
 
     beforeEach(async () => {

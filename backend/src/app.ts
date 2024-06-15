@@ -1,22 +1,20 @@
 import express from 'express';
 import createRoutes from './routes';
-import AdminService from './services/AdminService';
-import { AuthService } from './services/AuthService';
 import './env';
 import { AppConfig } from './@types/index';
+import passport from 'passport';
 
-const createApp = async (appConfig: AppConfig) => {
+export async function createApp(appConfig: AppConfig): Promise<express.Application> {
     const { database } = appConfig;
     const app = express();
     app.use(express.json());
+    app.use(passport.initialize());
 
     try {
         await database.connect();
         console.log('Database connected');
 
-        const adminService = new AdminService();
-        const authService = new AuthService(adminService);
-        const router = createRoutes(adminService, authService);
+        const router = createRoutes();
         app.use(router);
 
         return app;
@@ -26,4 +24,4 @@ const createApp = async (appConfig: AppConfig) => {
     }
 };
 
-export default createApp;
+

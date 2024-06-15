@@ -1,6 +1,6 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import MongoDatabase from '@/database';
-import { Database } from '@/@types';
+import MongoDatabase from '../../src/database';
+import { Database } from '../../src/@types';
 
 export class LocalDatabase implements Database {
     private mongoServer: MongoMemoryServer;

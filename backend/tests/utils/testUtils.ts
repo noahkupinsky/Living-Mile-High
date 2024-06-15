@@ -1,18 +1,7 @@
-import { AppConfig, Database } from "@/@types";
-import createApp from "@/app";
-import { Server } from "http";
+import { createApp } from '../../src/app';
 import supertest from "supertest";
-
-export async function setupTestServer(appConfig: AppConfig) {
-    const app = await createApp(appConfig);
-    const request = supertest(app);
-    const listener = (port: number) => {
-        return app.listen(port, () => {
-            console.log(`Server started on port ${port}`);
-        });
-    };
-    return { app, request, listener };
-}
+import { AppConfig, Database } from "../../src/@types";
+import { Server } from "http";
 
 export async function teardown(database: Database, server: Server) {
     await database.disconnect();

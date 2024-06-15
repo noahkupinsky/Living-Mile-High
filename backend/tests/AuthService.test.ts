@@ -1,27 +1,17 @@
 import supertest from 'supertest';
-import createServer from '@/app';
-import jwt from 'jsonwebtoken';
-import mongoose from 'mongoose';
-import AdminModel from '@/models/AdminModel';
-import { getSupertest } from './setup';
-import { AuthService } from '@/services/AuthService';
+import AdminModel from '../src/models/AdminModel';
+import { getApp } from './setup';
 
 let request: any;
 
 describe('Auth Routes', () => {
     beforeAll(async () => {
-        request = getSupertest();
+        request = supertest(getApp());
     });
 
     beforeEach(async () => {
         await AdminModel.deleteMany({});
     });
-
-    // it('should authenticate with master password and get token', async () => {
-    //     const response = await request.post('/auth/login').send({ password: 'masterpassword' });
-    //     expect(response.status).toBe(200);
-    //     expect(response.body.token).toBeDefined();
-    // });
 
     it('should reject invalid credentials', async () => {
         const response = await request.post('/api/auth/login').send({ password: 'wrong_password' });

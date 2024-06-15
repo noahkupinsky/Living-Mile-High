@@ -1,14 +1,8 @@
 import AdminModel from '../models/AdminModel';
 
-export interface IAdminService {
-    isAdmin(email: string): Promise<boolean>;
+async function isAdmin(email: string): Promise<boolean> {
+    const admin = await AdminModel.findOne({ email });
+    return !!admin;
 }
 
-class AdminService {
-    async isAdmin(email: string): Promise<boolean> {
-        const admin = await AdminModel.findOne({ email });
-        return !!admin;
-    }
-}
-
-export default AdminService;
+export default isAdmin;

@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import createApp from './app';
+import { createApp } from './app';
 import MongoDatabase from './database';
 import { MONGODB_ATLAS_URI, API_PORT } from './env';
 
@@ -9,7 +9,7 @@ const database = new MongoDatabase(MONGODB_ATLAS_URI);
 
 const startServer = async () => {
     try {
-        const app = await createApp(database);
+        const app = await createApp({ database });
 
         app.listen(API_PORT, () => {
             console.log(`Server started on port ${API_PORT}`);
