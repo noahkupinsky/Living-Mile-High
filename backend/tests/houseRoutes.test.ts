@@ -1,12 +1,13 @@
-import HouseModel from '../src/models/houseModel';
+import HouseModel, { HouseDocument } from '../src/models/houseModel';
 import { getRequest } from './setup';
 
 let request: any;
 
+beforeAll(() => {
+    request = getRequest();
+});
+
 describe('findHouses Function', () => {
-    beforeAll(() => {
-        request = getRequest();
-    });
 
     beforeEach(async () => {
         await HouseModel.create([
@@ -100,5 +101,105 @@ describe('findHouses Function', () => {
         expect(response.status).toBe(200);
         expect(response.body).toHaveLength(1);
         expect(response.body[0].mainPhoto).toBe('photo2.jpg');
+    });
+});
+
+describe('House save', () => {
+    beforeEach(async () => {
+        await HouseModel.deleteMany({});
+    });
+
+    it('should create a new house and then query it', async () => {
+        const house = {
+            address: '789 Pine St',
+            onHomePage: true,
+            isDeveloped: true,
+            isForSale: true,
+            mainPhoto: 'photo3.jpg',
+            photos: ['photo3.jpg', 'photo4.jpg'],
+            neighborhood: 'Uptown',
+            stats: {
+                houseSquareFeet: 2500,
+                lotSquareFeet: 6000,
+                bedrooms: 4,
+                bathrooms: 3,
+                garageSpaces: 2,
+            }
+        };
+
+        // Save the house
+        const saveResponse = await request
+            .post('/api/houses/save')
+            .send(house);
+
+        expect(saveResponse.status).toBe(200);
+
+        // Query the house
+        const queryResponse = await request
+            .get('/api/houses')
+            .query({ address: '789 Pine St' });
+
+        expect(queryResponse.status).toBe(200);
+        expect(queryResponse.body).toHaveLength(1);
+        const foundHouse = queryResponse.body[0];
+        expect(foundHouse.address).toBe('789 Pine St');
+        expect(foundHouse.mainPhoto).toBe('photo3.jpg');
+        expect(foundHouse.neighborhood).toBe('Uptown');
+    });
+
+    it('should update an existing house and then query it', async () => {
+        const existingHouse = await HouseModel.create({
+            address: '789 Pine St',
+            onHomePage: true,
+            isDeveloped: true,
+            isForSale: true,
+            mainPhoto: 'photo3.jpg',
+            photos: ['photo3.jpg', 'photo4.jpg'],
+            neighborhood: 'Uptown',
+            stats: {
+                houseSquareFeet: 2500,
+                lotSquareFeet: 6000,
+                bedrooms: 4,
+                bathrooms: 3,
+                garageSpaces: 2,
+            }
+        });
+
+        const updatedHouse = {
+            id: (existingHouse._id as string).toString(),
+            address: '789 Pine St',
+            onHomePage: false,
+            isDeveloped: true,
+            isForSale: false,
+            mainPhoto: 'photo4.jpg',
+            photos: ['photo4.jpg', 'photo5.jpg'],
+            neighborhood: 'Uptown',
+            stats: {
+                houseSquareFeet: 2500,
+                lotSquareFeet: 6000,
+                bedrooms: 4,
+                bathrooms: 3,
+                garageSpaces: 2,
+            }
+        };
+
+        // Update the house
+        const updateResponse = await request
+            .post('/api/houses/save')
+            .send(updatedHouse);
+
+        expect(updateResponse.status).toBe(200);
+
+        // Query the house
+        const queryResponse = await request
+            .get('/api/houses')
+            .query({ address: '789 Pine St' });
+
+        expect(queryResponse.status).toBe(200);
+        expect(queryResponse.body).toHaveLength(1);
+        const foundHouse = queryResponse.body[0];
+        expect(foundHouse.onHomePage).toBe(false);
+        expect(foundHouse.isForSale).toBe(false);
+        expect(foundHouse.mainPhoto).toBe('photo4.jpg');
     });
 });

@@ -35,6 +35,27 @@ export class MongoHouseService implements HouseService {
         }
     };
 
+    async saveHouse(house: House): Promise<void> {
+        if (!house.address || !house.mainPhoto || !house.neighborhood) {
+            throw new Error('House address, main photo, and neighborhood are required.');
+        }
+
+        let savedHouse;
+        if (house.id) {
+            // Extract the id and remove it from the update object
+            const { id, ...updateData } = house;
+            // Update existing house
+            savedHouse = await HouseModel.findByIdAndUpdate(id, updateData, { new: true });
+            if (!savedHouse) {
+                throw new Error('House not found');
+            }
+        } else {
+            // Create new house
+            savedHouse = new HouseModel(house);
+            await savedHouse.save();
+        }
+    }
+
     private houseRecordToObject(doc: HouseDocument): House {
         const house: House = {
             onHomePage: doc.get('onHomePage'),
