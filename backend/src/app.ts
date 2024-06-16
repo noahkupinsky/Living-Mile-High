@@ -58,7 +58,7 @@ export async function createApp(appConfig: IAppServices): Promise<express.Applic
     }
 };
 
-export async function teardown(server: Server) {
+export async function teardown(server: Server | null = null) {
     if (services) {
         await services.disconnect();
     }
