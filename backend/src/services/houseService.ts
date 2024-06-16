@@ -5,7 +5,7 @@ import HouseModel, { HouseDocument } from '../models/houseModel';
 export class MongoHouseService implements HouseService {
     async findHouses(houseFilter: HouseQuery): Promise<House[]> {
         try {
-            const { address, onHomePage, isDeveloped, isForSale, neighborhood, mainPhoto } = houseFilter;
+            const { address, onHomePage, isDeveloped, isForSale, neighborhood, mainImage } = houseFilter;
             const filter: any = {};
 
             if (address) {
@@ -23,8 +23,8 @@ export class MongoHouseService implements HouseService {
             if (neighborhood) {
                 filter.neighborhood = new RegExp(neighborhood, 'i'); // Case-insensitive search
             }
-            if (mainPhoto) {
-                filter.mainPhoto = mainPhoto;
+            if (mainImage) {
+                filter.mainImage = mainImage;
             }
 
             const houses = await HouseModel.find(filter);
@@ -36,7 +36,7 @@ export class MongoHouseService implements HouseService {
     };
 
     async saveHouse(house: House): Promise<void> {
-        if (!house.address || !house.mainPhoto || !house.neighborhood) {
+        if (!house.address || !house.mainImage || !house.neighborhood) {
             throw new Error('House address, main photo, and neighborhood are required.');
         }
 
@@ -56,14 +56,24 @@ export class MongoHouseService implements HouseService {
         }
     }
 
+    async allImages(): Promise<string[]> {
+        const houses = await HouseModel.find();
+        return houses.flatMap((house: any) => [house.mainImage, ...house.images]);
+    }
+
+    async allNeighborhoods(): Promise<string[]> {
+        const houses = await HouseModel.find();
+        return houses.map((house: any) => house.neighborhood);
+    }
+
     private houseRecordToObject(doc: HouseDocument): House {
         const house: House = {
             onHomePage: doc.get('onHomePage'),
             isDeveloped: doc.get('isDeveloped'),
             isForSale: doc.get('isForSale'),
             address: doc.get('address'),
-            mainPhoto: doc.get('mainPhoto'),
-            photos: doc.get('photos'),
+            mainImage: doc.get('mainImage'),
+            images: doc.get('images'),
             neighborhood: doc.get('neighborhood'),
             stats: {
                 houseSquareFeet: doc.get('stats.houseSquareFeet'),

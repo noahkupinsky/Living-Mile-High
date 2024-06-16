@@ -1,6 +1,6 @@
 {
   "name": "living-mile-high-types",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Shared types for Living Mile High's website",
   "main": "index.d.ts",
   "files": [

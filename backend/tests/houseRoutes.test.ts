@@ -7,7 +7,7 @@ beforeAll(() => {
     request = getRequest();
 });
 
-describe('findHouses Function', () => {
+describe('House queries', () => {
 
     beforeEach(async () => {
         await HouseModel.create([
@@ -16,8 +16,8 @@ describe('findHouses Function', () => {
                 onHomePage: true,
                 isDeveloped: true,
                 isForSale: true,
-                mainPhoto: 'photo1.jpg',
-                photos: ['photo1.jpg', 'photo2.jpg'],
+                mainImage: 'photo1.jpg',
+                images: ['photo1.jpg', 'photo2.jpg'],
                 neighborhood: 'Downtown',
                 stats: {
                     houseSquareFeet: 2000,
@@ -32,8 +32,8 @@ describe('findHouses Function', () => {
                 onHomePage: false,
                 isDeveloped: false,
                 isForSale: false,
-                mainPhoto: 'photo2.jpg',
-                photos: ['photo3.jpg', 'photo4.jpg'],
+                mainImage: 'photo2.jpg',
+                images: ['photo3.jpg', 'photo4.jpg'],
                 neighborhood: 'Suburbia',
                 stats: {
                     houseSquareFeet: 1500,
@@ -93,14 +93,14 @@ describe('findHouses Function', () => {
         expect(response.body[0].neighborhood).toBe('Downtown');
     });
 
-    it('should filter houses by mainPhoto', async () => {
+    it('should filter houses by mainImage', async () => {
         const response = await request
             .get('/api/houses')
-            .query({ mainPhoto: 'photo2.jpg' });
+            .query({ mainImage: 'photo2.jpg' });
 
         expect(response.status).toBe(200);
         expect(response.body).toHaveLength(1);
-        expect(response.body[0].mainPhoto).toBe('photo2.jpg');
+        expect(response.body[0].mainImage).toBe('photo2.jpg');
     });
 });
 
@@ -115,8 +115,8 @@ describe('House save', () => {
             onHomePage: true,
             isDeveloped: true,
             isForSale: true,
-            mainPhoto: 'photo3.jpg',
-            photos: ['photo3.jpg', 'photo4.jpg'],
+            mainImage: 'photo3.jpg',
+            images: ['photo3.jpg', 'photo4.jpg'],
             neighborhood: 'Uptown',
             stats: {
                 houseSquareFeet: 2500,
@@ -143,7 +143,7 @@ describe('House save', () => {
         expect(queryResponse.body).toHaveLength(1);
         const foundHouse = queryResponse.body[0];
         expect(foundHouse.address).toBe('789 Pine St');
-        expect(foundHouse.mainPhoto).toBe('photo3.jpg');
+        expect(foundHouse.mainImage).toBe('photo3.jpg');
         expect(foundHouse.neighborhood).toBe('Uptown');
     });
 
@@ -153,8 +153,8 @@ describe('House save', () => {
             onHomePage: true,
             isDeveloped: true,
             isForSale: true,
-            mainPhoto: 'photo3.jpg',
-            photos: ['photo3.jpg', 'photo4.jpg'],
+            mainImage: 'photo3.jpg',
+            images: ['photo3.jpg', 'photo4.jpg'],
             neighborhood: 'Uptown',
             stats: {
                 houseSquareFeet: 2500,
@@ -171,8 +171,8 @@ describe('House save', () => {
             onHomePage: false,
             isDeveloped: true,
             isForSale: false,
-            mainPhoto: 'photo4.jpg',
-            photos: ['photo4.jpg', 'photo5.jpg'],
+            mainImage: 'photo4.jpg',
+            images: ['photo4.jpg', 'photo5.jpg'],
             neighborhood: 'Uptown',
             stats: {
                 houseSquareFeet: 2500,
@@ -200,6 +200,6 @@ describe('House save', () => {
         const foundHouse = queryResponse.body[0];
         expect(foundHouse.onHomePage).toBe(false);
         expect(foundHouse.isForSale).toBe(false);
-        expect(foundHouse.mainPhoto).toBe('photo4.jpg');
+        expect(foundHouse.mainImage).toBe('photo4.jpg');
     });
 });

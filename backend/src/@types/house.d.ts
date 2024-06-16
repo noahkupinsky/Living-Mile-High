@@ -5,8 +5,8 @@ export interface HouseRecord {
     onHomePage: { type: Boolean, required: true },
     isDeveloped: { type: Boolean, required: true },
     isForSale: { type: Boolean, required: true },
-    mainPhoto: { type: String, required: true },
-    photos: { type: [String], required: true },
+    mainImage: { type: String, required: true },
+    images: { type: [String], required: true },
     neighborhood: { type: String, required: true },
     stats: {
         houseSquareFeet: { type: Number },
@@ -20,5 +20,7 @@ export interface HouseRecord {
 export interface HouseService {
     async findHouses(houseFilter: HouseFilter): Promise<any>;
     async saveHouse(house: House): Promise<void>;
+    async allImages(): Promise<string[]>;
+    async allNeighborhoods(): Promise<string[]>;
 }
 

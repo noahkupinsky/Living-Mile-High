@@ -4,8 +4,8 @@ export type House = {
     isDeveloped: boolean,
     isForSale: boolean,
     address: string,
-    mainPhoto: string,
-    photos: string[],
+    mainImage: string,
+    images: string[],
     neighborhood: string,
     stats: HouseStats
 }
@@ -25,5 +25,5 @@ export type HouseQuery = {
     isForSale?: string,
     address?: string,
     neighborhood?: string,
-    mainPhoto?: string
+    mainImage?: string
 }

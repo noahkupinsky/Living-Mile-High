@@ -8,8 +8,8 @@ const HouseSchema = new Schema<HouseDocument>({
     onHomePage: { type: Boolean, required: true },
     isDeveloped: { type: Boolean, required: true },
     isForSale: { type: Boolean, required: true },
-    mainPhoto: { type: String, required: true },
-    photos: { type: [String], required: true },
+    mainImage: { type: String, required: true },
+    images: { type: [String], required: true },
     neighborhood: { type: String, required: true },
     stats: {
         houseSquareFeet: { type: Number },
