@@ -1,29 +1,34 @@
 import { Client } from 'minio';
 import { v4 as uuidv4 } from 'uuid';
-import { DO_SPACE_BUCKET, DO_SPACE_KEY, DO_SPACE_SECRET, DO_SPACE_REGION } from '../env';
-
-const minioClient = new Client({
-    endPoint: `${DO_SPACE_REGION}.digitaloceanspaces.com`,
-    port: 443,
-    useSSL: true,
-    accessKey: DO_SPACE_KEY,
-    secretKey: DO_SPACE_SECRET
-});
 
 export class SpaceImageService {
-    private bucketName = DO_SPACE_BUCKET; // Replace with your actual Space name
+    private region: string;
+    private bucket: string;
+    private client: Client;
+
+    constructor(region: string, bucket: string, key: string, secret: string) {
+        this.region = region;
+        this.bucket = bucket;
+        this.client = new Client({
+            endPoint: `${region}.digitaloceanspaces.com`,
+            port: 443,
+            useSSL: true,
+            accessKey: key,
+            secretKey: secret
+        });
+    }
 
     public async uploadImage(file: Express.Multer.File): Promise<string> {
         const fileExtension = file.originalname.split('.').pop();
         const fileName = `${uuidv4()}.${fileExtension}`;
 
         try {
-            await minioClient.putObject(this.bucketName, fileName, file.buffer, undefined, {
+            await this.client.putObject(this.bucket, fileName, file.buffer, undefined, {
                 'Content-Type': file.mimetype,
                 'x-amz-acl': 'public-read'
             });
 
-            return `https://${this.bucketName}.nyc3.digitaloceanspaces.com/${fileName}`;
+            return `https://${this.bucket}.${this.region}.cdn.digitaloceanspaces.com/${fileName}`;
         } catch (error: any) {
             throw new Error(`Failed to upload image: ${error.message}`);
         }
@@ -45,12 +50,12 @@ export class SpaceImageService {
 
     private async listAllImages(): Promise<string[]> {
         try {
-            const stream = minioClient.listObjectsV2(this.bucketName, '', true);
+            const stream = this.client.listObjectsV2(this.bucket, '', true);
             const allImages: string[] = [];
 
             return new Promise((resolve, reject) => {
                 stream.on('data', obj => {
-                    allImages.push(`https://${this.bucketName}.nyc3.digitaloceanspaces.com/${obj.name}`);
+                    allImages.push(`https://${this.bucket}.${this.region}.cdn.digitaloceanspaces.com/${obj.name}`);
                 });
                 stream.on('end', () => resolve(allImages));
                 stream.on('error', reject);
@@ -65,7 +70,7 @@ export class SpaceImageService {
 
         try {
             const imageKey = imageKeyOptional!;
-            await minioClient.removeObject(this.bucketName, imageKey);
+            await this.client.removeObject(this.bucket, imageKey);
         } catch (error: any) {
             throw new Error(`Failed to delete image: ${error.message}`);
         }
