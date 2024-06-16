@@ -1,15 +1,21 @@
 import { User } from 'passport';
 export { AdminService, AdminRecord } from './admin';
-export { HouseService, HouseRecord } from './house';
+export { HouseService, HouseRecord, HouseFilter } from './house';
 export { ImageService } from './image';
 export { ExpressMiddleware, ExpressEndpoint } from './express';
 
 export interface IAppServices {
     connect(): Promise<void>;
     disconnect(): Promise<void>;
-    imageService: ImageService;
-    adminService: AdminService;
-    houseService: HouseService;
+    getService(key: ServiceKey): any;
+}
+
+export type ServiceKey = 'house' | 'admin' | 'image';
+
+export type ServiceDict = {
+    house: HouseService,
+    admin: AdminService,
+    image: ImageService
 }
 
 export interface Database {

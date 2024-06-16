@@ -1,41 +1,40 @@
 import { LocalDatabase } from "./LocalDatabase";
 import { LocalImageService } from "./LocalImageService";
-import { AdminService, HouseService, IAppServices, ImageService } from "src/@types";
+import { IAppServices, ServiceDict, ServiceKey } from "src/@types";
 
 
 class LocalAppServices implements IAppServices {
-    protected appImageService: LocalImageService;
-    protected database: LocalDatabase;
+    private database: LocalDatabase;
+    private imageService: LocalImageService;
+    private services: ServiceDict;
 
     constructor() {
         this.database = new LocalDatabase();
-        this.appImageService = new LocalImageService();
+        this.imageService = new LocalImageService();
+        this.services = {
+            house: this.database.houseService,
+            admin: this.database.adminService,
+            image: this.imageService
+        };
     }
 
     async connect(): Promise<void> {
         await this.database.connect();
-        await this.appImageService.connect();
+        await this.imageService.connect();
     }
 
     async disconnect(): Promise<void> {
         await this.database.disconnect();
-        await this.appImageService.disconnect();
+        await this.imageService.disconnect();
     }
 
     async clear(): Promise<void> {
         await this.database.clear();
+        await this.imageService.clear();
     }
 
-    get imageService(): ImageService {
-        return this.appImageService;
-    }
-
-    get adminService(): AdminService {
-        return this.database.adminService;
-    }
-
-    get houseService(): HouseService {
-        return this.database.houseService;
+    getService(key: ServiceKey): any {
+        return this.services[key];
     }
 }
 

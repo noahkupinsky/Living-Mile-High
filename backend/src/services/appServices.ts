@@ -1,34 +1,32 @@
-import { AdminService, Database, HouseService, IAppServices, ImageService } from "../@types";
+import { Database, IAppServices, ImageService, ServiceDict, ServiceKey } from "../@types";
 
 class AppServices implements IAppServices {
-    private appImageService: ImageService;
     private database: Database;
+    private imageService: ImageService;
+    private services: ServiceDict;
 
     constructor(database: Database, imageService: ImageService) {
         this.database = database;
-        this.appImageService = imageService;
+        this.imageService = imageService;
+        this.services = {
+            house: database.houseService,
+            admin: database.adminService,
+            image: imageService
+        };
     }
 
     async connect(): Promise<void> {
         await this.database.connect();
-        await this.appImageService.connect();
+        await this.imageService.connect();
     }
 
     async disconnect(): Promise<void> {
         await this.database.disconnect();
-        await this.appImageService.disconnect();
+        await this.imageService.disconnect();
     }
 
-    get imageService(): ImageService {
-        return this.appImageService;
-    }
-
-    get adminService(): AdminService {
-        return this.database.adminService;
-    }
-
-    get houseService(): HouseService {
-        return this.database.houseService;
+    getService(key: ServiceKey): any {
+        return this.services[key];
     }
 }
 

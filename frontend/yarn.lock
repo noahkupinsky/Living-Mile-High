@@ -1608,10 +1608,10 @@ levn@^0.4.1:
     prelude-ls "^1.2.1"
     type-check "~0.4.0"
 
-living-mile-high-types@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/living-mile-high-types/-/living-mile-high-types-1.0.3.tgz#2e8f36be92e216d35182600a45f63828fad7a8d7"
-  integrity sha512-LBiBmDJFl1nI8jX+GzNVwNLc3AXT+nWiAqsDk27shrHQMyyyJrhKHi2GKqGNUz4U5S6XOyZVU360ggCP46PNwg==
+living-mile-high-types@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/living-mile-high-types/-/living-mile-high-types-1.0.6.tgz#9c43ef4ded64c7c148e76b4b13286c68be9dc895"
+  integrity sha512-tY5F4gNSvfjBc0a1Oev2qLVx9MVgxOuPnhKqLN16heR9RN9ZhxhBRmn8e9e3XIf+Qh3bFmqFD3EfIfgBq0yR/Q==
 
 locate-path@^6.0.0:
   version "6.0.0"

@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { getServices } from '../src/app';
+import { getService } from '../src/app';
 import AdminModel from '../src/models/adminModel';
 import MongoAdminService from '../src/services/adminService';
 
@@ -7,7 +7,7 @@ describe('MongoAdminService', () => {
     let adminService: MongoAdminService;
 
     beforeEach(() => {
-        adminService = getServices().adminService;
+        adminService = getService('admin');
     });
 
     it('should create a new user', async () => {

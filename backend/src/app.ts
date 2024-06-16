@@ -1,6 +1,6 @@
 import express from 'express';
 import router from './routes';
-import { IAppServices } from './@types/index';
+import { IAppServices, ServiceKey } from './@types/index';
 import { ExpressMiddleware } from './@types/express';
 import passport from './config/passport';
 import { Server } from 'http';
@@ -25,11 +25,11 @@ const logResponses: ExpressMiddleware = (req, res, next) => {
     next();
 };
 
-export function getServices(): IAppServices {
+export function getService(service: ServiceKey): any {
     if (!services) {
         throw new Error('AppConfig has not been initialized. Call initializeAppConfig first.');
     }
-    return services;
+    return services.getService(service);
 }
 
 export function getApp(): express.Application {
@@ -59,7 +59,9 @@ export async function createApp(appConfig: IAppServices): Promise<express.Applic
 };
 
 export async function teardown(server: Server) {
-    await getServices().disconnect();
+    if (services) {
+        await services.disconnect();
+    }
     if (server) {
         server.close();
     }

@@ -1,4 +1,5 @@
-import { getServices } from '../src/app';
+import { AdminService } from 'src/@types';
+import { getService } from '../src/app';
 import { getRequest } from './setup';
 
 let request: any;
@@ -11,7 +12,7 @@ describe('Auth Routes', () => {
     })
 
     beforeEach(async () => {
-        const adminService = getServices().adminService;
+        const adminService: AdminService = getService('admin');
         await adminService.createUser('admin', 'password123');
     });
 

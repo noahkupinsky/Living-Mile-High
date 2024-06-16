@@ -13,4 +13,7 @@ export class LocalImageService implements ImageService {
     async garbageCollect(referencedImaged: Iterable<string>): Promise<void> {
         return;
     }
+    async clear(): Promise<void> {
+        return;
+    }
 }

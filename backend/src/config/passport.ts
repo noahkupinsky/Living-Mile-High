@@ -1,12 +1,13 @@
 // passport.ts
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
-import { getServices } from '../app';
+import { getService } from '../app';
+
+const getAdminService = () => getService('admin');
 
 passport.use(new LocalStrategy(async (username, password, done) => {
     try {
-        const adminService = getServices().adminService;
-        const user = await adminService.getUserByLoginInfo(username, password);
+        const user = await getAdminService().getUserByLoginInfo(username, password);
         if (!user) {
             return done(null, false, { message: 'Invalid username or password' });
         }
@@ -22,8 +23,7 @@ passport.serializeUser((user: any, done) => {
 
 passport.deserializeUser(async (id: string, done) => {
     try {
-        const adminService = getServices().adminService;
-        const user = await adminService.getUserById(id);
+        const user = await getAdminService().getUserById(id);
         done(null, user);
     } catch (err) {
         done(err);
