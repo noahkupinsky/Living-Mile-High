@@ -3,31 +3,34 @@ import { HouseService } from '../@types/house';
 import HouseModel, { HouseDocument } from '../models/houseModel';
 
 export class MongoHouseService implements HouseService {
-    async findHouses(houseFilter: HouseQuery): Promise<House[]> {
+    async findHouses(houseQuery: HouseQuery): Promise<House[]> {
         try {
-            const { address, onHomePage, isDeveloped, isForSale, neighborhood, mainImage } = houseFilter;
-            const filter: any = {};
+            const { address, onHomePage, isDeveloped, isSelectedWork, isForSale, neighborhood, mainImage } = houseQuery;
+            const dbQuery: any = {};
 
             if (address) {
-                filter.address = new RegExp(address, 'i'); // Case-insensitive search
+                dbQuery.address = new RegExp(address, 'i'); // Case-insensitive search
             }
             if (onHomePage !== undefined) {
-                filter.onHomePage = (onHomePage === 'true');
+                dbQuery.onHomePage = (onHomePage === 'true');
             }
             if (isDeveloped !== undefined) {
-                filter.isDeveloped = (isDeveloped === 'true');
+                dbQuery.isDeveloped = (isDeveloped === 'true');
             }
             if (isForSale !== undefined) {
-                filter.isForSale = (isForSale === 'true');
+                dbQuery.isForSale = (isForSale === 'true');
+            }
+            if (isSelectedWork !== undefined) {
+                dbQuery.isSelectedWork = (isSelectedWork === 'true');
             }
             if (neighborhood) {
-                filter.neighborhood = new RegExp(neighborhood, 'i'); // Case-insensitive search
+                dbQuery.neighborhood = new RegExp(neighborhood, 'i'); // Case-insensitive search
             }
             if (mainImage) {
-                filter.mainImage = mainImage;
+                dbQuery.mainImage = mainImage;
             }
 
-            const houses = await HouseModel.find(filter);
+            const houses = await HouseModel.find(dbQuery);
             return houses.map(doc => this.houseRecordToObject(doc));
         } catch (error) {
             console.log("Invalid Filter or db error", error);
@@ -37,7 +40,7 @@ export class MongoHouseService implements HouseService {
 
     async saveHouse(house: House): Promise<void> {
         if (!house.address || !house.mainImage || !house.neighborhood) {
-            throw new Error('House address, main photo, and neighborhood are required.');
+            throw new Error('House address, main image, and neighborhood are required.');
         }
 
         let savedHouse;
@@ -71,6 +74,7 @@ export class MongoHouseService implements HouseService {
             onHomePage: doc.get('onHomePage'),
             isDeveloped: doc.get('isDeveloped'),
             isForSale: doc.get('isForSale'),
+            isSelectedWork: doc.get('isSelectedWork'),
             address: doc.get('address'),
             mainImage: doc.get('mainImage'),
             images: doc.get('images'),

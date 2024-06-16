@@ -22,7 +22,7 @@
     "@types/react-dom": "^18",
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.2.4",
-    "living-mile-high-types": "^1.0.8",
+    "living-mile-high-types": "^1.0.9",
     "typescript": "^5"
   }
 }

@@ -3,6 +3,7 @@ export type House = {
     onHomePage: boolean,
     isDeveloped: boolean,
     isForSale: boolean,
+    isSelectedWork: boolean,
     address: string,
     mainImage: string,
     images: string[],
@@ -23,6 +24,7 @@ export type HouseQuery = {
     onHomePage?: string,
     isDeveloped?: string,
     isForSale?: string,
+    isSelectedWork?: string,
     address?: string,
     neighborhood?: string,
     mainImage?: string

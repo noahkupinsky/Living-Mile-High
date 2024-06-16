@@ -1,20 +1,21 @@
 import { House } from "living-mile-high-types";
 
 export interface HouseRecord {
-    address: { type: String, required: true },
-    onHomePage: { type: Boolean, required: true },
-    isDeveloped: { type: Boolean, required: true },
-    isForSale: { type: Boolean, required: true },
-    mainImage: { type: String, required: true },
-    images: { type: [String], required: true },
-    neighborhood: { type: String, required: true },
+    address: string;
+    onHomePage: boolean;
+    isDeveloped: boolean;
+    isForSale: boolean;
+    isSelectedWork: boolean;
+    mainImage: string;
+    images: string[];
+    neighborhood: string;
     stats: {
-        houseSquareFeet: { type: Number },
-        lotSquareFeet: { type: Number },
-        bedrooms: { type: Number },
-        bathrooms: { type: Number },
-        garageSpaces: { type: Number },
-    }
+        houseSquareFeet?: number;
+        lotSquareFeet?: number;
+        bedrooms?: number;
+        bathrooms?: number;
+        garageSpaces?: number;
+    };
 }
 
 export interface HouseService {
