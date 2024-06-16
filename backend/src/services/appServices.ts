@@ -17,12 +17,10 @@ class AppServices implements IAppServices {
 
     async connect(): Promise<void> {
         await this.database.connect();
-        await this.imageService.connect();
     }
 
     async disconnect(): Promise<void> {
         await this.database.disconnect();
-        await this.imageService.disconnect();
     }
 
     getService(key: ServiceKey): any {
