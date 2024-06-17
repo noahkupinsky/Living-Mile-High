@@ -1,4 +1,4 @@
-import HouseModel, { HouseDocument } from '../src/models/houseModelTemp';
+import HouseModel, { HouseDocument } from '../src/models/houseModel';
 import { getRequest } from './setup';
 
 let request: any;

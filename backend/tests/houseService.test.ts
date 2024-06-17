@@ -1,6 +1,6 @@
 import { HouseService } from "../src/@types";
 import { getService } from "../src/app";
-import HouseModel from "../src/models/houseModelTemp";
+import HouseModel from "../src/models/houseModel";
 
 let houseService: HouseService;
 

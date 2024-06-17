@@ -3,8 +3,8 @@ import { Database } from '../../src/@types';
 import { AdminService } from 'src/@types/admin';
 import { HouseService } from 'src/@types/house';
 import mongoose, { Connection } from 'mongoose';
-import MongoAdminService from '../../src/services/adminServiceTemp';
-import { MongoHouseService } from '../../src/services/houseServiceTemp';
+import MongoAdminService from '../../src/services/adminService';
+import { MongoHouseService } from '../../src/services/houseService';
 
 export class LocalDatabase implements Database {
     private connection: Connection;
