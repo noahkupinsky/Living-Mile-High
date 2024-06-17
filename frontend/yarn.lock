@@ -1085,6 +1085,11 @@
     "@tamagui/stacks" "1.100.6"
     "@tamagui/use-controllable-state" "1.100.6"
 
+"@tamagui/colors@1.100.6":
+  version "1.100.6"
+  resolved "https://registry.yarnpkg.com/@tamagui/colors/-/colors-1.100.6.tgz#9d249a19440d1c550e90454057888c8bf1ab5420"
+  integrity sha512-el9RaLWsxdw0lBH2OJeXVOd2Wp9HSw5vAyVMkQJekRJB/TXo/tUbhj7msq576abhFQ8B3Wfvt8VNSgegXsxYLA==
+
 "@tamagui/compose-refs@1.100.6":
   version "1.100.6"
   resolved "https://registry.yarnpkg.com/@tamagui/compose-refs/-/compose-refs-1.100.6.tgz#6c30fecfdc44b797fd90301e22101becc779d298"
@@ -1731,6 +1736,16 @@
   integrity sha512-i/c2dEaC6Y+wtNHO5B9A3RxHrsHvWRrs5xevvgusf3kwsZNmd5VO8dBIm9htUoaNBjWRQwMrhzuKz77l9/hO4w==
   dependencies:
     "@tamagui/constants" "1.100.6"
+    "@tamagui/web" "1.100.6"
+
+"@tamagui/themes@^1.100.6":
+  version "1.100.6"
+  resolved "https://registry.yarnpkg.com/@tamagui/themes/-/themes-1.100.6.tgz#9bf842b06757552cf759cc665c22e76c37a91b9d"
+  integrity sha512-njAXvzWYZEo5ht7vfJLwCEEJ6XpxI92oesLCOj0gUmy9R0JdaxOxbo1BgR7EGTthUbBm45g8tYh2xL2KE+r3Bw==
+  dependencies:
+    "@tamagui/colors" "1.100.6"
+    "@tamagui/create-theme" "1.100.6"
+    "@tamagui/theme-builder" "1.100.6"
     "@tamagui/web" "1.100.6"
 
 "@tamagui/timer@1.100.6":

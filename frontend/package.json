@@ -11,7 +11,7 @@
   "dependencies": {
     "@tamagui/next-plugin": "^1.100.5",
     "@tamagui/next-theme": "^1.100.5",
-    "@types/react": "^18.3.3",
+    "@tamagui/themes": "^1.100.6",
     "axios": "^1.7.2",
     "dotenv": "^16.4.5",
     "next": "^14.2.4",
@@ -21,8 +21,9 @@
     "react-query": "^3.39.3",
     "redis": "^4.6.14",
     "tamagui": "^1.100.5"
-  },
-  "devDependencies": {
+    },
+    "devDependencies": {
+    "@types/react": "^18.3.3",
     "@types/node": "^20",
     "@types/redis": "^4.0.11",
     "eslint": "^8.57.0",
