@@ -24,7 +24,7 @@ const Header = () => {
                 Company Logo
             </Text>
             <YStack flexDirection="row" gap="$3">
-                {['About', 'Services', 'Contact', 'Test'].map((tab) => (
+                {['About', 'Services', 'Contact'].map((tab) => (
                     <Text
                         key={tab}
                         onPress={() => router.push(`/${tab.toLowerCase()}`)}
