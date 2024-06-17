@@ -5,7 +5,7 @@ const Home: React.FC = () => {
         <div>
             <h1>Home Page</h1>
             <Link href="/admin">
-                <a>Go to Admin Dashboard</a>
+                Go to Admin Dashboard
             </Link>
         </div>
     );
