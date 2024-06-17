@@ -1,4 +1,3 @@
-// components/Header.tsx
 import { Stack, Text, YStack } from 'tamagui';
 import { useRouter } from 'next/router';
 

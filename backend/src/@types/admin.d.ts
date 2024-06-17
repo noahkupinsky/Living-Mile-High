@@ -5,8 +5,8 @@ export interface AdminRecord {
 }// IAdminService.ts
 
 export interface AdminService {
-    async getUserByLoginInfo(username: string, password: string): Promise<any>;
-    async createUser(username: string, password: string): Promise<any>;
-    async getUserById(id: string): Promise<any>;
+    getUserByLoginInfo(username: string, password: string): Promise<any>;
+    createUser(username: string, password: string): Promise<any>;
+    getUserById(id: string): Promise<any>;
 }
 

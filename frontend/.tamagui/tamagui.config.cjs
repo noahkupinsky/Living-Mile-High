@@ -1776,13 +1776,13 @@ var require_getElevation = __commonJS({
     var import_core59 = require("@tamagui/core");
     var getElevation2 = /* @__PURE__ */ __name((size5, extras) => {
       if (!size5) return;
-      const { tokens: tokens2 } = extras, token = tokens2.size[size5], sizeNum = (0, import_core59.isVariable)(token) ? +token.val : size5;
+      const { tokens: tokens3 } = extras, token = tokens3.size[size5], sizeNum = (0, import_core59.isVariable)(token) ? +token.val : size5;
       return getSizedElevation2(sizeNum, extras);
     }, "getElevation");
-    var getSizedElevation2 = /* @__PURE__ */ __name((val, { theme, tokens: tokens2 }) => {
+    var getSizedElevation2 = /* @__PURE__ */ __name((val, { theme, tokens: tokens3 }) => {
       let num = 0;
       if (val === true) {
-        const val2 = (0, import_core59.getVariableValue)(tokens2.size.true);
+        const val2 = (0, import_core59.getVariableValue)(tokens3.size.true);
         typeof val2 == "number" ? num = val2 : num = 10;
       } else
         num = +val;
@@ -1917,10 +1917,10 @@ var require_cjs13 = __commonJS({
     var cacheWholeKeys2 = {};
     var stepTokenUpOrDown2 = /* @__PURE__ */ __name((type, current, options = defaultOptions2) => {
       var _a, _b;
-      const tokens2 = (0, import_web20.getTokens)({ prefixed: true })[type];
+      const tokens3 = (0, import_web20.getTokens)({ prefixed: true })[type];
       if (!(type in cacheVariables2)) {
         cacheKeys2[type] = [], cacheVariables2[type] = [], cacheWholeKeys2[type] = [], cacheWholeVariables2[type] = [];
-        const sorted = Object.keys(tokens2).map((k) => tokens2[k]).sort((a, b) => a.val - b.val);
+        const sorted = Object.keys(tokens3).map((k) => tokens3[k]).sort((a, b) => a.val - b.val);
         for (const token of sorted)
           cacheKeys2[type].push(token.key), cacheVariables2[type].push(token);
         const sortedExcludingHalfSteps = sorted.filter((x) => !x.key.endsWith(".5"));
@@ -1931,7 +1931,7 @@ var require_cjs13 = __commonJS({
       let shift4 = options.shift || 0;
       shift4 && (current === "$true" || (0, import_web20.isVariable)(current) && current.name === "true") && (shift4 += shift4 > 0 ? 1 : -1);
       const index3 = Math.min(max2, Math.max(min2, currentIndex + shift4)), found = tokensOrdered[index3];
-      return (typeof found == "string" ? tokens2[found] : found) || tokens2.$true;
+      return (typeof found == "string" ? tokens3[found] : found) || tokens3.$true;
     }, "stepTokenUpOrDown");
     var getTokenRelative2 = stepTokenUpOrDown2;
   }
@@ -1961,7 +1961,7 @@ var require_cjs14 = __commonJS({
     });
     module2.exports = __toCommonJS2(src_exports);
     var import_get_token16 = require_cjs13();
-    var getButtonSized2 = /* @__PURE__ */ __name((val, { tokens: tokens2, props }) => {
+    var getButtonSized2 = /* @__PURE__ */ __name((val, { tokens: tokens3, props }) => {
       if (!val || props.circular)
         return;
       if (typeof val == "number")
@@ -1970,7 +1970,7 @@ var require_cjs14 = __commonJS({
           height: val,
           borderRadius: props.circular ? 1e5 : val * 0.2
         };
-      const xSize = (0, import_get_token16.getSpace)(val), radiusToken = tokens2.radius[val] ?? tokens2.radius.$true;
+      const xSize = (0, import_get_token16.getSpace)(val), radiusToken = tokens3.radius[val] ?? tokens3.radius.$true;
       return {
         paddingHorizontal: xSize,
         height: val,
@@ -2036,17 +2036,17 @@ var require_variants = __commonJS({
     }), "bordered");
     var padded2 = {
       true: /* @__PURE__ */ __name((_, extras) => {
-        const { tokens: tokens2, props } = extras;
+        const { tokens: tokens3, props } = extras;
         return {
-          padding: tokens2.space[props.size] || tokens2.space.$true
+          padding: tokens3.space[props.size] || tokens3.space.$true
         };
       }, "true")
     };
     var radiused2 = {
       true: /* @__PURE__ */ __name((_, extras) => {
-        const { tokens: tokens2, props } = extras;
+        const { tokens: tokens3, props } = extras;
         return {
-          borderRadius: tokens2.radius[props.size] || tokens2.radius.$true
+          borderRadius: tokens3.radius[props.size] || tokens3.radius.$true
         };
       }, "true")
     };
@@ -2055,10 +2055,10 @@ var require_variants = __commonJS({
       padding: 0
     };
     var circular2 = {
-      true: /* @__PURE__ */ __name((_, { props, tokens: tokens2 }) => {
+      true: /* @__PURE__ */ __name((_, { props, tokens: tokens3 }) => {
         if (!("size" in props))
           return circularStyle2;
-        const size5 = typeof props.size == "number" ? props.size : tokens2.size[props.size];
+        const size5 = typeof props.size == "number" ? props.size : tokens3.size[props.size];
         return {
           ...circularStyle2,
           width: size5,
@@ -8248,13 +8248,13 @@ var require_parse = __commonJS({
     var plus = "+".charCodeAt(0);
     var isUnicodeRange = /^[a-f0-9?-]+$/i;
     module2.exports = function(input) {
-      var tokens2 = [];
+      var tokens3 = [];
       var value = input;
       var next, quote, prev, token, escape, escapePos, whitespacePos, parenthesesOpenPos;
       var pos = 0;
       var code = value.charCodeAt(pos);
       var max2 = value.length;
-      var stack = [{ nodes: tokens2 }];
+      var stack = [{ nodes: tokens3 }];
       var balanced = 0;
       var parent;
       var name = "";
@@ -8268,7 +8268,7 @@ var require_parse = __commonJS({
             code = value.charCodeAt(next);
           } while (code <= 32);
           token = value.slice(pos, next);
-          prev = tokens2[tokens2.length - 1];
+          prev = tokens3[tokens3.length - 1];
           if (code === closeParentheses && balanced) {
             after = token;
           } else if (prev && prev.type === "div") {
@@ -8277,7 +8277,7 @@ var require_parse = __commonJS({
           } else if (code === comma || code === colon || code === slash && value.charCodeAt(next + 1) !== star && (!parent || parent && parent.type === "function" && parent.value !== "calc")) {
             before = token;
           } else {
-            tokens2.push({
+            tokens3.push({
               type: "space",
               sourceIndex: pos,
               sourceEndIndex: next,
@@ -8310,7 +8310,7 @@ var require_parse = __commonJS({
           } while (escape);
           token.value = value.slice(pos + 1, next);
           token.sourceEndIndex = token.unclosed ? next : next + 1;
-          tokens2.push(token);
+          tokens3.push(token);
           pos = next + 1;
           code = value.charCodeAt(pos);
         } else if (code === slash && value.charCodeAt(pos + 1) === star) {
@@ -8326,12 +8326,12 @@ var require_parse = __commonJS({
             token.sourceEndIndex = next;
           }
           token.value = value.slice(pos + 2, next);
-          tokens2.push(token);
+          tokens3.push(token);
           pos = next + 2;
           code = value.charCodeAt(pos);
         } else if ((code === slash || code === star) && parent && parent.type === "function" && parent.value === "calc") {
           token = value[pos];
-          tokens2.push({
+          tokens3.push({
             type: "word",
             sourceIndex: pos - before.length,
             sourceEndIndex: pos + token.length,
@@ -8341,7 +8341,7 @@ var require_parse = __commonJS({
           code = value.charCodeAt(pos);
         } else if (code === slash || code === comma || code === colon) {
           token = value[pos];
-          tokens2.push({
+          tokens3.push({
             type: "div",
             sourceIndex: pos - before.length,
             sourceEndIndex: pos + token.length,
@@ -8420,14 +8420,14 @@ var require_parse = __commonJS({
             pos = next + 1;
             token.sourceEndIndex = token.unclosed ? next : pos;
             code = value.charCodeAt(pos);
-            tokens2.push(token);
+            tokens3.push(token);
           } else {
             balanced += 1;
             token.after = "";
             token.sourceEndIndex = pos + 1;
-            tokens2.push(token);
+            tokens3.push(token);
             stack.push(token);
-            tokens2 = token.nodes = [];
+            tokens3 = token.nodes = [];
             parent = token;
           }
           name = "";
@@ -8441,7 +8441,7 @@ var require_parse = __commonJS({
           stack[stack.length - 1].sourceEndIndex = pos;
           stack.pop();
           parent = stack[balanced];
-          tokens2 = parent.nodes;
+          tokens3 = parent.nodes;
         } else {
           next = pos;
           do {
@@ -8455,14 +8455,14 @@ var require_parse = __commonJS({
           if (openParentheses === code) {
             name = token;
           } else if ((uLower === token.charCodeAt(0) || uUpper === token.charCodeAt(0)) && plus === token.charCodeAt(1) && isUnicodeRange.test(token.slice(2))) {
-            tokens2.push({
+            tokens3.push({
               type: "unicode-range",
               sourceIndex: pos,
               sourceEndIndex: next,
               value: token
             });
           } else {
-            tokens2.push({
+            tokens3.push({
               type: "word",
               sourceIndex: pos,
               sourceEndIndex: next,
@@ -10368,7 +10368,7 @@ var require_mergeRefs = __commonJS({
       for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
         args[_key] = arguments[_key];
       }
-      return /* @__PURE__ */ __name(function forwardRef25(node) {
+      return /* @__PURE__ */ __name(function forwardRef26(node) {
         args.forEach((ref) => {
           if (ref == null) {
             return;
@@ -27600,7 +27600,7 @@ __export(tamagui_config_exports, {
 });
 module.exports = __toCommonJS(tamagui_config_exports);
 
-// node_modules/@tamagui/colors/dist/esm/dark/blue.mjs
+// ../../../../node_modules/@tamagui/colors/dist/esm/dark/blue.mjs
 var blue = {
   blue1: "hsl(212, 35.0%, 9.2%)",
   blue2: "hsl(216, 50.0%, 11.8%)",
@@ -27616,7 +27616,7 @@ var blue = {
   blue12: "hsl(206, 98.0%, 95.8%)"
 };
 
-// node_modules/@tamagui/colors/dist/esm/dark/gray.mjs
+// ../../../../node_modules/@tamagui/colors/dist/esm/dark/gray.mjs
 var gray = {
   gray1: "hsl(0, 0%, 8.5%)",
   gray2: "hsl(0, 0%, 11.0%)",
@@ -27632,7 +27632,7 @@ var gray = {
   gray12: "hsl(0, 0%, 93.0%)"
 };
 
-// node_modules/@tamagui/colors/dist/esm/dark/green.mjs
+// ../../../../node_modules/@tamagui/colors/dist/esm/dark/green.mjs
 var green = {
   green1: "hsl(146, 30.0%, 7.4%)",
   green2: "hsl(155, 44.2%, 8.4%)",
@@ -27648,7 +27648,7 @@ var green = {
   green12: "hsl(137, 72.0%, 94.0%)"
 };
 
-// node_modules/@tamagui/colors/dist/esm/dark/orange.mjs
+// ../../../../node_modules/@tamagui/colors/dist/esm/dark/orange.mjs
 var orange = {
   orange1: "hsl(30, 70.0%, 7.2%)",
   orange2: "hsl(28, 100%, 8.4%)",
@@ -27664,7 +27664,7 @@ var orange = {
   orange12: "hsl(24, 97.0%, 93.2%)"
 };
 
-// node_modules/@tamagui/colors/dist/esm/dark/pink.mjs
+// ../../../../node_modules/@tamagui/colors/dist/esm/dark/pink.mjs
 var pink = {
   pink1: "hsl(318, 25.0%, 9.6%)",
   pink2: "hsl(319, 32.2%, 11.6%)",
@@ -27680,7 +27680,7 @@ var pink = {
   pink12: "hsl(322, 90.0%, 95.8%)"
 };
 
-// node_modules/@tamagui/colors/dist/esm/dark/purple.mjs
+// ../../../../node_modules/@tamagui/colors/dist/esm/dark/purple.mjs
 var purple = {
   purple1: "hsl(284, 20.0%, 9.6%)",
   purple2: "hsl(283, 30.0%, 11.8%)",
@@ -27696,7 +27696,7 @@ var purple = {
   purple12: "hsl(279, 75.0%, 95.7%)"
 };
 
-// node_modules/@tamagui/colors/dist/esm/dark/red.mjs
+// ../../../../node_modules/@tamagui/colors/dist/esm/dark/red.mjs
 var red = {
   red1: "hsl(353, 23.0%, 9.8%)",
   red2: "hsl(357, 34.4%, 12.0%)",
@@ -27712,7 +27712,7 @@ var red = {
   red12: "hsl(351, 89.0%, 96.0%)"
 };
 
-// node_modules/@tamagui/colors/dist/esm/dark/yellow.mjs
+// ../../../../node_modules/@tamagui/colors/dist/esm/dark/yellow.mjs
 var yellow = {
   yellow1: "hsl(45, 100%, 5.5%)",
   yellow2: "hsl(46, 100%, 6.7%)",
@@ -27728,7 +27728,7 @@ var yellow = {
   yellow12: "hsl(53, 100%, 91.0%)"
 };
 
-// node_modules/@tamagui/colors/dist/esm/light/blue.mjs
+// ../../../../node_modules/@tamagui/colors/dist/esm/light/blue.mjs
 var blue2 = {
   blue1: "hsl(206, 100%, 99.2%)",
   blue2: "hsl(210, 100%, 98.0%)",
@@ -27744,7 +27744,7 @@ var blue2 = {
   blue12: "hsl(211, 100%, 15.0%)"
 };
 
-// node_modules/@tamagui/colors/dist/esm/light/gray.mjs
+// ../../../../node_modules/@tamagui/colors/dist/esm/light/gray.mjs
 var gray2 = {
   gray1: "hsl(0, 0%, 99.0%)",
   gray2: "hsl(0, 0%, 97.3%)",
@@ -27760,7 +27760,7 @@ var gray2 = {
   gray12: "hsl(0, 0%, 9.0%)"
 };
 
-// node_modules/@tamagui/colors/dist/esm/light/green.mjs
+// ../../../../node_modules/@tamagui/colors/dist/esm/light/green.mjs
 var green2 = {
   green1: "hsl(136, 50.0%, 98.9%)",
   green2: "hsl(138, 62.5%, 96.9%)",
@@ -27776,7 +27776,7 @@ var green2 = {
   green12: "hsl(155, 40.0%, 14.0%)"
 };
 
-// node_modules/@tamagui/colors/dist/esm/light/orange.mjs
+// ../../../../node_modules/@tamagui/colors/dist/esm/light/orange.mjs
 var orange2 = {
   orange1: "hsl(24, 70.0%, 99.0%)",
   orange2: "hsl(24, 83.3%, 97.6%)",
@@ -27792,7 +27792,7 @@ var orange2 = {
   orange12: "hsl(15, 60.0%, 17.0%)"
 };
 
-// node_modules/@tamagui/colors/dist/esm/light/pink.mjs
+// ../../../../node_modules/@tamagui/colors/dist/esm/light/pink.mjs
 var pink2 = {
   pink1: "hsl(322, 100%, 99.4%)",
   pink2: "hsl(323, 100%, 98.4%)",
@@ -27808,7 +27808,7 @@ var pink2 = {
   pink12: "hsl(320, 70.0%, 13.5%)"
 };
 
-// node_modules/@tamagui/colors/dist/esm/light/purple.mjs
+// ../../../../node_modules/@tamagui/colors/dist/esm/light/purple.mjs
 var purple2 = {
   purple1: "hsl(280, 65.0%, 99.4%)",
   purple2: "hsl(276, 100%, 99.0%)",
@@ -27824,7 +27824,7 @@ var purple2 = {
   purple12: "hsl(272, 66.0%, 16.0%)"
 };
 
-// node_modules/@tamagui/colors/dist/esm/light/red.mjs
+// ../../../../node_modules/@tamagui/colors/dist/esm/light/red.mjs
 var red2 = {
   red1: "hsl(359, 100%, 99.4%)",
   red2: "hsl(359, 100%, 98.6%)",
@@ -27840,7 +27840,7 @@ var red2 = {
   red12: "hsl(354, 50.0%, 14.6%)"
 };
 
-// node_modules/@tamagui/colors/dist/esm/light/yellow.mjs
+// ../../../../node_modules/@tamagui/colors/dist/esm/light/yellow.mjs
 var yellow2 = {
   yellow1: "hsl(60, 54.0%, 98.5%)",
   yellow2: "hsl(52, 100%, 95.5%)",
@@ -27856,7 +27856,7 @@ var yellow2 = {
   yellow12: "hsl(40, 55.0%, 13.5%)"
 };
 
-// node_modules/@tamagui/themes/dist/esm/tokens.mjs
+// ../../../../node_modules/@tamagui/themes/dist/esm/tokens.mjs
 var import_web = require("@tamagui/core");
 var size = {
   $0: 0,
@@ -29527,17 +29527,17 @@ var import_core2 = require("@tamagui/core");
 var getElevation = /* @__PURE__ */ __name((size5, extras) => {
   if (!size5) return;
   const {
-    tokens: tokens2
-  } = extras, token = tokens2.size[size5], sizeNum = (0, import_core2.isVariable)(token) ? +token.val : size5;
+    tokens: tokens3
+  } = extras, token = tokens3.size[size5], sizeNum = (0, import_core2.isVariable)(token) ? +token.val : size5;
   return getSizedElevation(sizeNum, extras);
 }, "getElevation");
 var getSizedElevation = /* @__PURE__ */ __name((val, {
   theme,
-  tokens: tokens2
+  tokens: tokens3
 }) => {
   let num = 0;
   if (val === true) {
-    const val2 = (0, import_core2.getVariableValue)(tokens2.size.true);
+    const val2 = (0, import_core2.getVariableValue)(tokens3.size.true);
     typeof val2 == "number" ? num = val2 : num = 10;
   } else num = +val;
   if (num === 0) return;
@@ -29614,12 +29614,12 @@ var cacheKeys = {};
 var cacheWholeKeys = {};
 var stepTokenUpOrDown = /* @__PURE__ */ __name((type, current, options = defaultOptions) => {
   var _a, _b;
-  const tokens2 = (0, import_web2.getTokens)({
+  const tokens3 = (0, import_web2.getTokens)({
     prefixed: true
   })[type];
   if (!(type in cacheVariables)) {
     cacheKeys[type] = [], cacheVariables[type] = [], cacheWholeKeys[type] = [], cacheWholeVariables[type] = [];
-    const sorted = Object.keys(tokens2).map((k) => tokens2[k]).sort((a, b) => a.val - b.val);
+    const sorted = Object.keys(tokens3).map((k) => tokens3[k]).sort((a, b) => a.val - b.val);
     for (const token of sorted) cacheKeys[type].push(token.key), cacheVariables[type].push(token);
     const sortedExcludingHalfSteps = sorted.filter((x) => !x.key.endsWith(".5"));
     for (const token of sortedExcludingHalfSteps) cacheWholeKeys[type].push(token.key), cacheWholeVariables[type].push(token);
@@ -29628,13 +29628,13 @@ var stepTokenUpOrDown = /* @__PURE__ */ __name((type, current, options = default
   let shift4 = options.shift || 0;
   shift4 && (current === "$true" || (0, import_web2.isVariable)(current) && current.name === "true") && (shift4 += shift4 > 0 ? 1 : -1);
   const index3 = Math.min(max2, Math.max(min2, currentIndex + shift4)), found = tokensOrdered[index3];
-  return (typeof found == "string" ? tokens2[found] : found) || tokens2.$true;
+  return (typeof found == "string" ? tokens3[found] : found) || tokens3.$true;
 }, "stepTokenUpOrDown");
 var getTokenRelative = stepTokenUpOrDown;
 
 // node_modules/@tamagui/get-button-sized/dist/esm/index.mjs
 var getButtonSized = /* @__PURE__ */ __name((val, {
-  tokens: tokens2,
+  tokens: tokens3,
   props
 }) => {
   if (!val || props.circular) return;
@@ -29643,7 +29643,7 @@ var getButtonSized = /* @__PURE__ */ __name((val, {
     height: val,
     borderRadius: props.circular ? 1e5 : val * 0.2
   };
-  const xSize = getSpace(val), radiusToken = tokens2.radius[val] ?? tokens2.radius.$true;
+  const xSize = getSpace(val), radiusToken = tokens3.radius[val] ?? tokens3.radius.$true;
   return {
     paddingHorizontal: xSize,
     height: val,
@@ -29680,22 +29680,22 @@ var bordered = /* @__PURE__ */ __name((val, {
 var padded = {
   true: /* @__PURE__ */ __name((_, extras) => {
     const {
-      tokens: tokens2,
+      tokens: tokens3,
       props
     } = extras;
     return {
-      padding: tokens2.space[props.size] || tokens2.space.$true
+      padding: tokens3.space[props.size] || tokens3.space.$true
     };
   }, "true")
 };
 var radiused = {
   true: /* @__PURE__ */ __name((_, extras) => {
     const {
-      tokens: tokens2,
+      tokens: tokens3,
       props
     } = extras;
     return {
-      borderRadius: tokens2.radius[props.size] || tokens2.radius.$true
+      borderRadius: tokens3.radius[props.size] || tokens3.radius.$true
     };
   }, "true")
 };
@@ -29706,10 +29706,10 @@ var circularStyle = {
 var circular = {
   true: /* @__PURE__ */ __name((_, {
     props,
-    tokens: tokens2
+    tokens: tokens3
   }) => {
     if (!("size" in props)) return circularStyle;
-    const size5 = typeof props.size == "number" ? props.size : tokens2.size[props.size];
+    const size5 = typeof props.size == "number" ? props.size : tokens3.size[props.size];
     return {
       ...circularStyle,
       width: size5,
@@ -31788,9 +31788,9 @@ var import_web7 = require("@tamagui/core");
 
 // node_modules/@tamagui/shapes/dist/esm/getShapeSize.mjs
 var getShapeSize = /* @__PURE__ */ __name((size5, {
-  tokens: tokens2
+  tokens: tokens3
 }) => {
-  const width = tokens2.size[size5] ?? size5, height = tokens2.size[size5] ?? size5;
+  const width = tokens3.size[size5] ?? size5, height = tokens3.size[size5] ?? size5;
   return {
     width,
     height,
@@ -32206,9 +32206,9 @@ var CardFrame = (0, import_web11.styled)(ThemeableStack, {
     },
     size: {
       "...size": /* @__PURE__ */ __name((val, {
-        tokens: tokens2
+        tokens: tokens3
       }) => ({
-        borderRadius: tokens2.radius[val] ?? val
+        borderRadius: tokens3.radius[val] ?? val
       }), "...size")
     }
   },
@@ -32229,9 +32229,9 @@ var CardHeader = (0, import_web11.styled)(ThemeableStack, {
     },
     size: {
       "...size": /* @__PURE__ */ __name((val, {
-        tokens: tokens2
+        tokens: tokens3
       }) => ({
-        padding: tokens2.space[val] ?? val
+        padding: tokens3.space[val] ?? val
       }), "...size")
     }
   },
@@ -32807,9 +32807,9 @@ var GroupFrame = (0, import_core23.styled)(ThemeableStack, {
       }
     },
     size: /* @__PURE__ */ __name((val, {
-      tokens: tokens2
+      tokens: tokens3
     }) => ({
-      borderRadius: tokens2.radius[val] ?? val ?? tokens2.radius.$true
+      borderRadius: tokens3.radius[val] ?? val ?? tokens3.radius.$true
     }), "size")
   },
   defaultVariants: {
@@ -32882,7 +32882,7 @@ function createGroup(verticalDefault) {
   });
 }
 __name(createGroup, "createGroup");
-var GroupItem = import_react35.default.forwardRef((props, ref) => {
+var GroupItem = (0, import_react35.forwardRef)((props, _ref) => {
   var _a;
   const {
     __scopeGroup,
@@ -32891,16 +32891,12 @@ var GroupItem = import_react35.default.forwardRef((props, ref) => {
   } = props, groupItemProps = useGroupItem({
     disabled: (0, import_react35.isValidElement)(children) ? children.props.disabled : void 0
   }, forcePlacement, __scopeGroup);
-  return (0, import_react35.isValidElement)(children) ? (0, import_core23.isTamaguiElement)(children) ? import_react35.default.cloneElement(children, {
-    ...groupItemProps,
-    ref
-  }) : import_react35.default.cloneElement(children, {
+  return (0, import_react35.isValidElement)(children) ? (0, import_core23.isTamaguiElement)(children) ? import_react35.default.cloneElement(children, groupItemProps) : import_react35.default.cloneElement(children, {
     style: {
       // @ts-ignore
       ...(_a = children.props) == null ? void 0 : _a.style,
       ...groupItemProps
-    },
-    ref
+    }
   }) : children;
 });
 var useGroupItem = /* @__PURE__ */ __name((childrenProps, forcePlacement, __scopeGroup) => {
@@ -33043,11 +33039,11 @@ var ListItemFrame = (0, import_web15.styled)(ThemeableStack, {
     },
     size: {
       "...size": /* @__PURE__ */ __name((val, {
-        tokens: tokens2
+        tokens: tokens3
       }) => ({
-        minHeight: tokens2.size[val],
-        paddingHorizontal: tokens2.space[val],
-        paddingVertical: getSpace(tokens2.space[val], {
+        minHeight: tokens3.size[val],
+        paddingHorizontal: tokens3.space[val],
+        paddingVertical: getSpace(tokens3.space[val], {
           shift: -4
         })
       }), "...size")
@@ -35019,7 +35015,7 @@ function Popper(props) {
     open
   } = floating;
   if (isWeb) useIsomorphicLayoutEffect(() => {
-    if (open && refs.reference.current && refs.floating.current) return autoUpdate(refs.reference.current, refs.floating.current, floating.update);
+    if (open && refs.reference.current && refs.floating.current) return floating.update(), autoUpdate(refs.reference.current, refs.floating.current, floating.update);
   }, [open, floating.update, refs.floating, refs.reference]);
   else {
     const dimensions = (0, import_react_native_web8.useWindowDimensions)(), [keyboardOpen, setKeyboardOpen] = React20.useState(false);
@@ -35089,10 +35085,10 @@ var PopperContentFrame = (0, import_core26.styled)(ThemeableStack, {
     },
     size: {
       "...size": /* @__PURE__ */ __name((val, {
-        tokens: tokens2
+        tokens: tokens3
       }) => ({
-        padding: tokens2.space[val],
-        borderRadius: tokens2.radius[val]
+        padding: tokens3.space[val],
+        borderRadius: tokens3.radius[val]
       }), "...size")
     }
   },
@@ -40736,9 +40732,9 @@ var SelectViewportFrame = (0, import_core40.styled)(ThemeableStack, {
     },
     size: {
       "...size": /* @__PURE__ */ __name((val, {
-        tokens: tokens2
+        tokens: tokens3
       }) => ({
-        borderRadius: tokens2.radius[val] ?? val
+        borderRadius: tokens3.radius[val] ?? val
       }), "...size")
     }
   },
@@ -40903,11 +40899,11 @@ var NativeSelectFrame = (0, import_core41.styled)(ThemeableStack, {
     size: {
       "...size": /* @__PURE__ */ __name((val, extras) => {
         const {
-          tokens: tokens2
-        } = extras, paddingHorizontal = (0, import_core41.getVariableValue)(tokens2.space[val]);
+          tokens: tokens3
+        } = extras, paddingHorizontal = (0, import_core41.getVariableValue)(tokens3.space[val]);
         return {
-          borderRadius: tokens2.radius[val] ?? val,
-          minHeight: tokens2.size[val],
+          borderRadius: tokens3.radius[val] ?? val,
+          minHeight: tokens3.size[val],
           paddingRight: paddingHorizontal + 20,
           paddingLeft: paddingHorizontal,
           paddingVertical: getSpace(val, {
@@ -41467,7 +41463,7 @@ var SliderTrackActive = React35.forwardRef((props, forwardedRef) => {
 SliderTrackActive.displayName = RANGE_NAME;
 var THUMB_NAME = "SliderThumb";
 var getThumbSize = /* @__PURE__ */ __name((val) => {
-  const tokens2 = (0, import_core43.getTokens)(), size5 = typeof val == "number" ? val : getSize(tokens2.size[val], {
+  const tokens3 = (0, import_core43.getTokens)(), size5 = typeof val == "number" ? val : getSize(tokens3.size[val], {
     shift: -1
   });
   return {
@@ -43118,24 +43114,33 @@ var Text3 = (0, import_core57.styled)(import_core57.Text, {
 var import_core58 = require("@tamagui/core");
 
 // src/tamagui.config.ts
+var tokens2 = (0, import_core58.createTokens)({
+  ...tokens,
+  color: {
+    black: "#000000",
+    white: "#FFFFFF",
+    lightGray: "#D9D9D9",
+    darkGray: "#707070"
+  }
+});
 var lightTheme = {
-  background: "FFFFFF",
-  text: "000000",
-  primary: "FFFFFF",
-  secondary: "000000"
+  background: tokens2.color.white,
+  text: tokens2.color.black,
+  primary: tokens2.color.darkGray,
+  secondary: tokens2.color.lightGray
 };
 var darkTheme = {
-  background: "000000",
-  text: "FFFFFF",
-  primary: "000000",
-  secondary: "FFFFFF"
+  background: tokens2.color.black,
+  text: tokens2.color.white,
+  primary: tokens2.color.lightGray,
+  secondary: tokens2.color.darkGray
 };
 var config = createTamagui({
   themes: {
     light: lightTheme,
     dark: darkTheme
   },
-  tokens,
+  tokens: tokens2,
   shorthands: {}
 });
 var tamagui_config_default = config;

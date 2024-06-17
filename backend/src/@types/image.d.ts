@@ -1,5 +1,5 @@
 
 export interface ImageService {
-    async uploadImage(file: any): Promise<any>;
-    async garbageCollect(referencedImaged: Iterable<string>): Promise<void>
+    uploadImage(file: any): Promise<any>;
+    garbageCollect(referencedImaged: Iterable<string>): Promise<void>
 }

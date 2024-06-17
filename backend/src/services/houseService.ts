@@ -71,6 +71,7 @@ export class MongoHouseService implements HouseService {
 
     private houseRecordToObject(doc: HouseDocument): House {
         const house: House = {
+            id: doc.get('id'),
             onHomePage: doc.get('onHomePage'),
             isDeveloped: doc.get('isDeveloped'),
             isForSale: doc.get('isForSale'),

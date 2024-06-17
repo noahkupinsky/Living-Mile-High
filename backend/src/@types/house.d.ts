@@ -19,9 +19,9 @@ export interface HouseRecord {
 }
 
 export interface HouseService {
-    async findHouses(houseFilter: HouseFilter): Promise<any>;
-    async saveHouse(house: House): Promise<void>;
-    async allImages(): Promise<string[]>;
-    async allNeighborhoods(): Promise<string[]>;
+    findHouses(houseFilter: HouseFilter): Promise<any>;
+    saveHouse(house: House): Promise<void>;
+    allImages(): Promise<string[]>;
+    allNeighborhoods(): Promise<string[]>;
 }
 

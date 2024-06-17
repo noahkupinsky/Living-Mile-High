@@ -10368,7 +10368,7 @@ var require_mergeRefs = __commonJS({
       for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
         args[_key] = arguments[_key];
       }
-      return /* @__PURE__ */ __name(function forwardRef25(node) {
+      return /* @__PURE__ */ __name(function forwardRef26(node) {
         args.forEach((ref) => {
           if (ref == null) {
             return;
@@ -32495,7 +32495,7 @@ function createGroup(verticalDefault) {
   });
 }
 __name(createGroup, "createGroup");
-var GroupItem = import_react35.default.forwardRef((props, ref) => {
+var GroupItem = (0, import_react35.forwardRef)((props, _ref) => {
   var _a;
   const {
     __scopeGroup,
@@ -32504,16 +32504,12 @@ var GroupItem = import_react35.default.forwardRef((props, ref) => {
   } = props, groupItemProps = useGroupItem({
     disabled: (0, import_react35.isValidElement)(children) ? children.props.disabled : void 0
   }, forcePlacement, __scopeGroup);
-  return (0, import_react35.isValidElement)(children) ? (0, import_core23.isTamaguiElement)(children) ? import_react35.default.cloneElement(children, {
-    ...groupItemProps,
-    ref
-  }) : import_react35.default.cloneElement(children, {
+  return (0, import_react35.isValidElement)(children) ? (0, import_core23.isTamaguiElement)(children) ? import_react35.default.cloneElement(children, groupItemProps) : import_react35.default.cloneElement(children, {
     style: {
       // @ts-ignore
       ...(_a = children.props) == null ? void 0 : _a.style,
       ...groupItemProps
-    },
-    ref
+    }
   }) : children;
 });
 var useGroupItem = /* @__PURE__ */ __name((childrenProps, forcePlacement, __scopeGroup) => {
@@ -34632,7 +34628,7 @@ function Popper(props) {
     open
   } = floating;
   if (isWeb) useIsomorphicLayoutEffect(() => {
-    if (open && refs.reference.current && refs.floating.current) return autoUpdate(refs.reference.current, refs.floating.current, floating.update);
+    if (open && refs.reference.current && refs.floating.current) return floating.update(), autoUpdate(refs.reference.current, refs.floating.current, floating.update);
   }, [open, floating.update, refs.floating, refs.reference]);
   else {
     const dimensions = (0, import_react_native_web8.useWindowDimensions)(), [keyboardOpen, setKeyboardOpen] = React20.useState(false);

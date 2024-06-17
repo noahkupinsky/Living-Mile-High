@@ -81,8 +81,12 @@ web_modules/
 .parcel-cache
 
 # Next.js build output
-.next
+frontend/.next
 out
+
+
+# Tamagui output
+*/.tamagui/
 
 # Nuxt.js build / generate output
 .nuxt
