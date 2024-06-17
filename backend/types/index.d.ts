@@ -1,1 +1,0 @@
-export { AdminRecord } from './Admin';

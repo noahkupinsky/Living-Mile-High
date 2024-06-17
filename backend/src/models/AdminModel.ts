@@ -1,10 +1,11 @@
 import { Schema, model, Document } from 'mongoose';
-import { AdminRecord } from '@types';
+import { AdminRecord } from 'src/@types/admin';
 
 interface AdminDocument extends Document, AdminRecord { }
 
 const AdminSchema = new Schema<AdminDocument>({
-    email: { type: String, required: true, unique: true },
+    username: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
 });
 
 const AdminModel = model<AdminDocument>('Admin', AdminSchema);

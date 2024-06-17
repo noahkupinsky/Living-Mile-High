@@ -1,19 +1,36 @@
-import Document, { Html, Head, Main, NextScript } from 'next/document';
+import NextDocument, { DocumentContext, Head, Html, Main, NextScript } from 'next/document'
+import { StyleSheet } from 'react-native'
+import tamaguiConfig from '../src/tamagui.config'
 
-class MyDocument extends Document {
+export default class Document extends NextDocument {
+    static async getInitialProps({ renderPage }: DocumentContext) {
+        const page = await renderPage()
+        // @ts-ignore RN doesn't have this type
+        const rnwStyle = StyleSheet.getSheet()
+        return {
+            ...page,
+            styles: (
+                <>
+                    <style id={rnwStyle.id} dangerouslySetInnerHTML={{ __html: rnwStyle.textContent }} />
+                    <style dangerouslySetInnerHTML={{ __html: tamaguiConfig.getCSS() }} />
+                </>
+            ),
+        }
+    }
+
     render() {
         return (
-            <Html>
+            <Html lang="en">
                 <Head>
-                    {/* Custom head elements can go here */}
+                    <meta id="theme-color" name="theme-color" />
+                    <meta name="color-scheme" content="light dark" />
                 </Head>
                 <body>
                     <Main />
                     <NextScript />
                 </body>
             </Html>
-        );
+        )
     }
 }
 
-export default MyDocument;

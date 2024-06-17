@@ -1,14 +1,28 @@
-import AdminModel from '../models/AdminModel';
+import bcrypt from 'bcrypt';
+import { AdminService } from 'src/@types/admin';
+import AdminModel from '../models/adminModel';
 
-export interface IAdminService {
-    isAdmin(email: string): Promise<boolean>;
-}
+class MongoAdminService implements AdminService {
+    async getUserByLoginInfo(username: string, password: string): Promise<any> {
+        const user = await AdminModel.findOne({ username });
+        if (!user) return null;
 
-class AdminService {
-    async isAdmin(email: string): Promise<boolean> {
-        const admin = await AdminModel.findOne({ email });
-        return !!admin;
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) return null;
+
+        return user;
+    }
+
+    async createUser(username: string, password: string): Promise<any> {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const newUser = new AdminModel({ username, password: hashedPassword });
+        await newUser.save();
+        return newUser;
+    }
+
+    async getUserById(id: string): Promise<any> {
+        return AdminModel.findById(id);
     }
 }
 
-export default AdminService;
+export default MongoAdminService;

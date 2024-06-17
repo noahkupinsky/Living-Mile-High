@@ -1,19 +1,16 @@
 import { Router } from 'express';
-import createDevRoutes from './devRoutes';
-import { IAdminService } from '../services/AdminService';
-import { IAuthService } from '../services/AuthService';
-import createAuthRoutes from './authRoutes';
+import authRouter from './authRoutes';
+import houseRouter from './houseRoutes';
+import imageRouter from './imageRoutes';
 
-const createRoutes = (adminService: IAdminService, authService: IAuthService) => {
-    const router = Router();
 
-    router.use('/dev', createDevRoutes(adminService));
-    router.use('/auth', createAuthRoutes(authService));
+const subRouter = Router();
 
-    const apiRouter = Router();
-    apiRouter.use('/api', router);
+subRouter.use('/auth', authRouter);
+subRouter.use('/houses', houseRouter);
+subRouter.use('/image', imageRouter);
 
-    return apiRouter;
-}
+const router = Router();
+router.use('/api', subRouter);
 
-export default createRoutes;
+export default router;

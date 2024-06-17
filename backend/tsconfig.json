@@ -16,10 +16,7 @@
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
     "emitDecoratorMetadata": true,
-    "baseUrl": ".",
-    "paths": {
-      "types/*": ["types/*", "node_modules/living-mile-high-types/*"]
-    }
+    "baseUrl": "./",
   },
   "include": ["src/**/*", "tests/**/*"],
   "exclude": ["node_modules"]
