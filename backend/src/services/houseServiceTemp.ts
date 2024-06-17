@@ -1,6 +1,6 @@
 import { House, HouseQuery } from 'living-mile-high-types';
 import { HouseService } from '../@types/house';
-import HouseModel, { HouseDocument } from '../models/houseModel';
+import HouseModel, { HouseDocument } from '../models/houseModelTemp';
 
 export class MongoHouseService implements HouseService {
     async findHouses(houseQuery: HouseQuery): Promise<House[]> {

@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import { getService } from '../src/app';
-import AdminModel from '../src/models/adminModel';
-import MongoAdminService from '../src/services/adminService';
+import AdminModel from '../src/models/adminModelTemp';
+import MongoAdminService from '../src/services/adminServiceTemp';
 
 describe('MongoAdminService', () => {
     let adminService: MongoAdminService;
