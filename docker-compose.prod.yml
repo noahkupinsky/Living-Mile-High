@@ -13,11 +13,7 @@ services:
       - backend
 
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    volumes:
-      - ./frontend/:/usr/src/app
+    image: livingmilehigh/frontend:latest
     ports:
       - "3000:3000"
     depends_on:
@@ -27,11 +23,7 @@ services:
     restart: always
 
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    volumes:
-      - ./backend/:/usr/src/app
+    image: livingmilehigh/backend:latest
     ports:
       - "3001:3001"
     env_file:
