@@ -62,14 +62,14 @@ const dockerPull = (composeFile) => {
 const dockerUp = (composeFile, build = false) => {
     const buildOption = build ? '--build' : '';
     console.log(`Starting Docker containers using ${composeFile} ${buildOption}...`);
-    if (shell.exec(`docker compose -f ${composeFile} up ${buildOption}`).code !== 0) {
+    if (shell.exec(`docker compose -f ${composeFile} up ${buildOption} -d`).code !== 0) {
         throw new Error(`Failed to start Docker containers using ${composeFile}`);
     }
 };
 
 const dockerLogin = (username, password) => {
     console.log('Logging in to Docker...');
-    if (shell.exec(`docker login -u ${username} -p ${password}`).code !== 0) {
+    if (shell.exec(`echo ${password} | docker login -u ${username} --password-stdin`).code !== 0) {
         throw new Error('Failed to log in to Docker');
     }
 };

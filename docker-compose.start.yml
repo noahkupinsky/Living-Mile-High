@@ -10,7 +10,7 @@ services:
       DOMAINS: |
         ${HOST} -> http://frontend:${FRONTEND_PORT}
         ${HOST}/api -> http://backend:${BACKEND_PORT}
-      STAGE: staging
+      STAGE: ${STAGE}
     volumes:
       - ./https-portal/certs:/var/lib/https-portal
     depends_on:
