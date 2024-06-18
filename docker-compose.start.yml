@@ -8,14 +8,31 @@ services:
       - "443:443"
     environment:
       DOMAINS: |
-        ${HOST} -> http://frontend:${FRONTEND_PORT}
-        ${HOST}/api -> http://backend:${BACKEND_PORT}
+        ${HOST} -> http://nginx
       STAGE: ${STAGE}
     volumes:
       - ./https-portal/certs:/var/lib/https-portal
     depends_on:
       - frontend
       - backend
+    networks:
+      - default
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "8080:80" # NGINX will listen on port 8080 internally
+    volumes:
+      - ./nginx.conf.template:/etc/nginx/nginx.conf.template:ro
+    command: /bin/bash -c "envsubst '$${FRONTEND_PORT} $${BACKEND_PORT}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
+    depends_on:
+      - frontend
+      - backend
+    environment:
+      - FRONTEND_PORT=${FRONTEND_PORT}
+      - BACKEND_PORT=${BACKEND_PORT}
+    networks:
+      - default
 
   frontend:
     image: ${FRONTEND_IMAGE}:latest

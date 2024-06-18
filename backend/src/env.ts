@@ -13,3 +13,4 @@ export const DO_SPACE_SECRET = process.env.DO_SPACE_SECRET!;
 export const DO_SPACE_REGION = process.env.DO_SPACE_REGION!;
 export const DO_SPACE_URL = process.env.DO_SPACE_URL!;
 export const DO_SPACE_BUCKET = process.env.DO_SPACE_BUCKET!;
+export const HOST = process.env.HOST!;

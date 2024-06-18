@@ -6,6 +6,7 @@ import { ExpressMiddleware } from './@types/express';
 import passport from './config/passport';
 import { Server } from 'http';
 import './env';
+import { HOST } from './env';
 
 let services: IAppServices | null = null;
 let app: express.Application;
