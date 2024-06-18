@@ -35,9 +35,7 @@ const teardownEnv = () => {
 
 const dockerCleanup = (frontend_image, backend_image) => {
     console.log('Cleaning up Docker containers and images...');
-    if (shell.exec(`docker rmi ${frontend_image} ${backend_image}`).code !== 0) {
-        throw new Error('Failed to remove Docker images');
-    }
+    shell.exec(`docker rmi ${frontend_image} ${backend_image}`);
 };
 
 const dockerDown = (composeFile) => {
