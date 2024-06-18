@@ -1,3 +1,4 @@
+"use client";
 import { House } from 'living-mile-high-types';
 import React, { createContext, useContext } from 'react';
 

@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from 'react';
 import { useHouseContext } from './HouseContext';
 import { Stack, Text, Image, styled } from 'tamagui';
@@ -45,8 +46,6 @@ const RotatingHouseDisplay = ({ interval }: RotatingHouseDisplayProps) => {
     }, [houses, interval]);
 
     const currentHouse = houses[currentIndex];
-
-    console.log(houses);
 
     return (
         <Stack

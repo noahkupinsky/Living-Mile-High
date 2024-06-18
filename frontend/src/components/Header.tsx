@@ -1,8 +1,11 @@
+'use client';
+
 import { Stack, Text, YStack } from 'tamagui';
-import { useRouter } from 'next/router';
+import { usePathname, useRouter } from 'next/navigation';
 
 const Header = () => {
-    const router = useRouter();
+    const router = useRouter()
+    const pathname = usePathname()
 
     return (
         <Stack
@@ -30,7 +33,7 @@ const Header = () => {
                         onPress={() => router.push(`/${tab.toLowerCase()}`)}
                         // fontFamily="$body"
                         fontSize="$2"
-                        color={router.pathname === `/${tab.toLowerCase()}` ? '$primary' : '$text'}
+                        color={pathname === `/${tab.toLowerCase()}` ? '$text' : '$primary'}
                         cursor="pointer"
                     >
                         {tab}

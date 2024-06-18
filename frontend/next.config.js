@@ -9,8 +9,9 @@ const API_PORT = process.env.API_PORT || 3001;
 
 const plugins = [
     withTamagui({
-        config: 'src/tamagui.config.ts',
+        config: 'src/config/tamagui.config.ts',
         components: ['tamagui'],
+        appDir: true,
     }),
 ]
 

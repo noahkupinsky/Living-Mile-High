@@ -1834,6 +1834,14 @@
     "@tamagui/use-presence" "1.100.6"
     "@tamagui/web" "1.100.6"
 
+"@tamagui/animations-moti@1.100.6":
+  version "1.100.6"
+  resolved "https://registry.yarnpkg.com/@tamagui/animations-moti/-/animations-moti-1.100.6.tgz#c4661af32b72af73b0328e552ec5f5a197f6d906"
+  integrity sha512-newaIRUUjrqV9rk9SRD2IZ5F7TuOHbxqbGQfnlSMsOViu94bKH3OEyLpkRx3lqDE87AS2UPfTS/pbba2dLqR+A==
+  dependencies:
+    "@tamagui/use-presence" "1.100.6"
+    "@tamagui/web" "1.100.6"
+
 "@tamagui/animations-react-native@1.100.6":
   version "1.100.6"
   resolved "https://registry.yarnpkg.com/@tamagui/animations-react-native/-/animations-react-native-1.100.6.tgz#911a0f4661dc5bff7648c2ce48fc1882beecc8a5"
@@ -1995,6 +2003,22 @@
     "@tamagui/core" "1.100.6"
     "@tamagui/shorthands" "1.100.6"
 
+"@tamagui/config@^1.100.6":
+  version "1.100.6"
+  resolved "https://registry.yarnpkg.com/@tamagui/config/-/config-1.100.6.tgz#52246cd74068e8c83e6ea237f2df3d40727351f8"
+  integrity sha512-eZv74RjgM8rKcBYagf1QnvT7kDWgVEzWbz4Lo45cUOlL9jLPL5gXFGi1cHyIA62OTW/1SCL7vSZGbCt1hq2Cfg==
+  dependencies:
+    "@tamagui/animations-css" "1.100.6"
+    "@tamagui/animations-moti" "1.100.6"
+    "@tamagui/animations-react-native" "1.100.6"
+    "@tamagui/colors" "1.100.6"
+    "@tamagui/font-inter" "1.100.6"
+    "@tamagui/font-silkscreen" "1.100.6"
+    "@tamagui/react-native-media-driver" "1.100.6"
+    "@tamagui/shorthands" "1.100.6"
+    "@tamagui/themes" "1.100.6"
+    "@tamagui/web" "1.100.6"
+
 "@tamagui/constants@1.100.6":
   version "1.100.6"
   resolved "https://registry.yarnpkg.com/@tamagui/constants/-/constants-1.100.6.tgz#eae2688b607b18e6bce442ea079c67316ed0be8e"
@@ -2097,6 +2121,20 @@
   dependencies:
     "@tamagui/compose-refs" "1.100.6"
     "@tamagui/web" "1.100.6"
+
+"@tamagui/font-inter@1.100.6":
+  version "1.100.6"
+  resolved "https://registry.yarnpkg.com/@tamagui/font-inter/-/font-inter-1.100.6.tgz#8cb0d75d90e71be85c8b8654b4ea888f1d5d36ab"
+  integrity sha512-jD5CRq/WT2uLF3OG4MejBivRgg23khfanXYi33/fxCMzM4GZR1aMC2EVF9tkQKUNh8gBy7BXLpckAt9Y6n3FKA==
+  dependencies:
+    "@tamagui/core" "1.100.6"
+
+"@tamagui/font-silkscreen@1.100.6":
+  version "1.100.6"
+  resolved "https://registry.yarnpkg.com/@tamagui/font-silkscreen/-/font-silkscreen-1.100.6.tgz#6156766eb0e1da787b0ef0187491e4a713203381"
+  integrity sha512-kyMjytWKqp0kIHxM3DRs+OUhuA4YWBX4EEcy/VmArPfonPJbTn6H7in9yR4OgkQtFEuYPe3DbKbWFHdU+r+Cnw==
+  dependencies:
+    "@tamagui/core" "1.100.6"
 
 "@tamagui/font-size@1.100.6":
   version "1.100.6"
@@ -2629,7 +2667,7 @@
     "@tamagui/constants" "1.100.6"
     "@tamagui/web" "1.100.6"
 
-"@tamagui/themes@^1.100.6":
+"@tamagui/themes@1.100.6", "@tamagui/themes@^1.100.6":
   version "1.100.6"
   resolved "https://registry.yarnpkg.com/@tamagui/themes/-/themes-1.100.6.tgz#9bf842b06757552cf759cc665c22e76c37a91b9d"
   integrity sha512-njAXvzWYZEo5ht7vfJLwCEEJ6XpxI92oesLCOj0gUmy9R0JdaxOxbo1BgR7EGTthUbBm45g8tYh2xL2KE+r3Bw==
@@ -4073,9 +4111,9 @@ ee-first@1.1.1:
   integrity sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==
 
 electron-to-chromium@^1.4.796:
-  version "1.4.803"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.803.tgz#cf55808a5ee12e2a2778bbe8cdc941ef87c2093b"
-  integrity sha512-61H9mLzGOCLLVsnLiRzCbc63uldP0AniRYPV3hbGVtONA1pI7qSGILdbofR7A8TMbOypDocEAjH/e+9k1QIe3g==
+  version "1.4.804"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.804.tgz#fd84a66cee8c883e744f81ed30c5169f7791908a"
+  integrity sha512-gXMMs2m7aUTdZpORQAvMCyH0JHywSpZxjblSc/C81aDr34jh0hmpplTFcM4AYrYALVmiVT/r63oA3tEG1BPVRw==
 
 emoji-regex@^8.0.0:
   version "8.0.0"
@@ -6920,7 +6958,7 @@ react-devtools-core@^5.0.0:
     shell-quote "^1.6.1"
     ws "^7"
 
-react-dom@^18.2.0:
+react-dom@^18.2.0, react-dom@^18.3.1:
   version "18.3.1"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-18.3.1.tgz#c2265d79511b57d479b3dd3fdfa51536494c5cb4"
   integrity sha512-5m4nQKp+rZRb09LNH59GM4BxTh9251/ylbKIbpe7TpGxfJ+9kv6BLkLBXIjjspbgbnIBNqlI23tRnTWT0snUIw==
@@ -7079,7 +7117,7 @@ react-style-singleton@^2.2.1:
     invariant "^2.2.4"
     tslib "^2.0.0"
 
-react@^18.2.0:
+react@^18.2.0, react@^18.3.1:
   version "18.3.1"
   resolved "https://registry.yarnpkg.com/react/-/react-18.3.1.tgz#49ab892009c53933625bd16b2533fc754cab2891"
   integrity sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==
