@@ -16,12 +16,10 @@ services:
       - frontend
       - backend
     networks:
-      - default
+      - proxy
 
   nginx:
     image: nginx:latest
-    ports:
-      - "8080:80" # NGINX will listen on port 8080 internally
     volumes:
       - ./nginx.conf.template:/etc/nginx/nginx.conf.template:ro
     command: /bin/bash -c "envsubst '$${FRONTEND_PORT} $${BACKEND_PORT}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
@@ -32,7 +30,8 @@ services:
       - FRONTEND_PORT=${FRONTEND_PORT}
       - BACKEND_PORT=${BACKEND_PORT}
     networks:
-      - default
+      - proxy
+      - internal
 
   frontend:
     build:
@@ -40,20 +39,26 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - backend
-    ports:
-      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
+    expose:
+      - "${FRONTEND_PORT}"
     env_file:
       - .env
+    networks:
+      - internal
 
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    ports:
-      - "${BACKEND_PORT}:${BACKEND_PORT}"
+    expose:
+      - "${BACKEND_PORT}"
     env_file:
       - .env
+    networks:
+      - internal
 
 networks:
-  default:
-    driver: bridge
+  proxy:
+    external: false
+  internal:
+    external: false
