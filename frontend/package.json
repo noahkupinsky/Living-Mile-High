@@ -18,13 +18,15 @@
     "path": "^0.12.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-native": "^0.74.2",
     "react-query": "^3.39.3",
     "redis": "^4.6.14",
     "tamagui": "^1.100.5"
-    },
-    "devDependencies": {
-    "@types/react": "^18.3.3",
+  },
+  "devDependencies": {
     "@types/node": "^20",
+    "@types/react": "^18.3.3",
+    "@types/react-native": "^0.73.0",
     "@types/redis": "^4.0.11",
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.2.4",
