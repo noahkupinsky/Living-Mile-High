@@ -13,6 +13,7 @@ export type HouseQueryContextProps = {
 
 const HouseQueryContext = ({ children, initialQuery }: HouseQueryContextProps) => {
     const apiUrl = env('NEXT_PUBLIC_API_URL')!;
+    console.log(apiUrl);
     const [query, setQuery] = useState(initialQuery);
     const { data, error, isLoading } = useFetchData('/api/houses', apiUrl, query);
     const houses = isLoading ? [] : data;

@@ -3,6 +3,7 @@ const path = require('path');
 const { withTamagui } = require('@tamagui/next-plugin');
 
 const envFile = path.resolve(__dirname, `../.env.${process.env.NODE_ENV}`);
+
 dotenv.config({ path: envFile });
 
 const plugins = [
@@ -17,14 +18,6 @@ module.exports = function () {
     /** @type {import('next').NextConfig} */
     let config = {
         swcMinify: true,
-        async rewrites() {
-            return [
-                {
-                    source: '/api/:path*',
-                    destination: `${process.env.NEXT_PUBLIC_API_URL}/api/:path*`,
-                },
-            ];
-        },
         webpack: (config) => {
             config.resolve.alias = {
                 ...(config.resolve.alias || {}),
