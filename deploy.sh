@@ -1,17 +1,21 @@
 #!/bin/bash
 
-# Variables
-REPO_DIR="$HOME/Living-Mile-High"
-COMPOSE_FILE="docker-compose.prod.yml"
+# Ensure the script stops on the first error
+set -e
 
-# Pull the latest changes
-cd $REPO_DIR
-git pull origin main
+DIR_NAME="Living-Mile-High"
 
-# Stop and remove any existing containers
-docker compose -f $COMPOSE_FILE down
+# Navigate to the directory containing the docker-compose files
+if [[ "$(basename $PWD)" != $DIR_NAME ]]
+then
+  cd $DIR_NAME
+fi
 
-# Start new containers
-docker compose -f $COMPOSE_FILE up -d --build
+# Stop and remove existing containers
+docker-compose -f docker-compose.prod.yml down
 
-echo "Deployment Successful"
+# Pull the latest images from the container registry
+docker-compose -f docker-compose.prod.yml pull
+
+# Start the containers with the latest images
+docker-compose -f docker-compose.prod.yml up -d
