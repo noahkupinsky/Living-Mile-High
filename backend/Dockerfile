@@ -16,5 +16,4 @@ RUN yarn build
 RUN yarn global add pm2
 
 # Command to run the application
-CMD ["yarn", "start"]
-#CMD ["pm2-runtime", "yarn", "--interpreter", "bash", "--name", "backend", "--", "start"]
+CMD ["pm2-runtime", "yarn", "--interpreter", "bash", "--name", "backend", "--", "start"]
