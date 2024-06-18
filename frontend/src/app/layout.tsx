@@ -2,6 +2,7 @@ import React from 'react';
 import { Metadata } from 'next';
 import Providers from '@/providers/providers';
 import Header from '@/components/Header';
+import { PublicEnvScript } from 'next-runtime-env';
 
 export const metadata: Metadata = {
   title: 'Living Mile High',
@@ -12,6 +13,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
+      <head>
+        <PublicEnvScript />
+      </head>
       <body>
         <Providers>
           <Header />
