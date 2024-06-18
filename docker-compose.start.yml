@@ -10,7 +10,7 @@ services:
       DOMAINS: |
         ${HOST} -> http://frontend:${FRONTEND_PORT}
         ${HOST}/api -> http://backend:${BACKEND_PORT}
-      STAGE: local
+      STAGE: staging
     volumes:
       - ./https-portal/certs:/var/lib/https-portal
     depends_on:
@@ -18,9 +18,7 @@ services:
       - backend
 
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    image: ${FRONTEND_IMAGE}:latest
     depends_on:
       - backend
     ports:
@@ -29,9 +27,7 @@ services:
       - .env
 
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
+    image: ${BACKEND_IMAGE}:latest
     ports:
       - "${BACKEND_PORT}:${BACKEND_PORT}"
     env_file:

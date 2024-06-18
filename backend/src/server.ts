@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import { createApp } from './app';
 import MongoDatabase from './database';
-import { MONGODB_ATLAS_URI, API_PORT, DO_SPACE_REGION, DO_SPACE_BUCKET, DO_SPACE_KEY, DO_SPACE_SECRET } from './env';
+import { MONGODB_ATLAS_URI, BACKEND_PORT, DO_SPACE_REGION, DO_SPACE_BUCKET, DO_SPACE_KEY, DO_SPACE_SECRET } from './env';
 import { SpaceImageService } from './services/imageService';
 import AppServices from './services/appServices';
 
@@ -16,8 +16,8 @@ const startServer = async () => {
         await appServices.connect();
         const app = await createApp(appServices);
 
-        app.listen(API_PORT, () => {
-            console.log(`Server started on port ${API_PORT}`);
+        app.listen(BACKEND_PORT, () => {
+            console.log(`Server started on port ${BACKEND_PORT}`);
         });
     } catch (error) {
         console.error('Error starting server', error);

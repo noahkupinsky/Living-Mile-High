@@ -5,20 +5,20 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    image: livingmilehigh/frontend
+    image: ${FRONTEND_IMAGE}
     volumes:
       - ./frontend/:/usr/src/app
     depends_on:
       - backend
     env_file:
-      - .env.production
+      - .env
 
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    image: livingmilehigh/backend
+    image: ${BACKEND_IMAGE}
     volumes:
       - ./backend/:/usr/src/app
     env_file:
-      - .env.production
+      - .env

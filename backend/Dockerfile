@@ -15,8 +15,5 @@ RUN yarn build
 
 RUN yarn global add pm2
 
-# Expose the necessary port
-EXPOSE 3001
-
 # Command to run the application
 CMD ["pm2-runtime", "yarn", "--interpreter", "bash", "--name", "backend", "--", "start"]

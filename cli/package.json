@@ -1,0 +1,21 @@
+{
+  "name": "lmh-cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "cli.js",
+  "bin": {
+    "lmh": "./cli.js"
+  },
+  "scripts": {
+    "start": "node ./cli.js",
+    "postinstall": "yarn link && cd .. && yarn link lmh-cli"
+  },
+  "dependencies": {
+    "commander": "^8.0.0",
+    "dotenv": "^16.4.5",
+    "shelljs": "^0.8.4"
+  },
+  "devDependencies": {
+    "@types/dotenv": "^8.2.0"
+  }
+}

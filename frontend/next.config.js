@@ -5,8 +5,6 @@ const { withTamagui } = require('@tamagui/next-plugin');
 const envFile = path.resolve(__dirname, `../.env.${process.env.NODE_ENV}`);
 dotenv.config({ path: envFile });
 
-const API_PORT = process.env.API_PORT || 3001;
-
 const plugins = [
     withTamagui({
         config: 'src/config/tamagui.config.ts',
@@ -24,7 +22,7 @@ module.exports = function () {
                 return [
                     {
                         source: '/api/:path*',
-                        destination: `http://localhost:${API_PORT}/api/:path*`,
+                        destination: `${process.env.NEXT_PUBLIC_API_URL}/api/:path*`,
                     },
                 ];
             }
