@@ -1,21 +1,23 @@
 import React from 'react';
+import { Metadata } from 'next';
+import Providers from '@/providers/providers';
+import Header from '@/components/Header';
 
-interface LayoutProps {
-  children: React.ReactNode;
+export const metadata: Metadata = {
+  title: 'Living Mile High',
+  description: 'LMH Development website',
+  icons: '/favicon.ico',
 }
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div>
-      <header>
-        <h1>My Site</h1>
-      </header>
-      <main>{children}</main>
-      <footer>
-        <p>© 2024 My Site</p>
-      </footer>
-    </div>
-  );
-};
-
-export default Layout;
+    <html lang="en">
+      <body>
+        <Providers>
+          <Header />
+          {children}
+        </Providers>
+      </body>
+    </html>
+  )
+}

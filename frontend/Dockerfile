@@ -1,4 +1,4 @@
-FROM node:lts-slim AS deps
+FROM --platform=linux/amd64 node:lts-slim
 WORKDIR /app
 
 COPY package.json ./

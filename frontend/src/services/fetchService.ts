@@ -8,10 +8,10 @@ const fetcher = async (url: any) => {
     return response.json();
 };
 
-const useFetchData = (route: any, params: any = {}) => {
+const useFetchData = (route: string, baseUrl: string, params: any = {}) => {
     const queryKey = [route, params];
-
-    const fetchUrl = new URL(route, 'http://localhost:3001');
+    console.log(baseUrl);
+    const fetchUrl = new URL(route, baseUrl);
     Object.keys(params).forEach((key) => fetchUrl.searchParams.append(key, params[key]));
     return useQuery(queryKey, () => fetcher(fetchUrl.toString()));
 };
