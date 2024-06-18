@@ -18,15 +18,12 @@ module.exports = function () {
     let config = {
         swcMinify: true,
         async rewrites() {
-            if (process.env.NODE_ENV === 'development') { // Proxy to Backend in Development
-                return [
-                    {
-                        source: '/api/:path*',
-                        destination: `${process.env.NEXT_PUBLIC_API_URL}/api/:path*`,
-                    },
-                ];
-            }
-            return [];
+            return [
+                {
+                    source: '/api/:path*',
+                    destination: `${process.env.NEXT_PUBLIC_API_URL}/api/:path*`,
+                },
+            ];
         },
         webpack: (config) => {
             config.resolve.alias = {

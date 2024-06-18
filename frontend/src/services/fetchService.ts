@@ -10,7 +10,6 @@ const fetcher = async (url: any) => {
 
 const useFetchData = (route: string, baseUrl: string, params: any = {}) => {
     const queryKey = [route, params];
-    console.log(baseUrl);
     const fetchUrl = new URL(route, baseUrl);
     Object.keys(params).forEach((key) => fetchUrl.searchParams.append(key, params[key]));
     return useQuery(queryKey, () => fetcher(fetchUrl.toString()));
