@@ -49,7 +49,7 @@ const RotatingHouseDisplay = ({ interval }: RotatingHouseDisplayProps) => {
 
     return (
         <Stack
-            backgroundColor="$background"
+            backgroundColor="666333"
             width="100%"
             height={600}
             alignItems="center"

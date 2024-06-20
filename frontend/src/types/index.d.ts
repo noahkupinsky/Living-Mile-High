@@ -1,5 +1,9 @@
 export interface ApiService {
-    fetchData(route: string, params: Record<string, any> = {}): Promise<any>;
+    fetch(route: string, params: Record<string, any> = {}): Promise<any>;
     verifyAuthenticated(): Promise<boolean>;
     login(username: string, password: string): Promise<boolean>;
+}
+
+export type Services = {
+    apiService: ApiService;
 }

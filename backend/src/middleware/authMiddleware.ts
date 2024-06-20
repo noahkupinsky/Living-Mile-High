@@ -1,15 +1,15 @@
 import jwt from 'jsonwebtoken';
 import { ExpressMiddleware } from 'src/@types/express';
-import { JWT_SECRET } from '../env';
+import env from '../config/env';
 
 export const verifyToken: ExpressMiddleware = (req, res, next) => {
-    const token = req.headers['authorization']?.split(' ')[1];
+    const token = req.cookies.token;
     if (!token) return res.status(403).send({ auth: false, message: 'No token provided.' });
 
-    jwt.verify(token, JWT_SECRET, (err, decoded) => {
+    jwt.verify(token, env('JWT_SECRET'), (err: any, decoded: any) => {
         if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
 
-        req.user = decoded as any;
+        req.user = decoded;
         next();
     });
 }

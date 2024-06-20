@@ -1,57 +1,26 @@
-'use client';
+"use client"
 
-import { Stack, Text, YStack } from 'tamagui';
-import { usePathname, useRouter } from 'next/navigation';
+import { Text, View, styled } from 'tamagui';
 
-const Header = () => {
-    const router = useRouter()
-    const pathname = usePathname()
+const HeaderView = styled(View, {
+    name: 'HeaderView',
+    width: '100%',
+    padding: '$sm',
+    backgroundColor: '$background',
+    alignItems: 'center',
+    justifyContent: 'center',
+});
 
+const HeaderText = styled(Text, {
+    name: 'HeaderText',
+    fontSize: '$lg',
+    fontWeight: 'bold',
+});
+
+export default function Header() {
     return (
-        <Stack
-            backgroundColor="$background"
-            paddingVertical="$2"
-            paddingHorizontal="$3"
-            flexDirection="row"
-            alignItems="center"
-            justifyContent="space-between"
-        >
-            <Text
-                onPress={() => router.push('/')}
-                //fontFamily="$heading"
-                fontSize="$3"
-                cursor="pointer"
-                color="$text"
-            >
-                {/* Replace with your logo */}
-                Company Logo
-            </Text>
-            <YStack flexDirection="row" gap="$3">
-                {['About', 'Services', 'Contact'].map((tab) => (
-                    <Text
-                        key={tab}
-                        onPress={() => router.push(`/${tab.toLowerCase()}`)}
-                        // fontFamily="$body"
-                        fontSize="$2"
-                        color={pathname === `/${tab.toLowerCase()}` ? '$text' : '$primary'}
-                        cursor="pointer"
-                    >
-                        {tab}
-                    </Text>
-                ))}
-                <Text
-                    onPress={() => window.open('https://instagram.com', '_blank')}
-                    // fontFamily="$body"
-                    fontSize="$2"
-                    cursor="pointer"
-                    color="$text"
-                >
-                    {/* Replace with Instagram logo */}
-                    Instagram
-                </Text>
-            </YStack>
-        </Stack>
+        <HeaderView>
+            <HeaderText>Header</HeaderText>
+        </HeaderView>
     );
-};
-
-export default Header;
+}

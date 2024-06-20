@@ -1,12 +1,20 @@
 import { Client } from 'minio';
 import { v4 as uuidv4 } from 'uuid';
 
+export type SpaceConfig = {
+    region: string;
+    bucket: string;
+    key: string;
+    secret: string;
+}
+
 export class SpaceImageService {
     private region: string;
     private bucket: string;
     private client: Client;
 
-    constructor(region: string, bucket: string, key: string, secret: string) {
+    constructor(config: SpaceConfig) {
+        const { region, bucket, key, secret } = config;
         this.region = region;
         this.bucket = bucket;
         this.client = new Client({
@@ -18,7 +26,7 @@ export class SpaceImageService {
         });
     }
 
-    public async uploadImage(file: Express.Multer.File): Promise<string> {
+    public async uploadImage(file: any): Promise<string> {
         const fileExtension = file.originalname.split('.').pop();
         const fileName = `${uuidv4()}.${fileExtension}`;
 

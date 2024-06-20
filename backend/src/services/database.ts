@@ -1,9 +1,9 @@
 import mongoose, { Connection } from 'mongoose';
-import { Database } from './@types';
-import { AdminService } from './@types/admin';
-import { HouseService } from './@types/house';
-import MongoAdminService from './services/adminService';
-import { MongoHouseService } from './services/houseService';
+import { Database } from '../@types';
+import { AdminService } from '../@types/admin';
+import { HouseService } from '../@types/house';
+import MongoAdminService from './adminService';
+import { MongoHouseService } from './houseService';
 
 class MongoDatabase implements Database {
     private mongoUri: string;

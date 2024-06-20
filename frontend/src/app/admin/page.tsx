@@ -2,37 +2,35 @@
 
 import { useState, useEffect } from 'react'
 import axios from '../../services/axiosService'
+import { useServices } from '@/providers/ServiceProvider';
 
 const AdminPanel = () => {
-  const [password, setPassword] = useState('')
-  const [token, setToken] = useState('')
+  const { apiService } = useServices();
   const [adminData, setAdminData] = useState(null)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [password, setPassword] = useState('')
+  const [username, setUsername] = useState('')
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('/api/auth/login', { password })
-      setToken(response.data.token)
+      setIsAuthenticated(await apiService.login(username, password));
     } catch (error) {
       console.error('Login failed', error)
     }
   }
 
   useEffect(() => {
-    if (token) {
-      axios
-        .get('/api/auth/data', {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then(response => setAdminData(response.data))
-        .catch(error => console.error('Failed to fetch admin data', error))
+    if (isAuthenticated) {
+      apiService.fetch('/auth/data').then(data => setAdminData(data))
     }
-  }, [token])
+  }, [apiService, isAuthenticated])
 
   return (
     <div>
       <h1>Admin Panel</h1>
-      {!token ? (
+      {!isAuthenticated ? (
         <div>
+          <input type="text" placeholder="username" value={username} onChange={e => setUsername(e.target.value)} />
           <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
           <button onClick={handleLogin}>Login</button>
         </div>

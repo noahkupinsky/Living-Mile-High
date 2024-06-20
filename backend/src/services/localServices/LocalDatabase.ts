@@ -1,10 +1,10 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import { Database } from '../../src/@types';
-import { AdminService } from 'src/@types/admin';
-import { HouseService } from 'src/@types/house';
+import { Database } from '../../@types';
+import { AdminService } from '../../@types/admin';
+import { HouseService } from '../../@types/house';
 import mongoose, { Connection } from 'mongoose';
-import MongoAdminService from '../../src/services/adminService';
-import { MongoHouseService } from '../../src/services/houseService';
+import MongoAdminService from '../adminService';
+import { MongoHouseService } from '../houseService';
 
 export class LocalDatabase implements Database {
     private connection: Connection;

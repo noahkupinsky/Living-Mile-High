@@ -3,6 +3,7 @@
 import React from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { NextTamaguiProvider } from './NextTamaguiProvider';
+import { ServiceProvider } from './ServiceProvider';
 
 const queryClient = new QueryClient();
 
@@ -14,9 +15,12 @@ const Providers = ({ children }: ProviderProps) => {
     return (
         <QueryClientProvider client={queryClient}>
             <NextTamaguiProvider>
-                {children}
+                <ServiceProvider>
+                    {children}
+                </ServiceProvider>
             </NextTamaguiProvider>
         </QueryClientProvider>
+
     );
 };
 

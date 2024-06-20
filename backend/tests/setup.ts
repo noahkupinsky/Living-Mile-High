@@ -3,7 +3,7 @@ import { Server } from 'http';
 import { createApp, getApp, teardown } from '../src/app';
 import express from 'express';
 import supertest from 'supertest';
-import LocalAppServices from './utils/LocalAppServices';
+import LocalAppServices from '../src/services/localServices/LocalAppServices';
 
 dotenv.config();
 

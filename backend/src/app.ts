@@ -1,12 +1,11 @@
 import express from 'express';
 import cors from 'cors';
 import router from './routes';
+import cookieParser from 'cookie-parser';
 import { IAppServices, ServiceKey } from './@types/index';
 import { ExpressMiddleware } from './@types/express';
 import passport from './config/passport';
 import { Server } from 'http';
-import './env';
-import { HOST } from './env';
 
 let services: IAppServices | null = null;
 let app: express.Application;
@@ -15,15 +14,21 @@ async function setupApp(appServices: IAppServices): Promise<void> {
     services = appServices;
     await services.connect();
     app = express();
-    app.use(cors());
+    app.use(cors(
+        {
+            origin: true,
+            credentials: true
+        }
+    ));
     app.use(express.json());
+    app.use(cookieParser());
     app.use(passport.initialize());
     app.use(router);
 }
 
-export async function createApp(appConfig: IAppServices): Promise<express.Application> {
+export async function createApp(appServices: IAppServices): Promise<express.Application> {
     try {
-        await setupApp(appConfig);
+        await setupApp(appServices);
         return app;
     } catch (error) {
         console.error('Error setting up app', error);
