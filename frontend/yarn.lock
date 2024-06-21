@@ -5847,10 +5847,10 @@ lighthouse-logger@^1.0.0:
     debug "^2.6.9"
     marky "^1.2.2"
 
-living-mile-high-types@^1.0.9:
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/living-mile-high-types/-/living-mile-high-types-1.0.9.tgz#c459b43feeaf94654211546179e41010265b7d72"
-  integrity sha512-8DCAu8vajiXwljPqZTiEcosZPjHYY256TR1fxHxoDWLs1lmVO88tTR/ermkfdGjFPQ8yrSdUXAne4HjF0Tb/Yw==
+living-mile-high-types@1.0.10:
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/living-mile-high-types/-/living-mile-high-types-1.0.10.tgz#252ccd9ffbd5c26d78f5f9e2ce539f07995333a1"
+  integrity sha512-jqeRDSRHiJdgNkWIZmA9NmNHY5CC8TqE5WNgeLxCJSUWFEeBfq0wUKO6BaR+yKO6LeiPJEL8LcxG7KM+ox3Atg==
 
 loader-runner@^4.1.0:
   version "4.3.0"

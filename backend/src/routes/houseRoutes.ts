@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import { findHouses, saveHouse } from '../controllers/houseController';
-import { verifyToken } from '../middleware/authMiddleware';
+import { getHouses, saveHouse } from '../controllers/houseController';
+import verifyToken from '../middleware/authMiddleware';
 
 const router = Router();
 
-router.get('/', findHouses);
+router.get('/', getHouses);
 router.post('/save', verifyToken, saveHouse);
 
 export default router

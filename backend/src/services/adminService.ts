@@ -1,12 +1,11 @@
 import bcrypt from 'bcrypt';
-import { AdminService } from 'src/@types/admin';
+import { AdminService } from 'src/types/admin';
 import AdminModel from '../models/adminModel';
 
 class MongoAdminService implements AdminService {
     async getUserByLoginInfo(username: string, password: string): Promise<any> {
         const user = await AdminModel.findOne({ username });
         if (!user) return null;
-
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return null;
 

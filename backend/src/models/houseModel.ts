@@ -1,11 +1,10 @@
 import { Schema, model, Document } from 'mongoose';
-import { HouseRecord } from 'src/@types/house';
+import { HouseRecord } from 'src/types/house';
 
 export interface HouseDocument extends Document, HouseRecord { }
 
 const HouseSchema = new Schema<HouseDocument>({
     address: { type: String, required: true },
-    onHomePage: { type: Boolean, required: true },
     isDeveloped: { type: Boolean, required: true },
     isForSale: { type: Boolean, required: true },
     isSelectedWork: { type: Boolean, required: true },

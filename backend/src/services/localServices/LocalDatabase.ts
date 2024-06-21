@@ -1,7 +1,7 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import { Database } from '../../@types';
-import { AdminService } from '../../@types/admin';
-import { HouseService } from '../../@types/house';
+import { Database } from '../../types';
+import { AdminService } from '../../types/admin';
+import { HouseService } from '../../types/house';
 import mongoose, { Connection } from 'mongoose';
 import MongoAdminService from '../adminService';
 import { MongoHouseService } from '../houseService';
@@ -13,8 +13,8 @@ export class LocalDatabase implements Database {
     private mongoServer: MongoMemoryServer;
 
     constructor() {
-        this.adminService = new MongoAdminService(),
-            this.houseService = new MongoHouseService()
+        this.adminService = new MongoAdminService();
+        this.houseService = new MongoHouseService();
     }
 
     async connect(): Promise<void> {

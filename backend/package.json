@@ -5,12 +5,13 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "test": "jest --detectOpenHandles",
+    "test": "JWT_SECRET=secret jest --detectOpenHandles",
     "dev": "ENV_FILE=${ENV_FILE:-local} ts-node-dev src/server.ts",
     "start": "node dist/src/server.js",
     "start:pm2": "pm2 start yarn --name backend -- start"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.600.0",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
@@ -20,7 +21,7 @@
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "jsonwebtoken": "^9.0.2",
-    "living-mile-high-types": "^1.0.9",
+    "living-mile-high-types": "1.0.10",
     "minio": "^8.0.0",
     "mongodb": "^6.7.0",
     "mongoose": "^8.4.1",

@@ -1,17 +1,17 @@
-import { Database, IAppServices, ImageService, ServiceDict, ServiceKey } from "../@types";
+import { Database, IAppServices, ImageService, ServiceDict } from "../types";
 
 class AppServices implements IAppServices {
     private database: Database;
     private imageService: ImageService;
-    private services: ServiceDict;
+    private serviceDict: ServiceDict;
 
     constructor(database: Database, imageService: ImageService) {
         this.database = database;
         this.imageService = imageService;
-        this.services = {
-            house: database.houseService,
-            admin: database.adminService,
-            image: imageService
+        this.serviceDict = {
+            houseService: database.houseService,
+            adminService: database.adminService,
+            imageService: imageService
         };
     }
 
@@ -23,8 +23,8 @@ class AppServices implements IAppServices {
         await this.database.disconnect();
     }
 
-    getService(key: ServiceKey): any {
-        return this.services[key];
+    get services(): ServiceDict {
+        return this.serviceDict;
     }
 }
 

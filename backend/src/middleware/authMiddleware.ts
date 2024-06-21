@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken';
-import { ExpressMiddleware } from 'src/@types/express';
+import { ExpressMiddleware } from 'src/types/express';
 import env from '../config/env';
 
-export const verifyToken: ExpressMiddleware = (req, res, next) => {
+const verifyToken: ExpressMiddleware = (req, res, next) => {
     const token = req.cookies.token;
     if (!token) return res.status(403).send({ auth: false, message: 'No token provided.' });
 
@@ -13,3 +13,5 @@ export const verifyToken: ExpressMiddleware = (req, res, next) => {
         next();
     });
 }
+
+export default verifyToken

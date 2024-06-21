@@ -1,6 +1,5 @@
 export type House = {
     id?: string,
-    onHomePage: boolean,
     isDeveloped: boolean,
     isForSale: boolean,
     isSelectedWork: boolean,
@@ -11,7 +10,6 @@ export type House = {
     stats: HouseStats
 }
 
-
 export type HouseStats = {
     houseSquareFeet?: number,
     lotSquareFeet?: number,
@@ -20,12 +18,30 @@ export type HouseStats = {
     garageSpaces?: number,
 }
 
+
 export type HouseQuery = {
-    onHomePage?: string,
-    isDeveloped?: string,
-    isForSale?: string,
-    isSelectedWork?: string,
+    isDeveloped?: boolean,
+    isForSale?: boolean,
+    isSelectedWork?: boolean,
     address?: string,
     neighborhood?: string,
     mainImage?: string
+}
+
+export type AboutData = {
+    text: string,
+    image: string
+}
+
+export type ContactData = {
+    text: string,
+    image: string
+}
+
+export type AppData = {
+    about: AboutData,
+    contact: ContactData,
+    houses: House[],
+    placeholders: string[],
+    homeImages: string[]
 }

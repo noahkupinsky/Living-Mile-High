@@ -1,40 +1,49 @@
+import { S3CdnService, S3CdnServiceConfig } from "../S3CdnService";
+import { inMemoryCDN } from "../createS3CdnService";
+import { CdnImageService } from "../imageService";
 import { LocalDatabase } from "./LocalDatabase";
-import { LocalImageService } from "./LocalImageService";
-import { IAppServices, ServiceDict, ServiceKey } from "src/@types";
+import { CdnService, IAppServices, ImageService, ServiceDict } from "../../types";
+
+
+type LocalServiceDict = ServiceDict & {
+    cdnService: CdnService
+}
 
 
 class LocalAppServices implements IAppServices {
     private database: LocalDatabase;
-    private imageService: LocalImageService;
-    private services: ServiceDict;
+    private imageService: ImageService;
+    private serviceDict: LocalServiceDict;
 
-    constructor() {
+    constructor(S3ServiceConfig: S3CdnServiceConfig) {
         this.database = new LocalDatabase();
-        this.imageService = new LocalImageService();
-        this.services = {
-            house: this.database.houseService,
-            admin: this.database.adminService,
-            image: this.imageService
+        const s3Service = new S3CdnService(S3ServiceConfig);
+        this.imageService = new CdnImageService(s3Service);
+        this.serviceDict = {
+            houseService: this.database.houseService,
+            adminService: this.database.adminService,
+            imageService: this.imageService,
+            cdnService: s3Service
         };
     }
 
     async connect(): Promise<void> {
         await this.database.connect();
-        await this.imageService.connect();
     }
 
     async disconnect(): Promise<void> {
         await this.database.disconnect();
-        await this.imageService.disconnect();
     }
 
     async clear(): Promise<void> {
         await this.database.clear();
-        await this.imageService.clear();
+        for (const key in inMemoryCDN) {
+            delete inMemoryCDN[key];
+        }
     }
 
-    getService(key: ServiceKey): any {
-        return this.services[key];
+    get services(): LocalServiceDict {
+        return this.serviceDict;
     }
 }
 

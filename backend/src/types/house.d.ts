@@ -2,7 +2,6 @@ import { House } from "living-mile-high-types";
 
 export interface HouseRecord {
     address: string;
-    onHomePage: boolean;
     isDeveloped: boolean;
     isForSale: boolean;
     isSelectedWork: boolean;
@@ -19,7 +18,7 @@ export interface HouseRecord {
 }
 
 export interface HouseService {
-    findHouses(houseFilter: HouseFilter): Promise<any>;
+    getHouses(): Promise<House[]>;
     saveHouse(house: House): Promise<void>;
     allImages(): Promise<string[]>;
     allNeighborhoods(): Promise<string[]>;

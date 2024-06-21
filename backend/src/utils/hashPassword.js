@@ -17,6 +17,4 @@ if (!password) {
     console.error('Please provide a password to hash.');
     process.exit(1);
 }
-bcrypt.compare("hello", "$2b$10/5WgnK5ser2GHvjZkFkFao42g8zWSHYhnro9epqm").then(console.log);
-bcrypt.compare("hello", "$2b$10$qiZ2q01VawILx/5WgnK5ser2GHvjZkFkFao42g8zWSHYhnro9epqm").then(console.log);
 hashPassword(password);

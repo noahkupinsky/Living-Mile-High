@@ -1,18 +1,18 @@
 import dotenv from 'dotenv';
-import { Server } from 'http';
 import { createApp, getApp, teardown } from '../src/app';
-import express from 'express';
 import supertest from 'supertest';
 import LocalAppServices from '../src/services/localServices/LocalAppServices';
+import { createInMemoryS3CdnServiceConfig } from '../src/services/createS3CdnService';
 
 dotenv.config();
 
-const TEST_PORT = 3001;
-
 let localServices: LocalAppServices;
+let s3CdnClient: any;
 
 beforeAll(async () => {
-    localServices = new LocalAppServices();
+    const localS3ServiceConfig = createInMemoryS3CdnServiceConfig();
+    s3CdnClient = localS3ServiceConfig.client;
+    localServices = new LocalAppServices(localS3ServiceConfig);
     await createApp(localServices);
 });
 
@@ -24,4 +24,5 @@ afterAll(async () => {
     await teardown();
 });
 
-export const getRequest = () => supertest(getApp());
+export const services = () => localServices.services;
+export const s3Client = () => s3CdnClient;

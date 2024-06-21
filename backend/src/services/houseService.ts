@@ -1,48 +1,14 @@
-import { House, HouseQuery } from 'living-mile-high-types';
-import { HouseService } from '../@types/house';
+import { House } from 'living-mile-high-types';
+import { HouseService } from '../types/house';
 import HouseModel, { HouseDocument } from '../models/houseModel';
 
 export class MongoHouseService implements HouseService {
-    async findHouses(houseQuery: HouseQuery): Promise<House[]> {
-        try {
-            const { address, onHomePage, isDeveloped, isSelectedWork, isForSale, neighborhood, mainImage } = houseQuery;
-            const dbQuery: any = {};
-
-            if (address) {
-                dbQuery.address = new RegExp(address, 'i'); // Case-insensitive search
-            }
-            if (onHomePage !== undefined) {
-                dbQuery.onHomePage = (onHomePage === 'true');
-            }
-            if (isDeveloped !== undefined) {
-                dbQuery.isDeveloped = (isDeveloped === 'true');
-            }
-            if (isForSale !== undefined) {
-                dbQuery.isForSale = (isForSale === 'true');
-            }
-            if (isSelectedWork !== undefined) {
-                dbQuery.isSelectedWork = (isSelectedWork === 'true');
-            }
-            if (neighborhood) {
-                dbQuery.neighborhood = new RegExp(neighborhood, 'i'); // Case-insensitive search
-            }
-            if (mainImage) {
-                dbQuery.mainImage = mainImage;
-            }
-
-            const houses = await HouseModel.find(dbQuery);
-            return houses.map(doc => this.houseRecordToObject(doc));
-        } catch (error) {
-            console.log("Invalid Filter or db error", error);
-            return [];
-        }
+    async getHouses(): Promise<House[]> {
+        const houses: HouseDocument[] = await HouseModel.find();
+        return houses.map(house => this.houseRecordToObject(house));
     };
 
     async saveHouse(house: House): Promise<void> {
-        if (!house.address || !house.mainImage || !house.neighborhood) {
-            throw new Error('House address, main image, and neighborhood are required.');
-        }
-
         let savedHouse;
         if (house.id) {
             // Extract the id and remove it from the update object
@@ -72,7 +38,6 @@ export class MongoHouseService implements HouseService {
     private houseRecordToObject(doc: HouseDocument): House {
         const house: House = {
             id: doc.get('id'),
-            onHomePage: doc.get('onHomePage'),
             isDeveloped: doc.get('isDeveloped'),
             isForSale: doc.get('isForSale'),
             isSelectedWork: doc.get('isSelectedWork'),

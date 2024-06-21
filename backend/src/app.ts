@@ -2,17 +2,17 @@ import express from 'express';
 import cors from 'cors';
 import router from './routes';
 import cookieParser from 'cookie-parser';
-import { IAppServices, ServiceKey } from './@types/index';
-import { ExpressMiddleware } from './@types/express';
+import { IAppServices, ServiceDict } from './types/appServices';
+import { ExpressMiddleware } from './types/express';
 import passport from './config/passport';
 import { Server } from 'http';
 
-let services: IAppServices | null = null;
+let appServices: IAppServices | null = null;
 let app: express.Application;
 
-async function setupApp(appServices: IAppServices): Promise<void> {
-    services = appServices;
-    await services.connect();
+async function setupApp(services: IAppServices): Promise<void> {
+    appServices = services;
+    await appServices.connect();
     app = express();
     app.use(cors(
         {
@@ -26,9 +26,9 @@ async function setupApp(appServices: IAppServices): Promise<void> {
     app.use(router);
 }
 
-export async function createApp(appServices: IAppServices): Promise<express.Application> {
+export async function createApp(services: IAppServices): Promise<express.Application> {
     try {
-        await setupApp(appServices);
+        await setupApp(services);
         return app;
     } catch (error) {
         console.error('Error setting up app', error);
@@ -37,19 +37,19 @@ export async function createApp(appServices: IAppServices): Promise<express.Appl
 };
 
 export async function teardown(server: Server | null = null) {
-    if (services) {
-        await services.disconnect();
+    if (appServices) {
+        await appServices.disconnect();
     }
     if (server) {
         server.close();
     }
 }
 
-export function getService(service: ServiceKey): any {
-    if (!services) {
+export function services(): ServiceDict {
+    if (!appServices) {
         throw new Error('AppConfig has not been initialized. Call initializeAppConfig first.');
     }
-    return services.getService(service);
+    return appServices.services;
 }
 
 export function getApp(): express.Application {

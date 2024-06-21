@@ -1,24 +1,20 @@
-import { AdminService } from 'src/@types';
-import { getService } from '../src/app';
-import { getRequest } from './setup';
+import supertest from 'supertest';
+import { getApp, services } from '../src/app';
 
-let request: any;
+let agent: any;
+
+
+beforeAll(() => {
+    agent = supertest.agent(getApp());
+});
 
 describe('Auth Routes', () => {
     const loginEndpoint = '/api/auth/login';
 
-    beforeAll(() => {
-        request = getRequest();
-    })
-
-    beforeEach(async () => {
-        const adminService: AdminService = getService('admin');
-        await adminService.createUser('admin', 'password123');
-    });
-
     it('should login an existing user with correct credentials', async () => {
-
-        const response = await request.post(loginEndpoint).send({
+        const { adminService } = services();
+        await adminService.createUser('admin', 'password123');
+        const response = await agent.post(loginEndpoint).send({
             username: 'admin',
             password: 'password123'
         });
@@ -26,11 +22,13 @@ describe('Auth Routes', () => {
     });
 
     it('should not login with incorrect credentials', async () => {
-        const response = await request.post(loginEndpoint).send({
+        const { adminService } = services();
+        await adminService.createUser('admin', 'password123');
+        const response = await agent.post(loginEndpoint).send({
             username: 'admin',
             password: 'wrongpassword'
         });
-        expect(response.status).toBe(400);
+        expect(response.status).toBe(401);
         expect(response.body).toHaveProperty('message', 'Invalid username or password');
     });
 });

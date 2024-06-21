@@ -1,7 +1,7 @@
 import mongoose, { Connection } from 'mongoose';
-import { Database } from '../@types';
-import { AdminService } from '../@types/admin';
-import { HouseService } from '../@types/house';
+import { Database } from '../types';
+import { AdminService } from '../types/admin';
+import { HouseService } from '../types/house';
 import MongoAdminService from './adminService';
 import { MongoHouseService } from './houseService';
 

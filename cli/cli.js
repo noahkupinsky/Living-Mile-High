@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const { program } = require('commander');
 const shell = require('shelljs');
 const fs = require('fs');
+const path = require('path');
 
 const ENV_FILE_PATH = '.env';
 
@@ -130,14 +131,43 @@ program
         });
     });
 
+// Function to get the package version
+const getPackageVersion = (packagePath) => {
+    const packageJson = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
+    return packageJson.version;
+};
+
 program
     .command('publish-types')
     .description('Publish types')
     .action(() => {
-        console.log('Publishing types...');
-        if (shell.exec('sh ./publish_types.sh').code !== 0) {
-            throw new Error('Failed to publish types');
-        }
+        const origDir = process.cwd();
+
+        // Change into the living-mile-high-types directory
+        const typesDir = path.join(origDir, 'living-mile-high-types');
+        shell.cd(typesDir);
+
+        // Increment the version in package.json
+        shell.exec('npm version patch');
+
+        // Publish the package
+        shell.exec('npm publish');
+
+        // Get the new version
+        const newVersion = getPackageVersion(path.join(typesDir, 'package.json'));
+
+        // Reinstall the package in the frontend directory
+        const frontendDir = path.join(origDir, 'frontend');
+        shell.cd(frontendDir);
+        shell.exec(`yarn add "living-mile-high-types@${newVersion}"`);
+
+        // Reinstall the package in the backend directory
+        const backendDir = path.join(origDir, 'backend');
+        shell.cd(backendDir);
+        shell.exec(`yarn add "living-mile-high-types@${newVersion}"`);
+
+        // Change back to the original directory
+        shell.cd(origDir);
     });
 
 program.parse(process.argv);
