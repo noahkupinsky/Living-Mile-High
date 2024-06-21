@@ -1,17 +1,16 @@
-import { Database, IAppServices, ImageService, ServiceDict } from "../types";
+import { CdnServiceProvider, Database, IAppServices, ImageService, ServiceDict } from "../types";
 
 class AppServices implements IAppServices {
     private database: Database;
-    private imageService: ImageService;
+    private cdnServiceProvider: CdnServiceProvider;
     private serviceDict: ServiceDict;
 
-    constructor(database: Database, imageService: ImageService) {
+    constructor(database: Database, cdnServiceProvider: CdnServiceProvider) {
         this.database = database;
-        this.imageService = imageService;
+        this.cdnServiceProvider = cdnServiceProvider;
         this.serviceDict = {
-            houseService: database.houseService,
-            adminService: database.adminService,
-            imageService: imageService
+            ...database.services,
+            ...cdnServiceProvider.services
         };
     }
 

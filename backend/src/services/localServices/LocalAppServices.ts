@@ -1,8 +1,7 @@
-import { S3CdnService, S3CdnServiceConfig } from "../S3CdnService";
+import { CdnService, IAppServices, S3CdnConfig, ServiceDict } from "../../types";
 import { inMemoryCDN } from "../createS3CdnService";
-import { CdnImageService } from "../imageService";
-import { LocalDatabase } from "./LocalDatabase";
-import { CdnService, IAppServices, ImageService, ServiceDict } from "../../types";
+import LocalDatabase from "./LocalDatabase";
+import { LocalCdnServiceProvider } from "./LocalCdnServiceProvider";
 
 
 type LocalServiceDict = ServiceDict & {
@@ -12,18 +11,15 @@ type LocalServiceDict = ServiceDict & {
 
 class LocalAppServices implements IAppServices {
     private database: LocalDatabase;
-    private imageService: ImageService;
+    private cdnServiceProvider: LocalCdnServiceProvider;
     private serviceDict: LocalServiceDict;
 
-    constructor(S3ServiceConfig: S3CdnServiceConfig) {
+    constructor(S3ServiceConfig: S3CdnConfig) {
         this.database = new LocalDatabase();
-        const s3Service = new S3CdnService(S3ServiceConfig);
-        this.imageService = new CdnImageService(s3Service);
+        this.cdnServiceProvider = new LocalCdnServiceProvider();
         this.serviceDict = {
-            houseService: this.database.houseService,
-            adminService: this.database.adminService,
-            imageService: this.imageService,
-            cdnService: s3Service
+            ...this.database.services,
+            ...this.cdnServiceProvider.services,
         };
     }
 

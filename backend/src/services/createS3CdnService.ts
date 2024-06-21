@@ -1,5 +1,5 @@
 import { S3Client, PutObjectCommand, DeleteObjectCommand, GetObjectCommand, ListObjectsV2Command, GetObjectCommandOutput, GetObjectRequest } from "@aws-sdk/client-s3";
-import { S3CdnServiceConfig } from './S3CdnService';
+import { S3CdnConfig } from "../types";
 
 export const inMemoryCDN: { [key: string]: { body: any, contentType: string } } = {};
 
@@ -41,7 +41,7 @@ export class InMemoryS3Client {
     }
 }
 
-export function createInMemoryS3CdnServiceConfig(): S3CdnServiceConfig {
+export function createInMemoryS3CdnServiceConfig(): S3CdnConfig {
     const mockClient = new InMemoryS3Client() as unknown as S3Client;
     return {
         client: mockClient,
@@ -54,7 +54,7 @@ export function createDOSpaceS3CdnServiceConfig(
     bucket: string,
     key: string,
     secret: string
-): S3CdnServiceConfig {
+): S3CdnConfig {
     const client = new S3Client({
         endpoint: `https://${region}.digitaloceanspaces.com`,
         credentials: {

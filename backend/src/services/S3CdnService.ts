@@ -1,20 +1,14 @@
 import { S3Client, PutObjectCommand, DeleteObjectCommand, ListObjectsV2Command, ListObjectsV2CommandOutput, GetObjectCommand, GetObjectCommandOutput } from "@aws-sdk/client-s3";
-import { CdnService } from '../types';
+import { CdnService, S3CdnConfig } from '../types';
 import { CdnFixedKeys } from '../types/enums';
 import { v4 as uuidv4 } from 'uuid';
-
-export type S3CdnServiceConfig = {
-    client: S3Client,
-    bucket: string,
-    cdnBaseUrl?: string // Optional base URL for custom CDNs
-}
 
 export class S3CdnService implements CdnService {
     private client: S3Client;
     private bucket: string;
     private cdnBaseUrl: string;
 
-    constructor(config: S3CdnServiceConfig) {
+    constructor(config: S3CdnConfig) {
         this.client = config.client;
         this.bucket = config.bucket;
         this.cdnBaseUrl = config.cdnBaseUrl || this.defaultCdnBaseUrl();

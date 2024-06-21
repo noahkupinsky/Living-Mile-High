@@ -1,20 +1,20 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import { Database } from '../../types';
-import { AdminService } from '../../types/admin';
-import { HouseService } from '../../types/house';
+import { Database, DatabaseServiceDict } from '../../types';
 import mongoose, { Connection } from 'mongoose';
-import MongoAdminService from '../adminService';
-import { MongoHouseService } from '../houseService';
+import MongoAdminService from '../MongoAdminService';
+import { MongoHouseService } from '../MongoHouseService';
 
-export class LocalDatabase implements Database {
+class LocalDatabase implements Database {
     private connection: Connection;
-    public adminService: AdminService;
-    public houseService: HouseService;
+    private dbServices: DatabaseServiceDict;
     private mongoServer: MongoMemoryServer;
 
     constructor() {
-        this.adminService = new MongoAdminService();
-        this.houseService = new MongoHouseService();
+        this.dbServices = {
+            adminService: new MongoAdminService(),
+            houseService: new MongoHouseService()
+        };
+
     }
 
     async connect(): Promise<void> {
@@ -34,6 +34,10 @@ export class LocalDatabase implements Database {
         }
     }
 
+    get services(): DatabaseServiceDict {
+        return this.dbServices;
+    }
+
     async clear(): Promise<void> {
         const collections = await mongoose.connection.db.collections();
         for (let collection of collections) {
@@ -41,3 +45,5 @@ export class LocalDatabase implements Database {
         }
     }
 }
+
+export default LocalDatabase;

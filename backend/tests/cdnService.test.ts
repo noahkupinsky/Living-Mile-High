@@ -1,6 +1,5 @@
 import { CdnService } from "../src/types";
-import { createInMemoryS3CdnServiceConfig, inMemoryCDN } from "../src/services/createS3CdnService";
-import { S3CdnServiceConfig } from "../src/services/S3CdnService";
+import { inMemoryCDN } from "../src/services/createS3CdnService";
 import { services } from "./setup";
 
 let cdnService: CdnService;

@@ -1,18 +1,16 @@
 import mongoose, { Connection } from 'mongoose';
-import { Database } from '../types';
-import { AdminService } from '../types/admin';
-import { HouseService } from '../types/house';
-import MongoAdminService from './adminService';
-import { MongoHouseService } from './houseService';
+import { Database, DatabaseServiceDict } from '../types';
+import MongoAdminService from './MongoAdminService';
+import { MongoHouseService } from './MongoHouseService';
 
 class MongoDatabase implements Database {
     private mongoUri: string;
     private connection: Connection;
-    private services: { adminService: AdminService, houseService: HouseService };
+    private dbServices: DatabaseServiceDict;
 
     constructor(uri: string) {
         this.mongoUri = uri;
-        this.services = {
+        this.dbServices = {
             adminService: new MongoAdminService(),
             houseService: new MongoHouseService()
         }
@@ -31,12 +29,8 @@ class MongoDatabase implements Database {
         }
     }
 
-    get adminService(): AdminService {
-        return this.services.adminService;
-    }
-
-    get houseService(): HouseService {
-        return this.services.houseService
+    get services(): DatabaseServiceDict {
+        return this.dbServices;
     }
 }
 

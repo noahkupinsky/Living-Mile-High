@@ -1,6 +1,6 @@
-import AppServices from "../services/appServices";
-import MongoDatabase from "../services/database";
-import { CdnImageService } from "../services/imageService";
+import AppServices from "../services/AppServices";
+import MongoDatabase from "../services/MongoDatabase";
+import { CdnImageService } from "../services/CdnImageService";
 import env from './env'
 import LocalAppServices from "../services/localServices/LocalAppServices";
 import { createInMemoryS3CdnServiceConfig, createDOSpaceS3CdnServiceConfig } from "../services/createS3CdnService";
