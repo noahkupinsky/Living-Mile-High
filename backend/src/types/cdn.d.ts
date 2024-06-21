@@ -1,6 +1,6 @@
 import { ImageService } from "./image";
 
-export interface CdnService {
+export interface CdnAdapter {
     public getObjectUrl(objectKey: string): string;
     public generateUniqueKey(prefix: string): string;
     public async putObject(objectKey: string, body: any, contentType: string): Promise<boolean>;
@@ -10,7 +10,7 @@ export interface CdnService {
     public async garbageCollect(references: Object): Promise<number>;
 }
 
-export interface CdnServiceProvider {
+export interface CdnServiceProvider implements ServiceProvider<CdnServiceDict> {
     get services(): CdnServiceDict;
 }
 

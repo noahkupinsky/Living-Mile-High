@@ -1,9 +1,9 @@
-import { CdnServiceProvider, Database, IAppServices, ImageService, ServiceDict } from "../types";
+import { CdnServiceProvider, Database, IAppServices, ImageService, AppServiceDict } from "../types";
 
 class AppServices implements IAppServices {
     private database: Database;
     private cdnServiceProvider: CdnServiceProvider;
-    private serviceDict: ServiceDict;
+    private serviceDict: AppServiceDict;
 
     constructor(database: Database, cdnServiceProvider: CdnServiceProvider) {
         this.database = database;
@@ -22,7 +22,7 @@ class AppServices implements IAppServices {
         await this.database.disconnect();
     }
 
-    get services(): ServiceDict {
+    get services(): AppServiceDict {
         return this.serviceDict;
     }
 }

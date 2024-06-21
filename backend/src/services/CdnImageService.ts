@@ -1,19 +1,19 @@
-import { ImageService, CdnService } from '../types';
+import { ImageService, CdnAdapter } from '../types';
 import { ImageCategory } from '../types/enums';
 
 export class CdnImageService implements ImageService {
-    private cdnService: CdnService;
+    private adapter: CdnAdapter;
 
-    constructor(cdnService: CdnService) {
-        this.cdnService = cdnService;
+    constructor(cdnService: CdnAdapter) {
+        this.adapter = cdnService;
     }
 
     public async uploadImage(file: any, category: ImageCategory = ImageCategory.Houses): Promise<string> {
-        const objectKey = this.cdnService.generateUniqueKey(category);
+        const objectKey = this.adapter.generateUniqueKey(category);
 
         try {
-            await this.cdnService.putObject(objectKey, file.buffer, file.mimetype);
-            return this.cdnService.getObjectUrl(objectKey);
+            await this.adapter.putObject(objectKey, file.buffer, file.mimetype);
+            return this.adapter.getObjectUrl(objectKey);
         } catch (error: any) {
             throw new Error(`Failed to upload image: ${error.message}`);
         }

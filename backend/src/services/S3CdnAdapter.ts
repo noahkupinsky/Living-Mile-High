@@ -1,9 +1,9 @@
 import { S3Client, PutObjectCommand, DeleteObjectCommand, ListObjectsV2Command, ListObjectsV2CommandOutput, GetObjectCommand, GetObjectCommandOutput } from "@aws-sdk/client-s3";
-import { CdnService, S3CdnConfig } from '../types';
+import { CdnAdapter, S3CdnConfig } from '../types';
 import { CdnFixedKeys } from '../types/enums';
 import { v4 as uuidv4 } from 'uuid';
 
-export class S3CdnService implements CdnService {
+export class S3CdnAdapter implements CdnAdapter {
     private client: S3Client;
     private bucket: string;
     private cdnBaseUrl: string;

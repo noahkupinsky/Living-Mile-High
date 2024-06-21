@@ -41,7 +41,7 @@ export class InMemoryS3Client {
     }
 }
 
-export function createInMemoryS3CdnServiceConfig(): S3CdnConfig {
+export function createInMemoryS3CdnConfig(): S3CdnConfig {
     const mockClient = new InMemoryS3Client() as unknown as S3Client;
     return {
         client: mockClient,
@@ -49,7 +49,7 @@ export function createInMemoryS3CdnServiceConfig(): S3CdnConfig {
     };
 }
 
-export function createDOSpaceS3CdnServiceConfig(
+export function createDOSpaceS3CdnConfig(
     region: string,
     bucket: string,
     key: string,

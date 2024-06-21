@@ -1,8 +1,8 @@
-import { CdnService } from "../src/types";
+import { CdnAdapter } from "../src/types";
 import { inMemoryCDN } from "../src/services/createS3CdnService";
 import { services } from "./setup";
 
-let cdnService: CdnService;
+let cdnService: CdnAdapter;
 
 beforeAll(() => {
     cdnService = services().cdnService

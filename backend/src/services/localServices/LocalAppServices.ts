@@ -1,11 +1,10 @@
-import { CdnService, IAppServices, S3CdnConfig, ServiceDict } from "../../types";
-import { inMemoryCDN } from "../createS3CdnService";
+import { CdnAdapter, IAppServices, AppServiceDict } from "../../types";
 import LocalDatabase from "./LocalDatabase";
 import { LocalCdnServiceProvider } from "./LocalCdnServiceProvider";
 
 
-type LocalServiceDict = ServiceDict & {
-    cdnService: CdnService
+type LocalServiceDict = AppServiceDict & {
+    cdnService: CdnAdapter
 }
 
 
@@ -14,7 +13,7 @@ class LocalAppServices implements IAppServices {
     private cdnServiceProvider: LocalCdnServiceProvider;
     private serviceDict: LocalServiceDict;
 
-    constructor(S3ServiceConfig: S3CdnConfig) {
+    constructor() {
         this.database = new LocalDatabase();
         this.cdnServiceProvider = new LocalCdnServiceProvider();
         this.serviceDict = {
@@ -33,9 +32,7 @@ class LocalAppServices implements IAppServices {
 
     async clear(): Promise<void> {
         await this.database.clear();
-        for (const key in inMemoryCDN) {
-            delete inMemoryCDN[key];
-        }
+        this.cdnServiceProvider.clear();
     }
 
     get services(): LocalServiceDict {

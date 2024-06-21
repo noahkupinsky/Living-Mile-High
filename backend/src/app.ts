@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import router from './routes';
 import cookieParser from 'cookie-parser';
-import { IAppServices, ServiceDict } from './types/appServices';
+import { IAppServices, AppServiceDict } from './types/appServices';
 import { ExpressMiddleware } from './types/express';
 import passport from './config/passport';
 import { Server } from 'http';
@@ -45,7 +45,7 @@ export async function teardown(server: Server | null = null) {
     }
 }
 
-export function services(): ServiceDict {
+export function services(): AppServiceDict {
     if (!appServices) {
         throw new Error('AppConfig has not been initialized. Call initializeAppConfig first.');
     }
