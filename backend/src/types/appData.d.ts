@@ -1,6 +1,6 @@
 import { AppData } from "living-mile-high-types";
 
 export interface AppDataService {
-    get data(): Promise<AppData>;
-    update(updates: AppData): Promise<AppData>;
+    getData(): Promise<DeepPartial<AppData>>;
+    update(updates: DeepPartial<AppData>): Promise<AppData>;
 }

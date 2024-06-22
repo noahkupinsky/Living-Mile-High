@@ -1,13 +1,20 @@
 import env from './config/env';
-import { createApp } from './app';
+import { getServer, setupApp } from './app';
 import createServices from './config/di';
 
 const startServer = async () => {
     try {
-        const services = await createServices();
-        const app = await createApp(services);
+        const server = getServer();
+        const servicesConfig = {
+            server: getServer()
+        }
+
+        const services = await createServices(servicesConfig);
+
+        await setupApp(services);
+
         const backendPort = env('BACKEND_PORT');
-        app.listen(backendPort, () => {
+        server.listen(backendPort, () => {
             console.log(`Server started on port ${backendPort}`);
         });
     } catch (error) {

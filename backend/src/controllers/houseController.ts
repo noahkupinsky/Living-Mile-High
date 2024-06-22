@@ -1,4 +1,4 @@
-import { House, HouseQuery } from "living-mile-high-types";
+import { House } from "living-mile-high-types";
 import { ExpressEndpoint } from "../types";
 import { services } from "../app";
 

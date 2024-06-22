@@ -1,7 +1,7 @@
 import mongoose, { Connection } from 'mongoose';
-import { Database, DatabaseServiceDict } from '../types';
+import { Database, DatabaseServiceDict } from '../../types';
 import MongoAdminService from './MongoAdminService';
-import { MongoHouseService } from './MongoHouseService';
+import MongoHouseService from './MongoHouseService';
 
 class MongoDatabase implements Database {
     private mongoUri: string;

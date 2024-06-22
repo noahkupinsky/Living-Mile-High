@@ -1,16 +1,20 @@
 import dotenv from 'dotenv';
-import { createApp, getApp, teardown } from '../src/app';
-import supertest from 'supertest';
-import LocalAppServices from '../src/services/localServices/LocalAppServices';
-import { createInMemoryS3CdnConfig } from '../src/services/createS3CdnService';
+import { getServer, setupApp, teardown } from '../src/app';
+import LocalAppServiceProvider from '../src/services/localServices/LocalAppServiceProvider';
+import createServices from '../src/config/di';
 
 dotenv.config();
 
-let localServices: LocalAppServices;
+let localServices: LocalAppServiceProvider;
 
 beforeAll(async () => {
-    localServices = new LocalAppServices();
-    await createApp(localServices);
+    const servicesConfig = {
+        useLocal: true,
+        server: getServer()
+    }
+
+    localServices = await createServices(servicesConfig) as LocalAppServiceProvider;
+    await setupApp(localServices);
 });
 
 beforeEach(async () => {

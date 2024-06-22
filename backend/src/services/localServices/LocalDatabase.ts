@@ -1,19 +1,20 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import { Database, DatabaseServiceDict } from '../../types';
+import { DatabaseServiceDict } from '../../types';
 import mongoose, { Connection } from 'mongoose';
-import MongoAdminService from '../MongoAdminService';
-import { MongoHouseService } from '../MongoHouseService';
+import MongoAdminService from '../database/MongoAdminService';
+import MongoHouseService from '../database/MongoHouseService';
+import { LocalServiceProvider } from 'src/types/serviceProvider';
+import { LocalServiceProviderBase } from '../utils/ServiceProviderBase';
 
-class LocalDatabase implements Database {
+class LocalDatabase extends LocalServiceProviderBase<DatabaseServiceDict> implements LocalServiceProvider<DatabaseServiceDict> {
     private connection: Connection;
-    private dbServices: DatabaseServiceDict;
     private mongoServer: MongoMemoryServer;
 
     constructor() {
-        this.dbServices = {
+        super({
             adminService: new MongoAdminService(),
             houseService: new MongoHouseService()
-        };
+        });
 
     }
 
@@ -32,10 +33,6 @@ class LocalDatabase implements Database {
         if (this.mongoServer) {
             await this.mongoServer.stop();
         }
-    }
-
-    get services(): DatabaseServiceDict {
-        return this.dbServices;
     }
 
     async clear(): Promise<void> {

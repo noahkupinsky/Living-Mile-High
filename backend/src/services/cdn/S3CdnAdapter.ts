@@ -1,33 +1,21 @@
 import { S3Client, PutObjectCommand, DeleteObjectCommand, ListObjectsV2Command, ListObjectsV2CommandOutput, GetObjectCommand, GetObjectCommandOutput } from "@aws-sdk/client-s3";
-import { CdnAdapter, S3CdnConfig } from '../types';
-import { CdnFixedKeys } from '../types/enums';
+import { CdnAdapter, S3CdnConfig } from '../../types';
+import { CdnFixedKeys } from '../../types/enums';
 import { v4 as uuidv4 } from 'uuid';
 
-export class S3CdnAdapter implements CdnAdapter {
+class S3CdnAdapter implements CdnAdapter {
     private client: S3Client;
     private bucket: string;
-    private cdnBaseUrl: string;
+    private baseUrl: string;
 
     constructor(config: S3CdnConfig) {
         this.client = config.client;
         this.bucket = config.bucket;
-        this.cdnBaseUrl = config.cdnBaseUrl || this.defaultCdnBaseUrl();
-    }
-
-    private defaultCdnBaseUrl(): string {
-        const endpoint = this.client.config?.endpoint?.toString() || 'https://s3.amazonaws.com';
-        const matches = endpoint.match(/https:\/\/(.+)\.digitaloceanspaces\.com/);
-        const region = matches ? matches[1] : null;
-        if (region) {
-            return `https://${region}.cdn.digitaloceanspaces.com/${this.bucket}`;
-        } else {
-            const url = new URL(endpoint);
-            return `https://${this.bucket}.${url.hostname}`;
-        }
+        this.baseUrl = config.baseUrl
     }
 
     public getObjectUrl(objectKey: string): string {
-        return `${this.cdnBaseUrl}/${objectKey}`;
+        return `${this.baseUrl}/${objectKey}`;
     }
 
     public generateUniqueKey(prefix: string): string {
@@ -46,6 +34,7 @@ export class S3CdnAdapter implements CdnAdapter {
             await this.client.send(command);
             return true;
         } catch (error: any) {
+            // console.error(`Failed to upload object: ${error.message}`);
             return false;
         }
     }
@@ -114,7 +103,7 @@ export class S3CdnAdapter implements CdnAdapter {
         const keys: string[] = [];
 
         const traverse = (obj: any) => {
-            if (typeof obj === 'string' && obj.includes(this.cdnBaseUrl)) {
+            if (typeof obj === 'string' && obj.includes(this.baseUrl)) {
                 const key = new URL(obj).pathname.substring(1); // Extract the key from the URL
                 keys.push(key);
             } else if (typeof obj === 'object' && obj !== null) {
@@ -156,3 +145,5 @@ export class S3CdnAdapter implements CdnAdapter {
         return allKeys;
     }
 }
+
+export default S3CdnAdapter

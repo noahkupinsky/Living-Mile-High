@@ -19,7 +19,6 @@ type Env =
     'DO_SPACE_KEY' |
     'DO_SPACE_SECRET' |
     'DO_SPACE_REGION' |
-    'DO_SPACE_URL' |
     'DO_SPACE_BUCKET'
 
 const env = (key: Env) => {

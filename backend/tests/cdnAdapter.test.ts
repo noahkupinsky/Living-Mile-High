@@ -1,18 +1,18 @@
 import { CdnAdapter } from "../src/types";
-import { inMemoryCDN } from "../src/services/createS3CdnService";
+import { inMemoryCDN } from "../src/services/utils/createS3CdnService";
 import { services } from "./setup";
 
-let cdnService: CdnAdapter;
+let cdn: CdnAdapter;
 
 beforeAll(() => {
-    cdnService = services().cdnService
+    cdn = services().cdn
 })
 
 
 describe('S3Service', () => {
     it('should get object URL correctly', () => {
         const objectKey = 'test-object';
-        const url = cdnService.getObjectUrl(objectKey);
+        const url = cdn.getObjectUrl(objectKey);
 
         expect(url).toBe(`https://mock-bucket.s3.amazonaws.com/${objectKey}`);
     });
@@ -22,7 +22,7 @@ describe('S3Service', () => {
         const body = 'test-body';
         const contentType = 'text/plain';
 
-        const result = await cdnService.putObject(objectKey, body, contentType);
+        const result = await cdn.putObject(objectKey, body, contentType);
 
         expect(result).toBe(true);
         expect(inMemoryCDN[objectKey]).toEqual({ body, contentType });
@@ -34,10 +34,10 @@ describe('S3Service', () => {
         const contentType = 'text/plain';
 
         // First, put the object
-        await cdnService.putObject(objectKey, body, contentType);
+        await cdn.putObject(objectKey, body, contentType);
 
         // Then, delete the object
-        const result = await cdnService.deleteObject(objectKey);
+        const result = await cdn.deleteObject(objectKey);
 
         expect(result).toBe(true);
         expect(inMemoryCDN[objectKey]).toBeUndefined();
@@ -49,9 +49,9 @@ describe('S3Service', () => {
         const contentType = 'text/plain';
 
         // First, put the object
-        await cdnService.putObject(objectKey, body, contentType);
+        await cdn.putObject(objectKey, body, contentType);
 
-        const data = await cdnService.getObject(objectKey);
+        const data = await cdn.getObject(objectKey);
 
         expect(data).toEqual({ Body: body });
     });

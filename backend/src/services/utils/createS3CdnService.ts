@@ -1,5 +1,5 @@
 import { S3Client, PutObjectCommand, DeleteObjectCommand, GetObjectCommand, ListObjectsV2Command, GetObjectCommandOutput, GetObjectRequest } from "@aws-sdk/client-s3";
-import { S3CdnConfig } from "../types";
+import { S3CdnConfig } from "../../types";
 
 export const inMemoryCDN: { [key: string]: { body: any, contentType: string } } = {};
 
@@ -46,6 +46,7 @@ export function createInMemoryS3CdnConfig(): S3CdnConfig {
     return {
         client: mockClient,
         bucket: 'mock-bucket',
+        baseUrl: 'https://mock-bucket.s3.amazonaws.com'
     };
 }
 
@@ -64,6 +65,7 @@ export function createDOSpaceS3CdnConfig(
         region: region,
         forcePathStyle: true, // needed for spaces endpoint compatibility
     });
+    const baseUrl = `https://${bucket}.${region}.cdn.digitaloceanspaces.com`;
 
-    return { client, bucket };
+    return { client, bucket, baseUrl };
 }

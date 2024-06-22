@@ -1,8 +1,8 @@
 import { House } from 'living-mile-high-types';
-import { HouseService } from '../types/house';
-import HouseModel, { HouseDocument } from '../models/houseModel';
+import { HouseService } from '../../types/house';
+import HouseModel, { HouseDocument } from '../../models/houseModel';
 
-export class MongoHouseService implements HouseService {
+class MongoHouseService implements HouseService {
     async getHouses(): Promise<House[]> {
         const houses: HouseDocument[] = await HouseModel.find();
         return houses.map(house => this.houseRecordToObject(house));
@@ -56,3 +56,5 @@ export class MongoHouseService implements HouseService {
         return house;
     }
 }
+
+export default MongoHouseService

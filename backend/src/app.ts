@@ -2,18 +2,18 @@ import express from 'express';
 import cors from 'cors';
 import router from './routes';
 import cookieParser from 'cookie-parser';
-import { IAppServices, AppServiceDict } from './types/appServices';
+import { IAppServiceProvider, AppServiceDict } from './types/appServices';
 import { ExpressMiddleware } from './types/express';
 import passport from './config/passport';
-import { Server } from 'http';
+import http, { Server as HTTPServer } from 'http';
 
-let appServices: IAppServices | null = null;
-let app: express.Application;
+let appServices: IAppServiceProvider | null = null;
+const app = express();
+const server = http.createServer(app);
 
-async function setupApp(services: IAppServices): Promise<void> {
+export async function setupApp(services: IAppServiceProvider): Promise<void> {
     appServices = services;
     await appServices.connect();
-    app = express();
     app.use(cors(
         {
             origin: true,
@@ -26,17 +26,7 @@ async function setupApp(services: IAppServices): Promise<void> {
     app.use(router);
 }
 
-export async function createApp(services: IAppServices): Promise<express.Application> {
-    try {
-        await setupApp(services);
-        return app;
-    } catch (error) {
-        console.error('Error setting up app', error);
-        throw error;
-    }
-};
-
-export async function teardown(server: Server | null = null) {
+export async function teardown() {
     if (appServices) {
         await appServices.disconnect();
     }
@@ -52,12 +42,8 @@ export function services(): AppServiceDict {
     return appServices.services;
 }
 
-export function getApp(): express.Application {
-    if (!app) {
-        throw new Error('App has not been initialized. Call createApp first.');
-    }
-    return app;
-}
+export const getApp = () => app;
+export const getServer = () => server;
 
 // Middleware to log requests
 const logRequests: ExpressMiddleware = (req, res, next) => {

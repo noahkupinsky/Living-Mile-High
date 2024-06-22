@@ -4,8 +4,9 @@ export { HouseService, HouseRecord } from './house';
 export { ImageService, ImageCategory } from './image';
 export { ExpressMiddleware, ExpressEndpoint } from './express';
 export { AppDataService } from './appData';
-export { IAppServices, AppServiceDict } from './appServices';
+export { IAppServiceProvider, AppServiceDict, ServicesConfig } from './appServices';
 export { Database, DatabaseServiceDict } from './database';
-export { ServiceProvider } from './serviceProvider';
+export { ServiceProvider, LocalServiceProvider } from './serviceProvider';
+export { WebSocketService, ServerServiceDict, ServerServiceProvider } from './server';
 
 
