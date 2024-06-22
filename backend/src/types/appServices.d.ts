@@ -6,7 +6,7 @@ import { ServiceProvider } from './serviceProvider';
 import { AppDataService } from './appData';
 import { WebSocketService } from './server';
 
-export type IAppServiceProvider = ServiceProvider<AppServiceDict>
+export type AppServiceProvider = ServiceProvider<AppServiceDict>
 
 export type AppServiceDict = {
     houseService: HouseService;

@@ -2,16 +2,16 @@ import express from 'express';
 import cors from 'cors';
 import router from './routes';
 import cookieParser from 'cookie-parser';
-import { IAppServiceProvider, AppServiceDict } from './types/appServices';
+import { AppServiceProvider, AppServiceDict } from './types/appServices';
 import { ExpressMiddleware } from './types/express';
 import passport from './config/passport';
 import http, { Server as HTTPServer } from 'http';
 
-let appServices: IAppServiceProvider | null = null;
+let appServices: AppServiceProvider | null = null;
 const app = express();
 const server = http.createServer(app);
 
-export async function setupApp(services: IAppServiceProvider): Promise<void> {
+export async function setupApp(services: AppServiceProvider): Promise<void> {
     appServices = services;
     await appServices.connect();
     app.use(cors(

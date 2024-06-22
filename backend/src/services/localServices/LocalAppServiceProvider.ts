@@ -1,4 +1,4 @@
-import { IAppServiceProvider, LocalServiceProvider } from "../../types";
+import { AppServiceProvider, LocalServiceProvider } from "../../types";
 import LocalDatabase from "./LocalDatabase";
 import { LocalCdnServiceProvider } from "./LocalCdnServiceProvider";
 import ServiceProviderTree from "../utils/ServiceProviderTree";
@@ -26,7 +26,7 @@ class LocalAppServiceProvider extends LocalServiceProviderTree<
 
     [LocalCdnServiceProvider, LocalDatabase, LocalServerServiceProvider]
 
-> implements IAppServiceProvider {
+> implements AppServiceProvider {
     constructor(server: HTTPServer) {
         super([new LocalCdnServiceProvider(), new LocalDatabase(), new LocalServerServiceProvider(server)]);
     }

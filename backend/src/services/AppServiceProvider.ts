@@ -1,10 +1,8 @@
-import { ServerServiceProvider, CdnServiceProvider, Database, IAppServiceProvider } from "../types";
-import LocalServerServiceProviderImpl from "./localServices/LocalServerServiceProvider";
-import ServerServiceProviderImpl from "./server/ServerServiceProvider";
+import { ServerServiceProvider, CdnServiceProvider, Database, AppServiceProvider } from "../types";
 import ServiceProviderTree from "./utils/ServiceProviderTree";
 
-class AppServiceProvider extends ServiceProviderTree<
+class AppServiceProviderImpl extends ServiceProviderTree<
     [CdnServiceProvider, Database, ServerServiceProvider]
-> implements IAppServiceProvider { }
+> implements AppServiceProvider { }
 
-export default AppServiceProvider;
+export default AppServiceProviderImpl;

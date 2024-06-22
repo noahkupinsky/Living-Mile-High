@@ -2,18 +2,18 @@ import mongoose, { Connection } from 'mongoose';
 import { Database, DatabaseServiceDict } from '../../types';
 import MongoAdminService from './MongoAdminService';
 import MongoHouseService from './MongoHouseService';
+import { ServiceProviderBase } from '../utils/ServiceProviderBase';
 
-class MongoDatabase implements Database {
+class MongoDatabase extends ServiceProviderBase<DatabaseServiceDict> implements Database {
     private mongoUri: string;
     private connection: Connection;
-    private dbServices: DatabaseServiceDict;
 
     constructor(uri: string) {
-        this.mongoUri = uri;
-        this.dbServices = {
+        super({
             adminService: new MongoAdminService(),
             houseService: new MongoHouseService()
-        }
+        });
+        this.mongoUri = uri;
     }
 
     async connect(): Promise<void> {
@@ -27,10 +27,6 @@ class MongoDatabase implements Database {
             await this.connection.dropDatabase();
             await this.connection.close();
         }
-    }
-
-    get services(): DatabaseServiceDict {
-        return this.dbServices;
     }
 }
 
