@@ -6,12 +6,13 @@
   "scripts": {
     "build": "tsc",
     "test": "JWT_SECRET=secret jest --detectOpenHandles",
-    "dev": "ENV_FILE=${ENV_FILE:-local} ts-node-dev src/server.ts",
+    "dev": "ENV_FILE=${ENV_FILE:-development} ts-node-dev src/server.ts",
     "start": "node dist/src/server.js",
     "start:pm2": "pm2 start yarn --name backend -- start"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.600.0",
+    "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
@@ -34,6 +35,7 @@
     "ws": "^8.17.1"
   },
   "devDependencies": {
+    "@types/axios": "^0.14.0",
     "@types/bcrypt": "^5.0.2",
     "@types/bcryptjs": "^2.4.6",
     "@types/cookie-parser": "^1.4.7",

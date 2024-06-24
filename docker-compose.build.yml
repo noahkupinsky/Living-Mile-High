@@ -5,20 +5,20 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    image: ${FRONTEND_IMAGE}
+    image: lmh-frontend
     volumes:
       - ./frontend/:/usr/src/app
     depends_on:
       - backend
     env_file:
-      - .env
+      - .env.production
 
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    image: ${BACKEND_IMAGE}
+    image: lmh-backend
     volumes:
       - ./backend/:/usr/src/app
     env_file:
-      - .env
+      - .env.production

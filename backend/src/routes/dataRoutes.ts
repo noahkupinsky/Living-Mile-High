@@ -1,8 +1,9 @@
 import { Router } from 'express';
-import { updateAppData } from '../controllers/dataController';
+import { garbageCollect, updateAppData } from '../controllers/dataController';
 
 const router = Router();
 
 router.post('/update', updateAppData);
+router.delete('/garbageCollect', garbageCollect);
 
 export default router

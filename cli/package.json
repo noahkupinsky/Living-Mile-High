@@ -10,6 +10,8 @@
     "start": "node ./cli.js"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.600.0",
+    "child_process": "^1.0.2",
     "commander": "^8.0.0",
     "dotenv": "^16.4.5",
     "shelljs": "^0.8.4"

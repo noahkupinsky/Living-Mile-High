@@ -5,8 +5,10 @@ import { Server as HTTPServer } from 'http';
 class WebSocketServiceImpl implements WebSocketService {
     private wss: WebSocketServer;
 
-    constructor(server: HTTPServer) {
+    constructor(server: HTTPServer, verbose: boolean = false) {
         this.wss = new WebSocketServer({ server });
+
+        if (!verbose) return;
 
         this.wss.on('connection', (ws: WebSocketServer) => {
             console.log('New client connected');

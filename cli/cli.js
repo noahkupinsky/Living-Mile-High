@@ -1,42 +1,16 @@
 #!/usr/bin/env node
 
-const dotenv = require('dotenv');
+const { S3Client, GetObjectCommand, PutObjectCommand } = require('@aws-sdk/client-s3');
+const { execSync } = require('child_process');
 const { program } = require('commander');
 const shell = require('shelljs');
 const fs = require('fs');
 const path = require('path');
+require('dotenv').config();
 
-const ENV_FILE_PATH = '.env';
-
-const withEnv = (envFile, fn) => {
-    setupEnv(envFile);
-    const env = dotenv.config({ path: ENV_FILE_PATH }).parsed;
-    try {
-        return fn(env);
-    } finally {
-        teardownEnv();
-    }
-};
-
-const setupEnv = (envFile) => {
-    if (!fs.existsSync(ENV_FILE_PATH)) {
-        if (shell.cp(envFile, ENV_FILE_PATH).code !== 0) {
-            throw new Error('Failed to copy environment file');
-        }
-    }
-};
-
-const teardownEnv = () => {
-    if (fs.existsSync(ENV_FILE_PATH)) {
-        if (shell.rm(ENV_FILE_PATH).code !== 0) {
-            throw new Error('Failed to delete environment file');
-        }
-    }
-};
-
-const dockerCleanup = (frontend_image, backend_image) => {
+const dockerCleanup = (images) => {
     console.log('Cleaning up Docker containers and images...');
-    shell.exec(`docker rmi ${frontend_image} ${backend_image}`);
+    shell.exec(`docker rmi ${images.join(' ')}`);
 };
 
 const dockerDown = (composeFile) => {
@@ -46,89 +20,66 @@ const dockerDown = (composeFile) => {
     }
 };
 
-const dockerBuild = (composeFile) => {
-    console.log(`Building Docker images using ${composeFile}...`);
-    if (shell.exec(`docker compose -f ${composeFile} build`).code !== 0) {
-        throw new Error(`Failed to build Docker images using ${composeFile}`);
+const dockerDownAll = () => {
+    dockerDown('docker-compose.build.yml');
+    dockerDown('docker-compose.prod.yml');
+    dockerDown('docker-compose.staging.yml');
+    dockerDown('docker-compose.services.yml');
+}
+
+const dockerBuild = () => {
+    console.log(`Building Docker images using docker-compose.build.yml...`);
+    if (shell.exec(`docker compose -f docker-compose.build.yml build`).code !== 0) {
+        throw new Error(`Failed to build Docker images using docker-compose.build.yml`);
     }
 };
 
-const dockerPull = (composeFile) => {
-    console.log(`Pulling latest Docker images using ${composeFile}...`);
-    if (shell.exec(`docker compose -f ${composeFile} pull`).code !== 0) {
-        throw new Error(`Failed to pull Docker images using ${composeFile}`);
-    }
-};
-
-const dockerUp = (composeFile, build = false) => {
-    const buildOption = build ? '--build' : '';
-    console.log(`Starting Docker containers using ${composeFile} ${buildOption}...`);
-    if (shell.exec(`docker compose -f ${composeFile} up ${buildOption} -d`).code !== 0) {
+const dockerUp = (composeFile) => {
+    console.log(`Starting Docker containers using ${composeFile} --build...`);
+    if (shell.exec(`docker compose -f ${composeFile} up --build -d`).code !== 0) {
         throw new Error(`Failed to start Docker containers using ${composeFile}`);
     }
 };
 
-const dockerLogin = (username, password) => {
-    console.log('Logging in to Docker...');
-    if (shell.exec(`echo ${password} | docker login -u ${username} --password-stdin`).code !== 0) {
-        throw new Error('Failed to log in to Docker');
-    }
-};
-
-const dockerPush = (composeFile) => {
-    console.log('Pushing Docker images to registry...');
-    if (shell.exec(`docker compose -f ${composeFile} push`).code !== 0) {
-        throw new Error('Failed to push Docker images');
-    }
-};
-
 program
-    .command('build [envFile]')
+    .command('build')
     .description('Build Docker images')
-    .option('--push', 'Push Docker images to registry')
-    .action((envFile = '.env.production', options) => {
-        withEnv(envFile, (env) => {
-            const { DOCKER_USERNAME, DOCKER_PASSWORD, FRONTEND_IMAGE, BACKEND_IMAGE } = env;
-
-            dockerDown('docker-compose.start.yml');
-            dockerCleanup(FRONTEND_IMAGE, BACKEND_IMAGE);
-            dockerBuild('docker-compose.build.yml');
-            dockerDown('docker-compose.build.yml');
-
-            if (options.push) {
-                dockerLogin(DOCKER_USERNAME, DOCKER_PASSWORD);
-                dockerPush('docker-compose.build.yml');
-            }
-        });
+    .action(() => {
+        dockerDownAll();
+        dockerCleanup(['lmh-frontend', 'lmh-backend']);
+        dockerBuild('docker-compose.build.yml');
+        dockerDownAll();
     });
 
 program
-    .command('start [envFile]')
+    .command('prod')
     .description('Start Docker containers')
-    .option('--pull', 'Pull latest Docker images from registry')
-    .action((envFile = '.env.production', options) => {
-        withEnv(envFile, (env) => {
-            const { FRONTEND_IMAGE, BACKEND_IMAGE } = env;
-
-            dockerDown('docker-compose.start.yml');
-
-            if (options.pull) {
-                dockerCleanup(FRONTEND_IMAGE, BACKEND_IMAGE);
-                dockerPull('docker-compose.start.yml');
-            }
-
-            dockerUp('docker-compose.start.yml', true);
-        });
+    .action(() => {
+        dockerDownAll();
+        dockerUp('docker-compose.prod.yml');
     });
 
 program
-    .command('dev [envFile]')
+    .command('staging')
+    .description('Start Docker containers in staging mode')
+    .action(() => {
+        dockerDownAll();
+        dockerUp('docker-compose.staging.yml');
+    });
+
+program
+    .command('down')
     .description('Start Docker containers in development mode')
-    .action((envFile = '.env.development') => {
-        withEnv(envFile, (env) => {
-            dockerDown('docker-compose.dev.yml');
-            dockerUp('docker-compose.dev.yml', true);
-        });
+    .action(() => {
+        dockerDownAll();
+    });
+
+program
+    .command('services')
+    .description('Run local services in docker containers')
+    .action(() => {
+        dockerDownAll();
+        dockerUp('docker-compose.staging.yml');
     });
 
 // Function to get the package version
@@ -137,37 +88,163 @@ const getPackageVersion = (packagePath) => {
     return packageJson.version;
 };
 
+function updateAndPublishPackage(packageDir, origDir) {
+    shell.cd(packageDir);
+    shell.exec('npm version patch');
+    shell.exec('npm publish');
+    const newVersion = getPackageVersion(path.join(packageDir, 'package.json'));
+    ['frontend', 'backend'].forEach(targetDir => updateTarget(targetDir, newVersion));
+}
+
+function updateTarget(targetDir, newVersion) {
+    shell.cd(`./${targetDir}`);
+    shell.exec(`yarn add "living-mile-high-types@${newVersion}"`);
+    shell.cd('../');
+}
+
 program
     .command('publish-types')
     .description('Publish types')
     .action(() => {
         const origDir = process.cwd();
-
-        // Change into the living-mile-high-types directory
         const typesDir = path.join(origDir, 'living-mile-high-types');
-        shell.cd(typesDir);
+        updateAndPublishPackage(typesDir, origDir);
+    });
 
-        // Increment the version in package.json
-        shell.exec('npm version patch');
+const ENVS = ['production', 'staging', 'development'];
+const ACTIONS = ['push', 'pull'];
+const BUCKET = 'livingmilehigh-space';
 
-        // Publish the package
-        shell.exec('npm publish');
+async function pullEnv(client, env, doForce) {
+    const fileName = `.env.${env}`;
+    const targetPath = path.resolve(__dirname, `../.env.${env}`);
 
-        // Get the new version
-        const newVersion = getPackageVersion(path.join(typesDir, 'package.json'));
+    if (fs.existsSync(targetPath) && !doForce) {
+        console.log(`File .env.${env} already exists in the root directory. Use -f to overwrite.`);
+        return;
+    }
 
-        // Reinstall the package in the frontend directory
-        const frontendDir = path.join(origDir, 'frontend');
-        shell.cd(frontendDir);
-        shell.exec(`yarn add "living-mile-high-types@${newVersion}"`);
+    try {
+        const command = new GetObjectCommand({
+            Bucket: BUCKET,
+            Key: fileName
+        });
+        const { Body } = await client.send(command);
 
-        // Reinstall the package in the backend directory
-        const backendDir = path.join(origDir, 'backend');
-        shell.cd(backendDir);
-        shell.exec(`yarn add "living-mile-high-types@${newVersion}"`);
+        const fileStream = fs.createWriteStream(targetPath);
+        Body.pipe(fileStream);
+        Body.on('error', (err) => {
+            throw err;
+        });
+        Body.on('end', () => {
+            console.log(`Environment variables for ${env} fetched successfully.`);
+        });
+    } catch (err) {
+        console.error(`Failed to fetch environment variables for ${env}:`, err.message);
+    }
+}
 
-        // Change back to the original directory
-        shell.cd(origDir);
+async function pushEnv(client, env) {
+    const fileName = `.env.${env}`;
+    const targetPath = path.resolve(__dirname, `../.env.${env}`);
+
+    if (!fs.existsSync(targetPath)) {
+        console.log(`File .env.${env} does not exist in the root directory.`);
+        return;
+    }
+
+    try {
+        const fileContent = fs.readFileSync(targetPath);
+        const command = new PutObjectCommand({
+            Bucket: BUCKET,
+            Key: fileName,
+            Body: fileContent
+        });
+
+        await client.send(command);
+        console.log(`Environment variables for ${env} pushed successfully.`);
+    } catch (err) {
+        console.error(`Failed to push environment variables for ${env}:`, err.message);
+    }
+}
+
+
+program
+    .command('envs <action> <region> <key> <secret>')
+    .description('Fetch environment variables for the specified environment')
+    .option('-f, --force', 'Force overwrite if the file exists')
+    .action(async (action, region, key, secret, options) => {
+        const doForce = options.force;
+
+        if (!ACTIONS.includes(action)) {
+            console.error(`Invalid action: ${action} (Allowed: ${ACTIONS.join(', ')})`);
+            return;
+        }
+
+        const client = new S3Client({
+            endpoint: `https://${region}.digitaloceanspaces.com`,
+            credentials: {
+                accessKeyId: key,
+                secretAccessKey: secret,
+            },
+            region: region,
+            forcePathStyle: true, // needed for spaces endpoint compatibility
+        });
+
+        switch (action) {
+            case 'push':
+                await Promise.all(ENVS.map(env => pushEnv(client, env)));
+                break;
+            case 'pull':
+                await Promise.all(ENVS.map(env => pullEnv(client, env, doForce)));
+                break;
+        }
+    });
+
+async function latest() {
+    try {
+        console.log('Pulling from the repository...');
+        execSync('git checkout main', { stdio: 'inherit' });
+        execSync('git branch --set-upstream-to=origin/main', { stdio: 'inherit' });
+        execSync('git pull', { stdio: 'inherit' });
+
+        const lockFiles = [
+            './yarn.lock',
+            './package-lock.json',
+            './backend/yarn.lock',
+            './backend/package-lock.json',
+            './frontend/yarn.lock',
+            './frontend/package-lock.json',
+            './cli/yarn.lock',
+            './cli/package-lock.json',
+        ];
+
+        console.log('Deleting lock files...');
+        lockFiles.forEach((file) => {
+            if (fs.existsSync(file)) {
+                fs.unlinkSync(file);
+                console.log(`Deleted ${file}`);
+            }
+        });
+
+        console.log('Reinstalling packages...');
+        execSync('yarn install', { stdio: 'inherit' });
+        execSync('yarn install', { cwd: './backend', stdio: 'inherit' });
+        execSync('yarn install', { cwd: './frontend', stdio: 'inherit' });
+        execSync('yarn install', { cwd: './cli', stdio: 'inherit' });
+
+        console.log('Fetching the latest environment variables...');
+        await Promise.all(ENVS.map((env) => pullEnv(client, env, true)));
+    } catch (err) {
+        console.error('Error executing latest command:', err.message);
+    }
+}
+
+program
+    .command('latest')
+    .description('Pull from the repo, delete lock files, reinstall packages, and fetch the latest env vars')
+    .action(async () => {
+        await latest();
     });
 
 program.parse(process.argv);

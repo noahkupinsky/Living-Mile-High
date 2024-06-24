@@ -2,15 +2,13 @@ import env from './config/env';
 import { getServer, setupApp } from './app';
 import createServices from './config/di';
 
+const server = getServer();
+
 const startServer = async () => {
     try {
-        const server = getServer();
-        const servicesConfig = {
-            server: getServer()
-        }
+        const servicesConfig = {};
 
         const services = await createServices(servicesConfig);
-
         await setupApp(services);
 
         const backendPort = env('BACKEND_PORT');

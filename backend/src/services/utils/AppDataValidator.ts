@@ -120,6 +120,11 @@ export class AppDataValidator {
         if (placeholders.some(placeholder => typeof placeholder !== 'string')) {
             throw new Error('Placeholders must be an array of strings');
         }
+
+        // make sure placeholders has at least one element
+        if (placeholders.length === 0) {
+            throw new Error('Placeholders must have at least one element');
+        }
     }
 
     private static validateHomeImages(homeImages: any): void {

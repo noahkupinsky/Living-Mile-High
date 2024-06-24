@@ -1,4 +1,4 @@
-import { S3Client, PutObjectCommand, DeleteObjectCommand, ListObjectsV2Command, ListObjectsV2CommandOutput, GetObjectCommand, GetObjectCommandOutput } from "@aws-sdk/client-s3";
+import { S3Client, PutObjectCommand, DeleteObjectCommand, ListObjectsV2Command, ListObjectsV2CommandOutput, GetObjectCommand, GetObjectCommandOutput, CopyObjectCommand } from "@aws-sdk/client-s3";
 import { CdnAdapter, S3CdnConfig } from '../../types';
 import { CdnFixedKeys } from '../../types/enums';
 import { v4 as uuidv4 } from 'uuid';
@@ -14,92 +14,61 @@ class S3CdnAdapter implements CdnAdapter {
         this.baseUrl = config.baseUrl
     }
 
-    public getObjectUrl(objectKey: string): string {
-        return `${this.baseUrl}/${objectKey}`;
+    public getObjectUrl(key: string): string {
+        return `${this.baseUrl}/${key}`;
     }
 
     public generateUniqueKey(prefix: string): string {
         return `${prefix}--${uuidv4()}`;
     }
 
-    public async putObject(objectKey: string, body: any, contentType: string): Promise<boolean> {
+    private async tryCommand<T>(command: any): Promise<boolean> {
         try {
-            const command = new PutObjectCommand({
-                Bucket: this.bucket,
-                Key: objectKey,
-                Body: body,
-                ContentType: contentType,
-                ACL: 'public-read',
-            });
             await this.client.send(command);
             return true;
         } catch (error: any) {
-            // console.error(`Failed to upload object: ${error.message}`);
             return false;
         }
     }
 
-    public async getObject(objectKey: string): Promise<GetObjectCommandOutput> {
+    public async putObject(key: string, body: any, contentType: string): Promise<boolean> {
+        const command = new PutObjectCommand({
+            Bucket: this.bucket,
+            Key: key,
+            Body: body,
+            ContentType: contentType,
+            ACL: 'public-read',
+        });
+        return await this.tryCommand(command);
+    }
+
+    public async getObject(key: string): Promise<GetObjectCommandOutput> {
         const command = new GetObjectCommand({
             Bucket: this.bucket,
-            Key: objectKey,
+            Key: key,
         });
         return await this.client.send(command);
     }
 
-    public async deleteObject(objectKey: string): Promise<boolean> {
-        try {
-            const command = new DeleteObjectCommand({
-                Bucket: this.bucket,
-                Key: objectKey,
-            });
-            await this.client.send(command);
-            return true;
-        } catch (error: any) {
-            return false;
-        }
-    }
-
-    public async uploadImage(file: any, prefix: string): Promise<string> {
-        const fileExtension = file.originalname.split('.').pop();
-        const objectKey = `${prefix}-${uuidv4()}.${fileExtension}`;
-
-        try {
-            const command = new PutObjectCommand({
-                Bucket: this.bucket,
-                Key: objectKey,
-                Body: file.buffer,
-                ContentType: file.mimetype,
-                ACL: 'public-read',
-            });
-            await this.client.send(command);
-
-            return objectKey;
-        } catch (error: any) {
-            throw new Error(`Failed to upload image: ${error.message}`);
-        }
-    }
-
-    public async garbageCollect(references: object): Promise<number> {
-        const referencedKeys = this.extractCdnKeys(references);
-        const allKeys = await this.getAllKeys();
-        const fixedKeysSet = new Set<string>(Object.values(CdnFixedKeys));
-        const referencedKeysSet = new Set(referencedKeys);
-
-        const keysToDelete = allKeys.filter(key => {
-            return !fixedKeysSet.has(key) && !referencedKeysSet.has(key);
+    public async moveObject(sourceKey: string, destinationKey: string): Promise<boolean> {
+        const command = new CopyObjectCommand({
+            Bucket: this.bucket,
+            CopySource: `${this.bucket}/${sourceKey}`,
+            Key: destinationKey,
+            ACL: 'public-read'
         });
-
-        const success = await Promise.all(keysToDelete.map(key => this.deleteObject(key)));
-
-        if (!success) {
-            throw new Error('Failed to delete objects');
-        }
-
-        return keysToDelete.length;
+        return await this.tryCommand(command);
     }
 
-    private extractCdnKeys(references: object): string[] {
+    public async deleteObject(key: string): Promise<boolean> {
+        const command = new DeleteObjectCommand({
+            Bucket: this.bucket,
+            Key: key,
+        });
+        return await this.tryCommand(command);
+    }
+
+    public extractKeys(data: any): string[] {
         const keys: string[] = [];
 
         const traverse = (obj: any) => {
@@ -115,11 +84,11 @@ class S3CdnAdapter implements CdnAdapter {
             }
         };
 
-        traverse(references);
+        traverse(data);
         return keys;
     }
 
-    private async getAllKeys(): Promise<string[]> {
+    public async getAllKeys(): Promise<string[]> {
         const allKeys: string[] = [];
         let isTruncated = true;
         let continuationToken: string | undefined = undefined;

@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import path from 'path';
 
-const allowedEnvFiles = ['local', 'development', 'production'];
+const allowedEnvFiles = ['staging', 'development', 'production'];
 
 const envFile = process.env.ENV_FILE;
 
@@ -16,10 +16,11 @@ type Env =
     'MONGODB_ATLAS_URI' |
     'JWT_SECRET' |
     'BACKEND_PORT' |
-    'DO_SPACE_KEY' |
-    'DO_SPACE_SECRET' |
-    'DO_SPACE_REGION' |
-    'DO_SPACE_BUCKET'
+    'CDN_KEY' |
+    'CDN_SECRET' |
+    'CDN_REGION' |
+    'CDN_BUCKET' |
+    'CDN_ENDPOINT'
 
 const env = (key: Env) => {
     return process.env[key] || '';
