@@ -8,6 +8,25 @@ const fs = require('fs');
 const path = require('path');
 require('dotenv').config();
 
+const makeDataDirs = () => {
+    const data_services = ['database', 'cdn'];
+    const data_categories = ['development', 'production', 'staging'];
+    const data_dirs = data_services.map(s => data_categories.map(c => `./.data/${s}/${c}`)).flat();
+
+    data_dirs.forEach(dir => {
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+        }
+    });
+}
+
+program
+    .command('data-dirs')
+    .description('Ensures that data directories exist for Docker containers')
+    .action(() => {
+        makeDataDirs();
+    });
+
 const dockerCleanup = (images) => {
     console.log('Cleaning up Docker containers and images...');
     shell.exec(`docker rmi ${images.join(' ')}`);

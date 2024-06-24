@@ -131,16 +131,4 @@ dist
 .pnp.*
 
 # Ignore all files
-data/**
-
-# Un-ignore directories up to the third level
-!data/
-!data/*/
-!data/*/*/
-
-# Re-ignore files within those directories
-.data/*/*
-.data/*/*/*
-
-# Ignore any directories deeper than three levels
-.data/*/*/*/
+.data/
