@@ -3,13 +3,14 @@ import { ImageService } from "./image";
 import { ServiceProvider } from "./serviceProvider";
 
 export interface CdnAdapter {
-    public getObjectUrl(objectKey: string): string;
+    public getObjectUrl(key: string): string;
     public generateUniqueKey(prefix: string): string;
-    public putObject(objectKey: string, body: any, contentType: string): Promise<boolean>;
-    public getObject(objectKey: string): Promise<GetObjectCommandOutput>;
-    public deleteObject(objectKey: string): Promise<boolean>;
-    public uploadImage(file: any, prefix: string): Promise<string>;
-    public garbageCollect(references: Object): Promise<number>;
+    public extractKeys(object: any): string[];
+    public putObject(key: string, body: any, contentType: string): Promise<boolean>;
+    public getObject(key: string): Promise<GetObjectCommandOutput>;
+    public moveObject(sourceKey: string, destinationKey: string): Promise<boolean>;
+    public deleteObject(key: string): Promise<boolean>;
+    public getAllKeys(): Promise<string[]>
 }
 
 export type CdnServiceProvider = ServiceProvider<CdnServiceDict>

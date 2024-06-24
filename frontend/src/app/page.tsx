@@ -6,13 +6,12 @@ import Link from 'next/link';
 import HouseQueryContext from '@/components/HouseQueryContext';
 
 const HOME_PAGE_QUERY: HouseQuery = {
-    onHomePage: 'true'
 }
 
 const Home: React.FC = () => {
     return (
         <div>
-            <HouseQueryContext initialQuery={HOME_PAGE_QUERY}>
+            <HouseQueryContext>
                 <RotatingHouseDisplay interval={3000} />
             </HouseQueryContext>
         </div>

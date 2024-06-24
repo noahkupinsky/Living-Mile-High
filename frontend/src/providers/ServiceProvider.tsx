@@ -14,7 +14,7 @@ interface ServiceProviderProps {
 }
 
 const connectServices = () => {
-    const apiUrl = env("NEXT_PUBLIC_API_URL")!;
+    const apiUrl = env("NEXT_PUBLIC_API_HOST")!;
     return {
         apiService: new AxiosApiService(apiUrl)
     };

@@ -50,14 +50,25 @@ export function createInMemoryS3CdnConfig(): S3CdnConfig {
     };
 }
 
-export function createDOSpaceS3CdnConfig(
+function generateBaseUrl(endpoint: string, bucket: string, region: string): string {
+    if (endpoint.includes('digitaloceanspaces.com')) {
+        return `https://${bucket}.${region}.cdn.digitaloceanspaces.com`;
+    } else if (endpoint.includes('localhost')) {
+        return `${endpoint}/${bucket}`;
+    } else {
+        throw new Error("failed to construct base url");
+    }
+}
+
+export function createNetworkS3CdnConfig(
+    endpoint: string,
     region: string,
     bucket: string,
     key: string,
     secret: string
 ): S3CdnConfig {
     const client = new S3Client({
-        endpoint: `https://${region}.digitaloceanspaces.com`,
+        endpoint: endpoint,
         credentials: {
             accessKeyId: key,
             secretAccessKey: secret,

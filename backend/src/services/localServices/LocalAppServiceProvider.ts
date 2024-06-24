@@ -4,7 +4,6 @@ import { LocalCdnServiceProvider } from "./LocalCdnServiceProvider";
 import ServiceProviderTree from "../utils/ServiceProviderTree";
 import { CompoundServiceDict } from "src/types/serviceProvider";
 import LocalServerServiceProvider from "./LocalServerServiceProvider";
-import { Server as HTTPServer } from "http";
 
 class LocalServiceProviderTree<
 
@@ -27,8 +26,8 @@ class LocalAppServiceProvider extends LocalServiceProviderTree<
     [LocalCdnServiceProvider, LocalDatabase, LocalServerServiceProvider]
 
 > implements AppServiceProvider {
-    constructor(server: HTTPServer) {
-        super([new LocalCdnServiceProvider(), new LocalDatabase(), new LocalServerServiceProvider(server)]);
+    constructor() {
+        super([new LocalCdnServiceProvider(), new LocalDatabase(), new LocalServerServiceProvider()]);
     }
 }
 

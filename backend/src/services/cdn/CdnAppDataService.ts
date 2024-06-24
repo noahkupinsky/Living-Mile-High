@@ -4,6 +4,7 @@ import { AppDataService, CdnAdapter } from '../../types';
 import { AppDataValidator } from '../utils/AppDataValidator';
 import { GetObjectCommandOutput } from '@aws-sdk/client-s3';
 import { Readable } from 'stream';
+import axios, { AxiosError } from 'axios';
 
 function deepMerge<T>(target: T, source: Partial<T>): T {
     const output = { ...target };
@@ -30,23 +31,51 @@ function deepMerge<T>(target: T, source: Partial<T>): T {
     return output;
 }
 
+async function downloadImage(url: string): Promise<{ buffer: Buffer, contentType: string }> {
+    const response = await axios.get(url, { responseType: 'arraybuffer' });
+    return {
+        buffer: Buffer.from(response.data),
+        contentType: response.headers['content-type']
+    };
+}
+
 class CdnAppDataService implements AppDataService {
     private cdn: CdnAdapter;
-    private dataKey: string = CdnFixedKeys.AppData;
 
     constructor(cdn: CdnAdapter) {
         this.cdn = cdn;
     }
 
+    public async garbageCollect(): Promise<number> {
+        const references = await this.getData();
+        const referencedKeys = this.cdn.extractKeys(references);
+        const allKeys = await this.cdn.getAllKeys();
+        const fixedKeysSet = new Set<string>(Object.values(CdnFixedKeys));
+        const referencedKeysSet = new Set(referencedKeys);
+
+        const keysToDelete = allKeys.filter(key => {
+            return !fixedKeysSet.has(key) && !referencedKeysSet.has(key);
+        });
+
+        const success = await Promise.all(keysToDelete.map(key => this.cdn.deleteObject(key)));
+
+        if (!success) {
+            throw new Error('Failed to delete objects');
+        }
+
+        return keysToDelete.length;
+    }
 
     public async update(updates: DeepPartial<AppData>): Promise<AppData> {
         const objectKey = CdnFixedKeys.AppData;
         const existingData = await this.getData();
-        const updatedData = deepMerge(existingData, updates);
+        var updatedData = deepMerge(existingData, updates);
 
         if (!AppDataValidator.validate(updatedData)) {
             throw new Error('Invalid AppData');
         }
+
+        await this.updateHomeFirst(updatedData.homeImages);
 
         const putObjectSuccess = await this.cdn.putObject(objectKey, JSON.stringify(updatedData), 'application/json');
         if (!putObjectSuccess) {
@@ -90,6 +119,21 @@ class CdnAppDataService implements AppDataService {
                 resolve(Buffer.concat(chunks).toString('utf-8'));
             });
         });
+    }
+
+    private async updateHomeFirst(homeImages: string[]): Promise<void> {
+        try {
+            const homeFirstKey = CdnFixedKeys.HomeFirst;
+            const firstImageUrl = homeImages[0];
+
+            const { buffer, contentType } = await downloadImage(firstImageUrl);
+
+            await this.cdn.putObject(homeFirstKey, buffer, contentType);
+        } catch (error: any) {
+            if (!(error instanceof AxiosError)) {
+                throw error;
+            }
+        }
     }
 }
 

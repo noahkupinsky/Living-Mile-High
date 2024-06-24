@@ -18,5 +18,4 @@ export type AppServiceDict = {
 
 export type ServicesConfig = {
     useLocal?: boolean,
-    server: HTTPServer
 }

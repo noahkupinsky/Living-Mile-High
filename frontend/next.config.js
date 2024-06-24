@@ -2,7 +2,7 @@ const dotenv = require('dotenv');
 const path = require('path');
 const { withTamagui } = require('@tamagui/next-plugin');
 
-const allowedEnvFiles = ['local', 'development', 'production'];
+const allowedEnvFiles = ['staging', 'development', 'production'];
 
 const envFile = process.env.ENV_FILE;
 

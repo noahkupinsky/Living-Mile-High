@@ -5,7 +5,6 @@ import { House } from 'living-mile-high-types';
 const HOUSES: House[] = [
     {
         id: '1',
-        onHomePage: true,
         isDeveloped: true,
         isForSale: true,
         isSelectedWork: true,
@@ -17,7 +16,6 @@ const HOUSES: House[] = [
     },
     {
         id: '2',
-        onHomePage: true,
         isDeveloped: true,
         isForSale: true,
         isSelectedWork: true,

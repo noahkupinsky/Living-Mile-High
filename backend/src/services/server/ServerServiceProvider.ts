@@ -1,10 +1,12 @@
 import { ServerServiceDict, ServerServiceProvider } from "../../types";
-import { Server as HTTPServer } from "http";
 import WebSocketServiceImpl from './WebSocketService';
 import { ServiceProviderBase } from "../utils/ServiceProviderBase";
+import { getServer } from "../../app";
+
+const server = getServer();
 
 class ServerServiceProviderImpl extends ServiceProviderBase<ServerServiceDict> implements ServerServiceProvider {
-    constructor(server: HTTPServer) {
+    constructor() {
         super({
             webSocketService: new WebSocketServiceImpl(server)
         });

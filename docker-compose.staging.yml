@@ -8,8 +8,8 @@ services:
       - "443:443"
     environment:
       DOMAINS: |
-        ${HOST} -> http://nginx
-      STAGE: ${STAGE}
+        localhost -> http://nginx
+      STAGE: local
     volumes:
       - ./https-portal/certs:/var/lib/https-portal
     depends_on:
@@ -22,13 +22,13 @@ services:
     image: nginx:latest
     volumes:
       - ./nginx.conf.template:/etc/nginx/nginx.conf.template:ro
-    command: /bin/bash -c "envsubst '$${FRONTEND_PORT} $${BACKEND_PORT}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
+    command: /bin/bash -c "export FRONTEND_PORT=3000 BACKEND_PORT=3001 && envsubst '$${FRONTEND_PORT} $${BACKEND_PORT}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
     depends_on:
       - frontend
       - backend
     environment:
-      - FRONTEND_PORT=${FRONTEND_PORT}
-      - BACKEND_PORT=${BACKEND_PORT}
+      - FRONTEND_PORT=3000
+      - BACKEND_PORT=3001
     networks:
       - proxy
       - internal
@@ -40,9 +40,12 @@ services:
     depends_on:
       - backend
     expose:
-      - "${FRONTEND_PORT}"
+      - "3000"
     env_file:
-      - .env
+      - .env.staging
+    environment:
+      - FRONTEND_PORT=3000
+      - BACKEND_PORT=3001
     networks:
       - internal
 
@@ -51,9 +54,26 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     expose:
-      - "${BACKEND_PORT}"
+      - "3001"
     env_file:
-      - .env
+      - .env.staging
+    environment:
+      - FRONTEND_PORT=3000
+      - BACKEND_PORT=3001
+    networks:
+      - internal
+
+  minio:
+    image: minio/minio
+    container_name: minio
+    expose:
+      - "9000"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - ./data/minio/staging:/data
+    command: server /data
     networks:
       - internal
 
