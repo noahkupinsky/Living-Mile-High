@@ -2,18 +2,18 @@ import express from 'express';
 import cors from 'cors';
 import router from './routes';
 import cookieParser from 'cookie-parser';
-import { AppServiceProvider, AppServices } from './types/serviceManager';
-import { ExpressMiddleware } from './types/express';
 import passport from './config/passport';
 import http, { Server as HTTPServer } from 'http';
+import { AppServices, ServiceManager } from './types';
 
-let appServices: AppServiceProvider | null = null;
+let serviceManager: ServiceManager<AppServices> | null = null;
+let appServices: AppServices | null = null;
 const app = express();
 const server = http.createServer(app);
 
-export async function setupApp(services: AppServiceProvider): Promise<void> {
-    appServices = services;
-    await appServices.connect();
+export async function setupApp(sm: ServiceManager<AppServices>): Promise<void> {
+    serviceManager = sm;
+    appServices = await serviceManager.connect();
     app.use(cors(
         {
             origin: true,
@@ -27,8 +27,8 @@ export async function setupApp(services: AppServiceProvider): Promise<void> {
 }
 
 export async function teardown() {
-    if (appServices) {
-        await appServices.disconnect();
+    if (serviceManager) {
+        await serviceManager.disconnect();
     }
     if (server) {
         server.close();
@@ -39,27 +39,9 @@ export function services(): AppServices {
     if (!appServices) {
         throw new Error('AppConfig has not been initialized. Call initializeAppConfig first.');
     }
-    return appServices.services;
+    return appServices;
 }
 
 export const getApp = () => app;
 export const getServer = () => server;
-
-// Middleware to log requests
-const logRequests: ExpressMiddleware = (req, res, next) => {
-    console.log(`${req.method} ${req.url}`);
-    next();
-};
-
-// Middleware to log responses
-const logResponses: ExpressMiddleware = (req, res, next) => {
-    const originalSend = res.send;
-    res.send = function (body) {
-        console.log(`Response: ${res.statusCode} ${body}`);
-        return originalSend.call(this, body);
-    };
-    next();
-};
-
-
 

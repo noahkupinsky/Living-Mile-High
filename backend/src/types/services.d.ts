@@ -35,8 +35,6 @@ export interface ImageService {
     uploadImage(file: any): Promise<string>;
 }
 
-export const AssetPrefix: 'assets'
-
 export interface AppDataService {
     getData(): Promise<DeepPartial<AppData>>;
     update(updates: DeepPartial<AppData>): Promise<AppData>;

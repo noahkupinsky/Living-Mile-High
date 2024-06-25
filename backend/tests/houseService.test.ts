@@ -1,6 +1,6 @@
 import { HouseService } from "../src/types";
 import HouseModel from "../src/models/houseModel";
-import { services } from "./setup";
+import { services } from "../src/app";
 import { House } from "living-mile-high-types";
 
 let houseService: HouseService;

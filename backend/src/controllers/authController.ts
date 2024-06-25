@@ -1,16 +1,20 @@
 import jwt from 'jsonwebtoken';
-import { ExpressEndpoint, ExpressMiddleware } from 'src/types/express';
+import { ExpressEndpoint, ExpressMiddleware } from '../types';
 import env from '../config/env';
 import passport from '../config/passport';
 
 type PassportCallback = (err: any, user: any, info: any) => void;
 
 export const login: ExpressMiddleware = (req, res, next) => {
+    const { JWT_SECRET } = env();
+
     const localJwtLogin: PassportCallback = (err, user, info) => {
         if (err || !user) {
             return res.status(401).json({ message: "Invalid username or password" });
         }
-        const token = jwt.sign({ id: user.id, role: user.role }, env('JWT_SECRET'), { expiresIn: '1h' });
+
+        const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, { expiresIn: '1h' });
+
         res.cookie('token', token, {
             httpOnly: true,
         });

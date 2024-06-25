@@ -1,28 +1,20 @@
 import dotenv from 'dotenv';
 import { getServer, setupApp, teardown } from '../src/app';
-import LocalAppServiceProvider from '../src/services/localServices/LocalAppServiceProvider';
 import newServiceManager from '../src/config/di';
+import MockServiceManager from 'src/config/MockServiceManager';
 
 dotenv.config();
-
-let localServices: LocalAppServiceProvider;
+let MockSM: MockServiceManager;
 
 beforeAll(async () => {
-    const servicesConfig = {
-        useLocal: true,
-        server: getServer()
-    }
-
-    localServices = await newServiceManager(servicesConfig) as LocalAppServiceProvider;
-    await setupApp(localServices);
+    MockSM = newServiceManager(true) as MockServiceManager;
+    await setupApp(MockSM);
 });
 
 beforeEach(async () => {
-    await localServices.clear();
+    await MockSM.clear();
 });
 
 afterAll(async () => {
     await teardown();
 });
-
-export const services = () => localServices.services;

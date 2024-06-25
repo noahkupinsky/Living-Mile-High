@@ -1,5 +1,5 @@
 import { House } from 'living-mile-high-types';
-import { HouseService } from '../../types/database';
+import { HouseService } from '../../types';
 import HouseModel, { HouseDocument } from '../../models/houseModel';
 
 class MongoHouseService implements HouseService {

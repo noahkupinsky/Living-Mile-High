@@ -1,7 +1,7 @@
+import { Request, Response, NextFunction } from 'express';
 export { AdminRecord, HouseRecord } from './database'
 export {
     ServiceManager,
-    AssetPrefix,
     AppServices,
     CdnAdapter,
     S3Config,

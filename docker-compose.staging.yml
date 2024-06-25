@@ -13,8 +13,7 @@ services:
     volumes:
       - ./https-portal/certs:/var/lib/https-portal
     depends_on:
-      - frontend
-      - backend
+      - nginx
     networks:
       - proxy
 
@@ -22,10 +21,16 @@ services:
     image: nginx:latest
     volumes:
       - ./nginx.conf.template:/etc/nginx/nginx.conf.template:ro
-    command: /bin/bash -c "envsubst '$${FPORT} $${BPORT}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
+    command: >
+      /bin/bash -c "
+      envsubst '\$${FPORT} \$${BPORT}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf &&
+      nginx -g 'daemon off;'"
     depends_on:
       - frontend
       - backend
+    environment:
+      FPORT: ${FPORT}
+      BPORT: ${BPORT}
     networks:
       - proxy
       - internal
@@ -36,16 +41,14 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - backend
-      - minio
-      - websocket
     expose:
       - ${FPORT}
     env_file:
       - .env.staging
     environment:
-      FPORT: ${FPORT}
-      BPORT: ${BPORT}
-      NEXT_PUBLIC_BACKEND_URL: "https://localhost:${BPORT}"
+      FPORT: "${FPORT}"
+      BPORT: "${BPORT}"
+      NEXT_PUBLIC_BACKEND_URL: "https://localhost"
     networks:
       - internal
 
@@ -53,21 +56,21 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    ports:
-      - "${BPORT}:${BPORT}"
+    expose:
+      - "${BPORT}"
     env_file:
       - .env.staging
     depends_on:
+      - mongo
       - minio
-      - websocket
     environment:
       BPORT: ${BPORT}
       CDN_KEY: ${MINIO}
       CDN_SECRET: ${MINIO}
-      CDN_REGION: "sfo3"
+      CDN_REGION: sfo3
       CDN_BUCKET: ${MINIO}
-      CDN_ENDPOINT: "http://localhost:9000"
-      MONGODB_URI: "mongodb://root:staging@mongo:27017/?authSource=admin"
+      CDN_ENDPOINT: http://localhost:9000
+      MONGODB_URI: mongodb://root:staging@mongo:27017/?authSource=admin
     networks:
       - internal
 
@@ -90,8 +93,8 @@ services:
       - "9000:9000"
       - "9090:9090"
     environment:
-      MINIO_ROOT_USER: ${MINIO}
-      MINIO_ROOT_PASSWORD: ${MINIO}
+      MINIO_ROOT_USER: "${MINIO}"
+      MINIO_ROOT_PASSWORD: "${MINIO}"
     volumes:
       - "minio_data_staging:/data/minio"
     command: minio server /data/minio --console-address ":9090"

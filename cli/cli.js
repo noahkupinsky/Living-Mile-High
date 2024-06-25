@@ -66,7 +66,6 @@ program
     .command('staging')
     .description('Start Docker containers in staging mode')
     .action(() => {
-        resetDataDir();
         dockerDownAll();
         dockerRun('docker-compose.staging.yml');
     });
@@ -207,13 +206,16 @@ program
     });
 
 const resetDataDir = () => {
+    if (fs.existsSync(path.resolve(__dirname, '../.data'))) {
+        throw new Error('Data directory already exists. Please remove it before running this command.');
+    }
+
     const data_services = ['mongo', 'minio'];
     const data_categories = ['development', 'production', 'staging'];
-    const data_dirs = data_services.map(s => data_categories.map(c => `./.data/${s}/${c}`)).flat();
-    // remove the directory if it exists
-    fs.unlinkSync('./.data', { force: true });
 
-    data_dirs.forEach(dir => fs.mkdirSync(dir, { recursive: true }));
+    const data_dirs = data_services.map(s => data_categories.map(c => `../.data/${s}/${c}`)).flat();
+
+    data_dirs.forEach(dir => fs.mkdirSync(path.resolve(__dirname, dir), { recursive: true }));
 }
 
 const createBucket = async (port) => {
@@ -257,52 +259,6 @@ program
     .description('Setup local services')
     .action(async () => {
         resetServices();
-    });
-
-async function latest() {
-    try {
-        console.log('Pulling from the repository...');
-        execSync('git checkout main', { stdio: 'inherit' });
-        execSync('git branch --set-upstream-to=origin/main', { stdio: 'inherit' });
-        execSync('git pull', { stdio: 'inherit' });
-
-        const lockFiles = [
-            './yarn.lock',
-            './package-lock.json',
-            './backend/yarn.lock',
-            './backend/package-lock.json',
-            './frontend/yarn.lock',
-            './frontend/package-lock.json',
-            './cli/yarn.lock',
-            './cli/package-lock.json',
-        ];
-
-        console.log('Deleting lock files...');
-        lockFiles.forEach((file) => {
-            if (fs.existsSync(file)) {
-                fs.unlinkSync(file);
-                console.log(`Deleted ${file}`);
-            }
-        });
-
-        console.log('Reinstalling packages...');
-        execSync('yarn install', { stdio: 'inherit' });
-        execSync('yarn install', { cwd: './backend', stdio: 'inherit' });
-        execSync('yarn install', { cwd: './frontend', stdio: 'inherit' });
-        execSync('yarn install', { cwd: './cli', stdio: 'inherit' });
-
-        console.log('Fetching the latest environment variables...');
-        await Promise.all(ENVS.map((env) => pullEnv(env, true)));
-    } catch (err) {
-        console.error('Error executing latest command:', err.message);
-    }
-}
-
-program
-    .command('latest')
-    .description('Pull from the repo, delete lock files, reinstall packages, and fetch the latest env vars')
-    .action(async () => {
-        await latest();
     });
 
 program.parse(process.argv);

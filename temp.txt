@@ -9,6 +9,8 @@ http {
     sendfile        on;
     keepalive_timeout  65;
 
+    server_name localhost;
+
 
     upstream frontend {
         server frontend:${FPORT};

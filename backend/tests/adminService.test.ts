@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import AdminModel from '../src/models/adminModel';
-import { services } from './setup';
 import { AdminService } from '../src/types';
+import { services } from '../src/app';
 
 let adminService: AdminService;
 

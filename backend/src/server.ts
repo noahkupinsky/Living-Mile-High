@@ -6,14 +6,12 @@ const server = getServer();
 
 const startServer = async () => {
     try {
-        const servicesConfig = {};
+        const { MOCK, BPORT } = env();
+        const sm = newServiceManager(MOCK === 'true');
+        await setupApp(sm);
 
-        const services = await newServiceManager(env().MOCK === 'true');
-        await setupApp(services);
-
-        const backendPort = env().BPORT;
-        server.listen(backendPort, () => {
-            console.log(`Server started on port ${backendPort}`);
+        server.listen(BPORT, () => {
+            console.log(`Server started on port ${BPORT}`);
         });
     } catch (error) {
         console.error('Error starting server', error);

@@ -1,6 +1,6 @@
 import { AppServices, ServiceManager } from "../types";
 import mongoose from "mongoose";
-import env from "src/config/env";
+import env from "../config/env";
 import { createNetworkS3CdnConfig } from "../services/utils/createS3CdnService";
 import S3CdnAdapter from "../services/cdn/S3CdnAdapter";
 import CdnAppDataService from "../services/cdn/CdnAppDataService";

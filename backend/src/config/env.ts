@@ -36,7 +36,10 @@ if (envFile && allowedEnvFiles.includes(envFile)) {
 }
 
 const env = (): Env => {
-    return process.env && EnvDefaults
+    return {
+        ...EnvDefaults,
+        ...process.env
+    }
 };
 
 export default env

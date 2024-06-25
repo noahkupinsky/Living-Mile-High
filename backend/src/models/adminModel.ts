@@ -1,5 +1,5 @@
 import { Schema, model, Document } from 'mongoose';
-import { AdminRecord } from 'src/types/admin';
+import { AdminRecord } from '../types';
 
 interface AdminDocument extends Document, AdminRecord { }
 

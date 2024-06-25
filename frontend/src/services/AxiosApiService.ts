@@ -5,7 +5,7 @@ class AxiosApiService implements ApiService {
     private axiosInstance: AxiosInstance;
     constructor(apiHost: string) {
         this.axiosInstance = axios.create({
-            baseURL: `http://${apiHost}/api`,
+            baseURL: `${apiHost}/api`,
             withCredentials: true
         });
     }

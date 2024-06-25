@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "ENV_FILE=${ENV_FILE:-development} next dev",
     "build": "next build",
-    "start": "next start -p ${FRONTEND_PORT:-3000}",
+    "start": "next start -p ${FPORT:-3000}",
     "lint": "next lint"
   },
   "dependencies": {

@@ -1,5 +1,5 @@
 import { Schema, model, Document } from 'mongoose';
-import { HouseRecord } from 'src/types/house';
+import { HouseRecord } from '../types';
 
 export interface HouseDocument extends Document, HouseRecord { }
 

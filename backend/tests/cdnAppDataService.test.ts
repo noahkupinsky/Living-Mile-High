@@ -2,7 +2,7 @@ import { AppData, DeepPartial } from "living-mile-high-types";
 import { AppDataService } from "../src/types";
 import { inMemoryCDN } from "../src/services/utils/createS3CdnService";
 import { CdnFixedKeys } from "../src/types/enums";
-import { services } from "./setup";
+import { services } from "../src/app";
 
 const DATA_KEY = CdnFixedKeys.AppData;
 let appDataService: AppDataService;

@@ -1,11 +1,10 @@
-import { ExpressEndpoint } from "src/types";
+import { ExpressEndpoint } from "../types";
 import { services } from "../app";
 import { AppData, DeepPartial } from "living-mile-high-types";
 
 export const updateDataAndBroadcast = async (updates: DeepPartial<AppData>) => {
-    const { appDataService, webSocketService } = services();
+    const { appDataService } = services();
     await appDataService.update(updates);
-    webSocketService.broadcast("Updated App Data");
 }
 
 export const updateAppData: ExpressEndpoint = async (req, res) => {
