@@ -1,0 +1,17 @@
+{
+  "name": "living-mile-high-lib",
+  "version": "1.0.10",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "typescript": "^4.0.0"
+  },
+  "dependencies": {
+    "living-mile-high-lib": "1.0.8"
+  }
+}

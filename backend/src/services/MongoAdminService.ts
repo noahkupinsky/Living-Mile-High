@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
-import { AdminService } from '../../types';
-import AdminModel from '../../models/adminModel';
+import { AdminService } from '../types';
+import AdminModel from '../models/AdminModel';
 
 class MongoAdminService implements AdminService {
     async getUserByLoginInfo(username: string, password: string): Promise<any> {

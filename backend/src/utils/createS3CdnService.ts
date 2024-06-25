@@ -1,5 +1,5 @@
 import { S3Client, PutObjectCommand, DeleteObjectCommand, GetObjectCommand, ListObjectsV2Command, GetObjectCommandOutput, GetObjectRequest } from "@aws-sdk/client-s3";
-import { S3Config } from "../../types";
+import { S3Config } from "../types";
 
 export const inMemoryCDN: { [key: string]: { body: any, contentType: string } } = {};
 

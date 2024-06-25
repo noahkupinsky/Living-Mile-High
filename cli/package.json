@@ -14,7 +14,7 @@
     "child_process": "^1.0.2",
     "commander": "^8.0.0",
     "dotenv": "^16.4.5",
-    "shelljs": "^0.8.4"
+    "shelljs": "^0.8.5"
   },
   "devDependencies": {
     "@types/dotenv": "^8.2.0"

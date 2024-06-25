@@ -4163,10 +4163,31 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.2.4.tgz#eca284f75d2965079309dc0ad9255abb2ebc1632"
   integrity sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==
 
-living-mile-high-types@1.0.12:
-  version "1.0.12"
-  resolved "https://registry.yarnpkg.com/living-mile-high-types/-/living-mile-high-types-1.0.12.tgz#cb13b7568fc3ee27438d10a2530f8f9b9751e04d"
-  integrity sha512-+R4uVbJQrYYoKswZY43i8BLgow1DenoI16yrrscY92Qqd+qdhcUlHg+t3kzsZwfNCGnzJwC2vV+Jr3V4EAPe6Q==
+living-mile-high-lib@1.0.10:
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/living-mile-high-lib/-/living-mile-high-lib-1.0.10.tgz#080af1a819c33c3a15d05fafd339578f9f0fb05e"
+  integrity sha512-iG1XwDuwXNyKoYDDNjlHyK8ydkw/LEpwUCZjvWSCtjKafGktj394D4Djv6Qzo1G0N778JmYYZ8HLE+OVzGAyPg==
+  dependencies:
+    living-mile-high-lib "1.0.8"
+
+living-mile-high-lib@1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/living-mile-high-lib/-/living-mile-high-lib-1.0.4.tgz#dd98592e42a339761be202b6cdfc443a9c2f1d21"
+  integrity sha512-ROQo0LRmbRmZumdmtIdaHXAntL2DIzIpMl/kPpgwi8Vm/VquQxTBnRg+mj21WqAdrZQMEuVL+/DPboolU1w+3g==
+
+living-mile-high-lib@1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/living-mile-high-lib/-/living-mile-high-lib-1.0.6.tgz#207d1f0dc357270731aded4c9f0633eddd4b3b2c"
+  integrity sha512-y5s+H+PLnr8+PQoy02WcnyUX1fF6tUvGkkYRDP2olYfmAnqc0dMm4gOfuFxgnrEAYppt9vmfi9H6VvuGXmqIQQ==
+  dependencies:
+    living-mile-high-lib "1.0.4"
+
+living-mile-high-lib@1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/living-mile-high-lib/-/living-mile-high-lib-1.0.8.tgz#586c327284b07eec59c06d6ada85dd0cb7176b90"
+  integrity sha512-Cl6OkWUEKXP9XZxUJkPllcHib6D2efBQHwBigxSBBn6prqHA+HV03Yyg6wiqtihA5MYmAQ9UqgL8Q2d0gjZurg==
+  dependencies:
+    living-mile-high-lib "1.0.6"
 
 locate-path@^5.0.0:
   version "5.0.0"

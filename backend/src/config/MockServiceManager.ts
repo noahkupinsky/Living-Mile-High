@@ -1,12 +1,13 @@
 import { AppServices, ServiceManager } from "../types";
 import mongoose from "mongoose";
-import { createInMemoryS3CdnConfig, inMemoryCDN } from "../services/utils/createS3CdnService";
-import S3CdnAdapter from "../services/cdn/S3CdnAdapter";
-import CdnAppDataService from "../services/cdn/CdnAppDataService";
-import CdnImageService from "../services/cdn/CdnImageService";
-import MongoAdminService from "../services/database/MongoAdminService";
-import MongoHouseService from "../services/database/MongoHouseService";
+import { createInMemoryS3CdnConfig, inMemoryCDN } from "../utils/createS3CdnService";
+import S3CdnAdapter from "../services/S3CdnAdapter";
+import CdnAppDataService from "../services/CdnAppDataService";
+import CdnImageService from "../services/CdnImageService";
+import MongoAdminService from "../services/MongoAdminService";
+import MongoHouseService from "../services/MongoHouseService";
 import { MongoMemoryServer } from "mongodb-memory-server";
+import MongoOtherService from "../services/MongoOtherService";
 
 class MockServiceManager implements ServiceManager<AppServices> {
     private services?: AppServices;
@@ -23,13 +24,16 @@ class MockServiceManager implements ServiceManager<AppServices> {
 
         const s3CdnConfig = createInMemoryS3CdnConfig();
         const cdn = new S3CdnAdapter(s3CdnConfig);
+        const houseService = new MongoHouseService();
+        const otherService = new MongoOtherService();
 
         this.services = {
             cdnAdapter: cdn,
-            houseService: new MongoHouseService(),
+            houseService: houseService,
+            otherService: otherService,
             adminService: new MongoAdminService(),
             imageService: new CdnImageService(cdn),
-            appDataService: new CdnAppDataService(cdn)
+            appDataService: new CdnAppDataService(cdn, houseService, otherService)
         }
 
         return this.services!;

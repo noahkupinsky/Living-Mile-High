@@ -1,12 +1,13 @@
 import { AppServices, ServiceManager } from "../types";
 import mongoose from "mongoose";
 import env from "../config/env";
-import { createNetworkS3CdnConfig } from "../services/utils/createS3CdnService";
-import S3CdnAdapter from "../services/cdn/S3CdnAdapter";
-import CdnAppDataService from "../services/cdn/CdnAppDataService";
-import CdnImageService from "../services/cdn/CdnImageService";
-import MongoAdminService from "../services/database/MongoAdminService";
-import MongoHouseService from "../services/database/MongoHouseService";
+import { createNetworkS3CdnConfig } from "../utils/createS3CdnService";
+import S3CdnAdapter from "../services/S3CdnAdapter";
+import CdnAppDataService from "../services/CdnAppDataService";
+import CdnImageService from "../services/CdnImageService";
+import MongoAdminService from "../services/MongoAdminService";
+import MongoHouseService from "../services/MongoHouseService";
+import MongoOtherService from "src/services/MongoOtherService";
 
 class AppServiceManager implements ServiceManager<AppServices> {
     private services?: AppServices;
@@ -28,12 +29,16 @@ class AppServiceManager implements ServiceManager<AppServices> {
             }
         );
         const cdn = new S3CdnAdapter(s3CdnConfig);
+        const houseService = new MongoHouseService();
+        const otherService = new MongoOtherService();
+
         this.services = {
             cdnAdapter: cdn,
-            houseService: new MongoHouseService(),
+            houseService: houseService,
+            otherService: otherService,
             adminService: new MongoAdminService(),
             imageService: new CdnImageService(cdn),
-            appDataService: new CdnAppDataService(cdn)
+            appDataService: new CdnAppDataService(cdn, houseService, otherService)
         }
 
         return this.services!;

@@ -7,7 +7,9 @@ export type House = {
     mainImage: string,
     images: string[],
     neighborhood: string,
-    stats: HouseStats
+    stats: HouseStats,
+    createdAt?: Date,
+    updatedAt?: Date,
 }
 
 export type HouseStats = {
@@ -17,7 +19,6 @@ export type HouseStats = {
     bathrooms?: number,
     garageSpaces?: number,
 }
-
 
 export type HouseQuery = {
     isDeveloped?: boolean,
@@ -30,7 +31,7 @@ export type HouseQuery = {
 
 export type AboutData = {
     text: string,
-    image: string
+    image: string,
 }
 
 export type ContactData = {

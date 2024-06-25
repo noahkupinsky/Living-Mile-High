@@ -1,5 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
-export { AdminRecord, HouseRecord } from './database'
+export {
+    AdminRecord,
+    HouseRecord,
+    OtherRecord,
+    OtherData
+} from './database'
 export {
     ServiceManager,
     AppServices,
@@ -8,7 +13,8 @@ export {
     ImageService,
     HouseService,
     AdminService,
-    AppDataService
+    AppDataService,
+    OtherService
 } from './services'
 
 export type ExpressMiddleware<

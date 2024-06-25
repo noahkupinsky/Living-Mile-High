@@ -1,12 +1,12 @@
-import { House } from "living-mile-high-types";
+import { House, AppData } from "living-mile-high-lib";
 
 
-export interface AdminRecord {
+export type AdminRecord = {
     username: string;
     password: string;
 }
 
-export interface HouseRecord {
+export type HouseRecord = {
     address: string;
     isDeveloped: boolean;
     isForSale: boolean;
@@ -21,5 +21,22 @@ export interface HouseRecord {
         bathrooms?: number;
         garageSpaces?: number;
     };
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+export type OtherData = Omit<AppData, 'houses'>;
+
+export type OtherRecord = {
+    about: {
+        text: string;
+        image: string;
+    },
+    contact: {
+        text: string;
+        image: string
+    },
+    placeholderImages: string[],
+    homeImages: string[]
 }
 

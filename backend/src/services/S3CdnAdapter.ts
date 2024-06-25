@@ -1,5 +1,5 @@
 import { S3Client, PutObjectCommand, DeleteObjectCommand, ListObjectsV2Command, ListObjectsV2CommandOutput, GetObjectCommand, GetObjectCommandOutput, CopyObjectCommand } from "@aws-sdk/client-s3";
-import { CdnAdapter, S3Config } from '../../types';
+import { CdnAdapter, S3Config } from '../types';
 
 function generateAlphanumericKey(length: number = 16): string {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

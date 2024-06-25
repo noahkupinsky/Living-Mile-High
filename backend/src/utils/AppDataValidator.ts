@@ -1,4 +1,4 @@
-import { AppData } from "living-mile-high-types";
+import { AppData } from "living-mile-high-lib";
 
 export class AppDataValidator {
     public static validate(data: any): data is AppData {

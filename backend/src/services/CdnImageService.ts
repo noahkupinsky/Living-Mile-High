@@ -1,5 +1,5 @@
-import { AssetPrefix } from '../../types/enums';
-import { ImageService, CdnAdapter } from '../../types';
+import { AssetPrefix } from '../types/enums';
+import { ImageService, CdnAdapter } from '../types';
 
 
 

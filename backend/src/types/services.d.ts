@@ -1,5 +1,6 @@
-import { AppData } from "living-mile-high-types";
+import { AppData, DeepPartial } from "living-mile-high-lib";
 import { ImageCategory } from "./enums";
+import { OtherData } from "./database";
 
 export interface ServiceManager<Services> {
     public connect(): Promise<Services>;
@@ -11,7 +12,8 @@ export type AppServices = {
     adminService: AdminService;
     imageService: ImageService;
     appDataService: AppDataService;
-    cdnAdapter: CdnAdapter
+    cdnAdapter: CdnAdapter;
+    otherService: OtherService;
 };
 
 export interface CdnAdapter {
@@ -36,14 +38,13 @@ export interface ImageService {
 }
 
 export interface AppDataService {
-    getData(): Promise<DeepPartial<AppData>>;
-    update(updates: DeepPartial<AppData>): Promise<AppData>;
-    garbageCollect(): Promise<number>;
+    update(): Promise<AppData>;
+    // garbageCollect(): Promise<number>;
 }
 
 export interface HouseService {
-    getHouses(): Promise<House[]>;
-    saveHouse(house: House): Promise<void>;
+    getHouseObjects(): Promise<House[]>;
+    upsertHouse(house: DeepPartial<House>): Promise<void>;
     allImages(): Promise<string[]>;
     allNeighborhoods(): Promise<string[]>;
 }
@@ -52,4 +53,9 @@ export interface AdminService {
     getUserByLoginInfo(username: string, password: string): Promise<any>;
     createUser(username: string, password: string): Promise<any>;
     getUserById(id: string): Promise<any>;
+}
+
+export interface OtherService {
+    update(updates: DeepPartial<OtherData>): Promise<void>;
+    getOtherObject(): Promise<OtherData>;
 }

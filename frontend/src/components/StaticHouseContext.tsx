@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { HouseProvider } from './HouseContext';
-import { House } from 'living-mile-high-types';
+import { House } from 'living-mile-high-lib';
 
 const HOUSES: House[] = [
     {

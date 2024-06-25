@@ -1,7 +1,7 @@
 import { HouseService } from "../src/types";
-import HouseModel from "../src/models/houseModel";
+import HouseModel from "../src/models/HouseModel";
 import { services } from "../src/app";
-import { House } from "living-mile-high-types";
+import { House } from "living-mile-high-lib";
 
 let houseService: HouseService;
 
@@ -30,7 +30,7 @@ describe('HouseService get and save', () => {
         const house = new HouseModel(mockHouseData);
         await house.save();
 
-        const houses = await houseService.getHouses();
+        const houses = await houseService.getHouseObjects();
         expect(houses.length).toBe(1);
         expect(houses[0].address).toBe(mockHouseData.address);
     });
@@ -53,7 +53,7 @@ describe('HouseService get and save', () => {
             }
         };
 
-        await houseService.saveHouse(mockHouse);
+        await houseService.upsertHouse(mockHouse);
         const savedHouse = await HouseModel.findOne({ address: mockHouse.address });
         expect(savedHouse).not.toBeNull();
         expect(savedHouse!.address).toBe(mockHouse.address);
@@ -76,7 +76,7 @@ describe('HouseService get and save', () => {
                 garageSpaces: 2
             }
         };
-        await houseService.saveHouse(mockHouse);
+        await houseService.upsertHouse(mockHouse);
         const savedHouse = await HouseModel.findOne({ address: mockHouse.address });
         expect(savedHouse).not.toBeNull();
         const savedHouseId = savedHouse!._id as string;
@@ -87,7 +87,7 @@ describe('HouseService get and save', () => {
             isForSale: false
         };
 
-        await houseService.saveHouse(updatedHouse);
+        await houseService.upsertHouse(updatedHouse);
         const updatedSavedHouse = await HouseModel.findById(savedHouseId);
         expect(updatedSavedHouse!.isForSale).toBe(false);
     })

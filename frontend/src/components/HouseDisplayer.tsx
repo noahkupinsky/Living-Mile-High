@@ -1,5 +1,5 @@
 import React from 'react';
-import { House } from 'living-mile-high-types';
+import { House } from 'living-mile-high-lib';
 import { View, styled } from 'tamagui';
 
 export type HouseDisplayerProps = {

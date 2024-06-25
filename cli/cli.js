@@ -3,6 +3,7 @@
 const { S3Client, GetObjectCommand, PutObjectCommand, ListBucketsCommand, CreateBucketCommand } = require('@aws-sdk/client-s3');
 const { execSync } = require('child_process');
 const { program } = require('commander');
+const shell = require('shelljs');
 const fs = require('fs');
 const path = require('path');
 
@@ -93,25 +94,26 @@ const getPackageVersion = (packagePath) => {
 
 function updateAndPublishPackage(packageDir, origDir) {
     shell.cd(packageDir);
-    execSync('npm version patch');
-    execSync('npm publish');
+    shell.exec('npm version patch');
+    shell.exec('npm publish');
     const newVersion = getPackageVersion(path.join(packageDir, 'package.json'));
+    shell.cd(origDir);
     ['frontend', 'backend'].forEach(targetDir => updateTarget(targetDir, newVersion));
 }
 
 function updateTarget(targetDir, newVersion) {
     shell.cd(`./${targetDir}`);
-    execSync(`yarn add "living-mile-high-types@${newVersion}"`);
+    shell.exec(`yarn add "living-mile-high-lib@${newVersion}"`);
     shell.cd('../');
 }
 
 program
-    .command('publish-types')
+    .command('publib')
     .description('Publish types')
     .action(() => {
         const origDir = process.cwd();
-        const typesDir = path.join(origDir, 'living-mile-high-types');
-        updateAndPublishPackage(typesDir, origDir);
+        const libDir = path.join(origDir, 'living-mile-high-lib');
+        updateAndPublishPackage(libDir, origDir);
     });
 
 const ENVS = ['.env.production', '.env.staging', '.env.development', '.env'];

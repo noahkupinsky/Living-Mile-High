@@ -1,5 +1,5 @@
 import { CdnAdapter } from "../src/types";
-import { inMemoryCDN } from "../src/services/utils/createS3CdnService";
+import { inMemoryCDN } from "../src/utils/createS3CdnService";
 import { services } from "../src/app";
 
 let cdn: CdnAdapter;
