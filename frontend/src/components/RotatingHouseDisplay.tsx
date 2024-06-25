@@ -60,6 +60,10 @@ const RotatingHouseDisplay = ({ interval }: RotatingHouseDisplayProps) => {
             shadowOpacity={0.1}
             shadowRadius={8}
         >
+            <AutoImage
+                src={"http://localhost:9000/miniocdn/home-first"}
+                alt={"Couldn't load home first"}
+            />
             {houses.length > 0 ? (
                 <>
                     <AutoImage

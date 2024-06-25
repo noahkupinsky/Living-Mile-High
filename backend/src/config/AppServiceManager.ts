@@ -7,7 +7,7 @@ import CdnAppDataService from "../services/CdnAppDataService";
 import CdnImageService from "../services/CdnImageService";
 import MongoAdminService from "../services/MongoAdminService";
 import MongoHouseService from "../services/MongoHouseService";
-import MongoOtherService from "src/services/MongoOtherService";
+import MongoOtherService from "../services/MongoOtherService";
 
 class AppServiceManager implements ServiceManager<AppServices> {
     private services?: AppServices;

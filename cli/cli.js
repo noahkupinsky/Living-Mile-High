@@ -11,7 +11,7 @@ const envPath = path.resolve(__dirname, '../.env');
 
 require('dotenv').config({ path: envPath });
 
-const { CDN_ENDPOINT, CDN_KEY, CDN_SECRET, CDN_REGION, CDN_BUCKET, MINIO } = process.env;
+const { ENV_CDN_ENDPOINT, ENV_CDN_KEY, ENV_CDN_SECRET, ENV_CDN_REGION, ENV_CDN_BUCKET, MINIO } = process.env;
 
 const dockerCleanup = (images) => {
     console.log('Cleaning up Docker containers and images...');
@@ -121,12 +121,12 @@ const ACTIONS = ['push', 'pull'];
 
 function cdnClient() {
     return new S3Client({
-        endpoint: CDN_ENDPOINT,
+        endpoint: ENV_CDN_ENDPOINT,
         credentials: {
-            accessKeyId: CDN_KEY,
-            secretAccessKey: CDN_SECRET,
+            accessKeyId: ENV_CDN_KEY,
+            secretAccessKey: ENV_CDN_SECRET,
         },
-        region: CDN_REGION,
+        region: ENV_CDN_REGION,
         forcePathStyle: true, // needed for spaces endpoint compatibility
     });
 }
@@ -142,7 +142,7 @@ async function pullEnv(env, doForce) {
 
     try {
         const command = new GetObjectCommand({
-            Bucket: CDN_BUCKET,
+            Bucket: ENV_CDN_BUCKET,
             Key: env
         });
         const { Body } = await client.send(command);
@@ -172,7 +172,7 @@ async function pushEnv(env) {
     try {
         const fileContent = fs.readFileSync(targetPath);
         const command = new PutObjectCommand({
-            Bucket: CDN_BUCKET,
+            Bucket: ENV_CDN_BUCKET,
             Key: env,
             Body: fileContent
         });
@@ -233,15 +233,15 @@ const createBucket = async (port) => {
         });
 
         const buckets = await client.send(new ListBucketsCommand({}));
-        const bucketExists = buckets.Buckets.some(bucket => bucket.Name === CDN_BUCKET);
+        const bucketExists = buckets.Buckets.some(bucket => bucket.Name === MINIO);
 
         if (!bucketExists) {
             // Create the bucket
-            const createBucketParams = { Bucket: CDN_BUCKET };
+            const createBucketParams = { Bucket: MINIO };
             await client.send(new CreateBucketCommand(createBucketParams));
-            console.log(`Bucket created: ${CDN_BUCKET}`);
+            console.log(`Bucket created: ${MINIO}`);
         } else {
-            console.log(`Bucket already exists: ${CDN_BUCKET}`);
+            console.log(`Bucket already exists: ${MINIO}`);
         }
     } catch (err) {
         console.error('Error:', err);

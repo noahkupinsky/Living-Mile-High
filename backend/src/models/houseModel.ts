@@ -1,7 +1,7 @@
 import { Schema, model, Document } from 'mongoose';
 import { HouseRecord } from '../types';
 import { DeepPartial, House } from 'living-mile-high-lib';
-import { optionals } from 'src/types/enums';
+import { optionals } from '../types/enums';
 
 export interface HouseDocument extends Document, HouseRecord { }
 

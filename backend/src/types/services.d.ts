@@ -1,6 +1,7 @@
 import { AppData, DeepPartial } from "living-mile-high-lib";
 import { ImageCategory } from "./enums";
 import { OtherData } from "./database";
+import { GetObjectCommandOutput, CopyObjectCommandOutput, DeleteObjectCommandOutput, PutObjectAclCommandOutput } from "@aws-sdk/client-s3";
 
 export interface ServiceManager<Services> {
     public connect(): Promise<Services>;
@@ -20,10 +21,10 @@ export interface CdnAdapter {
     public getObjectUrl(key: string): string;
     public generateUniqueKey(prefix: string): string;
     public extractKeys(object: any): string[];
-    public putObject(key: string, body: any, contentType: string): Promise<boolean>;
+    public putObject(key: string, body: any, contentType: string): Promise<PutObjectAclCommandOutput>;
     public getObject(key: string): Promise<GetObjectCommandOutput>;
-    public moveObject(sourceKey: string, destinationKey: string): Promise<boolean>;
-    public deleteObject(key: string): Promise<boolean>;
+    public moveObject(sourceKey: string, destinationKey: string): Promise<CopyObjectCommandOutput>;
+    public deleteObject(key: string): Promise<DeleteObjectCommandOutput>;
     public getAllKeys(): Promise<string[]>
 }
 

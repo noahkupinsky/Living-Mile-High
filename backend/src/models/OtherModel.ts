@@ -1,6 +1,6 @@
 import { Schema, model, Document } from 'mongoose';
 import { OtherData, OtherRecord } from '../types';
-import { optionals } from 'src/types/enums';
+import { optionals } from '../types/enums';
 import { DeepPartial } from 'living-mile-high-lib';
 
 export interface OtherDocument extends Document, OtherRecord { }
@@ -18,7 +18,7 @@ const OtherSchema = new Schema<OtherDocument>({
     homeImages: { type: [String], required: true },
 });
 
-const OtherModel = model<OtherDocument>('House', OtherSchema);
+const OtherModel = model<OtherDocument>('Other', OtherSchema);
 
 export function otherDocumentToObject(doc: OtherDocument): OtherData {
     const data: OtherData = {

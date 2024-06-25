@@ -1,4 +1,16 @@
-import { S3Client, PutObjectCommand, DeleteObjectCommand, ListObjectsV2Command, ListObjectsV2CommandOutput, GetObjectCommand, GetObjectCommandOutput, CopyObjectCommand } from "@aws-sdk/client-s3";
+import {
+    S3Client,
+    PutObjectCommand,
+    DeleteObjectCommand,
+    ListObjectsV2Command,
+    ListObjectsV2CommandOutput,
+    GetObjectCommand,
+    GetObjectCommandOutput,
+    CopyObjectCommand,
+    CopyObjectCommandOutput,
+    DeleteObjectCommandOutput,
+    PutObjectCommandOutput
+} from "@aws-sdk/client-s3";
 import { CdnAdapter, S3Config } from '../types';
 
 function generateAlphanumericKey(length: number = 16): string {
@@ -30,16 +42,7 @@ class S3CdnAdapter implements CdnAdapter {
         return `${prefix}-${generateAlphanumericKey()}`;
     }
 
-    private async tryCommand<T>(command: any): Promise<boolean> {
-        try {
-            await this.client.send(command);
-            return true;
-        } catch (error: any) {
-            return false;
-        }
-    }
-
-    public async putObject(key: string, body: any, contentType: string): Promise<boolean> {
+    public async putObject(key: string, body: any, contentType: string): Promise<PutObjectCommandOutput> {
         const command = new PutObjectCommand({
             Bucket: this.bucket,
             Key: key,
@@ -47,7 +50,7 @@ class S3CdnAdapter implements CdnAdapter {
             ContentType: contentType,
             ACL: 'public-read',
         });
-        return await this.tryCommand(command);
+        return await this.client.send(command);
     }
 
     public async getObject(key: string): Promise<GetObjectCommandOutput> {
@@ -58,22 +61,22 @@ class S3CdnAdapter implements CdnAdapter {
         return await this.client.send(command);
     }
 
-    public async moveObject(sourceKey: string, destinationKey: string): Promise<boolean> {
+    public async moveObject(sourceKey: string, destinationKey: string): Promise<CopyObjectCommandOutput> {
         const command = new CopyObjectCommand({
             Bucket: this.bucket,
             CopySource: `${this.bucket}/${sourceKey}`,
             Key: destinationKey,
             ACL: 'public-read'
         });
-        return await this.tryCommand(command);
+        return await this.client.send(command);
     }
 
-    public async deleteObject(key: string): Promise<boolean> {
+    public async deleteObject(key: string): Promise<DeleteObjectCommandOutput> {
         const command = new DeleteObjectCommand({
             Bucket: this.bucket,
             Key: key,
         });
-        return await this.tryCommand(command);
+        return await this.client.send(command);
     }
 
     public extractKeys(data: any): string[] {

@@ -1,4 +1,4 @@
-import { S3Client, PutObjectCommand, DeleteObjectCommand, GetObjectCommand, ListObjectsV2Command, GetObjectCommandOutput, GetObjectRequest } from "@aws-sdk/client-s3";
+import { S3Client, PutObjectCommand, DeleteObjectCommand, GetObjectCommand, ListObjectsV2Command, GetObjectCommandOutput, GetObjectRequest, CopyObjectCommand } from "@aws-sdk/client-s3";
 import { S3Config } from "../types";
 
 export const inMemoryCDN: { [key: string]: { body: any, contentType: string } } = {};
@@ -27,6 +27,16 @@ export class InMemoryS3Client {
                 Contents: keys.map(key => ({ Key: key })),
                 IsTruncated: false,
             };
+        } else if (command instanceof CopyObjectCommand) {
+            const params = command.input;
+            const copySource = params.CopySource!;
+            if (inMemoryCDN[copySource.split('/').pop()!]) {
+                inMemoryCDN[params.Key!] = inMemoryCDN[copySource.split('/').pop()!];
+                delete inMemoryCDN[copySource.split('/').pop()!];
+                return {};
+            } else {
+                throw new Error("Source object not found");
+            }
         } else {
             throw new Error(`Unsupported command: ${command.constructor.name}`);
         }

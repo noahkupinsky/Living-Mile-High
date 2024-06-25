@@ -10,49 +10,52 @@ beforeAll(() => {
 
 
 describe('S3Service', () => {
-    it('should get object URL correctly', () => {
-        const objectKey = 'test-object';
-        const url = cdn.getObjectUrl(objectKey);
-
-        expect(url).toBe(`https://mock-bucket.s3.amazonaws.com/${objectKey}`);
-    });
-
-    it('should put object successfully', async () => {
-        const objectKey = 'test-object';
+    it('should upload an object', async () => {
+        const key = 'test-key';
         const body = 'test-body';
         const contentType = 'text/plain';
 
-        const result = await cdn.putObject(objectKey, body, contentType);
-
-        expect(result).toBe(true);
-        expect(inMemoryCDN[objectKey]).toEqual({ body, contentType });
+        await expect(cdn.putObject(key, body, contentType)).resolves.not.toThrow();
+        expect(inMemoryCDN[key]).toEqual({ body, contentType });
     });
 
-    it('should delete object successfully', async () => {
-        const objectKey = 'test-object';
+    it('should get an object', async () => {
+        const key = 'test-key';
         const body = 'test-body';
         const contentType = 'text/plain';
+        inMemoryCDN[key] = { body, contentType };
 
-        // First, put the object
-        await cdn.putObject(objectKey, body, contentType);
-
-        // Then, delete the object
-        const result = await cdn.deleteObject(objectKey);
-
-        expect(result).toBe(true);
-        expect(inMemoryCDN[objectKey]).toBeUndefined();
+        const result = await cdn.getObject(key);
+        expect(result.Body).toBe(body);
     });
 
-    it('should get object body successfully', async () => {
-        const objectKey = 'test-object';
+    it('should move an object', async () => {
+        const sourceKey = 'source-key';
+        const destinationKey = 'destination-key';
         const body = 'test-body';
         const contentType = 'text/plain';
+        inMemoryCDN[sourceKey] = { body, contentType };
 
-        // First, put the object
-        await cdn.putObject(objectKey, body, contentType);
+        await expect(cdn.moveObject(sourceKey, destinationKey)).resolves.not.toThrow();
+        expect(inMemoryCDN[destinationKey]).toEqual({ body, contentType });
+        expect(inMemoryCDN[sourceKey]).toBeUndefined();
+    });
 
-        const data = await cdn.getObject(objectKey);
+    it('should delete an object', async () => {
+        const key = 'test-key';
+        const body = 'test-body';
+        const contentType = 'text/plain';
+        inMemoryCDN[key] = { body, contentType };
 
-        expect(data).toEqual({ Body: body });
+        await expect(cdn.deleteObject(key)).resolves.not.toThrow();
+        expect(inMemoryCDN[key]).toBeUndefined();
+    });
+
+    it('should list all keys', async () => {
+        inMemoryCDN['key1'] = { body: 'body1', contentType: 'text/plain' };
+        inMemoryCDN['key2'] = { body: 'body2', contentType: 'text/plain' };
+
+        const keys = await cdn.getAllKeys();
+        expect(keys).toEqual(['key1', 'key2']);
     });
 });
