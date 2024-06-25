@@ -1,7 +1,7 @@
 "use client"
 
 import { ApiService, Services } from '../types';
-import React, { createContext, useContext, ReactNode, useState, useEffect } from 'react';
+import React, { createContext, useContext, ReactNode, useState } from 'react';
 import { env } from 'next-runtime-env';
 import AxiosApiService from '@/services/AxiosApiService';
 import mockServices from '@/services/mockServices';
@@ -14,9 +14,9 @@ interface ServiceProviderProps {
 }
 
 const connectServices = () => {
-    const apiUrl = env("NEXT_PUBLIC_API_HOST")!;
+    const apiHost = env("NEXT_PUBLIC_BACKEND_URL")!;
     return {
-        apiService: new AxiosApiService(apiUrl)
+        apiService: new AxiosApiService(apiHost)
     };
 }
 

@@ -3,9 +3,9 @@ import axios, { AxiosInstance } from "axios";
 
 class AxiosApiService implements ApiService {
     private axiosInstance: AxiosInstance;
-    constructor(apiUrl: string) {
+    constructor(apiHost: string) {
         this.axiosInstance = axios.create({
-            baseURL: `${apiUrl}/api`,
+            baseURL: `http://${apiHost}/api`,
             withCredentials: true
         });
     }

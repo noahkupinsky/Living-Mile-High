@@ -1,12 +1,29 @@
-export { CdnAdapter, CdnServiceProvider, CdnServiceDict, S3CdnConfig } from './cdn';
-export { AdminService, AdminRecord } from './admin';
-export { HouseService, HouseRecord } from './house';
-export { ImageService, ImageCategory } from './image';
-export { ExpressMiddleware, ExpressEndpoint } from './express';
-export { AppDataService } from './appData';
-export { AppServiceProvider, AppServiceDict, ServicesConfig } from './appServices';
-export { Database, DatabaseServiceDict } from './database';
-export { ServiceProvider, LocalServiceProvider } from './serviceProvider';
-export { WebSocketService, ServerServiceDict, ServerServiceProvider } from './server';
+export { AdminRecord, HouseRecord } from './database'
+export {
+    ServiceManager,
+    AssetPrefix,
+    AppServices,
+    CdnAdapter,
+    S3Config,
+    ImageService,
+    HouseService,
+    AdminService,
+    AppDataService
+} from './services'
 
+export type ExpressMiddleware<
+    Req = Request,
+    Res = Response
+> = (
+    req: Req,
+    res: Res,
+    next: NextFunction
+) => any;
 
+export type ExpressEndpoint<
+    Req = Request,
+    Res = Response
+> = (
+    req: Req,
+    res: Res
+) => any;

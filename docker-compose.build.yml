@@ -4,7 +4,6 @@ services:
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile
     image: lmh-frontend
     volumes:
       - ./frontend/:/usr/src/app
@@ -16,7 +15,6 @@ services:
   backend:
     build:
       context: ./backend
-      dockerfile: Dockerfile
     image: lmh-backend
     volumes:
       - ./backend/:/usr/src/app

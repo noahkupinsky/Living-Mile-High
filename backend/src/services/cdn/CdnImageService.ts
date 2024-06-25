@@ -1,5 +1,6 @@
+import { AssetPrefix } from '../../types';
 import { ImageService, CdnAdapter } from '../../types';
-import { ImageCategory } from '../../types/enums';
+
 
 class CdnImageService implements ImageService {
     private cdn: CdnAdapter;
@@ -8,8 +9,8 @@ class CdnImageService implements ImageService {
         this.cdn = cdn;
     }
 
-    public async uploadImage(file: any, category: ImageCategory = ImageCategory.Houses): Promise<string> {
-        const objectKey = this.cdn.generateUniqueKey(category);
+    public async uploadImage(file: any): Promise<string> {
+        const objectKey = this.cdn.generateUniqueKey(AssetPrefix);
 
         try {
             await this.cdn.putObject(objectKey, file.buffer, file.mimetype);

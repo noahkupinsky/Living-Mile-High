@@ -1,5 +1,5 @@
 import { S3Client, PutObjectCommand, DeleteObjectCommand, GetObjectCommand, ListObjectsV2Command, GetObjectCommandOutput, GetObjectRequest } from "@aws-sdk/client-s3";
-import { S3CdnConfig } from "../../types";
+import { S3Config } from "../../types";
 
 export const inMemoryCDN: { [key: string]: { body: any, contentType: string } } = {};
 
@@ -41,7 +41,7 @@ export class InMemoryS3Client {
     }
 }
 
-export function createInMemoryS3CdnConfig(): S3CdnConfig {
+export function createInMemoryS3CdnConfig(): S3Config {
     const mockClient = new InMemoryS3Client() as unknown as S3Client;
     return {
         client: mockClient,
@@ -60,13 +60,16 @@ function generateBaseUrl(endpoint: string, bucket: string, region: string): stri
     }
 }
 
-export function createNetworkS3CdnConfig(
+export type CreateCdnParams = {
     endpoint: string,
     region: string,
     bucket: string,
     key: string,
     secret: string
-): S3CdnConfig {
+}
+
+export function createNetworkS3CdnConfig(params: CreateCdnParams): S3Config {
+    const { endpoint, region, bucket, key, secret } = params;
     const client = new S3Client({
         endpoint: endpoint,
         credentials: {

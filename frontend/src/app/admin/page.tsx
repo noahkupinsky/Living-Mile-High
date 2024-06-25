@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from 'react'
-import axios from '../../services/axiosService'
 import { useServices } from '@/providers/ServiceProvider';
 
 const AdminPanel = () => {

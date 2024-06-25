@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import { getServer, setupApp, teardown } from '../src/app';
 import LocalAppServiceProvider from '../src/services/localServices/LocalAppServiceProvider';
-import createServices from '../src/config/di';
+import newServiceManager from '../src/config/di';
 
 dotenv.config();
 
@@ -13,7 +13,7 @@ beforeAll(async () => {
         server: getServer()
     }
 
-    localServices = await createServices(servicesConfig) as LocalAppServiceProvider;
+    localServices = await newServiceManager(servicesConfig) as LocalAppServiceProvider;
     await setupApp(localServices);
 });
 

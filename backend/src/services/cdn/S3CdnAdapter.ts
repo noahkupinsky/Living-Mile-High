@@ -1,14 +1,22 @@
 import { S3Client, PutObjectCommand, DeleteObjectCommand, ListObjectsV2Command, ListObjectsV2CommandOutput, GetObjectCommand, GetObjectCommandOutput, CopyObjectCommand } from "@aws-sdk/client-s3";
-import { CdnAdapter, S3CdnConfig } from '../../types';
-import { CdnFixedKeys } from '../../types/enums';
-import { v4 as uuidv4 } from 'uuid';
+import { CdnAdapter, S3Config } from '../../types';
+
+function generateAlphanumericKey(length: number = 16): string {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
 
 class S3CdnAdapter implements CdnAdapter {
     private client: S3Client;
     private bucket: string;
     private baseUrl: string;
 
-    constructor(config: S3CdnConfig) {
+    constructor(config: S3Config) {
         this.client = config.client;
         this.bucket = config.bucket;
         this.baseUrl = config.baseUrl
@@ -19,7 +27,7 @@ class S3CdnAdapter implements CdnAdapter {
     }
 
     public generateUniqueKey(prefix: string): string {
-        return `${prefix}--${uuidv4()}`;
+        return `${prefix}-${generateAlphanumericKey()}`;
     }
 
     private async tryCommand<T>(command: any): Promise<boolean> {

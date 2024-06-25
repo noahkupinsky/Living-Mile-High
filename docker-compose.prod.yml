@@ -8,7 +8,7 @@ services:
       - "443:443"
     environment:
       DOMAINS: |
-        test.livingmilehigh.com -> http://nginx
+        ${PROD_HOST} -> http://nginx
       STAGE: staging
     volumes:
       - ./https-portal/certs:/var/lib/https-portal
@@ -22,13 +22,10 @@ services:
     image: nginx:latest
     volumes:
       - ./nginx.conf.template:/etc/nginx/nginx.conf.template:ro
-    command: /bin/bash -c "export FRONTEND_PORT=3000 BACKEND_PORT=3001 && envsubst '$${FRONTEND_PORT} $${BACKEND_PORT}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
+    command: /bin/bash -c "envsubst '$${FPORT} $${BPORT}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
     depends_on:
       - frontend
       - backend
-    environment:
-      - FRONTEND_PORT=3000
-      - BACKEND_PORT=3001
     networks:
       - proxy
       - internal
@@ -36,30 +33,28 @@ services:
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile
     depends_on:
       - backend
     expose:
-      - "3000"
+      - ${FPORT}
     env_file:
       - .env.production
     environment:
-      - FRONTEND_PORT=3000
-      - BACKEND_PORT=3001
+      FPORT: ${FPORT}
+      BPORT: ${BPORT}
+      NEXT_PUBLIC_BACKEND_URL: "https://${PROD_HOST}"
     networks:
       - internal
 
   backend:
     build:
       context: ./backend
-      dockerfile: Dockerfile
     expose:
-      - "3001"
+      - ${BPORT}
     env_file:
       - .env.production
     environment:
-      - FRONTEND_PORT=3000
-      - BACKEND_PORT=3001
+      BPORT: ${BPORT}
     networks:
       - internal
 

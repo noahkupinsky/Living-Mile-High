@@ -22,13 +22,10 @@ services:
     image: nginx:latest
     volumes:
       - ./nginx.conf.template:/etc/nginx/nginx.conf.template:ro
-    command: /bin/bash -c "export FRONTEND_PORT=3000 BACKEND_PORT=3001 && envsubst '$${FRONTEND_PORT} $${BACKEND_PORT}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
+    command: /bin/bash -c "envsubst '$${FPORT} $${BPORT}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
     depends_on:
       - frontend
       - backend
-    environment:
-      - FRONTEND_PORT=3000
-      - BACKEND_PORT=3001
     networks:
       - proxy
       - internal
@@ -39,13 +36,16 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - backend
+      - minio
+      - websocket
     expose:
-      - "3000"
+      - ${FPORT}
     env_file:
       - .env.staging
     environment:
-      - FRONTEND_PORT=3000
-      - BACKEND_PORT=3001
+      FPORT: ${FPORT}
+      BPORT: ${BPORT}
+      NEXT_PUBLIC_BACKEND_URL: "https://localhost:${BPORT}"
     networks:
       - internal
 
@@ -53,32 +53,65 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    expose:
-      - "3001"
+    ports:
+      - "${BPORT}:${BPORT}"
     env_file:
       - .env.staging
+    depends_on:
+      - minio
+      - websocket
     environment:
-      - FRONTEND_PORT=3000
-      - BACKEND_PORT=3001
+      BPORT: ${BPORT}
+      CDN_KEY: ${MINIO}
+      CDN_SECRET: ${MINIO}
+      CDN_REGION: "sfo3"
+      CDN_BUCKET: ${MINIO}
+      CDN_ENDPOINT: "http://localhost:9000"
+      MONGODB_URI: "mongodb://root:staging@mongo:27017/?authSource=admin"
+    networks:
+      - internal
+
+  mongo:
+    image: mongo:latest
+    container_name: mongodb
+    expose:
+      - "27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: staging
+    volumes:
+      - mongo_data_staging:/data/db
     networks:
       - internal
 
   minio:
-    image: minio/minio
-    container_name: minio
-    expose:
-      - "9000"
+    image: "minio/minio:latest"
+    ports:
+      - "9000:9000"
+      - "9090:9090"
     environment:
-      MINIO_ROOT_USER: minioadmin
-      MINIO_ROOT_PASSWORD: minioadmin
+      MINIO_ROOT_USER: ${MINIO}
+      MINIO_ROOT_PASSWORD: ${MINIO}
     volumes:
-      - ./data/minio/staging:/data
-    command: server /data
-    networks:
-      - internal
+      - "minio_data_staging:/data/minio"
+    command: minio server /data/minio --console-address ":9090"
 
 networks:
   proxy:
     external: false
   internal:
     external: false
+
+volumes:
+  minio_data_staging:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./.data/minio/staging
+      o: bind
+  mongo_data_staging:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./.data/mongo/staging
+      o: bind
