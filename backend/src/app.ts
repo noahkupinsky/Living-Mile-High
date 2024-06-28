@@ -4,14 +4,14 @@ import router from './routes';
 import cookieParser from 'cookie-parser';
 import passport from './config/passport';
 import http, { Server as HTTPServer } from 'http';
-import { AppServices, ServiceManager } from './types';
+import { ServiceDict, ServiceManager } from './types';
 
-let serviceManager: ServiceManager<AppServices> | null = null;
-let appServices: AppServices | null = null;
+let serviceManager: ServiceManager<ServiceDict> | null = null;
+let appServices: ServiceDict | null = null;
 const app = express();
 const server = http.createServer(app);
 
-export async function setupApp(sm: ServiceManager<AppServices>): Promise<void> {
+export async function setupApp(sm: ServiceManager<ServiceDict>): Promise<void> {
     serviceManager = sm;
     appServices = await serviceManager.connect();
     app.use(cors(
@@ -35,7 +35,7 @@ export async function teardown() {
     }
 }
 
-export function services(): AppServices {
+export function services(): ServiceDict {
     if (!appServices) {
         throw new Error('AppConfig has not been initialized. Call initializeAppConfig first.');
     }

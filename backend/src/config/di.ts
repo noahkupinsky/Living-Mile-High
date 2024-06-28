@@ -1,5 +1,5 @@
-import AppServiceProvider from "./AppServiceManager";
-import MockServiceManager from "./MockServiceManager";
+import AppServiceProvider from "../service_managers/RealServiceManager";
+import MockServiceManager from "../service_managers/MockServiceManager";
 
 const newServiceManager = (mock = false) => {
     return mock ? new MockServiceManager() : new AppServiceProvider();

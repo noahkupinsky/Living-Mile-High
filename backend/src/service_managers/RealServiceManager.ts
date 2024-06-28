@@ -1,4 +1,4 @@
-import { AppServices, ServiceManager } from "../types";
+import { ServiceDict, ServiceManager } from "../types";
 import mongoose from "mongoose";
 import env from "../config/env";
 import { createNetworkS3CdnConfig } from "../utils/createS3CdnService";
@@ -7,12 +7,12 @@ import CdnAppDataService from "../services/CdnAppDataService";
 import CdnImageService from "../services/CdnImageService";
 import MongoAdminService from "../services/MongoAdminService";
 import MongoHouseService from "../services/MongoHouseService";
-import MongoOtherService from "../services/MongoOtherService";
+import MongoGeneralDataService from "../services/MongoGeneralDataService";
 
-class AppServiceManager implements ServiceManager<AppServices> {
-    private services?: AppServices;
+class RealServiceManager implements ServiceManager<ServiceDict> {
+    private services?: ServiceDict;
 
-    public async connect(): Promise<AppServices> {
+    public async connect(): Promise<ServiceDict> {
         if (this.services) {
             return this.services;
         }
@@ -30,15 +30,15 @@ class AppServiceManager implements ServiceManager<AppServices> {
         );
         const cdn = new S3CdnAdapter(s3CdnConfig);
         const houseService = new MongoHouseService();
-        const otherService = new MongoOtherService();
+        const generalDataService = new MongoGeneralDataService();
 
         this.services = {
             cdnAdapter: cdn,
             houseService: houseService,
-            otherService: otherService,
+            generalDataService: generalDataService,
             adminService: new MongoAdminService(),
             imageService: new CdnImageService(cdn),
-            appDataService: new CdnAppDataService(cdn, houseService, otherService)
+            appDataService: new CdnAppDataService(cdn, houseService, generalDataService)
         }
 
         return this.services!;
@@ -51,4 +51,4 @@ class AppServiceManager implements ServiceManager<AppServices> {
     }
 }
 
-export default AppServiceManager
+export default RealServiceManager

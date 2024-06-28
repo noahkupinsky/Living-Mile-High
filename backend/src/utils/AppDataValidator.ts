@@ -6,7 +6,7 @@ export class AppDataValidator {
             throw new Error('AppData must be an object');
         }
 
-        const requiredProperties = ['about', 'contact', 'houses', 'placeholderImages', 'homeImages'];
+        const requiredProperties = ['about', 'contact', 'houses', 'defaultImages', 'homeImages'];
 
         for (const prop of requiredProperties) {
             if (!(prop in data)) {
@@ -17,7 +17,7 @@ export class AppDataValidator {
         this.validateAboutData(data.about);
         this.validateContactData(data.contact);
         this.validateHouses(data.houses);
-        this.validatePlaceholders(data.placeholderImages);
+        this.validatePlaceholders(data.defaultImages);
         this.validateHomeImages(data.homeImages);
         return true;
     }
@@ -112,17 +112,17 @@ export class AppDataValidator {
         }
     }
 
-    private static validatePlaceholders(placeholders: any): void {
-        if (!Array.isArray(placeholders)) {
+    private static validatePlaceholders(defaults: any): void {
+        if (!Array.isArray(defaults)) {
             throw new Error('Placeholders must be an array');
         }
 
-        if (placeholders.some(placeholder => typeof placeholder !== 'string')) {
+        if (defaults.some(default => typeof default !== 'string')) {
             throw new Error('Placeholders must be an array of strings');
         }
 
-        // make sure placeholders has at least one element
-        if (placeholders.length === 0) {
+        // make sure defaults has at least one element
+        if (defaults.length === 0) {
             throw new Error('Placeholders must have at least one element');
         }
     }

@@ -2,7 +2,7 @@ import { Router } from 'express';
 import authRouter from './authRoutes';
 import houseRouter from './houseRoutes';
 import imageRouter from './imageRoutes';
-import { updateOtherData } from '../controllers/otherController';
+import { updateGeneralData } from '../controllers/generalDataController';
 
 
 const subRouter = Router();
@@ -10,7 +10,7 @@ const subRouter = Router();
 subRouter.use('/auth', authRouter);
 subRouter.use('/houses', houseRouter);
 subRouter.use('/image', imageRouter);
-subRouter.post('/other', updateOtherData);
+subRouter.post('/general', updateGeneralData);
 
 const router = Router();
 router.use('/api', subRouter);

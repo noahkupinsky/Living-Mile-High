@@ -1,20 +1,20 @@
 import { AppData, DeepPartial } from "living-mile-high-lib";
 import { ImageCategory } from "./enums";
-import { OtherData } from "./database";
+import { GeneralData } from "./database";
 import { GetObjectCommandOutput, CopyObjectCommandOutput, DeleteObjectCommandOutput, PutObjectAclCommandOutput } from "@aws-sdk/client-s3";
 
-export interface ServiceManager<Services> {
-    public connect(): Promise<Services>;
+export interface ServiceManager<T> {
+    public connect(): Promise<T>;
     public disconnect(): Promise<void>;
 }
 
-export type AppServices = {
+export type ServiceDict = {
     houseService: HouseService;
     adminService: AdminService;
     imageService: ImageService;
     appDataService: AppDataService;
     cdnAdapter: CdnAdapter;
-    otherService: OtherService;
+    generalDataService: GeneralDataService;
 };
 
 export interface CdnAdapter {
@@ -56,7 +56,7 @@ export interface AdminService {
     getUserById(id: string): Promise<any>;
 }
 
-export interface OtherService {
-    update(updates: DeepPartial<OtherData>): Promise<void>;
-    getOtherObject(): Promise<OtherData>;
+export interface GeneralDataService {
+    update(updates: DeepPartial<GeneralData>): Promise<void>;
+    getGeneralData(): Promise<GeneralData>;
 }

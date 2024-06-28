@@ -1,14 +1,14 @@
 import { ExpressEndpoint } from "../types";
 import { services } from "../app";
-import { AppData, DeepPartial } from "living-mile-high-lib";
+import { SiteData, DeepPartial } from "living-mile-high-lib";
 
-export const updateDataAndBroadcast = async (updates: DeepPartial<AppData>) => {
-    const { appDataService, otherService } = services();
-    await otherService.update(updates);
+export const updateDataAndBroadcast = async (updates: DeepPartial<SiteData>) => {
+    const { appDataService, generalDataService } = services();
+    await generalDataService.update(updates);
     await appDataService.update();
 }
 
-export const updateOtherData: ExpressEndpoint = async (req, res) => {
+export const updateGeneralData: ExpressEndpoint = async (req, res) => {
     const updates = req.body;
     try {
         await updateDataAndBroadcast(updates);

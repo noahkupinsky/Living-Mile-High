@@ -23,6 +23,30 @@ services:
       - "minio_data_staging:/data/minio"
     command: minio server /data/minio
 
+  mongo_dev:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: development
+    volumes:
+      - mongo_data_dev:/data/db
+    networks:
+      - internal
+
+  mongo_staging:
+    image: mongo:latest
+    ports:
+      - "27018:27018"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: staging
+    volumes:
+      - mongo_data_dev:/data/db
+    networks:
+      - internal
+
 volumes:
   minio_data_dev:
     driver: local
@@ -36,4 +60,18 @@ volumes:
     driver_opts:
       type: none
       device: ./.data/minio/staging
+      o: bind
+
+  mongo_data_dev:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./.data/mongo/development
+      o: bind
+
+  mongo_data_staging:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./.data/mongo/staging
       o: bind

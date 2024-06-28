@@ -2,19 +2,19 @@ import { Request, Response, NextFunction } from 'express';
 export {
     AdminRecord,
     HouseRecord,
-    OtherRecord,
-    OtherData
+    GeneralDataRecord,
+    GeneralData
 } from './database'
 export {
     ServiceManager,
-    AppServices,
+    ServiceDict,
     CdnAdapter,
     S3Config,
     ImageService,
     HouseService,
     AdminService,
     AppDataService,
-    OtherService
+    GeneralDataService
 } from './services'
 
 export type ExpressMiddleware<

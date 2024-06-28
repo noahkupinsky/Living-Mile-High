@@ -7,11 +7,14 @@ const shell = require('shelljs');
 const fs = require('fs');
 const path = require('path');
 
-const envPath = path.resolve(__dirname, '../.env');
+const joinCwd = (relativePath) => path.resolve(process.cwd(), relativePath);
+
+const envPath = joinCwd('.env');
 
 require('dotenv').config({ path: envPath });
 
 const { ENV_CDN_ENDPOINT, ENV_CDN_KEY, ENV_CDN_SECRET, ENV_CDN_REGION, ENV_CDN_BUCKET, MINIO } = process.env;
+
 
 const dockerCleanup = (images) => {
     console.log('Cleaning up Docker containers and images...');
@@ -27,7 +30,7 @@ const dockerDownAll = () => {
     dockerDown('docker-compose.build.yml');
     dockerDown('docker-compose.prod.yml');
     dockerDown('docker-compose.staging.yml');
-    dockerDown('docker-compose.services.yml');
+    dockerDown('docker-compose.dev-services.yml');
     dockerDown('docker-compose.setup-services.yml');
 }
 
@@ -133,7 +136,7 @@ function cdnClient() {
 
 async function pullEnv(env, doForce) {
     const client = cdnClient()
-    const targetPath = path.resolve(__dirname, `../${env}`);
+    const targetPath = path.resolve(process.cwd(), `${env}`);
 
     if (fs.existsSync(targetPath) && !doForce) {
         console.log(`File ${env} already exists in the root directory. Use -f to overwrite.`);
@@ -162,7 +165,7 @@ async function pullEnv(env, doForce) {
 
 async function pushEnv(env) {
     const client = cdnClient();
-    const targetPath = path.resolve(__dirname, `../${env}`);
+    const targetPath = path.resolve(process.cwd(), `${env}`);
 
     if (!fs.existsSync(targetPath)) {
         console.log(`File .env.${env} does not exist in the root directory.`);
@@ -208,16 +211,16 @@ program
     });
 
 const resetDataDir = () => {
-    if (fs.existsSync(path.resolve(__dirname, '../.data'))) {
+    if (fs.existsSync(path.resolve(process.cwd(), '.data'))) {
         throw new Error('Data directory already exists. Please remove it before running this command.');
     }
 
     const data_services = ['mongo', 'minio'];
     const data_categories = ['development', 'production', 'staging'];
 
-    const data_dirs = data_services.map(s => data_categories.map(c => `../.data/${s}/${c}`)).flat();
+    const data_dirs = data_services.map(s => data_categories.map(c => `.data/${s}/${c}`)).flat();
 
-    data_dirs.forEach(dir => fs.mkdirSync(path.resolve(__dirname, dir), { recursive: true }));
+    data_dirs.forEach(dir => fs.mkdirSync(path.resolve(process.cwd(), dir), { recursive: true }));
 }
 
 const createBucket = async (port) => {

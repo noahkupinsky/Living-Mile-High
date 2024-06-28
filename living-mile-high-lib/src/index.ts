@@ -19,6 +19,6 @@ export const DefaultAppData = {
     about: DefaultAboutData,
     contact: DefaultContactData,
     houses: DefaultHouses,
-    placeholderImages: DefaultPlaceholderImages,
+    defaultImages: DefaultPlaceholderImages,
     homeImages: DefaultHomeImages
 }

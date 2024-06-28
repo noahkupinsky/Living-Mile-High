@@ -39,13 +39,14 @@ export type ContactData = {
     image: string
 }
 
-export type AppData = {
+export type GeneralData = {
     about: AboutData,
     contact: ContactData,
-    houses: House[],
-    placeholderImages: string[],
+    defaultImages: string[],
     homeImages: string[]
 }
+
+export type SiteData = GeneralData & { houses: House[] }
 
 export type DeepPartial<T> = {
     [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];

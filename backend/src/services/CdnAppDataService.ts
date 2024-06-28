@@ -1,6 +1,6 @@
-import { AppData, House } from 'living-mile-high-lib';
+import { SiteData, House } from 'living-mile-high-lib';
 import { CdnFixedKeys } from '../types/enums';
-import { AppDataService, CdnAdapter, HouseService, OtherData, OtherService } from '../types';
+import { AppDataService, CdnAdapter, HouseService, GeneralData, GeneralDataService } from '../types';
 import { AppDataValidator } from '../utils/AppDataValidator';
 import axios, { AxiosError } from 'axios';
 
@@ -12,26 +12,26 @@ async function downloadImage(url: string): Promise<{ buffer: Buffer, contentType
     };
 }
 
-function composeAppData(houses: House[], other: OtherData) {
-    return { ...other, houses: houses };
+function composeAppData(houses: House[], general: GeneralData) {
+    return { ...general, houses: houses };
 }
 
 class CdnAppDataService implements AppDataService {
     private cdn: CdnAdapter;
     private houseService: HouseService;
-    private otherService: OtherService;
+    private generalDataService: GeneralDataService;
 
-    constructor(cdn: CdnAdapter, houseService: HouseService, otherService: OtherService) {
+    constructor(cdn: CdnAdapter, houseService: HouseService, generalService: GeneralDataService) {
         this.cdn = cdn;
         this.houseService = houseService;
-        this.otherService = otherService;
+        this.generalDataService = generalService;
     }
 
-    public async update(): Promise<AppData> {
+    public async update(): Promise<SiteData> {
         const objectKey = CdnFixedKeys.AppData;
         const houses = await this.houseService.getHouseObjects();
-        const other = await this.otherService.getOtherObject();
-        const appData = composeAppData(houses, other);
+        const generalData = await this.generalDataService.getGeneralData();
+        const appData = composeAppData(houses, generalData);
 
         if (!AppDataValidator.validate(appData)) {
             throw new Error('Invalid AppData');

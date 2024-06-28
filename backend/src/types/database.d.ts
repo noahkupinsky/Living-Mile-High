@@ -25,9 +25,7 @@ export type HouseRecord = {
     updatedAt: Date;
 }
 
-export type OtherData = Omit<AppData, 'houses'>;
-
-export type OtherRecord = {
+export type GeneralDataRecord = {
     about: {
         text: string;
         image: string;
@@ -36,7 +34,7 @@ export type OtherRecord = {
         text: string;
         image: string
     },
-    placeholderImages: string[],
+    defaultImages: string[],
     homeImages: string[]
 }
 

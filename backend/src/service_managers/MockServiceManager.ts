@@ -1,4 +1,4 @@
-import { AppServices, ServiceManager } from "../types";
+import { ServiceDict, ServiceManager } from "../types";
 import mongoose from "mongoose";
 import { createInMemoryS3CdnConfig, inMemoryCDN } from "../utils/createS3CdnService";
 import S3CdnAdapter from "../services/S3CdnAdapter";
@@ -7,13 +7,13 @@ import CdnImageService from "../services/CdnImageService";
 import MongoAdminService from "../services/MongoAdminService";
 import MongoHouseService from "../services/MongoHouseService";
 import { MongoMemoryServer } from "mongodb-memory-server";
-import MongoOtherService from "../services/MongoOtherService";
+import MongoGeneralDataService from "../services/MongoGeneralDataService";
 
-class MockServiceManager implements ServiceManager<AppServices> {
-    private services?: AppServices;
+class MockServiceManager implements ServiceManager<ServiceDict> {
+    private services?: ServiceDict;
     private mongoServer: MongoMemoryServer;
 
-    public async connect(): Promise<AppServices> {
+    public async connect(): Promise<ServiceDict> {
         if (this.services) {
             return this.services;
         }
@@ -25,15 +25,15 @@ class MockServiceManager implements ServiceManager<AppServices> {
         const s3CdnConfig = createInMemoryS3CdnConfig();
         const cdn = new S3CdnAdapter(s3CdnConfig);
         const houseService = new MongoHouseService();
-        const otherService = new MongoOtherService();
+        const generalDataService = new MongoGeneralDataService();
 
         this.services = {
             cdnAdapter: cdn,
             houseService: houseService,
-            otherService: otherService,
+            generalDataService: generalDataService,
             adminService: new MongoAdminService(),
             imageService: new CdnImageService(cdn),
-            appDataService: new CdnAppDataService(cdn, houseService, otherService)
+            appDataService: new CdnAppDataService(cdn, houseService, generalDataService)
         }
 
         return this.services!;

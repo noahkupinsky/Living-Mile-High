@@ -1,0 +1,42 @@
+version: "3.7"
+
+services:
+  minio:
+    image: "minio/minio:latest"
+    ports:
+      - "9000:9000"
+      - "9090:9090"
+    environment:
+      MINIO_ROOT_USER: "${MINIO}"
+      MINIO_ROOT_PASSWORD: "${MINIO}"
+    volumes:
+      - "minio_data_dev:/data/minio"
+    command: minio server /data/minio --console-address ":9090"
+    networks:
+      - internal
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: development
+    volumes:
+      - mongo_data_dev:/data/db
+    networks:
+      - internal
+
+volumes:
+  minio_data_dev:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./.data/minio/development
+      o: bind
+  mongo_data_dev:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./.data/mongo/development
+      o: bind

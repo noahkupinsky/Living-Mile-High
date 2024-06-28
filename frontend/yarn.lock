@@ -5847,10 +5847,10 @@ lighthouse-logger@^1.0.0:
     debug "^2.6.9"
     marky "^1.2.2"
 
-living-mile-high-lib@1.0.10:
-  version "1.0.10"
-  resolved "https://registry.yarnpkg.com/living-mile-high-lib/-/living-mile-high-lib-1.0.10.tgz#080af1a819c33c3a15d05fafd339578f9f0fb05e"
-  integrity sha512-iG1XwDuwXNyKoYDDNjlHyK8ydkw/LEpwUCZjvWSCtjKafGktj394D4Djv6Qzo1G0N778JmYYZ8HLE+OVzGAyPg==
+living-mile-high-lib@1.0.12:
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/living-mile-high-lib/-/living-mile-high-lib-1.0.12.tgz#d5c7c3e42be4b257548549c1f67e5557e6001b66"
+  integrity sha512-a2lbbaNdR43GSXVrI3gxWf7zJhQQtflYI67mxIH6duCO4kf01vzEjclzZHxI9Nvz35UC0kMj/feBsDJUO5wtoQ==
   dependencies:
     living-mile-high-lib "1.0.8"
 
