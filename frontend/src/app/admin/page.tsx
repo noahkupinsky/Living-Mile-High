@@ -29,8 +29,8 @@ const AdminPanel = () => {
       <h1>Admin Panel</h1>
       {!isAuthenticated ? (
         <div>
-          <input type="text" default="username" value={username} onChange={e => setUsername(e.target.value)} />
-          <input type="password" default="Password" value={password} onChange={e => setPassword(e.target.value)} />
+          <input type="text" placeholder="username" value={username} onChange={e => setUsername(e.target.value)} />
+          <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
           <button onClick={handleLogin}>Login</button>
         </div>
       ) : (

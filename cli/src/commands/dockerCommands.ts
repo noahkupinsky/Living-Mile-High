@@ -1,5 +1,7 @@
 import { Command } from 'commander';
-import { dockerBuild, dockerRun, dockerDownAll, dockerCleanup, resetServices } from '../utils/dockerUtils';
+import { dockerBuild, dockerRun, dockerDownAll, dockerCleanup } from '../utils/dockerUtils';
+import { config } from '../config';
+import { resetServices } from '../utils/resetServices';
 
 export function dockerCommands(program: Command) {
     program
@@ -8,7 +10,7 @@ export function dockerCommands(program: Command) {
         .action(() => {
             dockerDownAll();
             dockerCleanup(['lmh-frontend', 'lmh-backend']);
-            dockerBuild();
+            dockerBuild(config.composeBuildFile);
             dockerDownAll();
         });
 
@@ -16,7 +18,7 @@ export function dockerCommands(program: Command) {
         .command('prod')
         .description('Start Docker containers')
         .action(() => {
-            dockerRun('docker-compose.prod.yml');
+            dockerRun(config.composeProdFile);
         });
 
     program
@@ -24,7 +26,7 @@ export function dockerCommands(program: Command) {
         .description('Start Docker containers in staging mode')
         .action(() => {
             dockerDownAll();
-            dockerRun('docker-compose.staging.yml');
+            dockerRun(config.composeStagingFile);
         });
 
     program
@@ -38,7 +40,7 @@ export function dockerCommands(program: Command) {
         .command('services')
         .description('Run local services in Docker containers')
         .action(() => {
-            dockerRun('docker-compose.staging.yml');
+            dockerRun(config.composeDevServicesFile);
         });
 
     program

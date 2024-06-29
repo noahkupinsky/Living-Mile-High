@@ -1,7 +1,7 @@
-import { AppData } from "living-mile-high-lib";
+import { SiteData } from "living-mile-high-lib";
 
 export class AppDataValidator {
-    public static validate(data: any): data is AppData {
+    public static validate(data: any): data is SiteData {
         if (typeof data !== 'object' || data === null) {
             throw new Error('AppData must be an object');
         }
@@ -117,7 +117,7 @@ export class AppDataValidator {
             throw new Error('Placeholders must be an array');
         }
 
-        if (defaults.some(default => typeof default !== 'string')) {
+        if (defaults.some(d => typeof d !== 'string')) {
             throw new Error('Placeholders must be an array of strings');
         }
 

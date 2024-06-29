@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { program } from 'commander';
 import { dockerCommands } from './commands/dockerCommands';
 import { envCommands } from './commands/envCommands';

@@ -1,4 +1,4 @@
-import { AppData, DeepPartial } from "living-mile-high-lib";
+import { SiteData, DeepPartial } from "living-mile-high-lib";
 import { ImageCategory } from "./enums";
 import { GeneralData } from "./database";
 import { GetObjectCommandOutput, CopyObjectCommandOutput, DeleteObjectCommandOutput, PutObjectAclCommandOutput } from "@aws-sdk/client-s3";
@@ -39,7 +39,7 @@ export interface ImageService {
 }
 
 export interface AppDataService {
-    update(): Promise<AppData>;
+    update(): Promise<SiteData>;
     // garbageCollect(): Promise<number>;
 }
 

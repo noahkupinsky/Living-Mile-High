@@ -70,7 +70,7 @@ services:
       CDN_REGION: sfo3
       CDN_BUCKET: ${MINIO}
       CDN_ENDPOINT: http://minio:9000
-      MONGODB_URI: mongodb://root:staging@mongo:27017/?authSource=admin
+      MONGODB_URI: mongodb://mongo:27017/?authSource=admin
     networks:
       - internal
 
@@ -79,9 +79,6 @@ services:
     container_name: mongodb
     expose:
       - "27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: staging
     volumes:
       - mongo_data_staging:/data/db
     networks:
