@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import AdminModel from '../src/models/AdminModel';
+import AdminModel from '../../lib/src/AdminModel';
 import { AdminService } from '../src/types';
 import { services } from '../src/app';
 

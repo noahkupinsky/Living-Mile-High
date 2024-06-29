@@ -15,7 +15,7 @@
     "@tamagui/themes": "^1.100.6",
     "axios": "^1.7.2",
     "dotenv": "^16.4.5",
-    "living-mile-high-lib": "1.0.12",
+    "living-mile-high-lib": "1.0.16",
     "next": "^14.2.4",
     "next-runtime-env": "^3.2.2",
     "path": "^0.12.7",

@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import { AdminService } from '../types';
-import AdminModel from '../models/AdminModel';
+import { AdminModel } from 'living-mile-high-lib';
 
 class MongoAdminService implements AdminService {
     async getUserByLoginInfo(username: string, password: string): Promise<any> {

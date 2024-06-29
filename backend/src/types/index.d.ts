@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
 export {
-    AdminRecord,
     HouseRecord,
     GeneralDataRecord,
     GeneralData

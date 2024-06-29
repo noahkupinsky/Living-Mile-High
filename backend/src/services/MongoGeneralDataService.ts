@@ -1,4 +1,4 @@
-import { DeepPartial, DefaultAppData } from "living-mile-high-lib";
+import { DeepPartial, DefaultGeneralData } from "living-mile-high-lib";
 import { GeneralData, GeneralDataService } from "../types";
 import GeneralDataModel, { GeneralDataDocument, generalDocumentToObject, generalPartialToUpsert } from "../models/GeneralDataModel";
 
@@ -24,7 +24,7 @@ class MongoGeneralDataService implements GeneralDataService {
     private async getSingletonDocument(): Promise<GeneralDataDocument> {
         let data = await GeneralDataModel.findOne();
         if (!data) {
-            data = new GeneralDataModel(generalPartialToUpsert(DefaultAppData));
+            data = new GeneralDataModel(generalPartialToUpsert(DefaultGeneralData));
             await data.save();
         }
         return data;

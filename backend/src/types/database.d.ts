@@ -1,6 +1,3 @@
-import { House, AppData } from "living-mile-high-lib";
-
-
 export type AdminRecord = {
     username: string;
     password: string;

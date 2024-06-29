@@ -1,6 +1,6 @@
 {
   "name": "living-mile-high-lib",
-  "version": "1.0.12",
+  "version": "1.0.16",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "license": "MIT",
@@ -9,9 +9,11 @@
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
+    "@types/mongoose": "^5.11.97",
     "typescript": "^4.0.0"
   },
   "dependencies": {
-    "living-mile-high-lib": "1.0.8"
+    "living-mile-high-lib": "1.0.8",
+    "mongoose": "^8.4.4"
   }
 }

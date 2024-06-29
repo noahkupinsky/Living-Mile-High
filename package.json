@@ -11,7 +11,8 @@
     "test": "yarn test:backend && yarn test:frontend",
     "dev:frontend": "yarn --cwd frontend dev",
     "dev:backend": "yarn --cwd backend dev",
-    "dev": "concurrently \"yarn dev:frontend\" \"yarn dev:backend\""
+    "dev": "concurrently \"yarn dev:frontend\" \"yarn dev:backend\"",
+    "cli": "yarn --cwd cli build"
   },
   "license": "MIT",
   "devDependencies": {

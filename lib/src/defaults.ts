@@ -1,4 +1,4 @@
-export * from './types';
+import { GeneralData } from './types';
 
 export const DefaultAboutData = {
     text: "about",
@@ -10,15 +10,12 @@ export const DefaultContactData = {
     image: "https://placehold.co/400"
 }
 
-export const DefaultHouses = [];
-
 export const DefaultPlaceholderImages = ["https://placehold.co/400"];
 export const DefaultHomeImages = ["https://placehold.co/400", "https://placehold.co/500", "https://placehold.co/600"];
 
-export const DefaultAppData = {
+export const DefaultGeneralData: GeneralData = {
     about: DefaultAboutData,
     contact: DefaultContactData,
-    houses: DefaultHouses,
     defaultImages: DefaultPlaceholderImages,
     homeImages: DefaultHomeImages
 }
