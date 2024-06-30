@@ -1,0 +1,40 @@
+version: "3.9"
+
+services:
+  superadmin:
+    build:
+      context: ./superadmin
+    container_name: superadmin
+    depends_on:
+      - mongo
+    ports:
+      - "${BPORT}:${BPORT}"
+    env_file:
+      - .env.production
+    networks:
+      - internal
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo_prod
+    expose:
+      - "27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "${MONGODB_USERNAME}"
+      MONGO_INITDB_ROOT_PASSWORD: "${MONGODB_PASSWORD}"
+    volumes:
+      - mongo_data_prod:/data/db
+    networks:
+      - internal
+
+volumes:
+  mongo_data_prod:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./.data/mongo/production
+      o: bind
+
+networks:
+  internal:
+    external: false

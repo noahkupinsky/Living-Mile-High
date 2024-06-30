@@ -1,30 +1,31 @@
 import { Command } from 'commander';
-import { dockerBuild, dockerRun, dockerDownAll, dockerCleanup, dockerDown } from '../utils/dockerUtils';
+import { dockerRun, dockerDownAll, dockerDown } from '../utils/dockerUtils';
 import { config } from '../config';
 import { setupLocalServices } from '../utils/setupServices';
 import shell from 'shelljs';
 import { loadEnvFile } from '../utils/envUtils';
 
 export function dockerCommands(program: Command) {
+    registerDownCommand(program);
+    registerProdCommands(program);
+    registerStagingCommands(program);
+    registerDevCommands(program);
+    registerSetupCommands(program);
+}
+
+function registerDownCommand(program: Command) {
     program
         .command('down')
         .description('Stop all Docker containers')
         .action(() => {
             dockerDownAll();
         });
+}
 
-    program
-        .command('build')
-        .description('Build Docker images')
-        .action(() => {
-            dockerDownAll();
-            dockerCleanup(['lmh-frontend', 'lmh-backend']);
-            dockerBuild(config.composes.build);
-        });
-
+function registerProdCommands(program: Command) {
     const prod = program
         .command('prod')
-        .description('Docker prod commands')
+        .description('Docker prod commands');
 
     prod
         .command('up')
@@ -34,15 +35,25 @@ export function dockerCommands(program: Command) {
         });
 
     prod
+        .command('superadmin')
+        .description('Start superadmin service')
+        .action(() => {
+            dockerRun(config.composes.superadmin);
+        });
+
+    prod
         .command('down')
         .description('Stop prod containers')
         .action(() => {
             dockerDown(config.composes.prod);
+            dockerDown(config.composes.superadmin);
         });
+}
 
+function registerStagingCommands(program: Command) {
     const staging = program
         .command('staging')
-        .description('Docker staging commands')
+        .description('Docker staging commands');
 
     staging
         .command('up')
@@ -58,10 +69,12 @@ export function dockerCommands(program: Command) {
         .action(() => {
             dockerDown(config.composes.staging);
         });
+}
 
+function registerDevCommands(program: Command) {
     const dev = program
         .command('dev')
-        .description('Docker dev commands')
+        .description('Docker dev commands');
 
     dev
         .command('up')
@@ -79,14 +92,16 @@ export function dockerCommands(program: Command) {
         .action(() => {
             dockerDown(config.composes.devServices);
         });
+}
 
+function registerSetupCommands(program: Command) {
     const setup = program
         .command('setup')
-        .description('Setup docker services')
+        .description('Setup docker services');
 
     setup
         .command('local')
-        .description('setup dev and staging services')
+        .description('Setup dev and staging services')
         .action(async () => {
             await setupLocalServices();
         });

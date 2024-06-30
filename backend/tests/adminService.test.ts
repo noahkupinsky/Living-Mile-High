@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { AdminService } from '../src/types';
 import { services } from '../src/app';
 import { AdminModel } from '../src/models/AdminModel';

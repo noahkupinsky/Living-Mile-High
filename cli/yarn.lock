@@ -1207,6 +1207,11 @@ bcrypt@^5.1.1:
     "@mapbox/node-pre-gyp" "^1.0.11"
     node-addon-api "^5.0.0"
 
+bcryptjs@^2.4.3:
+  version "2.4.3"
+  resolved "https://registry.yarnpkg.com/bcryptjs/-/bcryptjs-2.4.3.tgz#9ab5627b93e60621ff7cdac5da9733027df1d0cb"
+  integrity sha512-V/Hy/X9Vt7f3BbPJEi8BdVFMByHi+jNXrYkW3huaybV/kQ0KJg0Y6PkEMbn+zeT+i+SiKZ/HMqJGIIt4LZDqNQ==
+
 bowser@^2.11.0:
   version "2.11.0"
   resolved "https://registry.yarnpkg.com/bowser/-/bowser-2.11.0.tgz#5ca3c35757a7aa5771500c70a73a9f91ef420a8f"
@@ -1393,14 +1398,6 @@ kareem@2.6.3:
   resolved "https://registry.yarnpkg.com/kareem/-/kareem-2.6.3.tgz#23168ec8ffb6c1abfd31b7169a6fb1dd285992ac"
   integrity sha512-C3iHfuGUXK2u8/ipq9LfjFfXFxAZMQJJq7vLS45r3D9Y2xQ/m4S8zaR4zMLFWh9AsNPXmcFfUDhTEO8UIC/V6Q==
 
-living-mile-high-lib@1.0.20:
-  version "1.0.20"
-  resolved "https://registry.yarnpkg.com/living-mile-high-lib/-/living-mile-high-lib-1.0.20.tgz#20082b37850ad6b4a5278c8e6adaf68c2fa909b9"
-  integrity sha512-h+3PLE8//50M3/bNSyr6bdv0aFFKi/a9IMCwpq0oUYCoOvboP7hm7x1UlCsTqeMUWXBJwd0SZ36iT29UZWVKag==
-  dependencies:
-    living-mile-high-lib "1.0.8"
-    mongoose "^8.4.4"
-
 living-mile-high-lib@1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/living-mile-high-lib/-/living-mile-high-lib-1.0.4.tgz#dd98592e42a339761be202b6cdfc443a9c2f1d21"
@@ -1419,6 +1416,15 @@ living-mile-high-lib@1.0.8:
   integrity sha512-Cl6OkWUEKXP9XZxUJkPllcHib6D2efBQHwBigxSBBn6prqHA+HV03Yyg6wiqtihA5MYmAQ9UqgL8Q2d0gjZurg==
   dependencies:
     living-mile-high-lib "1.0.6"
+
+living-mile-high-lib@^1.0.24:
+  version "1.0.24"
+  resolved "https://registry.yarnpkg.com/living-mile-high-lib/-/living-mile-high-lib-1.0.24.tgz#906902376d1ddaf0f808e29d83263a756287d472"
+  integrity sha512-swQuwwzvRDW2d4222xg0+5//MmwgEf6jFPEjsDx+bHmYg2ZZCsQOPSt8tqVUH3uwgzks1CIytSMTeWG8s4Ub5w==
+  dependencies:
+    bcryptjs "^2.4.3"
+    living-mile-high-lib "1.0.8"
+    mongoose "^8.4.4"
 
 make-dir@^3.1.0:
   version "3.1.0"

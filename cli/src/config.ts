@@ -21,8 +21,10 @@ export class Compose {
     }
 }
 
-const composes: Record<string, Compose> = {
-    build: new Compose('docker-compose.build.yml', 'production'),
+type ComposeNames = 'superadmin' | 'prod' | 'staging' | 'devServices' | 'stagingServices';
+
+const composes: Record<ComposeNames, Compose> = {
+    superadmin: new Compose('docker-compose.prod-superadmin.yml', 'production'),
     prod: new Compose('docker-compose.prod.yml', 'production'),
     staging: new Compose('docker-compose.staging.yml', 'staging'),
     devServices: new Compose('docker-compose.dev-services.yml', 'development'),

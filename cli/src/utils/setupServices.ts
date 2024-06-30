@@ -3,9 +3,8 @@ import path from "path";
 import { Compose, config } from "../config";
 import { dockerDown, dockerRemoveVolumes, dockerRun } from "./dockerUtils";
 import fs from "fs";
-import bcrypt from "bcrypt";
 import mongoose, { model } from 'mongoose';
-import { AdminSchema } from "living-mile-high-lib";
+import { AdminSchema, hashPassword } from "living-mile-high-lib";
 import { loadEnvFile } from "./envUtils";
 
 const AdminModel = model('Admin', AdminSchema);
@@ -74,7 +73,7 @@ async function createLocalAdmin(port: number) {
     await mongoose.connect(uri, {});
 
     try {
-        const hashedPassword = await bcrypt.hash('password', 10);
+        const hashedPassword = await hashPassword('password');
         const newAdmin = new AdminModel({ username: 'admin', password: hashedPassword });
         await newAdmin.save();
         console.log('Admin added to MongoDB.');
