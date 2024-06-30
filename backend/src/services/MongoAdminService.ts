@@ -4,7 +4,6 @@ import { AdminModel } from '../models/AdminModel';
 
 class MongoAdminService implements AdminService {
     async getUserByLoginInfo(username: string, password: string): Promise<any> {
-        console.log("hello there");
         console.log(await AdminModel.find({}));
         const user = await AdminModel.findOne({ username });
         if (!user) return null;

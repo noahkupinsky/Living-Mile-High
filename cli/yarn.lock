@@ -1393,6 +1393,14 @@ kareem@2.6.3:
   resolved "https://registry.yarnpkg.com/kareem/-/kareem-2.6.3.tgz#23168ec8ffb6c1abfd31b7169a6fb1dd285992ac"
   integrity sha512-C3iHfuGUXK2u8/ipq9LfjFfXFxAZMQJJq7vLS45r3D9Y2xQ/m4S8zaR4zMLFWh9AsNPXmcFfUDhTEO8UIC/V6Q==
 
+living-mile-high-lib@1.0.20:
+  version "1.0.20"
+  resolved "https://registry.yarnpkg.com/living-mile-high-lib/-/living-mile-high-lib-1.0.20.tgz#20082b37850ad6b4a5278c8e6adaf68c2fa909b9"
+  integrity sha512-h+3PLE8//50M3/bNSyr6bdv0aFFKi/a9IMCwpq0oUYCoOvboP7hm7x1UlCsTqeMUWXBJwd0SZ36iT29UZWVKag==
+  dependencies:
+    living-mile-high-lib "1.0.8"
+    mongoose "^8.4.4"
+
 living-mile-high-lib@1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/living-mile-high-lib/-/living-mile-high-lib-1.0.4.tgz#dd98592e42a339761be202b6cdfc443a9c2f1d21"
@@ -1411,14 +1419,6 @@ living-mile-high-lib@1.0.8:
   integrity sha512-Cl6OkWUEKXP9XZxUJkPllcHib6D2efBQHwBigxSBBn6prqHA+HV03Yyg6wiqtihA5MYmAQ9UqgL8Q2d0gjZurg==
   dependencies:
     living-mile-high-lib "1.0.6"
-
-living-mile-high-lib@^1.0.19:
-  version "1.0.19"
-  resolved "https://registry.yarnpkg.com/living-mile-high-lib/-/living-mile-high-lib-1.0.19.tgz#59a3e17c6fdad4f3f1202f75ae0ad92ad3362b44"
-  integrity sha512-LjQSnCTvf5HGn7gE9HTRLrRoc3wqLbqhJauzdPcRiBmn7mgVR8jaoFwUNooi1vJyRXUbCP1hPVeDjll1GEcIlQ==
-  dependencies:
-    living-mile-high-lib "1.0.8"
-    mongoose "^8.4.4"
 
 make-dir@^3.1.0:
   version "3.1.0"

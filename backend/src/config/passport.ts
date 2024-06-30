@@ -6,10 +6,8 @@ import { AdminModel } from '../models/AdminModel';
 const adminService = () => services().adminService;
 
 passport.use('local', new LocalStrategy(async (username, password, done) => {
-    const { adminService } = services();
     try {
-        console.log("hello");
-        const user = await adminService.getUserByLoginInfo(username, password);
+        const user = await adminService().getUserByLoginInfo(username, password);
         if (!user) {
             return done(null, false, { message: `Invalid username or password ${await AdminModel.find({})}` });
         }

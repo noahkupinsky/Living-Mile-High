@@ -1,4 +1,4 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, Document } from 'mongoose';
 import { AdminRecord } from './types';
 
 export interface AdminDocument extends Document, AdminRecord { }
