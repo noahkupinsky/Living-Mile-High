@@ -1,26 +1,28 @@
 import { S3Client, ListBucketsCommandOutput, ListBucketsCommand, CreateBucketCommand } from "@aws-sdk/client-s3";
 import path from "path";
-import { config } from "../config";
+import { Compose, config } from "../config";
 import { dockerDown, dockerRemoveVolumes, dockerRun } from "./dockerUtils";
 import fs from "fs";
 import bcrypt from "bcrypt";
-import mongoose, { Schema, model, Document } from 'mongoose';
+import mongoose, { model } from 'mongoose';
 import { AdminSchema } from "living-mile-high-lib";
+import { loadEnvFile } from "./envUtils";
+
+const AdminModel = model('Admin', AdminSchema);
 
 export async function setupLocalServices() {
     createDataDir();
     dockerRemoveVolumes();
-    await setupServicesForComposeFile(config.composeDevServicesFile);
-    await setupServicesForComposeFile(config.composeStagingServicesFile);
+    await setupLocalServicesForCompose(config.composes.devServices);
+    await setupLocalServicesForCompose(config.composes.stagingServices);
 }
 
-async function setupServicesForComposeFile(composeFile: string) {
-    dockerRun(composeFile);
-    await createBucket(9000);
-    await createDefaultAdmin(27017);
-    dockerDown(composeFile);
+async function setupLocalServicesForCompose(compose: Compose) {
+    dockerRun(compose);
+    await createLocalBucket(compose, 9000);
+    await createLocalAdmin(27017);
+    dockerDown(compose);
 }
-
 
 function createDataDir() {
     if (fs.existsSync(path.resolve(process.cwd(), '.data'))) {
@@ -35,27 +37,29 @@ function createDataDir() {
     data_dirs.forEach(dir => fs.mkdirSync(path.resolve(process.cwd(), dir), { recursive: true }));
 }
 
-async function createBucket(port: number) {
+async function createLocalBucket(compose: Compose, port: number) {
+    const { CDN_KEY, CDN_SECRET, CDN_BUCKET } = loadEnvFile(compose.envFile);
+
     try {
         const client = new S3Client({
             endpoint: `http://localhost:${port}`,
             region: 'sfo3',
             credentials: {
-                accessKeyId: process.env.MINIO as string,
-                secretAccessKey: process.env.MINIO as string,
+                accessKeyId: CDN_KEY,
+                secretAccessKey: CDN_SECRET,
             },
             forcePathStyle: true,
         });
 
         const buckets: ListBucketsCommandOutput = await client.send(new ListBucketsCommand({}));
-        const bucketExists = buckets.Buckets?.some(bucket => bucket.Name === process.env.MINIO);
+        const bucketExists = buckets.Buckets?.some(bucket => bucket.Name === CDN_BUCKET);
 
         if (!bucketExists) {
-            const createBucketParams = { Bucket: process.env.MINIO as string };
+            const createBucketParams = { Bucket: CDN_BUCKET };
             await client.send(new CreateBucketCommand(createBucketParams));
-            console.log(`Bucket created: ${process.env.MINIO}`);
+            console.log(`Bucket created: ${CDN_BUCKET}`);
         } else {
-            console.log(`Bucket already exists: ${process.env.MINIO}`);
+            console.log(`Bucket already exists: ${CDN_BUCKET}`);
         }
     } catch (err: any) {
         if (err.code !== 'BucketAlreadyOwnedByYou') {
@@ -65,17 +69,15 @@ async function createBucket(port: number) {
     }
 }
 
-const AdminModel = model('Admin', AdminSchema);
-
-async function createDefaultAdmin(port: number) {
-    const uri = `mongodb://localhost:${port}/?authSource=admin`; // Replace 'yourDatabase' with the correct database name
+async function createLocalAdmin(port: number) {
+    const uri = `mongodb://localhost:${port}`;
     await mongoose.connect(uri, {});
 
     try {
         const hashedPassword = await bcrypt.hash('password', 10);
         const newAdmin = new AdminModel({ username: 'admin', password: hashedPassword });
         await newAdmin.save();
-        console.log('Admin document added to MongoDB.');
+        console.log('Admin added to MongoDB.');
     } finally {
         await mongoose.disconnect();
     }

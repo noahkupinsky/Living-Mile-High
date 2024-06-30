@@ -3,6 +3,7 @@ import { dockerBuild, dockerRun, dockerDownAll, dockerCleanup, dockerDown } from
 import { config } from '../config';
 import { setupLocalServices } from '../utils/setupServices';
 import shell from 'shelljs';
+import { loadEnvFile } from '../utils/envUtils';
 
 export function dockerCommands(program: Command) {
     program
@@ -18,7 +19,7 @@ export function dockerCommands(program: Command) {
         .action(() => {
             dockerDownAll();
             dockerCleanup(['lmh-frontend', 'lmh-backend']);
-            dockerBuild(config.composeBuildFile);
+            dockerBuild(config.composes.build);
         });
 
     const prod = program
@@ -29,14 +30,14 @@ export function dockerCommands(program: Command) {
         .command('up')
         .description('Start prod containers')
         .action(() => {
-            dockerRun(config.composeProdFile);
+            dockerRun(config.composes.prod);
         });
 
     prod
         .command('down')
         .description('Stop prod containers')
         .action(() => {
-            dockerDown(config.composeProdFile);
+            dockerDown(config.composes.prod);
         });
 
     const staging = program
@@ -48,14 +49,14 @@ export function dockerCommands(program: Command) {
         .description('Start staging containers')
         .action(() => {
             dockerDownAll();
-            dockerRun(config.composeStagingFile);
+            dockerRun(config.composes.staging);
         });
 
     staging
         .command('down')
         .description('Stop staging containers')
         .action(() => {
-            dockerDown(config.composeStagingFile);
+            dockerDown(config.composes.staging);
         });
 
     const dev = program
@@ -66,15 +67,17 @@ export function dockerCommands(program: Command) {
         .command('up')
         .description('Start dev services')
         .action(() => {
-            dockerRun(config.composeDevServicesFile);
-            shell.exec('FPORT=3000 BPORT=3001 yarn dev');
+            const compose = config.composes.devServices;
+            dockerRun(compose);
+            const { FPORT, BPORT } = loadEnvFile(compose.envFile);
+            shell.exec(`FPORT=${FPORT} BPORT=${BPORT} yarn dev`);
         });
 
     dev
         .command('down')
         .description('Stop dev services')
         .action(() => {
-            dockerDown(config.composeDevServicesFile);
+            dockerDown(config.composes.devServices);
         });
 
     const setup = program

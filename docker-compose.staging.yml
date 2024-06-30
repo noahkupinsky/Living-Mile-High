@@ -45,10 +45,6 @@ services:
       - ${FPORT}
     env_file:
       - .env.staging
-    environment:
-      FPORT: "${FPORT}"
-      BPORT: "${BPORT}"
-      NEXT_PUBLIC_BACKEND_URL: "https://localhost"
     networks:
       - internal
 
@@ -63,14 +59,6 @@ services:
     depends_on:
       - mongo
       - minio
-    environment:
-      BPORT: ${BPORT}
-      CDN_KEY: ${MINIO}
-      CDN_SECRET: ${MINIO}
-      CDN_REGION: sfo3
-      CDN_BUCKET: ${MINIO}
-      CDN_ENDPOINT: http://minio:9000
-      MONGODB_URI: mongodb://mongo:27017/?authSource=admin
     networks:
       - internal
 
@@ -90,8 +78,8 @@ services:
       - "9000:9000"
       - "9090:9090"
     environment:
-      MINIO_ROOT_USER: "${MINIO}"
-      MINIO_ROOT_PASSWORD: "${MINIO}"
+      MINIO_ROOT_USER: "${CDN_KEY}"
+      MINIO_ROOT_PASSWORD: "${CDN_SECRET}"
     volumes:
       - "minio_data_staging:/data/minio"
     command: minio server /data/minio --console-address ":9090"

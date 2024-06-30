@@ -1,7 +1,7 @@
 import { Command } from 'commander';
 import { pullEnv, pushEnv } from '../utils/envUtils';
 
-const EnvFiles = ['.env.production', '.env.staging', '.env.development', '.env'];
+const EnvFiles = ['.env.production', '.env.staging', '.env.development'];
 
 export function envCommands(program: Command) {
     const env = program

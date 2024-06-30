@@ -8,8 +8,8 @@ services:
       - "9000:9000"
       - "9090:9090"
     environment:
-      MINIO_ROOT_USER: "${MINIO}"
-      MINIO_ROOT_PASSWORD: "${MINIO}"
+      MINIO_ROOT_USER: "${CDN_KEY}"
+      MINIO_ROOT_PASSWORD: "${CDN_SECRET}"
     volumes:
       - "minio_data_staging:/data/minio"
     command: minio server /data/minio --console-address ":9090"

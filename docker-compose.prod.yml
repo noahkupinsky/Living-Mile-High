@@ -8,7 +8,7 @@ services:
       - "443:443"
     environment:
       DOMAINS: |
-        ${PROD_HOST} -> http://nginx
+        ${HOST} -> http://nginx
       STAGE: staging
     volumes:
       - ./https-portal/certs:/var/lib/https-portal
@@ -39,10 +39,6 @@ services:
       - ${FPORT}
     env_file:
       - .env.production
-    environment:
-      FPORT: ${FPORT}
-      BPORT: ${BPORT}
-      NEXT_PUBLIC_BACKEND_URL: "https://${PROD_HOST}"
     networks:
       - internal
 
@@ -53,8 +49,6 @@ services:
       - ${BPORT}
     env_file:
       - .env.production
-    environment:
-      BPORT: ${BPORT}
     networks:
       - internal
 

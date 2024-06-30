@@ -1,16 +1,24 @@
 import { S3Client, GetObjectCommand, PutObjectCommand, GetObjectCommandOutput } from '@aws-sdk/client-s3';
 import fs from 'fs';
 import path from 'path';
-import { config } from '../config';
 import { Readable } from 'stream';
+import dotenv from 'dotenv';
+
+export const loadEnvFile = (envFile: string) => {
+    const envConfig = dotenv.parse(fs.readFileSync(envFile));
+    return envConfig;
+};
+
+const prodEnvFile = path.resolve(process.cwd(), `.env.production`);
+const { CDN_BUCKET, CDN_ENDPOINT, CDN_KEY, CDN_SECRET, CDN_REGION } = loadEnvFile(prodEnvFile);
 
 const cdnClient = new S3Client({
-    endpoint: config.cdnEndpoint!,
+    endpoint: CDN_ENDPOINT,
     credentials: {
-        accessKeyId: config.cdnKey!,
-        secretAccessKey: config.cdnSecret!,
+        accessKeyId: CDN_KEY,
+        secretAccessKey: CDN_SECRET,
     },
-    region: config.cdnRegion!,
+    region: CDN_REGION,
     forcePathStyle: true,
 });
 
@@ -33,7 +41,7 @@ export async function pullEnv(env: string, doForce: boolean) {
 
     try {
         const command = new GetObjectCommand({
-            Bucket: config.cdnBucket as string,
+            Bucket: CDN_BUCKET,
             Key: env,
         });
         const response: GetObjectCommandOutput = await cdnClient.send(command);
@@ -60,7 +68,7 @@ export async function pushEnv(env: string) {
     try {
         const fileContent = fs.readFileSync(targetPath);
         const command = new PutObjectCommand({
-            Bucket: config.cdnBucket as string,
+            Bucket: CDN_BUCKET,
             Key: env,
             Body: fileContent,
         });

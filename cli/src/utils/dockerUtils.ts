@@ -1,32 +1,35 @@
 import { execSync } from 'child_process';
-import { config } from '../config';
+import { Compose, config } from '../config';
 
-export function dockerBuild(composeFile: string) {
+export function dockerBuild(compose: Compose) {
+    const composeFile = compose.composeFile;
+    const envFile = compose.envFile;
     console.log('Building Docker images...');
-    execSync(`docker compose -f ${composeFile} build`, { stdio: 'inherit' });
+    execSync(`docker compose -f-f ${composeFile} --env-file ${envFile} build`, { stdio: 'inherit' });
 }
 
-export function dockerRun(composeFile: string) {
-    dockerDown(composeFile);
-    console.log(`Starting Docker containers using ${composeFile}...`);
-    execSync(`docker compose -f ${composeFile} up --build -d`, { stdio: 'inherit' });
+export function dockerRun(compose: Compose) {
+    dockerDown(compose);
+
+    const composeFile = compose.composeFile;
+    const envFile = compose.envFile;
+    console.log(`Starting Docker containers using compose file ${composeFile} and env file ${envFile}...`);
+    console.log(`docker compose -f ${composeFile} --env-file ${envFile} up --build -d`);
+    execSync(`docker compose -f ${composeFile} --env-file ${envFile} up --build -d`, { stdio: 'inherit' });
 }
 
-export function dockerDown(composeFile: string) {
+export function dockerDown(compose: Compose) {
+    const composeFile = compose.composeFile;
+    const envFile = compose.envFile;
     console.log(`Shutting down Docker containers using ${composeFile}...`);
-    execSync(`docker compose -f ${composeFile} down`, { stdio: 'inherit' });
+    execSync(`docker compose -f ${composeFile} --env-file ${envFile} down`, { stdio: 'inherit' });
 }
 
 export function dockerDownAll() {
     console.log('Shutting down all Docker containers...');
-    const files = [
-        config.composeBuildFile,
-        config.composeProdFile,
-        config.composeStagingFile,
-        config.composeDevServicesFile,
-        config.composeStagingServicesFile,
-    ];
-    files.forEach(file => dockerDown(file));
+    for (const compose of Object.values(config.composes)) {
+        dockerDown(compose);
+    }
 }
 
 export function dockerCleanup(images: string[]) {
