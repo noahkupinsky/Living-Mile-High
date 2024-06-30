@@ -7,5 +7,3 @@ export const AdminSchema = new Schema<AdminDocument>({
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
 });
-
-export const AdminModel = model<AdminDocument>('Admin', AdminSchema);

@@ -1,6 +1,7 @@
 import env from './config/env';
-import { getServer, setupApp } from './app';
+import { getApp, getServer, setupApp } from './app';
 import newServiceManager from './config/di';
+import passport from './config/passport';
 
 const server = getServer();
 

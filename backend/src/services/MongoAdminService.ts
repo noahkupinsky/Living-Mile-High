@@ -1,11 +1,11 @@
 import bcrypt from 'bcrypt';
 import { AdminService } from '../types';
-import { AdminModel } from 'living-mile-high-lib';
+import { AdminModel } from '../models/AdminModel';
 
 class MongoAdminService implements AdminService {
     async getUserByLoginInfo(username: string, password: string): Promise<any> {
-        const users = await AdminModel.find({});
-        console.log(users.map(u => u.username));
+        console.log("hello there");
+        console.log(await AdminModel.find({}));
         const user = await AdminModel.findOne({ username });
         if (!user) return null;
         const isMatch = await bcrypt.compare(password, user.password);

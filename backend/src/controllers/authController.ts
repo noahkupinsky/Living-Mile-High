@@ -8,9 +8,9 @@ type PassportCallback = (err: any, user: any, info: any) => void;
 export const login: ExpressMiddleware = (req, res, next) => {
     const { JWT_SECRET } = env();
 
-    const localJwtLogin: PassportCallback = (err, user, info) => {
+    const localJwtLogin: PassportCallback = async (err, user, info) => {
         if (err || !user) {
-            return res.status(401).json({ message: "Invalid username or password" });
+            return res.status(401).json({ message: `Invalid username or password` });
         }
 
         const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, { expiresIn: '1h' });
@@ -21,7 +21,8 @@ export const login: ExpressMiddleware = (req, res, next) => {
 
         res.status(200).json({ message: 'Logged in successfully' });
     }
-    passport.authenticate('local', { session: false }, localJwtLogin)(req, res, next);
+
+    passport.authenticate('local', localJwtLogin)(req, res, next);
 };
 
 export const verify: ExpressEndpoint = (req, res) => {

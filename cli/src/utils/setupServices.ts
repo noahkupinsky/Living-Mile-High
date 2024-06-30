@@ -5,20 +5,24 @@ import { dockerDown, dockerRemoveVolumes, dockerRun } from "./dockerUtils";
 import fs from "fs";
 import bcrypt from "bcrypt";
 import mongoose, { Schema, model, Document } from 'mongoose';
+import { AdminSchema } from "living-mile-high-lib";
 
-export async function resetServices() {
-    resetDataDir();
+export async function setupLocalServices() {
+    createDataDir();
     dockerRemoveVolumes();
-    const composeFiles = [config.composeStagingServicesFile, config.composeDevServicesFile];
-    for (const composeFile of composeFiles) {
-        dockerRun(composeFile);
-        await createBucket(9000);
-        await createDefaultAdmin(27017);
-        dockerDown(composeFile);
-    }
+    await setupServicesForComposeFile(config.composeDevServicesFile);
+    await setupServicesForComposeFile(config.composeStagingServicesFile);
 }
 
-function resetDataDir() {
+async function setupServicesForComposeFile(composeFile: string) {
+    dockerRun(composeFile);
+    await createBucket(9000);
+    await createDefaultAdmin(27017);
+    dockerDown(composeFile);
+}
+
+
+function createDataDir() {
     if (fs.existsSync(path.resolve(process.cwd(), '.data'))) {
         throw new Error('Data directory already exists. Please remove it before running this command.');
     }
@@ -61,20 +65,7 @@ async function createBucket(port: number) {
     }
 }
 
-interface AdminDocument extends Document {
-    username: string;
-    password: string;
-}
-
-const AdminSchema = new Schema<AdminDocument>({
-    username: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-});
-
-const AdminModel = model<AdminDocument>('Admin', AdminSchema);
-
-export default AdminModel;
-
+const AdminModel = model('Admin', AdminSchema);
 
 async function createDefaultAdmin(port: number) {
     const uri = `mongodb://localhost:${port}/?authSource=admin`; // Replace 'yourDatabase' with the correct database name

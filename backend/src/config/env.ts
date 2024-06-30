@@ -29,9 +29,14 @@ const allowedEnvFiles = ['staging', 'development', 'production'];
 
 const envFile = process.env.ENV_FILE;
 
+const projectRootRelative = process.env.NODE_ENV === 'production' ? '../../../..' : '../../..';
+console.log(projectRootRelative);
+
+const projectRoot = path.join(__dirname, projectRootRelative);
+
 if (envFile && allowedEnvFiles.includes(envFile)) {
-    // Project root dir is three folders back
-    const envPath = path.resolve(__dirname, `../../../.env.${envFile}`);
+    const envPath = path.join(projectRoot, `.env.${envFile}`);
+    console.log(envPath);
     dotenv.config({ path: envPath });
 }
 

@@ -1,19 +1,26 @@
 import { Command } from 'commander';
 import { pullEnv, pushEnv } from '../utils/envUtils';
 
+const EnvFiles = ['.env.production', '.env.staging', '.env.development', '.env'];
+
 export function envCommands(program: Command) {
-    program
-        .command('envs <action>')
-        .description('Fetch or push environment variables')
+    const env = program
+        .command('env')
+        .description('Fetch or push environment variables (requires CDN credentials)');
+
+    env
+        .command('pull')
+        .description('Pull environment variables to current directory')
         .option('-f, --force', 'Force overwrite if the file exists')
-        .action(async (action, options) => {
+        .action(async (options) => {
             const doForce = options.force;
-            if (action === 'push') {
-                await Promise.all(['.env.production', '.env.staging', '.env.development', '.env'].map(env => pushEnv(env)));
-            } else if (action === 'pull') {
-                await Promise.all(['.env.production', '.env.staging', '.env.development', '.env'].map(env => pullEnv(env, doForce)));
-            } else {
-                console.error(`Invalid action: ${action}`);
-            }
+            await Promise.all(EnvFiles.map(env => pullEnv(env, doForce)));
+        });
+
+    env
+        .command('push')
+        .description('Push environment variables from current directory')
+        .action(async () => {
+            await Promise.all(EnvFiles.map(env => pushEnv(env)));
         });
 }

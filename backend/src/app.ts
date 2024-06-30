@@ -13,6 +13,15 @@ const server = http.createServer(app);
 
 export async function setupApp(sm: ServiceManager<ServiceDict>): Promise<void> {
     serviceManager = sm;
+    app.use((req, res, next) => {
+        console.log(`Request: ${req.method} ${req.url}`, req.body);
+        express.json()(req, res, next);
+    });
+    app.use(cookieParser());
+    app.use((req, res, next) => {
+        console.log(`Request: ${req.method} ${req.url}`, req.body);
+        passport.initialize()(req, res, next);
+    });
     appServices = await serviceManager.connect();
     app.use(cors(
         {
@@ -20,9 +29,6 @@ export async function setupApp(sm: ServiceManager<ServiceDict>): Promise<void> {
             credentials: true
         }
     ));
-    app.use(express.json());
-    app.use(cookieParser());
-    app.use(passport.initialize());
     app.use(router);
 }
 

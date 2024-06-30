@@ -8,7 +8,7 @@ export function updateAndPublishPackage(packageDir: string, origDir: string, pac
     shell.exec('npm publish');
     const newVersion = JSON.parse(fs.readFileSync(path.join(packageDir, 'package.json'), 'utf8')).version;
     shell.cd(origDir);
-    ['frontend', 'backend'].forEach(dir => {
+    ['frontend', 'backend', 'cli'].forEach(dir => {
         shell.cd(dir);
         shell.exec(`yarn add "${packageName}@${newVersion}"`);
         shell.cd('../');
