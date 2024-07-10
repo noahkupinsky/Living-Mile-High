@@ -19,3 +19,8 @@ export const DefaultGeneralData: GeneralData = {
     defaultImages: DefaultPlaceholderImages,
     homeImages: DefaultHomeImages
 }
+
+export enum CdnKeys {
+    siteData = 'siteData',
+    homeFirst = 'homeFirst'
+}

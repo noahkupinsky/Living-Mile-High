@@ -1,7 +1,6 @@
 import { Schema, model, Document } from 'mongoose';
 import { HouseRecord } from '../types';
-import { DeepPartial, House } from 'living-mile-high-lib';
-import { optionals } from '../types/enums';
+import { House } from 'living-mile-high-lib';
 
 export interface HouseDocument extends Document, HouseRecord { }
 
@@ -27,35 +26,42 @@ const HouseSchema = new Schema<HouseDocument>({
 const HouseModel = model<HouseDocument>('House', HouseSchema);
 
 export function houseDocumentToObject(doc: HouseDocument): House {
+    const { id, isDeveloped, isForSale, isSelectedWork, address, mainImage, images, neighborhood, stats, createdAt, updatedAt } = doc;
+
     const house: House = {
-        id: doc.get('id'),
-        isDeveloped: doc.get('isDeveloped'),
-        isForSale: doc.get('isForSale'),
-        isSelectedWork: doc.get('isSelectedWork'),
-        address: doc.get('address'),
-        mainImage: doc.get('mainImage'),
-        images: doc.get('images'),
-        neighborhood: doc.get('neighborhood'),
-        stats: doc.get('stats'),
-        createdAt: doc.get('createdAt'),
-        updatedAt: doc.get('updatedAt'),
+        id,
+        isDeveloped,
+        isForSale,
+        isSelectedWork,
+        address,
+        mainImage,
+        images,
+        neighborhood,
+        stats,
+        createdAt,
+        updatedAt,
     };
+
     return house;
 }
 
-export function housePartialToUpsert(house: DeepPartial<House>): DeepPartial<HouseDocument> {
-    const o = optionals(house);
-    const houseUpsert: Partial<HouseDocument> = {
-        ...o('isDeveloped'),
-        ...o('isForSale'),
-        ...o('isSelectedWork'),
-        ...o('address'),
-        ...o('mainImage'),
-        ...o('images'),
-        ...o('neighborhood'),
-        ...o('stats'),
-    }
-    return houseUpsert;
+type NewHouseDocument = Omit<HouseRecord, 'id' | 'createdAt' | 'updatedAt'>;
+
+export function houseObjectToNewDocument(house: House): NewHouseDocument {
+    const { isDeveloped, isForSale, isSelectedWork, address, mainImage, images, neighborhood, stats } = house;
+
+    const doc = {
+        isDeveloped,
+        isForSale,
+        isSelectedWork,
+        address,
+        mainImage,
+        images,
+        neighborhood,
+        stats,
+    };
+
+    return doc
 }
 
 export default HouseModel;

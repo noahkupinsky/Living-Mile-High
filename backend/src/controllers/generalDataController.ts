@@ -3,9 +3,9 @@ import { services } from "../app";
 import { SiteData, DeepPartial } from "living-mile-high-lib";
 
 export const updateDataAndBroadcast = async (updates: DeepPartial<SiteData>) => {
-    const { appDataService, generalDataService } = services();
+    const { siteUpdater, generalDataService } = services();
     await generalDataService.update(updates);
-    await appDataService.update();
+    await siteUpdater.updateSiteData();
 }
 
 export const updateGeneralData: ExpressEndpoint = async (req, res) => {

@@ -1,6 +1,7 @@
 import { DeepPartial, House } from 'living-mile-high-lib';
 import { HouseService } from '../types';
-import HouseModel, { HouseDocument, houseDocumentToObject, housePartialToUpsert } from '../models/HouseModel';
+import HouseModel, { HouseDocument, houseDocumentToObject, houseObjectToNewDocument } from '../models/HouseModel';
+import { constructUpdateObject } from '../utils/constructUpdateObject';
 
 class MongoHouseService implements HouseService {
     async getHouseObjects(): Promise<House[]> {
@@ -9,21 +10,29 @@ class MongoHouseService implements HouseService {
     };
 
     async upsertHouse(house: DeepPartial<House>): Promise<void> {
-        const upsert: DeepPartial<HouseDocument> = housePartialToUpsert(house);
         const id = house.id;
-        let savedHouse;
 
         if (id) {
-            const id = house.id;
-
-            savedHouse = await HouseModel.findByIdAndUpdate(id, upsert, { new: true });
-            if (!savedHouse) {
-                throw new Error('House not found');
-            }
+            await this.updateHouse(id, house);
         } else {
-            savedHouse = new HouseModel(upsert);
-            await savedHouse.save();
+            await this.insertHouse(house as House);
         }
+    }
+
+    private async updateHouse(id: any, house: DeepPartial<House>): Promise<void> {
+        const updateFields = constructUpdateObject(house);
+
+        const foundHouse = await HouseModel.findByIdAndUpdate(id, { $set: updateFields }, { new: true });
+
+        if (!foundHouse) {
+            throw new Error('House not found');
+        }
+    }
+
+    private async insertHouse(house: House): Promise<void> {
+        const doc = houseObjectToNewDocument(house);
+        const savedHouse = new HouseModel(doc);
+        await savedHouse.save();
     }
 
     async allImages(): Promise<string[]> {

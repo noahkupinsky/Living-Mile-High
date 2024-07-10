@@ -12,9 +12,10 @@ export type ServiceDict = {
     houseService: HouseService;
     adminService: AdminService;
     imageService: ImageService;
-    appDataService: AppDataService;
     cdnAdapter: CdnAdapter;
     generalDataService: GeneralDataService;
+    stateService: StateService;
+    siteUpdater: SiteUpdater;
 };
 
 export interface CdnAdapter {
@@ -59,4 +60,18 @@ export interface AdminService {
 export interface GeneralDataService {
     update(updates: DeepPartial<GeneralData>): Promise<void>;
     getGeneralData(): Promise<GeneralData>;
+}
+
+export interface SiteUpdater {
+    updateSiteData(): Promise<void>;
+    deleteBackup(name: string): Promise<void>;
+    restoreBackup(name: string): Promise<void>;
+    listBackups(): Promise<string[]>;
+    createBackup(name: string): Promise<void>;
+}
+
+export interface StateService {
+    getState(): Promise<SiteData>;
+    serializeState(): Promise<string>;
+    deserializeState(state: string): Promise<void>;
 }

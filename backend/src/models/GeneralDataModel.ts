@@ -1,7 +1,6 @@
 import { Schema, model, Document } from 'mongoose';
 import { GeneralDataRecord } from '../types';
-import { optionals } from '../types/enums';
-import { DeepPartial, GeneralData } from 'living-mile-high-lib';
+import { GeneralData } from 'living-mile-high-lib';
 
 export interface GeneralDataDocument extends Document, GeneralDataRecord { }
 
@@ -21,25 +20,29 @@ const GeneralDataSchema = new Schema<GeneralDataDocument>({
 const GeneralDataModel = model<GeneralDataDocument>('GeneralData', GeneralDataSchema);
 
 export function generalDocumentToObject(doc: GeneralDataDocument): GeneralData {
+    const { about, contact, homeImages, defaultImages } = doc;
+
     const data: GeneralData = {
-        about: doc.get('about'),
-        contact: doc.get('contact'),
-        homeImages: doc.get('homeImages'),
-        defaultImages: doc.get('defaultImages'),
+        about,
+        contact,
+        homeImages,
+        defaultImages
     }
+
     return data;
 }
-// TODO: Create GeneralDataUpsert type to pass in, and return the same type. Update names appropriately
 
-export function generalPartialToUpsert(generalData: DeepPartial<GeneralData>): DeepPartial<GeneralDataDocument> {
-    const o = optionals(generalData);
-    const generalUpsert: Partial<GeneralDataDocument> = {
-        ...o('about'),
-        ...o('contact'),
-        ...o('homeImages'),
-        ...o('defaultImages'),
+export function generalObjectToNewDocument(data: GeneralData): GeneralDataRecord {
+    const { about, contact, homeImages, defaultImages } = data;
+
+    const doc = {
+        about,
+        contact,
+        homeImages,
+        defaultImages
     }
-    return generalUpsert;
+
+    return doc;
 }
 
 export default GeneralDataModel;

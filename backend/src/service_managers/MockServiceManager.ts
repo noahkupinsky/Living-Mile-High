@@ -2,12 +2,13 @@ import { ServiceDict, ServiceManager } from "../types";
 import mongoose from "mongoose";
 import { createInMemoryS3CdnConfig, inMemoryCDN } from "../utils/createS3CdnService";
 import S3CdnAdapter from "../services/S3CdnAdapter";
-import CdnAppDataService from "../services/CdnAppDataService";
 import CdnImageService from "../services/CdnImageService";
 import MongoAdminService from "../services/MongoAdminService";
 import MongoHouseService from "../services/MongoHouseService";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import MongoGeneralDataService from "../services/MongoGeneralDataService";
+import MongoStateService from "../services/MongoStateService";
+import CdnSiteUpdater from "../services/CdnSiteUpdater";
 
 class MockServiceManager implements ServiceManager<ServiceDict> {
     private services?: ServiceDict;
@@ -26,6 +27,7 @@ class MockServiceManager implements ServiceManager<ServiceDict> {
         const cdn = new S3CdnAdapter(s3CdnConfig);
         const houseService = new MongoHouseService();
         const generalDataService = new MongoGeneralDataService();
+        const stateService = new MongoStateService(houseService, generalDataService);
 
         this.services = {
             cdnAdapter: cdn,
@@ -33,7 +35,8 @@ class MockServiceManager implements ServiceManager<ServiceDict> {
             generalDataService: generalDataService,
             adminService: new MongoAdminService(),
             imageService: new CdnImageService(cdn),
-            appDataService: new CdnAppDataService(cdn, houseService, generalDataService)
+            stateService: stateService,
+            siteUpdater: new CdnSiteUpdater(stateService, cdn),
         }
 
         return this.services!;

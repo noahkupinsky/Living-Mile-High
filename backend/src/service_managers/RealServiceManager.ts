@@ -3,11 +3,12 @@ import mongoose from "mongoose";
 import env from "../config/env";
 import { createNetworkS3CdnConfig } from "../utils/createS3CdnService";
 import S3CdnAdapter from "../services/S3CdnAdapter";
-import CdnAppDataService from "../services/CdnAppDataService";
 import CdnImageService from "../services/CdnImageService";
 import MongoAdminService from "../services/MongoAdminService";
 import MongoHouseService from "../services/MongoHouseService";
 import MongoGeneralDataService from "../services/MongoGeneralDataService";
+import CdnSiteUpdater from "../services/CdnSiteUpdater";
+import MongoStateService from "../services/MongoStateService";
 
 class RealServiceManager implements ServiceManager<ServiceDict> {
     private services?: ServiceDict;
@@ -31,6 +32,7 @@ class RealServiceManager implements ServiceManager<ServiceDict> {
         const cdn = new S3CdnAdapter(s3CdnConfig);
         const houseService = new MongoHouseService();
         const generalDataService = new MongoGeneralDataService();
+        const stateService = new MongoStateService(houseService, generalDataService);
 
         this.services = {
             cdnAdapter: cdn,
@@ -38,7 +40,8 @@ class RealServiceManager implements ServiceManager<ServiceDict> {
             generalDataService: generalDataService,
             adminService: new MongoAdminService(),
             imageService: new CdnImageService(cdn),
-            appDataService: new CdnAppDataService(cdn, houseService, generalDataService)
+            stateService: stateService,
+            siteUpdater: new CdnSiteUpdater(stateService, cdn),
         }
 
         return this.services!;

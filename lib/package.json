@@ -1,6 +1,6 @@
 {
   "name": "living-mile-high-lib",
-  "version": "1.0.24",
+  "version": "1.0.31",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "license": "MIT",
@@ -15,7 +15,6 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "living-mile-high-lib": "1.0.8",
     "mongoose": "^8.4.4"
   }
 }

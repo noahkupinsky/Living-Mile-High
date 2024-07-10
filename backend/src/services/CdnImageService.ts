@@ -1,8 +1,6 @@
 import { AssetPrefix } from '../types/enums';
 import { ImageService, CdnAdapter } from '../types';
 
-
-
 class CdnImageService implements ImageService {
     private cdn: CdnAdapter;
 

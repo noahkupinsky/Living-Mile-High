@@ -81,13 +81,12 @@ describe('HouseService get and save', () => {
         expect(savedHouse).not.toBeNull();
         const savedHouseId = savedHouse!._id as string;
 
-        const updatedHouse: House = {
-            ...mockHouse,
+        const upsert = {
             id: savedHouseId,
             isForSale: false
         };
 
-        await houseService.upsertHouse(updatedHouse);
+        await houseService.upsertHouse(upsert);
         const updatedSavedHouse = await HouseModel.findById(savedHouseId);
         expect(updatedSavedHouse!.isForSale).toBe(false);
     })
