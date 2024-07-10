@@ -1,5 +1,5 @@
-import { services } from "../src/app";
-import { GeneralDataService } from "../src/types";
+import { services } from "~/di";
+import { GeneralDataService } from "~/@types";
 import { DefaultGeneralData } from "living-mile-high-lib";
 
 let generalDataService: GeneralDataService;

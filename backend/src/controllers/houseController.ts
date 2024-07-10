@@ -1,6 +1,6 @@
 import { House } from "living-mile-high-lib";
-import { ExpressEndpoint } from "../types";
-import { services } from "../app";
+import { ExpressEndpoint } from "~/@types";
+import { services } from "~/di";
 
 const houseService = () => services().houseService;
 

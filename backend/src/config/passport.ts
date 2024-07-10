@@ -1,7 +1,7 @@
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
-import { services } from '../app';
-import { AdminModel } from '../models/AdminModel';
+import { services } from '~/di';
+import { AdminModel } from '~/models/AdminModel';
 
 const adminService = () => services().adminService;
 

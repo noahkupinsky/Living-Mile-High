@@ -1,6 +1,6 @@
-import { HouseService } from "../src/types";
-import HouseModel from "../src/models/HouseModel";
-import { services } from "../src/app";
+import { HouseService } from "~/@types";
+import HouseModel from "~/models/HouseModel";
+import { services } from "~/di";
 import { House } from "living-mile-high-lib";
 
 let houseService: HouseService;

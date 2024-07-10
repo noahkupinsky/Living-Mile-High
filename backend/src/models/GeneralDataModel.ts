@@ -1,6 +1,6 @@
 import { Schema, model, Document } from 'mongoose';
-import { GeneralDataRecord } from '../types';
 import { GeneralData } from 'living-mile-high-lib';
+import { GeneralDataRecord } from '~/@types';
 
 export interface GeneralDataDocument extends Document, GeneralDataRecord { }
 

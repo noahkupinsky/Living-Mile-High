@@ -1,6 +1,6 @@
-import { CdnAdapter } from "../src/types";
-import { inMemoryCDN } from "../src/utils/createS3CdnService";
-import { services } from "../src/app";
+import { CdnAdapter } from "~/@types";
+import { inMemoryCDN } from "~/utils/createS3CdnService";
+import { services } from "~/di";
 
 let cdn: CdnAdapter;
 

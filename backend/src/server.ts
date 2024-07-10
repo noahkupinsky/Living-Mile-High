@@ -1,15 +1,12 @@
-import env from './config/env';
-import { getApp, getServer, setupApp } from './app';
-import newServiceManager from './config/di';
-import passport from './config/passport';
+import env from '~/config/env';
+import { getServer, setupApp } from '~/app';
 
 const server = getServer();
 
 const startServer = async () => {
     try {
         const { MOCK, BPORT } = env();
-        const sm = newServiceManager(MOCK === 'true');
-        await setupApp(sm);
+        await setupApp(MOCK === 'true');
 
         server.listen(BPORT, () => {
             console.log(`Server started on port ${BPORT}`);

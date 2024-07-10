@@ -4,10 +4,10 @@
   "main": "app.js",
   "license": "MIT",
   "scripts": {
-    "build": "ENV_FILE=${ENV_FILE} tsc",
+    "build": "ENV_FILE=${ENV_FILE} tsc --project ./src/tsconfig.json",
     "test": "jest --detectOpenHandles",
-    "dev": "ENV_FILE=${ENV_FILE:-development} nodemon --exec ts-node src/server.ts",
-    "start": "ENV_FILE=${ENV_FILE} node dist/src/server.js",
+    "dev": "ENV_FILE=${ENV_FILE:-development} nodemon --exec 'tsx --tsconfig ./src/tsconfig.json' src/server.ts",
+    "start": "ENV_FILE=${ENV_FILE} node dist/server.js",
     "start:pm2": "pm2 start yarn --name backend -- start"
   },
   "dependencies": {
@@ -52,9 +52,10 @@
     "mongodb-memory-server": "^9.3.0",
     "nodemon": "^3.1.4",
     "supertest": "^7.0.0",
-    "ts-jest": "^29.1.4",
+    "ts-jest": "^29.2.2",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
+    "tsx": "^4.16.2",
     "typescript": "^5.4.5"
   }
 }

@@ -1,6 +1,6 @@
 import { Schema, model, Document } from 'mongoose';
-import { HouseRecord } from '../types';
 import { House } from 'living-mile-high-lib';
+import { HouseRecord } from '~/@types';
 
 export interface HouseDocument extends Document, HouseRecord { }
 

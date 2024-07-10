@@ -1,9 +1,9 @@
 import { SiteData } from "living-mile-high-lib";
-import { GeneralDataService, HouseService, StateService } from "../types/services";
-import HouseModel from "../models/HouseModel";
-import GeneralDataModel from "../models/GeneralDataModel";
+import { GeneralDataService, HouseService, StateService } from "~/@types/services";
+import HouseModel from "~/models/HouseModel";
+import GeneralDataModel from "~/models/GeneralDataModel";
 
-class MongoStateService implements StateService {
+export class MongoStateService implements StateService {
     private houseService: HouseService;
     private generalDataService: GeneralDataService;
 
@@ -36,8 +36,3 @@ class MongoStateService implements StateService {
         await GeneralDataModel.insertMany(generalData);
     }
 }
-
-
-
-
-export default MongoStateService

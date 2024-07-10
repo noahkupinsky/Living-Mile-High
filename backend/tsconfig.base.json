@@ -12,6 +12,9 @@
     "types": ["node", "jest"],
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "declaration": true,
+    "declarationMap": true,
+    "composite": true
   }
 }

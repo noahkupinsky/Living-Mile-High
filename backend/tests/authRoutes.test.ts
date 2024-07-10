@@ -1,5 +1,6 @@
 import supertest from 'supertest';
-import { getApp, services } from '../src/app';
+import { getApp } from '~/app';
+import { services } from '~/di';
 
 let agent: any;
 

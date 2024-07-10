@@ -1,16 +1,11 @@
-import { ServiceDict, ServiceManager } from "../types";
 import mongoose from "mongoose";
-import env from "../config/env";
-import { createNetworkS3CdnConfig } from "../utils/createS3CdnService";
-import S3CdnAdapter from "../services/S3CdnAdapter";
-import CdnImageService from "../services/CdnImageService";
-import MongoAdminService from "../services/MongoAdminService";
-import MongoHouseService from "../services/MongoHouseService";
-import MongoGeneralDataService from "../services/MongoGeneralDataService";
-import CdnSiteUpdater from "../services/CdnSiteUpdater";
-import MongoStateService from "../services/MongoStateService";
 
-class RealServiceManager implements ServiceManager<ServiceDict> {
+import { ServiceDict, SiteServiceManager } from "~/@types";
+import env from "~/config/env";
+import { createNetworkS3CdnConfig } from "~/utils/createS3CdnService";
+import * as Services from "~/services";
+
+export class RealServiceManager implements SiteServiceManager {
     private services?: ServiceDict;
 
     public async connect(): Promise<ServiceDict> {
@@ -29,19 +24,19 @@ class RealServiceManager implements ServiceManager<ServiceDict> {
                 secret: CDN_SECRET,
             }
         );
-        const cdn = new S3CdnAdapter(s3CdnConfig);
-        const houseService = new MongoHouseService();
-        const generalDataService = new MongoGeneralDataService();
-        const stateService = new MongoStateService(houseService, generalDataService);
+        const cdn = new Services.S3CdnAdapter(s3CdnConfig);
+        const houseService = new Services.MongoHouseService();
+        const generalDataService = new Services.MongoGeneralDataService();
+        const stateService = new Services.MongoStateService(houseService, generalDataService);
 
         this.services = {
             cdnAdapter: cdn,
             houseService: houseService,
             generalDataService: generalDataService,
-            adminService: new MongoAdminService(),
-            imageService: new CdnImageService(cdn),
+            adminService: new Services.MongoAdminService(),
+            imageService: new Services.CdnImageService(cdn),
             stateService: stateService,
-            siteUpdater: new CdnSiteUpdater(stateService, cdn),
+            siteUpdater: new Services.CdnSiteUpdater(stateService, cdn),
         }
 
         return this.services!;
@@ -53,5 +48,3 @@ class RealServiceManager implements ServiceManager<ServiceDict> {
         }
     }
 }
-
-export default RealServiceManager

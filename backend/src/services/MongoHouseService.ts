@@ -1,9 +1,9 @@
 import { DeepPartial, House } from 'living-mile-high-lib';
-import { HouseService } from '../types';
-import HouseModel, { HouseDocument, houseDocumentToObject, houseObjectToNewDocument } from '../models/HouseModel';
-import { constructUpdateObject } from '../utils/constructUpdateObject';
+import { HouseService } from '~/@types';
+import HouseModel, { HouseDocument, houseDocumentToObject, houseObjectToNewDocument } from '~/models/HouseModel';
+import { constructUpdateObject } from '~/utils/constructUpdateObject';
 
-class MongoHouseService implements HouseService {
+export class MongoHouseService implements HouseService {
     async getHouseObjects(): Promise<House[]> {
         const houses: HouseDocument[] = await HouseModel.find();
         return houses.map(house => houseDocumentToObject(house));
@@ -45,5 +45,3 @@ class MongoHouseService implements HouseService {
         return houses.map((house: any) => house.neighborhood);
     }
 }
-
-export default MongoHouseService

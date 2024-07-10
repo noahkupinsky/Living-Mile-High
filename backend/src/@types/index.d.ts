@@ -7,13 +7,15 @@ export {
 export {
     ServiceManager,
     ServiceDict,
+    SiteServiceManager,
     CdnAdapter,
     S3Config,
     ImageService,
     HouseService,
     AdminService,
-    AppDataService,
-    GeneralDataService
+    GeneralDataService,
+    StateService,
+    SiteUpdater
 } from './services'
 
 export type ExpressMiddleware<

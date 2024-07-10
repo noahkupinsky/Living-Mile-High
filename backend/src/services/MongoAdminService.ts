@@ -1,9 +1,10 @@
 import { compare } from 'bcryptjs';
-import { AdminService } from '../types';
-import { AdminModel } from '../models/AdminModel';
-import { hashPassword } from 'living-mile-high-lib';
 
-class MongoAdminService implements AdminService {
+import { hashPassword } from 'living-mile-high-lib';
+import { AdminService } from '~/@types';
+import { AdminModel } from '~/models/AdminModel';
+
+export class MongoAdminService implements AdminService {
     async getUserByLoginInfo(username: string, password: string): Promise<any> {
         const user = await AdminModel.findOne({ username });
         if (!user) return null;
@@ -24,5 +25,3 @@ class MongoAdminService implements AdminService {
         return AdminModel.findById(id);
     }
 }
-
-export default MongoAdminService;

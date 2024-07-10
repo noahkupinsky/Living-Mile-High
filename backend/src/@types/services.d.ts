@@ -1,5 +1,5 @@
 import { SiteData, DeepPartial } from "living-mile-high-lib";
-import { ImageCategory } from "./enums";
+import { ImageCategory } from "./constants";
 import { GeneralData } from "./database";
 import { GetObjectCommandOutput, CopyObjectCommandOutput, DeleteObjectCommandOutput, PutObjectAclCommandOutput } from "@aws-sdk/client-s3";
 
@@ -17,6 +17,8 @@ export type ServiceDict = {
     stateService: StateService;
     siteUpdater: SiteUpdater;
 };
+
+export type SiteServiceManager = ServiceManager<ServiceDict>;
 
 export interface CdnAdapter {
     public getObjectUrl(key: string): string;
@@ -37,11 +39,6 @@ export type S3Config = {
 
 export interface ImageService {
     uploadImage(file: any): Promise<string>;
-}
-
-export interface AppDataService {
-    update(): Promise<SiteData>;
-    // garbageCollect(): Promise<number>;
 }
 
 export interface HouseService {

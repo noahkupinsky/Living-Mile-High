@@ -1,16 +1,11 @@
-import { ServiceDict, ServiceManager } from "../types";
-import mongoose from "mongoose";
-import { createInMemoryS3CdnConfig, inMemoryCDN } from "../utils/createS3CdnService";
-import S3CdnAdapter from "../services/S3CdnAdapter";
-import CdnImageService from "../services/CdnImageService";
-import MongoAdminService from "../services/MongoAdminService";
-import MongoHouseService from "../services/MongoHouseService";
 import { MongoMemoryServer } from "mongodb-memory-server";
-import MongoGeneralDataService from "../services/MongoGeneralDataService";
-import MongoStateService from "../services/MongoStateService";
-import CdnSiteUpdater from "../services/CdnSiteUpdater";
+import mongoose from "mongoose";
 
-class MockServiceManager implements ServiceManager<ServiceDict> {
+import { ServiceDict, SiteServiceManager } from "~/@types";
+import { createInMemoryS3CdnConfig, inMemoryCDN } from "~/utils/createS3CdnService";
+import * as Services from "~/services";
+
+export class MockServiceManager implements SiteServiceManager {
     private services?: ServiceDict;
     private mongoServer: MongoMemoryServer;
 
@@ -24,19 +19,19 @@ class MockServiceManager implements ServiceManager<ServiceDict> {
         await mongoose.connect(mongoUri, {});
 
         const s3CdnConfig = createInMemoryS3CdnConfig();
-        const cdn = new S3CdnAdapter(s3CdnConfig);
-        const houseService = new MongoHouseService();
-        const generalDataService = new MongoGeneralDataService();
-        const stateService = new MongoStateService(houseService, generalDataService);
+        const cdn = new Services.S3CdnAdapter(s3CdnConfig);
+        const houseService = new Services.MongoHouseService();
+        const generalDataService = new Services.MongoGeneralDataService();
+        const stateService = new Services.MongoStateService(houseService, generalDataService);
 
         this.services = {
             cdnAdapter: cdn,
             houseService: houseService,
             generalDataService: generalDataService,
-            adminService: new MongoAdminService(),
-            imageService: new CdnImageService(cdn),
+            adminService: new Services.MongoAdminService(),
+            imageService: new Services.CdnImageService(cdn),
             stateService: stateService,
-            siteUpdater: new CdnSiteUpdater(stateService, cdn),
+            siteUpdater: new Services.CdnSiteUpdater(stateService, cdn),
         }
 
         return this.services!;
@@ -61,5 +56,3 @@ class MockServiceManager implements ServiceManager<ServiceDict> {
         }
     }
 }
-
-export default MockServiceManager

@@ -1,6 +1,6 @@
-import { ExpressEndpoint } from "../types";
-import { services } from "../app";
 import { SiteData, DeepPartial } from "living-mile-high-lib";
+import { ExpressEndpoint } from "~/@types";
+import { services } from "~/di";
 
 export const updateDataAndBroadcast = async (updates: DeepPartial<SiteData>) => {
     const { siteUpdater, generalDataService } = services();

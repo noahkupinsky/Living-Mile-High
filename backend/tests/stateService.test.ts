@@ -1,6 +1,5 @@
-import { GeneralData, House } from "living-mile-high-lib";
-import { services } from "../src/app";
-import { StateService } from "../src/types/services";
+import { services } from "~/di";
+import { StateService } from "~/@types/services";
 
 let stateService: StateService;
 

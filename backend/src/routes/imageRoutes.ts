@@ -1,6 +1,6 @@
 import express from 'express';
 import multer from 'multer';
-import { services } from '../app';
+import { services } from '~/di';
 
 const router = express.Router();
 const upload = multer(); // Assuming you are using multer for file uploads

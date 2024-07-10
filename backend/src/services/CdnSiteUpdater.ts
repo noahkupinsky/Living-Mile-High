@@ -1,7 +1,8 @@
-import { CdnKeys } from "living-mile-high-lib";
-import { CdnAdapter, SiteUpdater, StateService } from "../types/services";
-import { AppDataValidator } from "../utils/AppDataValidator";
 import axios, { AxiosError } from "axios";
+
+import { CdnKeys } from "living-mile-high-lib";
+import { CdnAdapter, SiteUpdater, StateService } from "~/@types";
+import { AppDataValidator } from "~/utils/AppDataValidator";
 
 async function downloadImage(url: string): Promise<{ buffer: Buffer, contentType: string }> {
     const response = await axios.get(url, { responseType: 'arraybuffer' });
@@ -11,7 +12,7 @@ async function downloadImage(url: string): Promise<{ buffer: Buffer, contentType
     };
 }
 
-class CdnSiteUpdater implements SiteUpdater {
+export class CdnSiteUpdater implements SiteUpdater {
     private stateService: StateService;
     private cdn: CdnAdapter;
 
@@ -63,6 +64,3 @@ class CdnSiteUpdater implements SiteUpdater {
     }
 
 }
-
-
-export default CdnSiteUpdater

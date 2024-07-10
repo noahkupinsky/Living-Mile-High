@@ -11,7 +11,7 @@ import {
     DeleteObjectCommandOutput,
     PutObjectCommandOutput
 } from "@aws-sdk/client-s3";
-import { CdnAdapter, S3Config } from '../types';
+import { CdnAdapter, S3Config } from '~/@types';
 
 function generateAlphanumericKey(length: number = 16): string {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -23,7 +23,7 @@ function generateAlphanumericKey(length: number = 16): string {
     return result;
 }
 
-class S3CdnAdapter implements CdnAdapter {
+export class S3CdnAdapter implements CdnAdapter {
     private client: S3Client;
     private bucket: string;
     private baseUrl: string;
@@ -125,5 +125,3 @@ class S3CdnAdapter implements CdnAdapter {
         return allKeys;
     }
 }
-
-export default S3CdnAdapter

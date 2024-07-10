@@ -1,18 +1,16 @@
 import dotenv from 'dotenv';
-import { getServer, setupApp, teardown } from '../src/app';
-import newServiceManager from '../src/config/di';
-import MockServiceManager from '../src/service_managers/MockServiceManager';
+import { setupApp, teardown } from '~/app';
+import { getServiceManager } from '~/di';
 
 dotenv.config();
-let MockSM: MockServiceManager;
 
 beforeAll(async () => {
-    MockSM = newServiceManager(true) as MockServiceManager;
-    await setupApp(MockSM);
+    await setupApp(true);
 });
 
 beforeEach(async () => {
-    await MockSM.clear();
+    const mockServiceManager = getServiceManager() as any;
+    await mockServiceManager.clear();
 });
 
 afterAll(async () => {

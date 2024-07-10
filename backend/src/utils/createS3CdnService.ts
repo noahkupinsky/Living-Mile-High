@@ -1,5 +1,5 @@
 import { S3Client, PutObjectCommand, DeleteObjectCommand, GetObjectCommand, ListObjectsV2Command, GetObjectCommandOutput, GetObjectRequest, CopyObjectCommand } from "@aws-sdk/client-s3";
-import { S3Config } from "../types";
+import { S3Config } from "~/@types";
 
 export const inMemoryCDN: { [key: string]: { body: any, contentType: string } } = {};
 
@@ -89,6 +89,9 @@ export function createNetworkS3CdnConfig(params: CreateCdnParams): S3Config {
         region: region,
         forcePathStyle: true, // needed for spaces endpoint compatibility
     });
+
+    // Will have to add extra logic if we want to support other endpoints
+
     const baseUrl = `https://${bucket}.${region}.cdn.digitaloceanspaces.com`;
 
     return { client, bucket, baseUrl };

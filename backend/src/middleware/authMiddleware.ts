@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
-import env from '../config/env';
-import { ExpressMiddleware } from '../types';
+import env from '~/config/env';
+import { ExpressMiddleware } from '~/@types';
 
 const verifyToken: ExpressMiddleware = (req, res, next) => {
     const { JWT_SECRET } = env();

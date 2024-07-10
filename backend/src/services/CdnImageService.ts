@@ -1,7 +1,7 @@
-import { AssetPrefix } from '../types/enums';
-import { ImageService, CdnAdapter } from '../types';
+import { AssetPrefix } from '~/@types/constants';
+import { ImageService, CdnAdapter } from '~/@types';
 
-class CdnImageService implements ImageService {
+export class CdnImageService implements ImageService {
     private cdn: CdnAdapter;
 
     constructor(cdn: CdnAdapter) {
@@ -19,5 +19,3 @@ class CdnImageService implements ImageService {
         }
     }
 }
-
-export default CdnImageService

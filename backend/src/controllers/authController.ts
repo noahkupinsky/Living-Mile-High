@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
-import { ExpressEndpoint, ExpressMiddleware } from '../types';
-import env from '../config/env';
-import passport from '../config/passport';
+import { ExpressEndpoint, ExpressMiddleware } from '~/@types';
+import env from '~/config/env';
+import passport from '~/config/passport';
 
 type PassportCallback = (err: any, user: any, info: any) => void;
 

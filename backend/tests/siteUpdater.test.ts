@@ -1,6 +1,6 @@
 import { SiteData } from "living-mile-high-lib";
-import { services } from "../src/app";
-import { CdnAdapter } from "../src/types";
+import { services } from "~/di";
+import { CdnAdapter } from "~/@types";
 
 let cdn: CdnAdapter;
 
