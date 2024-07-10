@@ -29,8 +29,7 @@ const allowedEnvFiles = ['staging', 'development', 'production'];
 
 const envFile = process.env.ENV_FILE;
 
-const devRootRelative = '../../..';
-const projectRootRelative = devRootRelative + (process.env.NODE_ENV === 'production' ? '/..' : '');
+const projectRootRelative = '../../..'
 
 const projectRoot = path.join(__dirname, projectRootRelative);
 
