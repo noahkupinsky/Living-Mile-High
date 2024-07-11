@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import { S3Config, ServiceDict, SiteServiceManager } from "~/@types";
 import { createInMemoryS3CdnConfig } from "~/utils/createS3CdnService";
 import * as Services from "~/services";
-import { inMemoryCdn } from "~/utils/memoryCdn";
+import { inMemoryCdn } from "~/utils/inMemoryCdn";
 
 export class MockServiceManager implements SiteServiceManager {
     private services?: ServiceDict;

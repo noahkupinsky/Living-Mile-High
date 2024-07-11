@@ -1,6 +1,6 @@
 import { S3Client } from "@aws-sdk/client-s3";
 import { S3Config } from "~/@types";
-import { mockS3Cdn } from "./memoryCdn";
+import { mockS3Cdn } from "./inMemoryCdn";
 
 function generateBaseUrl(endpoint: string, bucket: string, region: string): string {
     if (endpoint.includes('digitaloceanspaces.com')) {

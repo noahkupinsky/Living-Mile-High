@@ -4,8 +4,6 @@ import {
     DeleteObjectCommand,
     ListObjectsV2Command,
     ListObjectsV2CommandOutput,
-    GetObjectCommand,
-    GetObjectCommandOutput,
     CopyObjectCommand,
     CopyObjectCommandOutput,
     DeleteObjectCommandOutput,
@@ -53,14 +51,6 @@ export class S3CdnAdapter implements CdnAdapter {
             Body: body,
             ContentType: contentType,
             ACL: 'public-read',
-        });
-        return await this.client.send(command);
-    }
-
-    public async getObject(key: string): Promise<GetObjectCommandOutput> {
-        const command = new GetObjectCommand({
-            Bucket: this.bucket,
-            Key: key,
         });
         return await this.client.send(command);
     }

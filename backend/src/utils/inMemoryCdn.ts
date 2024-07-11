@@ -2,8 +2,6 @@ import {
     S3Client,
     PutObjectCommand,
     PutObjectCommandOutput,
-    GetObjectCommand,
-    GetObjectCommandOutput,
     ListObjectsV2Command,
     ListObjectsV2CommandOutput,
     DeleteObjectsCommand,
@@ -12,47 +10,25 @@ import {
     DeleteObjectCommandOutput
 } from "@aws-sdk/client-s3";
 import { mockClient } from "aws-sdk-client-mock";
-import { Readable } from "stream";
-
-function bufferToStream(buffer: Buffer): Readable {
-    const stream = new Readable();
-    stream.push(buffer);
-    stream.push(null); // No more data
-    return stream;
-}
 
 // In-memory storage
-export const inMemoryCdn: { [key: string]: { body: Buffer; metadata: { [key: string]: string } } } = {};
+export const inMemoryCdn: { [key: string]: { body: any; contentType?: string; metadata: { [key: string]: string } } } = {};
 
 export function mockS3Cdn() {
     const s3Mock = mockClient(S3Client);
 
-    // Mock PutObjectCommand
     s3Mock.on(PutObjectCommand).callsFake((input) => {
+        const body = input.Body;
+
         inMemoryCdn[input.Key] = {
-            body: Buffer.from(input.Body as string),
+            body,
+            contentType: input.ContentType,
             metadata: input.Metadata || {},
         };
 
         const result: PutObjectCommandOutput = {
             $metadata: {}
-        }
-
-        return Promise.resolve(result);
-    });
-
-    // Mock GetObjectCommand
-    s3Mock.on(GetObjectCommand).callsFake((input) => {
-        if (!inMemoryCdn[input.Key]) {
-            throw new Error(`Object ${input.Key} does not exist`);
-        }
-        const object = inMemoryCdn[input.Key];
-
-        const result: GetObjectCommandOutput = {
-            Body: object.body as any,
-            Metadata: object.metadata,
-            $metadata: {}
-        }
+        };
 
         return Promise.resolve(result);
     });

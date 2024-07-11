@@ -4,7 +4,7 @@ import { CdnKeys } from "living-mile-high-lib";
 import { CdnAdapter, SiteUpdater, StateService } from "~/@types";
 import { AppDataValidator } from "~/utils/AppDataValidator";
 
-async function downloadImage(url: string): Promise<{ buffer: Buffer, contentType: string }> {
+export async function downloadImage(url: string): Promise<{ buffer: Buffer, contentType: string }> {
     const response = await axios.get(url, { responseType: 'arraybuffer' });
     return {
         buffer: Buffer.from(response.data),
