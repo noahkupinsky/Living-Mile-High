@@ -1,5 +1,5 @@
 import { SiteData, DeepPartial } from "living-mile-high-lib";
-import { ContentPrefix } from "./constants";
+import { ContentPrefix, ContentType } from "./constants";
 import { GeneralData } from "./database";
 import { CopyObjectCommandOutput, DeleteObjectCommandOutput, PutObjectAclCommandOutput } from "@aws-sdk/client-s3";
 
@@ -24,7 +24,7 @@ export interface CdnAdapter {
     public getObjectUrl(key: string): string;
     public generateUniqueKey(): string;
     public extractKeys(object: any): string[];
-    public putObject(key: string, body: any, contentType: string, prefix?: ContentPrefix): Promise<PutObjectAclCommandOutput>;
+    public putObject(key: string, body: any, contentType: ContentType, prefix?: ContentPrefix): Promise<PutObjectAclCommandOutput>;
     public moveObject(sourceKey: string, destinationKey: string): Promise<CopyObjectCommandOutput>;
     public deleteObject(key: string): Promise<DeleteObjectCommandOutput>;
     public getKeys(prefix?: ContentPrefix): Promise<string[]>

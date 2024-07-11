@@ -2,9 +2,10 @@ import axios, { AxiosError } from "axios";
 
 import { CdnKeys } from "living-mile-high-lib";
 import { CdnAdapter, SiteUpdater, StateService } from "~/@types";
+import { ContentType } from "~/@types/constants";
 import { AppDataValidator } from "~/utils/AppDataValidator";
 
-export async function downloadImage(url: string): Promise<{ buffer: Buffer, contentType: string }> {
+export async function downloadImage(url: string): Promise<{ buffer: Buffer, contentType: ContentType }> {
     const response = await axios.get(url, { responseType: 'arraybuffer' });
     return {
         buffer: Buffer.from(response.data),
@@ -30,7 +31,7 @@ export class CdnSiteUpdater implements SiteUpdater {
 
         await this.updateHomePageFirst(siteData.homePageImages);
 
-        await this.cdn.putObject(CdnKeys.siteData, JSON.stringify(siteData), 'application/json');
+        await this.cdn.putObject(CdnKeys.siteData, JSON.stringify(siteData), ContentType.JSON);
     }
 
     private async updateHomePageFirst(homePageImages: string[]): Promise<void> {

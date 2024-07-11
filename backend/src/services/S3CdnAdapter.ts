@@ -10,7 +10,7 @@ import {
     PutObjectCommandOutput
 } from "@aws-sdk/client-s3";
 import { CdnAdapter, S3Config } from '~/@types';
-import { ContentPrefix } from "~/@types/constants";
+import { ContentPrefix, ContentType } from "~/@types/constants";
 import { prefixKey } from "~/utils/misc";
 
 function generateAlphanumericKey(length: number = 16): string {
@@ -42,7 +42,7 @@ export class S3CdnAdapter implements CdnAdapter {
         return generateAlphanumericKey();
     }
 
-    public async putObject(key: string, body: any, contentType: string, prefix?: ContentPrefix): Promise<PutObjectCommandOutput> {
+    public async putObject(key: string, body: any, contentType: ContentType, prefix?: ContentPrefix): Promise<PutObjectCommandOutput> {
         const prefixedKey = prefixKey(key, prefix);
 
         const command = new PutObjectCommand({

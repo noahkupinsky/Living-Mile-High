@@ -12,7 +12,7 @@ export class CdnImageService implements ImageService {
         const objectKey = this.cdn.generateUniqueKey();
 
         try {
-            await this.cdn.putObject(objectKey, file.buffer, file.mimetype, ContentPrefix.asset);
+            await this.cdn.putObject(objectKey, file.buffer, file.mimetype, ContentPrefix.ASSET);
             return this.cdn.getObjectUrl(objectKey);
         } catch (error: any) {
             throw new Error(`Failed to upload image: ${error.message}`);
