@@ -14,16 +14,16 @@ export function constructUpdateObject(obj: any, prefix = ''): Record<string, any
 }
 
 
-export function prefixKey(key: string, prefix?: string): string {
+export function prefixKey(key: string, prefix?: ContentPrefix): string {
     return prefix ? `${prefix}-${key}` : key;
 }
 
 export function unprefixKey(key: string): string {
-    Object.values(ContentPrefix).forEach((p) => {
-        if (key.startsWith(p)) {
-            return key.substring(p.length + 1);
+    for (const prefix of Object.values(ContentPrefix)) {
+        if (key.startsWith(prefix)) {
+            return key.slice(prefix.length + 1);
         }
-    });
+    }
     return key;
 }
 

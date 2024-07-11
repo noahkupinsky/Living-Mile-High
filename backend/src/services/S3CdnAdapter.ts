@@ -7,9 +7,11 @@ import {
     CopyObjectCommand,
     CopyObjectCommandOutput,
     DeleteObjectCommandOutput,
-    PutObjectCommandOutput
+    PutObjectCommandOutput,
+    GetObjectCommand,
+    GetObjectCommandOutput
 } from "@aws-sdk/client-s3";
-import { CdnAdapter, S3Config } from '~/@types';
+import { CdnAdapter, CdnMetadata, GetCommandOutput, PutCommand, S3Config } from '~/@types';
 import { ContentPrefix, ContentType } from "~/@types/constants";
 import { prefixKey } from "~/utils/misc";
 
@@ -42,17 +44,22 @@ export class S3CdnAdapter implements CdnAdapter {
         return generateAlphanumericKey();
     }
 
-    public async putObject(key: string, body: any, contentType: ContentType, prefix?: ContentPrefix): Promise<PutObjectCommandOutput> {
+    public async putObject(command: PutCommand): Promise<PutObjectCommandOutput> {
+        const { key, body, contentType, prefix, metadata: optionalMetadata } = command;
+
+        const metadata: CdnMetadata = optionalMetadata || {};
+
         const prefixedKey = prefixKey(key, prefix);
 
-        const command = new PutObjectCommand({
+        const putObjectCommand = new PutObjectCommand({
             Bucket: this.bucket,
+            Metadata: metadata,
             Key: prefixedKey,
             Body: body,
             ContentType: contentType,
             ACL: 'public-read',
         });
-        return await this.client.send(command);
+        return await this.client.send(putObjectCommand);
     }
 
     public async moveObject(sourceKey: string, destinationKey: string): Promise<CopyObjectCommandOutput> {
@@ -119,5 +126,35 @@ export class S3CdnAdapter implements CdnAdapter {
         }
 
         return allKeys;
+    }
+
+    public async getObjects(keys: string | string[]): Promise<GetCommandOutput[]> {
+        const keyArray = Array.isArray(keys) ? keys : [keys];
+        const objects = [];
+
+        for (const key of keyArray) {
+            try {
+                const command = new GetObjectCommand({
+                    Bucket: this.bucket,
+                    Key: key
+                });
+                const response: GetObjectCommandOutput = await this.client.send(command);
+
+                const body = response.Body!;
+                const metadata = response.Metadata!;
+                const contentType = response.ContentType! as ContentType;
+
+                objects.push({
+                    key,
+                    body,
+                    contentType,
+                    metadata
+                });
+            } catch (error: any) {
+                throw new Error(`Failed to get object ${key}: ${error.message}`);
+            }
+        }
+
+        return objects;
     }
 }

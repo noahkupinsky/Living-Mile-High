@@ -7,9 +7,12 @@ import {
     DeleteObjectsCommand,
     DeleteObjectsCommandOutput,
     DeleteObjectCommand,
-    DeleteObjectCommandOutput
+    DeleteObjectCommandOutput,
+    GetObjectCommand,
+    GetObjectCommandOutput
 } from "@aws-sdk/client-s3";
 import { mockClient } from "aws-sdk-client-mock";
+import { Readable } from "stream";
 
 // In-memory storage
 export const inMemoryCdn: { [key: string]: { body: any; contentType?: string; metadata: { [key: string]: string } } } = {};
@@ -72,6 +75,27 @@ export function mockS3Cdn() {
 
         const result: DeleteObjectsCommandOutput = {
             Deleted: input.Delete.Objects.map((obj: any) => ({ Key: obj.Key })),
+            $metadata: {}
+        };
+
+        return Promise.resolve(result);
+    });
+
+    s3Mock.on(GetObjectCommand).callsFake((input) => {
+        const object = inMemoryCdn[input.Key];
+
+        if (!object) {
+            throw new Error(`Object ${input.Key} does not exist`);
+        }
+
+        const stream: any = new Readable();
+        stream.push(object.body);
+        stream.push(null);
+
+        const result: GetObjectCommandOutput = {
+            Body: stream,
+            Metadata: object.metadata,
+            ContentType: object.contentType,
             $metadata: {}
         };
 

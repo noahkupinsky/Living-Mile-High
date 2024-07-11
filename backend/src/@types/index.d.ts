@@ -15,7 +15,10 @@ export {
     AdminService,
     GeneralDataService,
     StateService,
-    SiteUpdater
+    SiteUpdater,
+    CdnMetadata,
+    PutCommand,
+    GetCommandOutput,
 } from './services'
 
 export type ExpressMiddleware<

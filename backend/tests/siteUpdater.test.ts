@@ -1,10 +1,10 @@
 import { CdnKeys, DefaultGeneralData, DefaultHomePageImages, SiteData } from "living-mile-high-lib";
 import { services } from "~/di";
 import { CdnAdapter, SiteUpdater } from "~/@types";
-import { combineSiteData } from "~/utils/misc";
+import { combineSiteData, prefixKey, unprefixKey } from "~/utils/misc";
 import { inMemoryCdn } from "~/utils/inMemoryCdn";
-import { Readable } from "stream";
 import { downloadImage } from "~/services/CdnSiteUpdater";
+import { ContentPrefix, ContentType } from "~/@types/constants";
 
 let cdn: CdnAdapter;
 let siteUpdater: SiteUpdater;
@@ -14,12 +14,7 @@ beforeAll(() => {
     siteUpdater = services().siteUpdater;
 });
 
-
 describe('SiteUpdater', () => {
-    test('should update site data', async () => {
-
-    });
-
     test('updateSiteData should update site data', async () => {
         await siteUpdater.updateSiteData();
 
@@ -28,10 +23,33 @@ describe('SiteUpdater', () => {
 
         const siteData = JSON.parse(siteDataString) as SiteData;
 
+        expect(siteData).toEqual(expectedSiteData);
+    });
+
+    test('updateSiteData should update home first', async () => {
+        await siteUpdater.updateSiteData();
+
         const expectedHomePageFirst = (await downloadImage(DefaultHomePageImages[0])).buffer;
         const homePageFirst = inMemoryCdn[CdnKeys.HOME_PAGE_FIRST].body;
 
-        expect(siteData).toEqual(expectedSiteData);
         expect(homePageFirst).toEqual(expectedHomePageFirst);
+    });
+
+    test('listBackups should list backups', async () => {
+        const name = "Hello World";
+
+        cdn.putObject({
+            key: 'key',
+            body: 'body',
+            contentType: ContentType.JSON,
+            prefix: ContentPrefix.BACKUP,
+            metadata: {
+                name: name
+            }
+        });
+
+        const backups = await siteUpdater.listBackups();
+
+        expect(backups).toEqual([name]);
     });
 });

@@ -1,7 +1,9 @@
 import { SiteData, DeepPartial } from "living-mile-high-lib";
 import { ContentPrefix, ContentType } from "./constants";
 import { GeneralData } from "./database";
-import { CopyObjectCommandOutput, DeleteObjectCommandOutput, PutObjectAclCommandOutput } from "@aws-sdk/client-s3";
+import {
+    CopyObjectCommandOutput, DeleteObjectCommandOutput, GetObjectCommandOutput, PutObjectAclCommandOutput,
+} from "@aws-sdk/client-s3";
 
 export interface ServiceManager<T> {
     public connect(): Promise<T>;
@@ -20,11 +22,35 @@ export type ServiceDict = {
 
 export type SiteServiceManager = ServiceManager<ServiceDict>;
 
+export type CdnMetadata = {
+    backupType?: BackupType,
+    backupPower?: string,
+    createdAt?: string,
+    expiration?: string,
+    name?: string
+}
+
+export type PutCommand = {
+    key: string,
+    body: any,
+    contentType: ContentType,
+    prefix?: ContentPrefix,
+    metadata?: CdnMetadata
+}
+
+export type GetCommandOutput = {
+    key: string,
+    body: StreamingBlobPayloadOutputTypes,
+    contentType: ContentType,
+    metadata: CdnMetadata
+}
+
 export interface CdnAdapter {
     public getObjectUrl(key: string): string;
     public generateUniqueKey(): string;
     public extractKeys(object: any): string[];
-    public putObject(key: string, body: any, contentType: ContentType, prefix?: ContentPrefix): Promise<PutObjectAclCommandOutput>;
+    public putObject(command: PutCommand): Promise<PutObjectAclCommandOutput>;
+    public getObjects(keys: string | string[]): Promise<GetCommandOutput[]>;
     public moveObject(sourceKey: string, destinationKey: string): Promise<CopyObjectCommandOutput>;
     public deleteObject(key: string): Promise<DeleteObjectCommandOutput>;
     public getKeys(prefix?: ContentPrefix): Promise<string[]>
@@ -60,10 +86,10 @@ export interface GeneralDataService {
 
 export interface SiteUpdater {
     updateSiteData(): Promise<void>;
-    deleteBackup(name: string): Promise<void>;
+    deleteManualBackup(name: string): Promise<void>;
     restoreBackup(name: string): Promise<void>;
     listBackups(): Promise<string[]>;
-    createBackup(name: string): Promise<void>;
+    createManualBackup(name: string): Promise<void>;
 }
 
 export interface StateService {

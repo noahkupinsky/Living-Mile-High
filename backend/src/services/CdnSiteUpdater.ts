@@ -2,7 +2,7 @@ import axios, { AxiosError } from "axios";
 
 import { CdnKeys } from "living-mile-high-lib";
 import { CdnAdapter, SiteUpdater, StateService } from "~/@types";
-import { ContentType } from "~/@types/constants";
+import { BACKUP_RETENTION_DAYS, BackupType, ContentPrefix, ContentType } from "~/@types/constants";
 import { AppDataValidator } from "~/utils/AppDataValidator";
 
 export async function downloadImage(url: string): Promise<{ buffer: Buffer, contentType: ContentType }> {
@@ -31,7 +31,13 @@ export class CdnSiteUpdater implements SiteUpdater {
 
         await this.updateHomePageFirst(siteData.homePageImages);
 
-        await this.cdn.putObject(CdnKeys.SITE_DATA, JSON.stringify(siteData), ContentType.JSON);
+        await this.cdn.putObject({
+            key: CdnKeys.SITE_DATA,
+            body: JSON.stringify(siteData),
+            contentType: ContentType.JSON
+        });
+
+        await this.createBackup(BackupType.AUTO);
     }
 
     private async updateHomePageFirst(homePageImages: string[]): Promise<void> {
@@ -40,7 +46,11 @@ export class CdnSiteUpdater implements SiteUpdater {
 
             const { buffer, contentType } = await downloadImage(firstImageUrl);
 
-            await this.cdn.putObject(CdnKeys.HOME_PAGE_FIRST, buffer, contentType);
+            await this.cdn.putObject({
+                key: CdnKeys.HOME_PAGE_FIRST,
+                body: buffer,
+                contentType: contentType
+            });
         } catch (error: any) {
             if (!(error instanceof AxiosError)) {
                 throw error;
@@ -48,7 +58,7 @@ export class CdnSiteUpdater implements SiteUpdater {
         }
     }
 
-    async deleteBackup(name: string): Promise<void> {
+    async deleteManualBackup(name: string): Promise<void> {
         throw new Error("Method not implemented.");
     }
 
@@ -57,11 +67,51 @@ export class CdnSiteUpdater implements SiteUpdater {
     }
 
     async listBackups(): Promise<string[]> {
+        const keys = await this.cdn.getKeys(ContentPrefix.BACKUP);
+
+        const backups = await this.cdn.getObjects(keys);
+
+        const names = backups.map(backup => backup.metadata.name!);
+
+        return names
+    }
+
+    async createManualBackup(name: string): Promise<void> {
         throw new Error("Method not implemented.");
     }
 
-    async createBackup(name: string): Promise<void> {
-        throw new Error("Method not implemented.");
+    private async createBackup(backupType: BackupType, name?: string): Promise<void> {
+        const backupData = await this.stateService.serializeState();
+        const timestamp = new Date().toISOString();
+
+        const expiration = backupType === BackupType.AUTO ? { expiration: this.getExpirationDate() } : {};
+        const backupName = name || `${timestamp}`;
+
+        const metadata = {
+            backupType,
+            createdAt: timestamp,
+            name: backupName,
+            ...expiration
+        };
+
+        const key = timestamp.replace(/\D/g, '_');
+
+        await this.cdn.putObject({
+            key: key,
+            body: backupData,
+            contentType: ContentType.JSON,
+            prefix: ContentPrefix.BACKUP,
+            metadata: metadata
+        });
+        // if (backupType === BackupType.AUTO) {
+        //     await this.logarithmicBackupProcess();
+        // }
+    }
+
+    private getExpirationDate(): string {
+        const date = new Date();
+        date.setDate(date.getDate() + BACKUP_RETENTION_DAYS);
+        return date.toISOString();
     }
 
 }

@@ -14,3 +14,10 @@ export enum ContentType {
     TIFF = 'image/tiff',
     SVG = 'image/svg+xml'
 }
+
+export enum BackupType {
+    AUTO = 'auto',
+    MANUAL = 'manual'
+}
+
+export const BACKUP_RETENTION_DAYS = 365;
