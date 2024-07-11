@@ -128,33 +128,34 @@ export class S3CdnAdapter implements CdnAdapter {
         return allKeys;
     }
 
-    public async getObjects(keys: string | string[]): Promise<GetCommandOutput[]> {
-        const keyArray = Array.isArray(keys) ? keys : [keys];
-        const objects = [];
+    public async getObject(key: string): Promise<GetCommandOutput> {
+        try {
+            const command = new GetObjectCommand({
+                Bucket: this.bucket,
+                Key: key
+            });
+            const response: GetObjectCommandOutput = await this.client.send(command);
 
-        for (const key of keyArray) {
-            try {
-                const command = new GetObjectCommand({
-                    Bucket: this.bucket,
-                    Key: key
-                });
-                const response: GetObjectCommandOutput = await this.client.send(command);
+            const body = response.Body!;
+            const metadata = response.Metadata!;
+            const contentType = response.ContentType! as ContentType;
 
-                const body = response.Body!;
-                const metadata = response.Metadata!;
-                const contentType = response.ContentType! as ContentType;
-
-                objects.push({
-                    key,
-                    body,
-                    contentType,
-                    metadata
-                });
-            } catch (error: any) {
-                throw new Error(`Failed to get object ${key}: ${error.message}`);
-            }
+            return {
+                key,
+                body,
+                contentType,
+                metadata
+            };
+        } catch (error: any) {
+            throw new Error(`Failed to get object ${key}: ${error.message}`);
         }
+    }
 
-        return objects;
+    public async getObjects(keys: string[]): Promise<GetCommandOutput[]> {
+        const getObjectPromises = keys.map(async (key) => {
+            return this.getObject(key);
+        });
+
+        return await Promise.all(getObjectPromises);
     }
 }

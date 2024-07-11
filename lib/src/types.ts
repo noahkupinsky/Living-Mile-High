@@ -56,3 +56,8 @@ export type AdminRecord = {
     username: string,
     password: string
 }
+
+export type BackupIndex = {
+    key: string,
+    name: string
+}

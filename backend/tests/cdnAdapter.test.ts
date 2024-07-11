@@ -101,7 +101,7 @@ describe('S3Service', () => {
     it('should get a single object correctly', async () => {
         const key = 'test-key';
         const body = 'test-body';
-        const contentType = 'text/plain';
+        const contentType = ContentType.TEXT;
         const metadata = { key1: 'value1' };
 
         inMemoryCdn[key] = {
@@ -110,14 +110,13 @@ describe('S3Service', () => {
             metadata
         };
 
-        const result = await cdn.getObjects(key);
+        const result = await cdn.getObject(key);
 
-        expect(result).toHaveLength(1);
-        expect(result[0].key).toBe(key);
-        expect(result[0].contentType).toBe(contentType);
-        expect(result[0].metadata).toEqual(metadata);
+        expect(result.key).toBe(key);
+        expect(result.contentType).toBe(contentType);
+        expect(result.metadata).toEqual(metadata);
 
-        const stream = result[0].body as Readable;
+        const stream = result.body as Readable;
         let receivedBody = '';
         for await (const chunk of stream) {
             receivedBody += chunk;
@@ -129,7 +128,7 @@ describe('S3Service', () => {
     it('should get multiple objects correctly', async () => {
         const keys = ['key1', 'key2'];
         const bodies = ['body1', 'body2'];
-        const contentTypes = ['text/plain', 'application/json'];
+        const contentTypes = [ContentType.TEXT, ContentType.JSON];
         const metadatas: CdnMetadata[] = [{ name: 'name1' }, { name: 'name2' }];
 
         keys.forEach((key, index) => {
@@ -162,7 +161,7 @@ describe('S3Service', () => {
     it('should handle non-existent keys gracefully', async () => {
         const key = 'non-existent-key';
 
-        await expect(cdn.getObjects(key)).rejects.toThrow(`Failed to get object ${key}`);
+        await expect(cdn.getObject(key)).rejects.toThrow(`Failed to get object ${key}`);
     });
 });
 

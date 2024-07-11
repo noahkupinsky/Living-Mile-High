@@ -106,7 +106,7 @@ export class AppDataValidator {
         ];
 
         for (const prop of optionalProperties) {
-            if (prop in stats && typeof stats[prop] !== 'number') {
+            if (prop in stats && stats[prop] !== undefined && typeof stats[prop] !== 'number') {
                 throw new Error(`HouseStats property ${prop} must be a number`);
             }
         }

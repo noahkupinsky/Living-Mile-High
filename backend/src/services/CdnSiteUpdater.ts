@@ -1,9 +1,11 @@
 import axios, { AxiosError } from "axios";
 
-import { CdnKeys } from "living-mile-high-lib";
-import { CdnAdapter, SiteUpdater, StateService } from "~/@types";
+import { BackupIndex, CdnKeys } from "living-mile-high-lib";
+import { Readable } from "stream";
+import { CdnAdapter, GetCommandOutput, SiteUpdater, StateService } from "~/@types";
 import { BACKUP_RETENTION_DAYS, BackupType, ContentPrefix, ContentType } from "~/@types/constants";
 import { AppDataValidator } from "~/utils/AppDataValidator";
+import { streamToBuffer } from "~/utils/misc";
 
 export async function downloadImage(url: string): Promise<{ buffer: Buffer, contentType: ContentType }> {
     const response = await axios.get(url, { responseType: 'arraybuffer' });
@@ -58,26 +60,54 @@ export class CdnSiteUpdater implements SiteUpdater {
         }
     }
 
-    async deleteManualBackup(name: string): Promise<void> {
-        throw new Error("Method not implemented.");
+    async deleteManualBackup(key: string): Promise<void> {
+        const backup = await this.cdn.getObject(key);
+        const backupType = backup.metadata.backupType;
+
+        if (!backupType) {
+            throw new Error('Not a backup');
+        }
+
+        const isManual = backup.metadata.backupType === BackupType.MANUAL;
+
+        if (!isManual) {
+            throw new Error('Not a manual backup');
+        }
+
+        await this.cdn.deleteObject(key);
     }
 
-    async restoreBackup(name: string): Promise<void> {
-        throw new Error("Method not implemented.");
+    async restoreBackup(key: string): Promise<void> {
+        const backup = await this.cdn.getObject(key);
+        const backupType = backup.metadata.backupType;
+
+        if (!backupType) {
+            throw new Error('Not a backup');
+        }
+
+        const buffer = await streamToBuffer(backup.body as Readable);
+        const data = buffer.toString('utf-8');
+
+        await this.stateService.deserializeState(data);
+
+        await this.createBackup(BackupType.AUTO);
     }
 
-    async listBackups(): Promise<string[]> {
+    async listBackups(): Promise<BackupIndex[]> {
         const keys = await this.cdn.getKeys(ContentPrefix.BACKUP);
 
         const backups = await this.cdn.getObjects(keys);
 
-        const names = backups.map(backup => backup.metadata.name!);
+        const indices = backups.map(backup => ({
+            key: backup.key,
+            name: backup.metadata.name!
+        }));
 
-        return names
+        return indices;
     }
 
     async createManualBackup(name: string): Promise<void> {
-        throw new Error("Method not implemented.");
+        await this.createBackup(BackupType.MANUAL, name);
     }
 
     private async createBackup(backupType: BackupType, name?: string): Promise<void> {
@@ -114,4 +144,5 @@ export class CdnSiteUpdater implements SiteUpdater {
         return date.toISOString();
     }
 
+    // TODO: prune backups, prune assets, logarithmic
 }

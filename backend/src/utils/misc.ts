@@ -1,4 +1,5 @@
 import { GeneralData, House, SiteData } from "living-mile-high-lib";
+import { Readable } from "stream";
 import { ContentPrefix } from "~/@types/constants";
 
 export function constructUpdateObject(obj: any, prefix = ''): Record<string, any> {
@@ -33,3 +34,11 @@ export function combineSiteData(generalData: GeneralData, houses: House[]): Site
         houses
     };
 }
+
+export async function streamToBuffer(stream: Readable): Promise<Buffer> {
+    const chunks: Uint8Array[] = [];
+    for await (const chunk of stream) {
+        chunks.push(chunk);
+    }
+    return Buffer.concat(chunks);
+};

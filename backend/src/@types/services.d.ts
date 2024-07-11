@@ -1,4 +1,4 @@
-import { SiteData, DeepPartial } from "living-mile-high-lib";
+import { SiteData, DeepPartial, BackupIndex } from "living-mile-high-lib";
 import { ContentPrefix, ContentType } from "./constants";
 import { GeneralData } from "./database";
 import {
@@ -50,7 +50,8 @@ export interface CdnAdapter {
     public generateUniqueKey(): string;
     public extractKeys(object: any): string[];
     public putObject(command: PutCommand): Promise<PutObjectAclCommandOutput>;
-    public getObjects(keys: string | string[]): Promise<GetCommandOutput[]>;
+    public getObject(key: string): Promise<GetCommandOutput>;
+    public getObjects(keys: string[]): Promise<GetCommandOutput[]>;
     public moveObject(sourceKey: string, destinationKey: string): Promise<CopyObjectCommandOutput>;
     public deleteObject(key: string): Promise<DeleteObjectCommandOutput>;
     public getKeys(prefix?: ContentPrefix): Promise<string[]>
@@ -86,9 +87,9 @@ export interface GeneralDataService {
 
 export interface SiteUpdater {
     updateSiteData(): Promise<void>;
-    deleteManualBackup(name: string): Promise<void>;
-    restoreBackup(name: string): Promise<void>;
-    listBackups(): Promise<string[]>;
+    deleteManualBackup(key: string): Promise<void>;
+    restoreBackup(key: string): Promise<void>;
+    listBackups(): Promise<BackupIndex[]>;
     createManualBackup(name: string): Promise<void>;
 }
 
