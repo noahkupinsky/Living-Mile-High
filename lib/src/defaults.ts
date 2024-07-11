@@ -21,6 +21,6 @@ export const DefaultGeneralData: GeneralData = {
 }
 
 export enum CdnKeys {
-    siteData = 'siteData',
-    homePageFirst = 'homePageFirst'
+    SITE_DATA = 'siteData',
+    HOME_PAGE_FIRST = 'homePageFirst'
 }

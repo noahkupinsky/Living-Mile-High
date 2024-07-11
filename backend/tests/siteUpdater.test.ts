@@ -24,12 +24,12 @@ describe('SiteUpdater', () => {
         await siteUpdater.updateSiteData();
 
         const expectedSiteData = combineSiteData(DefaultGeneralData, []);
-        const siteDataString = inMemoryCdn[CdnKeys.siteData].body;
+        const siteDataString = inMemoryCdn[CdnKeys.SITE_DATA].body;
 
         const siteData = JSON.parse(siteDataString) as SiteData;
 
         const expectedHomePageFirst = (await downloadImage(DefaultHomePageImages[0])).buffer;
-        const homePageFirst = inMemoryCdn[CdnKeys.homePageFirst].body;
+        const homePageFirst = inMemoryCdn[CdnKeys.HOME_PAGE_FIRST].body;
 
         expect(siteData).toEqual(expectedSiteData);
         expect(homePageFirst).toEqual(expectedHomePageFirst);

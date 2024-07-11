@@ -31,7 +31,7 @@ export class CdnSiteUpdater implements SiteUpdater {
 
         await this.updateHomePageFirst(siteData.homePageImages);
 
-        await this.cdn.putObject(CdnKeys.siteData, JSON.stringify(siteData), ContentType.JSON);
+        await this.cdn.putObject(CdnKeys.SITE_DATA, JSON.stringify(siteData), ContentType.JSON);
     }
 
     private async updateHomePageFirst(homePageImages: string[]): Promise<void> {
@@ -40,7 +40,7 @@ export class CdnSiteUpdater implements SiteUpdater {
 
             const { buffer, contentType } = await downloadImage(firstImageUrl);
 
-            await this.cdn.putObject(CdnKeys.homePageFirst, buffer, contentType);
+            await this.cdn.putObject(CdnKeys.HOME_PAGE_FIRST, buffer, contentType);
         } catch (error: any) {
             if (!(error instanceof AxiosError)) {
                 throw error;
