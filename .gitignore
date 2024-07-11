@@ -92,6 +92,7 @@ out
 .nuxt
 dist
 dist-tests
+mocks
 
 # Gatsby files
 .cache/

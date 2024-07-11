@@ -16,7 +16,7 @@
     "child_process": "^1.0.2",
     "commander": "^8.0.0",
     "dotenv": "^16.4.5",
-    "living-mile-high-lib": "^1.0.31",
+    "living-mile-high-lib": "^1.0.32",
     "mongoose": "^8.4.4",
     "path": "^0.12.7",
     "shelljs": "^0.8.5",

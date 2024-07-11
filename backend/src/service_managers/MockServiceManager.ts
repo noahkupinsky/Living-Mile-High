@@ -1,13 +1,15 @@
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
 
-import { ServiceDict, SiteServiceManager } from "~/@types";
-import { createInMemoryS3CdnConfig, inMemoryCDN } from "~/utils/createS3CdnService";
+import { S3Config, ServiceDict, SiteServiceManager } from "~/@types";
+import { createInMemoryS3CdnConfig } from "~/utils/createS3CdnService";
 import * as Services from "~/services";
+import { inMemoryCdn } from "~/utils/memoryCdn";
 
 export class MockServiceManager implements SiteServiceManager {
     private services?: ServiceDict;
     private mongoServer: MongoMemoryServer;
+    private s3CdnConfig: S3Config;
 
     public async connect(): Promise<ServiceDict> {
         if (this.services) {
@@ -18,8 +20,9 @@ export class MockServiceManager implements SiteServiceManager {
         const mongoUri = this.mongoServer.getUri();
         await mongoose.connect(mongoUri, {});
 
-        const s3CdnConfig = createInMemoryS3CdnConfig();
-        const cdn = new Services.S3CdnAdapter(s3CdnConfig);
+        this.s3CdnConfig = await createInMemoryS3CdnConfig();
+
+        const cdn = new Services.S3CdnAdapter(this.s3CdnConfig);
         const houseService = new Services.MongoHouseService();
         const generalDataService = new Services.MongoGeneralDataService();
         const stateService = new Services.MongoStateService(houseService, generalDataService);
@@ -51,8 +54,6 @@ export class MockServiceManager implements SiteServiceManager {
         for (let collection of collections) {
             await collection.deleteMany({});
         }
-        for (const key in inMemoryCDN) {
-            delete inMemoryCDN[key];
-        }
+        Object.keys(inMemoryCdn).forEach(key => delete inMemoryCdn[key]);
     }
 }

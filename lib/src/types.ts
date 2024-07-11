@@ -43,7 +43,7 @@ export type GeneralData = {
     about: AboutData,
     contact: ContactData,
     defaultImages: string[],
-    homeImages: string[]
+    homePageImages: string[]
 }
 
 export type SiteData = GeneralData & { houses: House[] }

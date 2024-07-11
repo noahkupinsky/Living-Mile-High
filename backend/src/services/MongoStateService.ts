@@ -2,6 +2,7 @@ import { SiteData } from "living-mile-high-lib";
 import { GeneralDataService, HouseService, StateService } from "~/@types/services";
 import HouseModel from "~/models/HouseModel";
 import GeneralDataModel from "~/models/GeneralDataModel";
+import { combineSiteData } from "~/utils/misc";
 
 export class MongoStateService implements StateService {
     private houseService: HouseService;
@@ -14,7 +15,7 @@ export class MongoStateService implements StateService {
     async getState(): Promise<SiteData> {
         const houseData = await this.houseService.getHouseObjects();
         const generalData = await this.generalDataService.getGeneralData();
-        const siteData = { ...generalData, houses: houseData }
+        const siteData = combineSiteData(generalData, houseData);
 
         return siteData
     }

@@ -10,7 +10,7 @@ const defaultMockGeneralData: GeneralData = {
         image: "https://placehold.co/400"
     },
     defaultImages: ["https://placehold.co/400"],
-    homeImages: ["https://placehold.co/400", "https://placehold.co/500"]
+    homePageImages: ["https://placehold.co/400", "https://placehold.co/500"]
 }
 
 const defaultMockHouseData: House = {

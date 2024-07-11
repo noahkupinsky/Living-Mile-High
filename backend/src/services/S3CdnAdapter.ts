@@ -12,6 +12,8 @@ import {
     PutObjectCommandOutput
 } from "@aws-sdk/client-s3";
 import { CdnAdapter, S3Config } from '~/@types';
+import { ContentPrefix } from "~/@types/constants";
+import { prefixKey } from "~/utils/misc";
 
 function generateAlphanumericKey(length: number = 16): string {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -38,14 +40,16 @@ export class S3CdnAdapter implements CdnAdapter {
         return `${this.baseUrl}/${key}`;
     }
 
-    public generateUniqueKey(prefix: string): string {
-        return `${prefix}-${generateAlphanumericKey()}`;
+    public generateUniqueKey(): string {
+        return generateAlphanumericKey();
     }
 
-    public async putObject(key: string, body: any, contentType: string): Promise<PutObjectCommandOutput> {
+    public async putObject(key: string, body: any, contentType: string, prefix?: ContentPrefix): Promise<PutObjectCommandOutput> {
+        const prefixedKey = prefixKey(key, prefix);
+
         const command = new PutObjectCommand({
             Bucket: this.bucket,
-            Key: key,
+            Key: prefixedKey,
             Body: body,
             ContentType: contentType,
             ACL: 'public-read',
@@ -99,7 +103,7 @@ export class S3CdnAdapter implements CdnAdapter {
         return keys;
     }
 
-    public async getAllKeys(): Promise<string[]> {
+    public async getKeys(prefix?: ContentPrefix): Promise<string[]> {
         const allKeys: string[] = [];
         let isTruncated = true;
         let continuationToken: string | undefined = undefined;
@@ -109,10 +113,12 @@ export class S3CdnAdapter implements CdnAdapter {
                 const command = new ListObjectsV2Command({
                     Bucket: this.bucket,
                     ContinuationToken: continuationToken,
+                    Prefix: prefix,
                 });
                 const response: ListObjectsV2CommandOutput = await this.client.send(command);
 
                 const newKeys = response.Contents?.map((item) => item.Key!) || [];
+
                 allKeys.push(...newKeys);
 
                 isTruncated = response.IsTruncated || false;

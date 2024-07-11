@@ -11,16 +11,16 @@ export const DefaultContactData = {
 }
 
 export const DefaultPlaceholderImages = ["https://placehold.co/400"];
-export const DefaultHomeImages = ["https://placehold.co/400", "https://placehold.co/500", "https://placehold.co/600"];
+export const DefaultHomePageImages = ["https://placehold.co/400", "https://placehold.co/500", "https://placehold.co/600"];
 
 export const DefaultGeneralData: GeneralData = {
     about: DefaultAboutData,
     contact: DefaultContactData,
     defaultImages: DefaultPlaceholderImages,
-    homeImages: DefaultHomeImages
+    homePageImages: DefaultHomePageImages
 }
 
 export enum CdnKeys {
     siteData = 'siteData',
-    homeFirst = 'homeFirst'
+    homePageFirst = 'homePageFirst'
 }

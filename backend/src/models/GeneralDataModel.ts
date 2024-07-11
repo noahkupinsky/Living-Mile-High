@@ -14,18 +14,18 @@ const GeneralDataSchema = new Schema<GeneralDataDocument>({
         image: { type: String, required: true },
     },
     defaultImages: { type: [String] },
-    homeImages: { type: [String], required: true },
+    homePageImages: { type: [String], required: true },
 });
 
 const GeneralDataModel = model<GeneralDataDocument>('GeneralData', GeneralDataSchema);
 
 export function generalDocumentToObject(doc: GeneralDataDocument): GeneralData {
-    const { about, contact, homeImages, defaultImages } = doc;
+    const { about, contact, homePageImages, defaultImages } = doc;
 
     const data: GeneralData = {
         about,
         contact,
-        homeImages,
+        homePageImages,
         defaultImages
     }
 
@@ -33,12 +33,12 @@ export function generalDocumentToObject(doc: GeneralDataDocument): GeneralData {
 }
 
 export function generalObjectToNewDocument(data: GeneralData): GeneralDataRecord {
-    const { about, contact, homeImages, defaultImages } = data;
+    const { about, contact, homePageImages, defaultImages } = data;
 
     const doc = {
         about,
         contact,
-        homeImages,
+        homePageImages,
         defaultImages
     }
 

@@ -1,64 +1,6 @@
-import { S3Client, PutObjectCommand, DeleteObjectCommand, GetObjectCommand, ListObjectsV2Command, GetObjectCommandOutput, GetObjectRequest, CopyObjectCommand } from "@aws-sdk/client-s3";
+import { S3Client } from "@aws-sdk/client-s3";
 import { S3Config } from "~/@types";
-
-export const inMemoryCDN: { [key: string]: { body: any, contentType: string } } = {};
-
-export class InMemoryS3Client {
-    public async send(command: any): Promise<any> {
-        if (command instanceof PutObjectCommand) {
-            const params = command.input;
-            inMemoryCDN[params.Key!] = { body: params.Body, contentType: params.ContentType! };
-            return {};
-        } else if (command instanceof DeleteObjectCommand) {
-            const params = command.input;
-            delete inMemoryCDN[params.Key!];
-            return {};
-        } else if (command instanceof GetObjectCommand) {
-            const params = command.input;
-            if (inMemoryCDN[params.Key!]) {
-                return { Body: inMemoryCDN[params.Key!].body } as GetObjectCommandOutput;
-            } else {
-                throw new Error('Object not found');
-            }
-        } else if (command instanceof ListObjectsV2Command) {
-            const params = command.input;
-            const keys = Object.keys(inMemoryCDN).filter(key => key.startsWith(params.Prefix || ""));
-            return {
-                Contents: keys.map(key => ({ Key: key })),
-                IsTruncated: false,
-            };
-        } else if (command instanceof CopyObjectCommand) {
-            const params = command.input;
-            const copySource = params.CopySource!;
-            if (inMemoryCDN[copySource.split('/').pop()!]) {
-                inMemoryCDN[params.Key!] = inMemoryCDN[copySource.split('/').pop()!];
-                delete inMemoryCDN[copySource.split('/').pop()!];
-                return {};
-            } else {
-                throw new Error("Source object not found");
-            }
-        } else {
-            throw new Error(`Unsupported command: ${command.constructor.name}`);
-        }
-    }
-
-    public async getObject(params: GetObjectRequest): Promise<GetObjectCommandOutput> {
-        if (inMemoryCDN[params.Key!]) {
-            return { Body: inMemoryCDN[params.Key!].body } as GetObjectCommandOutput;
-        } else {
-            throw new Error('Object not found');
-        }
-    }
-}
-
-export function createInMemoryS3CdnConfig(): S3Config {
-    const mockClient = new InMemoryS3Client() as unknown as S3Client;
-    return {
-        client: mockClient,
-        bucket: 'mock-bucket',
-        baseUrl: 'https://mock-bucket.s3.amazonaws.com'
-    };
-}
+import { mockS3Cdn } from "./memoryCdn";
 
 function generateBaseUrl(endpoint: string, bucket: string, region: string): string {
     if (endpoint.includes('digitaloceanspaces.com')) {
@@ -68,6 +10,18 @@ function generateBaseUrl(endpoint: string, bucket: string, region: string): stri
     } else {
         throw new Error("failed to construct base url");
     }
+}
+
+export async function createInMemoryS3CdnConfig(): Promise<S3Config> {
+    mockS3Cdn();
+
+    const client = new S3Client({});
+
+    const bucket = 'mock-bucket';
+
+    const baseUrl = generateBaseUrl('localhost', bucket, 'us-east-1');
+
+    return { client, bucket, baseUrl };
 }
 
 export type CreateCdnParams = {
@@ -90,9 +44,7 @@ export function createNetworkS3CdnConfig(params: CreateCdnParams): S3Config {
         forcePathStyle: true, // needed for spaces endpoint compatibility
     });
 
-    // Will have to add extra logic if we want to support other endpoints
-
-    const baseUrl = `https://${bucket}.${region}.cdn.digitaloceanspaces.com`;
+    const baseUrl = generateBaseUrl(endpoint, bucket, region);
 
     return { client, bucket, baseUrl };
 }

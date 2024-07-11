@@ -28,18 +28,18 @@ export class CdnSiteUpdater implements SiteUpdater {
             throw new Error('Invalid AppData');
         }
 
-        await this.updateHomeFirst(siteData.homeImages);
+        await this.updateHomePageFirst(siteData.homePageImages);
 
         await this.cdn.putObject(CdnKeys.siteData, JSON.stringify(siteData), 'application/json');
     }
 
-    private async updateHomeFirst(homeImages: string[]): Promise<void> {
+    private async updateHomePageFirst(homePageImages: string[]): Promise<void> {
         try {
-            const firstImageUrl = homeImages[0];
+            const firstImageUrl = homePageImages[0];
 
             const { buffer, contentType } = await downloadImage(firstImageUrl);
 
-            await this.cdn.putObject(CdnKeys.homeFirst, buffer, contentType);
+            await this.cdn.putObject(CdnKeys.homePageFirst, buffer, contentType);
         } catch (error: any) {
             if (!(error instanceof AxiosError)) {
                 throw error;

@@ -32,6 +32,6 @@ export type GeneralDataRecord = {
         image: string
     },
     defaultImages: string[],
-    homeImages: string[]
+    homePageImages: string[]
 }
 

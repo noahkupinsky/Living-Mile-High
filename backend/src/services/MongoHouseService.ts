@@ -1,7 +1,7 @@
 import { DeepPartial, House } from 'living-mile-high-lib';
 import { HouseService } from '~/@types';
 import HouseModel, { HouseDocument, houseDocumentToObject, houseObjectToNewDocument } from '~/models/HouseModel';
-import { constructUpdateObject } from '~/utils/constructUpdateObject';
+import { constructUpdateObject } from '~/utils/misc';
 
 export class MongoHouseService implements HouseService {
     async getHouseObjects(): Promise<House[]> {

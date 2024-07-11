@@ -1,1 +1,4 @@
-export const AssetPrefix = 'assets';
+export enum ContentPrefix {
+    asset = 'asset',
+    backup = 'backup'
+}

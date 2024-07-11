@@ -6,7 +6,7 @@ export class AppDataValidator {
             throw new Error('AppData must be an object');
         }
 
-        const requiredProperties = ['about', 'contact', 'houses', 'defaultImages', 'homeImages'];
+        const requiredProperties = ['about', 'contact', 'houses', 'defaultImages', 'homePageImages'];
 
         for (const prop of requiredProperties) {
             if (!(prop in data)) {
@@ -18,7 +18,7 @@ export class AppDataValidator {
         this.validateContactData(data.contact);
         this.validateHouses(data.houses);
         this.validatePlaceholders(data.defaultImages);
-        this.validateHomeImages(data.homeImages);
+        this.validateHomePageImages(data.homePageImages);
         return true;
     }
 
@@ -127,13 +127,13 @@ export class AppDataValidator {
         }
     }
 
-    private static validateHomeImages(homeImages: any): void {
-        if (!Array.isArray(homeImages)) {
-            throw new Error('HomeImages must be an array');
+    private static validateHomePageImages(homePageImages: any): void {
+        if (!Array.isArray(homePageImages)) {
+            throw new Error('HomePageImages must be an array');
         }
 
-        if (homeImages.some(homeImage => typeof homeImage !== 'string')) {
-            throw new Error('HomeImages must be an array of strings');
+        if (homePageImages.some(homeImage => typeof homeImage !== 'string')) {
+            throw new Error('HomePageImages must be an array of strings');
         }
     }
 }

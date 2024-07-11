@@ -1,7 +1,7 @@
 import { DeepPartial, DefaultGeneralData } from "living-mile-high-lib";
 import { GeneralData, GeneralDataService } from "~/@types";
 import GeneralDataModel, { GeneralDataDocument, generalDocumentToObject, generalObjectToNewDocument } from "~/models/GeneralDataModel";
-import { constructUpdateObject } from "~/utils/constructUpdateObject";
+import { constructUpdateObject } from "~/utils/misc";
 
 export class MongoGeneralDataService implements GeneralDataService {
     async update(updates: DeepPartial<GeneralData>): Promise<void> {
