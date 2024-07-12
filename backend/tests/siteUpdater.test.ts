@@ -1,6 +1,6 @@
-import { CdnKeys, DefaultGeneralData, DefaultHomePageImages, SiteData } from "living-mile-high-lib";
+import { CdnKeys, DefaultGeneralData, DefaultHomePageImages, House, SiteData } from "living-mile-high-lib";
 import { services } from "~/di";
-import { BackupService, CdnAdapter, GeneralDataService } from "~/@types";
+import { BackupService, CdnAdapter, GeneralDataService, HouseService } from "~/@types";
 import { combineSiteData, downloadImage, prefixKey } from "~/utils/misc";
 import { inMemoryCdn } from "~/utils/inMemoryCdn";
 import { pruneAssets, updateSiteData } from "~/controllers/siteUpdateController";
@@ -8,10 +8,11 @@ import { ContentPrefix, ContentType } from "~/@types/constants";
 
 let backupService: BackupService;
 let generalDataService: GeneralDataService;
+let houseService: HouseService;
 let cdn: CdnAdapter;
 
 beforeAll(() => {
-    ({ generalDataService, backupService, cdnAdapter: cdn } = services());
+    ({ houseService, generalDataService, backupService, cdnAdapter: cdn } = services());
 });
 
 describe('SiteUpdater', () => {
@@ -58,6 +59,20 @@ describe('PruneAssets', () => {
         await pruneAssets();
 
         expect(inMemoryCdn[assetKey]).toBeUndefined();
+    });
+
+    test('pruneAssets should leave non ASSET-prefixed content alone', async () => {
+        await updateSiteData();
+
+        const assetKey = await cdn.putObject({
+            key: 'test-key',
+            body: 'body',
+            contentType: ContentType.TEXT,
+        });
+
+        await pruneAssets();
+
+        expect(inMemoryCdn[assetKey]).toBeDefined();
     });
 
     test('pruneAssets should not delete assets referred to in nonexpired backups', async () => {
@@ -110,9 +125,8 @@ describe('PruneAssets', () => {
         // this will create an auto backup containing a reference to the asset url
         await updateSiteData();
 
-        // manually edit the date of the backup to expire it
+        // manually expire the backup
         const backupKey = (await backupService.getBackupKeys())[0];
-
         inMemoryCdn[backupKey].metadata.expiration = new Date(Date.now() - 1000).toISOString();
 
         // remove asset from current site data
@@ -125,5 +139,61 @@ describe('PruneAssets', () => {
         // prune and expect the asset to still be there due to backup reference
         await pruneAssets();
         expect(inMemoryCdn[assetKey]).toBeUndefined();
+    });
+
+    test('pruneAssets handle links within house objects', async () => {
+        // create asset
+        const assetKey1 = await cdn.putObject({
+            key: 'test-key1',
+            body: 'body',
+            contentType: ContentType.TEXT,
+            prefix: ContentPrefix.ASSET
+        });
+        const assetUrl1 = cdn.getObjectUrl(assetKey1);
+        const assetKey2 = await cdn.putObject({
+            key: 'test-key2',
+            body: 'body',
+            contentType: ContentType.TEXT,
+            prefix: ContentPrefix.ASSET
+        });
+        const assetUrl2 = cdn.getObjectUrl(assetKey2);
+
+        // add house containing links to both
+        const mockHouse: House = {
+            isDeveloped: true,
+            isForSale: true,
+            isSelectedWork: false,
+            address: '123 Main St',
+            mainImage: assetUrl1,
+            images: [assetUrl2, 'image2.jpg'],
+            neighborhood: 'Downtown',
+            stats: {
+                houseSquareFeet: 2000,
+                lotSquareFeet: 3000,
+                bedrooms: 3,
+                bathrooms: 2,
+                garageSpaces: 2
+            }
+        };
+        await houseService.upsertHouse(mockHouse);
+
+        // this will create an auto backup containing a reference to the asset url
+        await updateSiteData();
+
+        // manually expire the backup
+        const backupKey = (await backupService.getBackupKeys())[0];
+        inMemoryCdn[backupKey].metadata.expiration = new Date(Date.now() - 1000).toISOString();
+
+        // remove JUST asset 1 from the house data
+        const houseObjects = await houseService.getHouseObjects();
+        const existingHouseId = houseObjects[0].id;
+        await houseService.upsertHouse({
+            id: existingHouseId,
+            mainImage: 'image3.jpg'
+        })
+
+        await pruneAssets();
+        expect(inMemoryCdn[assetKey1]).toBeUndefined();
+        expect(inMemoryCdn[assetKey2]).toBeDefined();
     });
 });
