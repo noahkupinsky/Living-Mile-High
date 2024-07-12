@@ -1,5 +1,4 @@
-import { SiteData, DeepPartial, BackupIndex } from "living-mile-high-lib";
-import { ContentCategory, ContentType } from "./constants";
+import { SiteData, DeepPartial } from "living-mile-high-lib";
 import { GeneralData } from "./database";
 import {
     CopyObjectCommandOutput, GetObjectCommandOutput, PutObjectAclCommandOutput,

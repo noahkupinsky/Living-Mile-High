@@ -4352,10 +4352,10 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.2.4.tgz#eca284f75d2965079309dc0ad9255abb2ebc1632"
   integrity sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==
 
-living-mile-high-lib@^1.0.34:
-  version "1.0.34"
-  resolved "https://registry.yarnpkg.com/living-mile-high-lib/-/living-mile-high-lib-1.0.34.tgz#2882db9f8192f9842fbfa8aee6c30e1dc7c1aedb"
-  integrity sha512-AdRzdSoIBeOi/NaCuU+i+FBK2KT+6n44eClMHFgBEqprj5ToyGx/78ryKijL181ySjMkfxn2/BgSVLjJW4tTsQ==
+living-mile-high-lib@^1.0.35:
+  version "1.0.35"
+  resolved "https://registry.yarnpkg.com/living-mile-high-lib/-/living-mile-high-lib-1.0.35.tgz#24d33fb02d8ce14e00e15fe6fccd4c233754b95e"
+  integrity sha512-Gf8Aw7YMp3jtCCQBrUxYbyQ+GrjjjbO7RQ35hM/mlA488pNQT/TvHUx2g574XNZUvaA9MwS3E6ebZwhgs+/MKA==
   dependencies:
     bcryptjs "^2.4.3"
     mongoose "^8.4.4"
@@ -4663,9 +4663,9 @@ mongoose@^8.4.1:
     sift "17.1.3"
 
 mongoose@^8.4.4:
-  version "8.5.0"
-  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-8.5.0.tgz#70e5f032225c20ab8819513fd8cb94b7e6a956bb"
-  integrity sha512-iGgZvgO+fIgX1AQMehkG+Wj8qrWc9it8vUZrSKWjrebgfwHTqUcIdTgWK8mT1us1xd83NOQxiuGbg9ZJtLxs2Q==
+  version "8.5.1"
+  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-8.5.1.tgz#011192edf77af54dd0826a836459212da317c503"
+  integrity sha512-OhVcwVl91A1G6+XpjDcpkGP7l7ikZkxa0DylX7NT/lcEqAjggzSdqDxb48A+xsDxqNAr0ntSJ1yiE3+KJTOd5Q==
   dependencies:
     bson "^6.7.0"
     kareem "2.6.3"

@@ -48,13 +48,12 @@ export class CdnBackupService implements BackupService {
     }
 
     async getBackupIndices(): Promise<BackupIndex[]> {
-        const keys = await this.getBackupKeys();
-
-        const backups = await this.cdn.getObjects(keys);
+        const backups = await this.getBackups();
 
         const indices = backups.map(backup => ({
             key: backup.key,
-            name: backup.metadata.name!
+            name: backup.metadata.name!,
+            createdAt: new Date(backup.metadata.createdAt)
         }));
 
         return indices;
@@ -66,7 +65,7 @@ export class CdnBackupService implements BackupService {
 
     async getBackups(): Promise<Backup[]> {
         const keys = await this.getBackupKeys();
-        return await this.cdn.getObjects(keys);
+        return await this.cdn.getObjects(keys) as Backup[];
     }
 
     async createManualBackup(name: string): Promise<void> {
@@ -121,8 +120,7 @@ export class CdnBackupService implements BackupService {
     }
 
     async pruneBackups(): Promise<void> {
-        const backupKeys = await this.getBackupKeys();
-        const backups = await this.cdn.getObjects(backupKeys);
+        const backups = await this.getBackups();
 
         backups.forEach(backup => this.pruneBackup(backup));
     }

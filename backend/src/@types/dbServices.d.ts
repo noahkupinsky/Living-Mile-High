@@ -1,3 +1,5 @@
+import { DeepPartial, House, GeneralData, SiteData } from "living-mile-high-lib";
+
 export interface HouseService {
     getHouseObjects(): Promise<House[]>;
     upsertHouse(house: DeepPartial<House>): Promise<void>;

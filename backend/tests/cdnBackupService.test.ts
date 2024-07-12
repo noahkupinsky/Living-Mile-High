@@ -35,7 +35,8 @@ describe("backup service", () => {
 
         expect(backups).toEqual([{
             name: name,
-            key: prefixedKey
+            key: prefixedKey,
+            createdAt: expect.any(Date),
         }]);
     });
 

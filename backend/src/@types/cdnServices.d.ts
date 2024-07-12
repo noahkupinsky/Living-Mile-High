@@ -1,9 +1,12 @@
+import { BackupIndex } from "living-mile-high-lib";
+import { ContentCategory, ContentType, ContentPermission, BackupType } from "./constants";
+
 export type BackupMetadata = {
-    backupType?: BackupType,
-    backupPower?: string,
-    createdAt?: string,
+    backupType: BackupType,
+    backupPower: string,
+    createdAt: string,
+    name: string
     expiration?: string,
-    name?: string
 }
 
 export type Backup = {
@@ -26,7 +29,7 @@ export interface BackupService {
 }
 
 // CdnMetadata is a superset of all metadatas
-export type CdnMetadata = BackupMetadata
+export type CdnMetadata = Partial<BackupMetadata>
 
 export type PutCommand = {
     key: string,
