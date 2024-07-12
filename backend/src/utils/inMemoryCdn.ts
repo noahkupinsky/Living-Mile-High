@@ -9,7 +9,10 @@ import {
     DeleteObjectCommand,
     DeleteObjectCommandOutput,
     GetObjectCommand,
-    GetObjectCommandOutput
+    GetObjectCommandOutput,
+    CopyObjectCommand,
+    CopyObjectCommandOutput,
+    MetadataDirective
 } from "@aws-sdk/client-s3";
 import { mockClient } from "aws-sdk-client-mock";
 import { Readable } from "stream";
@@ -96,6 +99,29 @@ export function mockS3Cdn() {
             Body: stream,
             Metadata: object.metadata,
             ContentType: object.contentType,
+            $metadata: {}
+        };
+
+        return Promise.resolve(result);
+    });
+
+    s3Mock.on(CopyObjectCommand).callsFake((input) => {
+        const sourceKey = input.CopySource!.split('/').pop();
+        const destinationKey = input.Key;
+
+        if (!sourceKey || !inMemoryCdn[sourceKey]) {
+            throw new Error(`Source object ${sourceKey} does not exist`);
+        }
+
+        const sourceObject = inMemoryCdn[sourceKey];
+
+        inMemoryCdn[destinationKey!] = {
+            body: sourceObject.body,
+            contentType: sourceObject.contentType,
+            metadata: input.MetadataDirective === MetadataDirective.REPLACE ? input.Metadata : sourceObject.metadata,
+        };
+
+        const result: CopyObjectCommandOutput = {
             $metadata: {}
         };
 

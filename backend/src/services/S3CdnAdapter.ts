@@ -9,9 +9,10 @@ import {
     DeleteObjectCommandOutput,
     PutObjectCommandOutput,
     GetObjectCommand,
-    GetObjectCommandOutput
+    GetObjectCommandOutput,
+    MetadataDirective
 } from "@aws-sdk/client-s3";
-import { CdnAdapter, CdnMetadata, GetCommandOutput, PutCommand, S3Config } from '~/@types';
+import { CdnAdapter, CdnMetadata, CdnContent, PutCommand, S3Config } from '~/@types';
 import { ContentPrefix, ContentType } from "~/@types/constants";
 import { prefixKey } from "~/utils/misc";
 
@@ -131,7 +132,7 @@ export class S3CdnAdapter implements CdnAdapter {
         return allKeys;
     }
 
-    public async getObject(key: string): Promise<GetCommandOutput> {
+    public async getObject(key: string): Promise<CdnContent> {
         try {
             const command = new GetObjectCommand({
                 Bucket: this.bucket,
@@ -154,11 +155,25 @@ export class S3CdnAdapter implements CdnAdapter {
         }
     }
 
-    public async getObjects(keys: string[]): Promise<GetCommandOutput[]> {
+    public async getObjects(keys: string[]): Promise<CdnContent[]> {
         const getObjectPromises = keys.map(async (key) => {
             return this.getObject(key);
         });
 
         return await Promise.all(getObjectPromises);
+    }
+
+    public async updateObjectMetadata(key: string, updates: Partial<CdnMetadata>): Promise<void> {
+        const existingObject = await this.getObject(key);
+        const metadata = { ...existingObject.metadata, ...updates };
+
+        const command = new CopyObjectCommand({
+            Bucket: this.bucket,
+            CopySource: this.getObjectUrl(key),
+            Key: key,
+            Metadata: metadata,
+            MetadataDirective: MetadataDirective.REPLACE
+        });
+        await this.client.send(command);
     }
 }

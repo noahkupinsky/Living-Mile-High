@@ -18,7 +18,7 @@ export {
     BackupService,
     CdnMetadata,
     PutCommand,
-    GetCommandOutput,
+    CdnContent,
 } from './services'
 
 export type ExpressMiddleware<

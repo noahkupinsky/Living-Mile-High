@@ -1,5 +1,6 @@
+import { Readable } from "stream";
 import { BackupService, CdnAdapter, GeneralDataService, HouseService } from "~/@types";
-import { ContentPrefix, ContentType, BackupType } from "~/@types/constants";
+import { ContentPrefix, ContentType, BackupType, BACKUP_LOGARITHMIC_BASE as BASE } from "~/@types/constants";
 import { services } from "~/di";
 import { inMemoryCdn } from "~/utils/inMemoryCdn";
 import { prefixKey } from "~/utils/misc";
@@ -201,5 +202,100 @@ describe("backup service", () => {
         await backupService.pruneBackups();
 
         expect(inMemoryCdn).toHaveProperty(backupKey1);
+    });
+});
+
+describe('backup consolidation', () => {
+    const createBackup = async (name: string, timeDelta: number, backupPower: number = 0) => {
+        const baseDate = new Date();
+        const createdAt = new Date(baseDate.getTime() - timeDelta);
+        const key = await cdnAdapter.putObject({
+            key: name,
+            body: `{"data": "${name}"}`,
+            contentType: ContentType.JSON,
+            prefix: ContentPrefix.BACKUP,
+            metadata: {
+                name: name,
+                backupType: BackupType.AUTO,
+                createdAt: createdAt.toISOString(),
+                backupPower: backupPower.toString()
+            }
+        });
+        return key;
+    };
+
+    // Test consolidating oldest backups while persisting the most recent one
+    test('consolidateAutoBackups should consolidate oldest backups and persist the most recent one', async () => {
+        const backupKeys = [];
+        for (let i = 1; i <= BASE; i++) {
+            backupKeys.push(await createBackup(`backup-${i}`, i * 1000, 0));
+        }
+
+        // Perform consolidation
+        await backupService.consolidateAutoBackups();
+
+        // Expect the latest backup to have power 1 and only one backup remaining
+        const latestBackupKey = backupKeys[0];
+        const consolidatedBackup = inMemoryCdn[latestBackupKey];
+        expect(consolidatedBackup.metadata.backupPower).toBe('1');
+        expect(Object.keys(inMemoryCdn).length).toBe(1);
+        expect(consolidatedBackup.metadata.name).toBe(`backup-1`);
+    });
+
+    // Test when there are not enough backups to consolidate
+    test('consolidateAutoBackups should not consolidate if there are not enough backups', async () => {
+        for (let i = 1; i < BASE; i++) {
+            await createBackup(`backup-${i}`, i * 1000, 0);
+        }
+
+        // Perform consolidation
+        await backupService.consolidateAutoBackups();
+
+        // Expect no consolidation to have occurred
+        expect(Object.keys(inMemoryCdn).length).toBe(BASE - 1);
+    });
+
+    // Test consolidating multiple levels of backups
+    test('consolidateAutoBackups should handle multiple consolidation levels', async () => {
+        const backupKeys = [];
+        for (let i = 1; i <= BASE * 2; i++) {
+            backupKeys.push(await createBackup(`backup-${i}`, i * 1000, 0));
+        }
+
+        // Perform consolidation
+        await backupService.consolidateAutoBackups();
+
+        // Expect two consolidated backups with power 1
+        const keys = Object.keys(inMemoryCdn);
+        const consolidatedBackup1 = inMemoryCdn[keys[0]];
+        const consolidatedBackup2 = inMemoryCdn[keys[1]];
+
+        expect(consolidatedBackup1.metadata.backupPower).toBe('1');
+        expect(consolidatedBackup2.metadata.backupPower).toBe('1');
+        expect(keys.length).toBe(2);
+    });
+
+    // Test handling previously consolidated backups
+    test('consolidateAutoBackups should handle previously consolidated backups', async () => {
+        const backupKeys = [];
+        for (let i = 1; i <= BASE - 1; i++) {
+            backupKeys.push(await createBackup(`backup-${i}`, i * 1000, 0));
+        }
+        backupKeys.push(await createBackup('backup-5', BASE * 1000, 1));
+        backupKeys.push(await createBackup('backup-6', (BASE + 1) * 1000, 0));
+        backupKeys.push(await createBackup('backup-7', (BASE + 2) * 1000, 0));
+
+        // Perform consolidation
+        await backupService.consolidateAutoBackups();
+
+        // Expect three backups: one previously consolidated, one newly consolidated, and one remaining level 0
+        const consolidatedBackup1 = Object.values(inMemoryCdn).find(b => b.metadata.name === 'backup-5');
+        const consolidatedBackup2 = Object.values(inMemoryCdn).find(b => b.metadata.backupPower === '1' && b !== consolidatedBackup1);
+        const remainingBackup = Object.values(inMemoryCdn).find(b => b.metadata.name === 'backup-7');
+
+        expect(consolidatedBackup1!.metadata.backupPower).toBe('1');
+        expect(consolidatedBackup2!.metadata.backupPower).toBe('1');
+        expect(Object.keys(inMemoryCdn).length).toBe(3);
+        expect(remainingBackup!.metadata.backupPower).toBe('0');
     });
 });

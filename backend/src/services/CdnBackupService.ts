@@ -1,8 +1,12 @@
 import { BackupIndex } from "living-mile-high-lib";
 import { Readable } from "stream";
-import { CdnAdapter, GetCommandOutput, BackupService, StateService } from "~/@types";
-import { BACKUP_RETENTION_DAYS, BackupType, ContentPrefix, ContentType } from "~/@types/constants";
+import { PriorityQueue } from "typescript-collections";
+import { CdnAdapter, CdnContent, BackupService, StateService, CdnMetadata } from "~/@types";
+import { BACKUP_LOGARITHMIC_BASE, BACKUP_RETENTION_DAYS, BackupType, ContentPrefix, ContentType } from "~/@types/constants";
+import { inMemoryCdn } from "~/utils/inMemoryCdn";
 import { streamToString } from "~/utils/misc";
+
+type BackupPriority = { key: string; createdAt: Date; backupPower: number }
 
 export class CdnBackupService implements BackupService {
     private stateService: StateService;
@@ -62,7 +66,7 @@ export class CdnBackupService implements BackupService {
         return await this.cdn.getKeys(ContentPrefix.BACKUP);
     }
 
-    async getBackups(): Promise<GetCommandOutput[]> {
+    async getBackups(): Promise<CdnContent[]> {
         const keys = await this.getBackupKeys();
         return await this.cdn.getObjects(keys);
     }
@@ -82,9 +86,10 @@ export class CdnBackupService implements BackupService {
         const expiration = backupType === BackupType.AUTO ? { expiration: this.getExpirationDate() } : {};
         const backupName = name || `${timestamp}`;
 
-        const metadata = {
+        const metadata: CdnMetadata = {
             backupType,
             createdAt: timestamp,
+            backupPower: '0',
             name: backupName,
             ...expiration
         };
@@ -98,9 +103,6 @@ export class CdnBackupService implements BackupService {
             prefix: ContentPrefix.BACKUP,
             metadata: metadata
         });
-        // if (backupType === BackupType.AUTO) {
-        //     await this.logarithmicBackupProcess();
-        // }
     }
 
     private getExpirationDate(): string {
@@ -116,13 +118,13 @@ export class CdnBackupService implements BackupService {
         backups.forEach(backup => this.pruneBackup(backup));
     }
 
-    private async pruneBackup(backup: GetCommandOutput): Promise<void> {
+    private async pruneBackup(backup: CdnContent): Promise<void> {
         if (this.isBackupExpired(backup)) {
             await this.cdn.deleteObject(backup.key);
         }
     }
 
-    private isBackupExpired(backup: GetCommandOutput): boolean {
+    private isBackupExpired(backup: CdnContent): boolean {
         const currentDate = new Date();
         const metadata = backup.metadata;
 
@@ -132,5 +134,70 @@ export class CdnBackupService implements BackupService {
         const isExpired = hasExpiration && currentDate > new Date(metadata.expiration!);
 
         return isAutoBackup && isExpired;
+    }
+
+    async consolidateAutoBackups(): Promise<void> {
+        const backupQueue = await this.createConsolidationPriorityQueue();
+
+        // Consolidate backups
+        while (!backupQueue.isEmpty()) {
+            const currentPower = backupQueue.peek()!.backupPower;
+            const backupsToConsolidate: BackupPriority[] = [];
+
+            while (!backupQueue.isEmpty() && backupQueue.peek()!.backupPower === currentPower && backupsToConsolidate.length < BACKUP_LOGARITHMIC_BASE) {
+                backupsToConsolidate.push(backupQueue.dequeue()!);
+            }
+
+            if (backupsToConsolidate.length >= BACKUP_LOGARITHMIC_BASE) {
+                const consolidatedBackup = await this.consolidateBackupSet(backupsToConsolidate);
+                backupQueue.enqueue(consolidatedBackup);
+            }
+        }
+    }
+
+    private async consolidateBackupSet(backupsToConsolidate: BackupPriority[]): Promise<BackupPriority> {
+        const sortRecentFirst = (a: BackupPriority, b: BackupPriority) => b.createdAt.getTime() - a.createdAt.getTime();
+        const latestBackup = backupsToConsolidate.sort(sortRecentFirst)[0];
+        const newPower = latestBackup.backupPower + 1;
+
+        // Delete the old backups except the latest one
+        const keysToDelete = backupsToConsolidate.filter(backup => backup.key !== latestBackup.key).map(b => b.key);
+
+        if (keysToDelete.length > 0) {
+            await this.cdn.deleteObjects(keysToDelete);
+        }
+
+        // Update metadata of the latest backup
+        latestBackup.backupPower = newPower;
+        await this.cdn.updateObjectMetadata(latestBackup.key, { backupPower: newPower.toString() });
+
+        return latestBackup;
+    }
+
+    private async createConsolidationPriorityQueue(): Promise<PriorityQueue<BackupPriority>> {
+        const backups = await this.getBackups();
+        const automaticBackups = backups.filter(backup => backup.metadata.backupType === BackupType.AUTO);
+
+        // Create a priority queue to sort backups by date and power
+        const backupQueue = new PriorityQueue<BackupPriority>((a, b) => {
+            if (a.backupPower !== b.backupPower) {
+                return a.backupPower - b.backupPower;
+            }
+            return a.createdAt.getTime() - b.createdAt.getTime();
+        });
+
+        automaticBackups.forEach(backup => {
+            backupQueue.enqueue({
+                key: backup.key,
+                createdAt: new Date(backup.metadata.createdAt!),
+                backupPower: this.getBackupPower(backup)
+            });
+        });
+
+        return backupQueue;
+    }
+
+    private getBackupPower(backup: CdnContent): number {
+        return parseInt(backup.metadata.backupPower!);
     }
 }

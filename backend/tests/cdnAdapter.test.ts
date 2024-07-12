@@ -1,5 +1,5 @@
 import { CdnAdapter, CdnMetadata } from "~/@types";
-import { ContentPrefix, ContentType } from "~/@types/constants";
+import { BackupType, ContentPrefix, ContentType } from "~/@types/constants";
 import { services } from "~/di";
 import { prefixKey } from "~/utils/misc";
 import { inMemoryCdn } from "~/utils/inMemoryCdn";
@@ -162,6 +162,35 @@ describe('S3Service', () => {
         const key = 'non-existent-key';
 
         await expect(cdn.getObject(key)).rejects.toThrow(`Failed to get object ${key}`);
+    });
+
+    it('should update an object metadata', async () => {
+        const key = 'key';
+        const metadata = { name: 'name' };
+        await cdn.putObject({
+            key,
+            body: 'body',
+            contentType: ContentType.TEXT
+        });
+        await expect(cdn.updateObjectMetadata(key, metadata)).resolves.not.toThrow();
+        expect(inMemoryCdn[key].metadata).toEqual(metadata);
+    });
+
+    it('should update metadata of an existing object', async () => {
+        const key = 'test-key';
+        const originalMetadata = { name: 'name', createdAt: 'today' };
+        const updatedMetadata = { name: 'updated-name' };
+
+        // Setup in-memory storage
+        inMemoryCdn[key] = {
+            body: 'test-body',
+            contentType: 'text/plain',
+            metadata: originalMetadata
+        };
+
+        await cdn.updateObjectMetadata(key, updatedMetadata);
+
+        expect(inMemoryCdn[key].metadata).toEqual({ ...originalMetadata, ...updatedMetadata });
     });
 });
 

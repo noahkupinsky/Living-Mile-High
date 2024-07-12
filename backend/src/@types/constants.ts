@@ -21,3 +21,4 @@ export enum BackupType {
 }
 
 export const BACKUP_RETENTION_DAYS = 365;
+export const BACKUP_LOGARITHMIC_BASE = 5;

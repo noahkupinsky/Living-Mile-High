@@ -38,7 +38,7 @@ export type PutCommand = {
     metadata?: CdnMetadata
 }
 
-export type GetCommandOutput = {
+export type CdnContent = {
     key: string,
     body: StreamingBlobPayloadOutputTypes,
     contentType: ContentType,
@@ -50,11 +50,12 @@ export interface CdnAdapter {
     public generateUniqueKey(): string;
     public extractKeys(object: any): string[];
     public putObject(command: PutCommand): Promise<string>;
-    public getObject(key: string): Promise<GetCommandOutput>;
-    public getObjects(keys: string[]): Promise<GetCommandOutput[]>;
+    public getObject(key: string): Promise<CdnContent>;
+    public getObjects(keys: string[]): Promise<CdnContent[]>;
     public deleteObject(key: string): Promise<DeleteObjectCommandOutput>;
     public deleteObjects(keys: string[]): Promise<DeleteObjectCommandOutput[]>;
     public getKeys(prefix?: ContentPrefix): Promise<string[]>
+    public updateObjectMetadata(key: string, updates: Partial<CdnMetadata>): Promise<void>;
 }
 
 export type S3Config = {
@@ -90,10 +91,11 @@ export interface BackupService {
     restoreBackup(key: string): Promise<void>;
     getBackupIndices(): Promise<BackupIndex[]>;
     getBackupKeys(): Promise<string[]>;
-    getBackups(): Promise<GetCommandOutput[]>;
+    getBackups(): Promise<CdnContent[]>;
     createManualBackup(name: string): Promise<void>;
     createAutoBackup(): Promise<void>;
     pruneBackups(): Promise<void>;
+    consolidateAutoBackups(): Promise<void>;
 }
 
 export interface StateService {
