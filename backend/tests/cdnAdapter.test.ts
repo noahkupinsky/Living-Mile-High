@@ -1,5 +1,5 @@
 import { CdnAdapter, CdnMetadata } from "~/@types";
-import { BackupType, ContentCategory, ContentPermission, ContentType } from "~/@types/constants";
+import { ContentCategory, ContentPermission, ContentType } from "~/@types/constants";
 import { services } from "~/di";
 import { prefixKey } from "~/utils/misc";
 import { inMemoryCdn } from "~/utils/inMemoryCdn";

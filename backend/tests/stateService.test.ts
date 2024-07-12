@@ -1,5 +1,5 @@
 import { services } from "~/di";
-import { StateService } from "~/@types/services";
+import { StateService } from "~/@types";
 import HouseModel from "~/models/HouseModel";
 import GeneralDataModel from "~/models/GeneralDataModel";
 

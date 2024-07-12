@@ -1,5 +1,5 @@
 import { SiteData } from "living-mile-high-lib";
-import { GeneralDataService, HouseService, StateService } from "~/@types/services";
+import { GeneralDataService, HouseService, StateService } from "~/@types";
 import HouseModel from "~/models/HouseModel";
 import GeneralDataModel from "~/models/GeneralDataModel";
 import { combineSiteData } from "~/utils/misc";

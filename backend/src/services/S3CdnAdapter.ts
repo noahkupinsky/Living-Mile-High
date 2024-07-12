@@ -5,9 +5,6 @@ import {
     ListObjectsV2Command,
     ListObjectsV2CommandOutput,
     CopyObjectCommand,
-    CopyObjectCommandOutput,
-    DeleteObjectCommandOutput,
-    PutObjectCommandOutput,
     GetObjectCommand,
     GetObjectCommandOutput,
     MetadataDirective
@@ -75,20 +72,20 @@ export class S3CdnAdapter implements CdnAdapter {
         return isPublic ? ContentPermission.PUBLIC : ContentPermission.PRIVATE
     }
 
-    public async deleteObject(key: string): Promise<DeleteObjectCommandOutput> {
+    public async deleteObject(key: string): Promise<void> {
         const command = new DeleteObjectCommand({
             Bucket: this.bucket,
             Key: key,
         });
-        return await this.client.send(command);
+        await this.client.send(command);
     }
 
-    public async deleteObjects(keys: string[]): Promise<DeleteObjectCommandOutput[]> {
+    public async deleteObjects(keys: string[]): Promise<void> {
         const deleteObjectPromises = keys.map(async (key) => {
             return this.deleteObject(key);
         });
 
-        return await Promise.all(deleteObjectPromises);
+        await Promise.all(deleteObjectPromises);
     }
 
     public extractKeys(data: any): string[] {

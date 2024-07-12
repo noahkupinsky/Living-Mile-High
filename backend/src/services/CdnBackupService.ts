@@ -1,9 +1,7 @@
 import { BackupIndex } from "living-mile-high-lib";
-import { Readable } from "stream";
 import { PriorityQueue } from "typescript-collections";
-import { CdnAdapter, CdnContent, BackupService, StateService, CdnMetadata } from "~/@types";
+import { CdnAdapter, BackupService, StateService, Backup, BackupMetadata } from "~/@types";
 import { BACKUP_LOGARITHMIC_BASE, BACKUP_RETENTION_DAYS, BackupType, ContentCategory, ContentType } from "~/@types/constants";
-import { inMemoryCdn } from "~/utils/inMemoryCdn";
 import { streamToString } from "~/utils/misc";
 
 type BackupPriority = { key: string; createdAt: Date; backupPower: number }
@@ -66,7 +64,7 @@ export class CdnBackupService implements BackupService {
         return await this.cdn.getKeys(ContentCategory.BACKUP);
     }
 
-    async getBackups(): Promise<CdnContent[]> {
+    async getBackups(): Promise<Backup[]> {
         const keys = await this.getBackupKeys();
         return await this.cdn.getObjects(keys);
     }
@@ -97,7 +95,7 @@ export class CdnBackupService implements BackupService {
         const expiration = backupType === BackupType.AUTO ? { expiration: this.getExpirationDate() } : {};
         const backupName = name || `${timestamp}`;
 
-        const metadata: CdnMetadata = {
+        const metadata: BackupMetadata = {
             backupType,
             createdAt: timestamp,
             backupPower: '0',
@@ -129,13 +127,13 @@ export class CdnBackupService implements BackupService {
         backups.forEach(backup => this.pruneBackup(backup));
     }
 
-    private async pruneBackup(backup: CdnContent): Promise<void> {
+    private async pruneBackup(backup: Backup): Promise<void> {
         if (this.isBackupExpired(backup)) {
             await this.cdn.deleteObject(backup.key);
         }
     }
 
-    private isBackupExpired(backup: CdnContent): boolean {
+    private isBackupExpired(backup: Backup): boolean {
         const currentDate = new Date();
         const metadata = backup.metadata;
 
@@ -208,7 +206,7 @@ export class CdnBackupService implements BackupService {
         return backupQueue;
     }
 
-    private getBackupPower(backup: CdnContent): number {
+    private getBackupPower(backup: Backup): number {
         return parseInt(backup.metadata.backupPower!);
     }
 }
