@@ -88,9 +88,10 @@ export interface GeneralDataService {
 export interface BackupService {
     deleteManualBackup(key: string): Promise<void>;
     restoreBackup(key: string): Promise<void>;
-    listBackups(): Promise<BackupIndex[]>;
+    getBackupIndices(): Promise<BackupIndex[]>;
     createManualBackup(name: string): Promise<void>;
     createAutoBackup(): Promise<void>;
+    pruneBackups(): Promise<void>;
 }
 
 export interface StateService {

@@ -49,8 +49,8 @@ export class CdnBackupService implements BackupService {
         await this.createBackup(BackupType.AUTO);
     }
 
-    async listBackups(): Promise<BackupIndex[]> {
-        const keys = await this.cdn.getKeys(ContentPrefix.BACKUP);
+    async getBackupIndices(): Promise<BackupIndex[]> {
+        const keys = await this.getBackupKeys();
 
         const backups = await this.cdn.getObjects(keys);
 
@@ -60,6 +60,10 @@ export class CdnBackupService implements BackupService {
         }));
 
         return indices;
+    }
+
+    private async getBackupKeys(): Promise<string[]> {
+        return await this.cdn.getKeys(ContentPrefix.BACKUP);
     }
 
     async createManualBackup(name: string): Promise<void> {
@@ -84,7 +88,7 @@ export class CdnBackupService implements BackupService {
             ...expiration
         };
 
-        const key = timestamp.replace(/\D/g, '_');
+        const key = timestamp.replace(/\s/g, '_');
 
         await this.cdn.putObject({
             key: key,
@@ -104,5 +108,28 @@ export class CdnBackupService implements BackupService {
         return date.toISOString();
     }
 
-    // TODO: prune backups, prune assets, logarithmic
+    async pruneBackups(): Promise<void> {
+        const backupKeys = await this.getBackupKeys();
+        const backups = await this.cdn.getObjects(backupKeys);
+
+        backups.forEach(backup => this.pruneBackup(backup));
+    }
+
+    private async pruneBackup(backup: GetCommandOutput): Promise<void> {
+        if (this.isBackupExpired(backup)) {
+            await this.cdn.deleteObject(backup.key);
+        }
+    }
+
+    private isBackupExpired(backup: GetCommandOutput): boolean {
+        const currentDate = new Date();
+        const metadata = backup.metadata;
+
+        const isAutoBackup = (metadata.backupType === BackupType.AUTO);
+
+        const hasExpiration = (metadata.expiration !== undefined);
+        const isExpired = hasExpiration && currentDate > new Date(metadata.expiration!);
+
+        return isAutoBackup && isExpired;
+    }
 }

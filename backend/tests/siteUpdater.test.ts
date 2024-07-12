@@ -35,7 +35,7 @@ describe('SiteUpdater', () => {
     test('updateSiteData should produce an automatic backup', async () => {
         await updateSiteData();
 
-        const backups = await backupService.listBackups();
+        const backups = await backupService.getBackupIndices();
 
         expect(backups).toHaveLength(1);
     });

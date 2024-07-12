@@ -1,7 +1,6 @@
 import { CdnKeys } from "living-mile-high-lib";
 import { BackupService, CdnAdapter, GeneralDataService, HouseService, StateService } from "~/@types";
 import { ContentPrefix, ContentType, BackupType } from "~/@types/constants";
-import { updateSiteData } from "~/controllers/siteUpdateController";
 import { services } from "~/di";
 import { inMemoryCdn } from "~/utils/inMemoryCdn";
 import { prefixKey } from "~/utils/misc";
@@ -16,20 +15,8 @@ beforeAll(() => {
     ({ backupService, cdnAdapter, stateService, houseService, generalDataService } = services());
 });
 
-async function updateSiteDataAndAutoBackup(): Promise<void> {
-    const siteData = await stateService.getState();
-
-    await cdnAdapter.putObject({
-        key: CdnKeys.SITE_DATA,
-        body: JSON.stringify(siteData),
-        contentType: ContentType.JSON
-    });
-
-    await backupService.createAutoBackup();
-}
-
 describe("backup service", () => {
-    test('listBackups should list backups', async () => {
+    test('getBackupIndices should get backup indices correctly', async () => {
         const name = "Hello World";
 
         const key = 'backup-key';
@@ -45,7 +32,7 @@ describe("backup service", () => {
             }
         });
 
-        const backups = await backupService.listBackups();
+        const backups = await backupService.getBackupIndices();
 
         expect(backups).toEqual([{
             name: name,
@@ -58,7 +45,7 @@ describe("backup service", () => {
 
         await backupService.createManualBackup(backupName);
 
-        const backups = await backupService.listBackups();
+        const backups = await backupService.getBackupIndices();
 
         expect(backups).toHaveLength(1);
         expect(backups[0].name).toBe(backupName);
@@ -99,11 +86,13 @@ describe("backup service", () => {
     });
 
     test('restoreBackup should restore backups', async () => {
+        //make sure general data singleton exists
+        await generalDataService.getGeneralData();
         // create initial auto backup
-        await updateSiteData();
+        await backupService.createAutoBackup();
 
         // grab first backup
-        const backups = await backupService.listBackups();
+        const backups = await backupService.getBackupIndices();
         const oldBackup = backups[0].key;
 
         // make change to general data
@@ -129,10 +118,10 @@ describe("backup service", () => {
         });
 
         // apply changes and auto backup again
-        await updateSiteData();
+        await backupService.createAutoBackup();
 
         // find new backup
-        const newBackups = await backupService.listBackups();
+        const newBackups = await backupService.getBackupIndices();
         expect(newBackups).toHaveLength(2);
 
         const newBackup = newBackups[0].key === oldBackup ? newBackups[1].key : newBackups[0].key;
@@ -161,7 +150,58 @@ describe("backup service", () => {
         expect(newHouses[0].neighborhood).toBe(neighborhood);
 
         // make sure restores created new backups
-        const restoreBackups = await backupService.listBackups();
+        const restoreBackups = await backupService.getBackupIndices();
         expect(restoreBackups).toHaveLength(4);
+    });
+
+    test('pruneBackups should delete expired automatic backups', async () => {
+        const backupKey1 = prefixKey('key-1', ContentPrefix.BACKUP);
+        const backupKey2 = prefixKey('key-2', ContentPrefix.BACKUP);
+
+        const currentDate = new Date();
+        const pastDate = new Date(currentDate.getTime() - 1000 * 60 * 60 * 24 * 10); // 10 days ago
+        const futureDate = new Date(currentDate.getTime() + 1000 * 60 * 60 * 24 * 10); // 10 days in the future
+
+        inMemoryCdn[backupKey1] = {
+            body: 'backup-data-1',
+            contentType: ContentType.JSON,
+            metadata: {
+                name: 'backup1',
+                backupType: BackupType.AUTO,
+                expiration: pastDate.toISOString()
+            }
+        };
+
+        inMemoryCdn[backupKey2] = {
+            body: 'backup-data-2',
+            contentType: ContentType.JSON,
+            metadata: {
+                name: 'backup2',
+                backupType: BackupType.AUTO,
+                expiration: futureDate.toISOString()
+            }
+        };
+
+        await backupService.pruneBackups();
+
+        expect(inMemoryCdn).not.toHaveProperty(backupKey1);
+        expect(inMemoryCdn).toHaveProperty(backupKey2);
+    });
+
+    test('pruneBackups should not delete manual backups', async () => {
+        const backupKey1 = prefixKey('key-1', ContentPrefix.BACKUP);
+
+        inMemoryCdn[backupKey1] = {
+            body: 'backup-data-1',
+            contentType: ContentType.JSON,
+            metadata: {
+                name: 'backup1',
+                backupType: BackupType.MANUAL,
+            }
+        };
+
+        await backupService.pruneBackups();
+
+        expect(inMemoryCdn).toHaveProperty(backupKey1);
     });
 });
