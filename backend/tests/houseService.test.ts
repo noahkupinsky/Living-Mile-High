@@ -6,7 +6,7 @@ import { House } from "living-mile-high-lib";
 let houseService: HouseService;
 
 beforeAll(() => {
-    houseService = services().houseService;
+    ({ houseService } = services());
 })
 
 describe('HouseService get and save', () => {

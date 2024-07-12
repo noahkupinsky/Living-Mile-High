@@ -34,7 +34,7 @@ export class MockServiceManager implements SiteServiceManager {
             adminService: new Services.MongoAdminService(),
             imageService: new Services.CdnImageService(cdn),
             stateService: stateService,
-            siteUpdater: new Services.CdnSiteUpdater(stateService, cdn),
+            backupService: new Services.CdnBackupService(stateService, cdn),
         }
 
         return this.services!;

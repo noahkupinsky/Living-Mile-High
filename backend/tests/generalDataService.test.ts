@@ -5,7 +5,7 @@ import { DefaultGeneralData } from "living-mile-high-lib";
 let generalDataService: GeneralDataService;
 
 beforeAll(() => {
-    generalDataService = services().generalDataService;
+    ({ generalDataService } = services());
 });
 
 describe('GeneralDataService', () => {

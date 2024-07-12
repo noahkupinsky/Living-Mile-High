@@ -17,7 +17,7 @@ export type ServiceDict = {
     cdnAdapter: CdnAdapter;
     generalDataService: GeneralDataService;
     stateService: StateService;
-    siteUpdater: SiteUpdater;
+    backupService: BackupService;
 };
 
 export type SiteServiceManager = ServiceManager<ServiceDict>;
@@ -85,12 +85,12 @@ export interface GeneralDataService {
     getGeneralData(): Promise<GeneralData>;
 }
 
-export interface SiteUpdater {
-    updateSiteData(): Promise<void>;
+export interface BackupService {
     deleteManualBackup(key: string): Promise<void>;
     restoreBackup(key: string): Promise<void>;
     listBackups(): Promise<BackupIndex[]>;
     createManualBackup(name: string): Promise<void>;
+    createAutoBackup(): Promise<void>;
 }
 
 export interface StateService {

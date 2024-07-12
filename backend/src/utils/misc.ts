@@ -1,6 +1,7 @@
+import axios from "axios";
 import { GeneralData, House, SiteData } from "living-mile-high-lib";
 import { Readable } from "stream";
-import { ContentPrefix } from "~/@types/constants";
+import { ContentPrefix, ContentType } from "~/@types/constants";
 
 export function constructUpdateObject(obj: any, prefix = ''): Record<string, any> {
     return Object.keys(obj).reduce((acc, key) => {
@@ -42,3 +43,11 @@ export async function streamToBuffer(stream: Readable): Promise<Buffer> {
     }
     return Buffer.concat(chunks);
 };
+
+export async function downloadImage(url: string): Promise<{ buffer: Buffer, contentType: ContentType }> {
+    const response = await axios.get(url, { responseType: 'arraybuffer' });
+    return {
+        buffer: Buffer.from(response.data),
+        contentType: response.headers['content-type']
+    };
+}

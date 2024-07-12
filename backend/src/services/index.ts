@@ -1,6 +1,6 @@
 export { CdnImageService } from "./CdnImageService";
 export { MongoAdminService } from "./MongoAdminService";
-export { CdnSiteUpdater } from "./CdnSiteUpdater";
+export { CdnBackupService } from "./CdnBackupService";
 export { MongoGeneralDataService } from "./MongoGeneralDataService";
 export { MongoHouseService } from "./MongoHouseService";
 export { MongoStateService } from "./MongoStateService";

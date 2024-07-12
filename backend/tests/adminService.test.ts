@@ -6,7 +6,7 @@ import { AdminModel } from '~/models/AdminModel';
 let adminService: AdminService;
 
 beforeAll(async () => {
-    adminService = services().adminService;
+    ({ adminService } = services());
 })
 
 describe('MongoAdminService', () => {

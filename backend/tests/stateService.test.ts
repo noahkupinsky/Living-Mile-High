@@ -6,7 +6,7 @@ import GeneralDataModel from "~/models/GeneralDataModel";
 let stateService: StateService;
 
 beforeAll(() => {
-    stateService = services().stateService;
+    ({ stateService } = services());
 });
 
 describe('StateService', () => {

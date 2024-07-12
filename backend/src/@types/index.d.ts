@@ -15,7 +15,7 @@ export {
     AdminService,
     GeneralDataService,
     StateService,
-    SiteUpdater,
+    BackupService,
     CdnMetadata,
     PutCommand,
     GetCommandOutput,

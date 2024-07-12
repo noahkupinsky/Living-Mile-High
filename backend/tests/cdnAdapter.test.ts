@@ -8,7 +8,7 @@ import { Readable } from "stream";
 let cdn: CdnAdapter;
 
 beforeAll(() => {
-    cdn = services().cdnAdapter;
+    ({ cdnAdapter: cdn } = services());
 });
 
 describe('S3Service', () => {
