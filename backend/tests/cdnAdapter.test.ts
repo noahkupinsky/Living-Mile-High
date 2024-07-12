@@ -48,7 +48,7 @@ describe('S3Service', () => {
 
     it('should delete an object', async () => {
         const key = 'key';
-        cdn.putObject({
+        await cdn.putObject({
             key,
             body: 'body',
             contentType: ContentType.TEXT
@@ -60,13 +60,13 @@ describe('S3Service', () => {
 
     it('should list all keys', async () => {
         const key1 = 'key1';
-        cdn.putObject({
+        await cdn.putObject({
             key: key1,
             body: 'body',
             contentType: ContentType.TEXT
         });
         const key2 = 'key2';
-        cdn.putObject({
+        await cdn.putObject({
             key: key2,
             body: 'body',
             contentType: ContentType.TEXT
@@ -81,13 +81,13 @@ describe('S3Service', () => {
 
         const prefixedKey = prefixKey('key1', prefix);
 
-        cdn.putObject({
+        await cdn.putObject({
             key: 'key1',
             body: 'body1',
             contentType: ContentType.TEXT,
             prefix: prefix
         });
-        cdn.putObject({
+        await cdn.putObject({
             key: 'key2',
             body: 'body2',
             contentType: ContentType.TEXT,

@@ -44,6 +44,15 @@ export async function streamToBuffer(stream: Readable): Promise<Buffer> {
     return Buffer.concat(chunks);
 };
 
+export async function streamToString(stream: Readable): Promise<string> {
+    const buffer = await streamToBuffer(stream);
+    return buffer.toString('utf-8');
+}
+
+export async function streamToParsedJson(stream: Readable): Promise<any> {
+    return JSON.parse(await streamToString(stream));
+}
+
 export async function downloadImage(url: string): Promise<{ buffer: Buffer, contentType: ContentType }> {
     const response = await axios.get(url, { responseType: 'arraybuffer' });
     return {

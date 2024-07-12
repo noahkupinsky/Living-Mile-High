@@ -1,18 +1,16 @@
-import { CdnKeys } from "living-mile-high-lib";
-import { BackupService, CdnAdapter, GeneralDataService, HouseService, StateService } from "~/@types";
+import { BackupService, CdnAdapter, GeneralDataService, HouseService } from "~/@types";
 import { ContentPrefix, ContentType, BackupType } from "~/@types/constants";
 import { services } from "~/di";
 import { inMemoryCdn } from "~/utils/inMemoryCdn";
 import { prefixKey } from "~/utils/misc";
 
 let backupService: BackupService;
-let stateService: StateService;
 let cdnAdapter: CdnAdapter;
 let houseService: HouseService;
 let generalDataService: GeneralDataService;
 
 beforeAll(() => {
-    ({ backupService, cdnAdapter, stateService, houseService, generalDataService } = services());
+    ({ backupService, cdnAdapter, houseService, generalDataService } = services());
 });
 
 describe("backup service", () => {
@@ -22,7 +20,7 @@ describe("backup service", () => {
         const key = 'backup-key';
         const prefixedKey = prefixKey(key, ContentPrefix.BACKUP);
 
-        cdnAdapter.putObject({
+        await cdnAdapter.putObject({
             key: key,
             body: 'body',
             contentType: ContentType.JSON,

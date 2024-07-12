@@ -19,7 +19,7 @@ export async function createInMemoryS3CdnConfig(): Promise<S3Config> {
 
     const bucket = 'mock-bucket';
 
-    const baseUrl = generateBaseUrl('localhost', bucket, 'us-east-1');
+    const baseUrl = generateBaseUrl('http://localhost', bucket, 'us-east-1');
 
     return { client, bucket, baseUrl };
 }

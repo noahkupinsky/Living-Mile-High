@@ -24,7 +24,9 @@ export class MongoStateService implements StateService {
         const houseData = await HouseModel.find().lean().exec();
         const generalData = await GeneralDataModel.find().lean().exec();
 
-        return JSON.stringify({ houseData: houseData, generalData: generalData });
+        const state = JSON.stringify({ houseData: houseData, generalData: generalData });
+
+        return state;
     }
 
     async deserializeState(state: string): Promise<void> {

@@ -44,7 +44,7 @@ export class S3CdnAdapter implements CdnAdapter {
         return generateAlphanumericKey();
     }
 
-    public async putObject(command: PutCommand): Promise<PutObjectCommandOutput> {
+    public async putObject(command: PutCommand): Promise<string> {
         const { key, body, contentType, prefix, metadata: optionalMetadata } = command;
 
         const metadata: CdnMetadata = optionalMetadata || {};
@@ -59,17 +59,9 @@ export class S3CdnAdapter implements CdnAdapter {
             ContentType: contentType,
             ACL: 'public-read',
         });
-        return await this.client.send(putObjectCommand);
-    }
+        await this.client.send(putObjectCommand);
 
-    public async moveObject(sourceKey: string, destinationKey: string): Promise<CopyObjectCommandOutput> {
-        const command = new CopyObjectCommand({
-            Bucket: this.bucket,
-            CopySource: `${this.bucket}/${sourceKey}`,
-            Key: destinationKey,
-            ACL: 'public-read'
-        });
-        return await this.client.send(command);
+        return prefixedKey;
     }
 
     public async deleteObject(key: string): Promise<DeleteObjectCommandOutput> {
@@ -80,13 +72,24 @@ export class S3CdnAdapter implements CdnAdapter {
         return await this.client.send(command);
     }
 
+    public async deleteObjects(keys: string[]): Promise<DeleteObjectCommandOutput[]> {
+        const deleteObjectPromises = keys.map(async (key) => {
+            return this.deleteObject(key);
+        });
+
+        return await Promise.all(deleteObjectPromises);
+    }
+
     public extractKeys(data: any): string[] {
         const keys: string[] = [];
+        const urlPattern = new RegExp(`${this.baseUrl}/([^/]+)`);
 
         const traverse = (obj: any) => {
-            if (typeof obj === 'string' && obj.includes(this.baseUrl)) {
-                const key = new URL(obj).pathname.substring(1); // Extract the key from the URL
-                keys.push(key);
+            if (typeof obj === 'string') {
+                const match = obj.match(urlPattern);
+                if (match && match[1]) {
+                    keys.push(match[1]);
+                }
             } else if (typeof obj === 'object' && obj !== null) {
                 for (const key in obj) {
                     if (obj.hasOwnProperty(key)) {

@@ -49,11 +49,11 @@ export interface CdnAdapter {
     public getObjectUrl(key: string): string;
     public generateUniqueKey(): string;
     public extractKeys(object: any): string[];
-    public putObject(command: PutCommand): Promise<PutObjectAclCommandOutput>;
+    public putObject(command: PutCommand): Promise<string>;
     public getObject(key: string): Promise<GetCommandOutput>;
     public getObjects(keys: string[]): Promise<GetCommandOutput[]>;
-    public moveObject(sourceKey: string, destinationKey: string): Promise<CopyObjectCommandOutput>;
     public deleteObject(key: string): Promise<DeleteObjectCommandOutput>;
+    public deleteObjects(keys: string[]): Promise<DeleteObjectCommandOutput[]>;
     public getKeys(prefix?: ContentPrefix): Promise<string[]>
 }
 
@@ -89,6 +89,8 @@ export interface BackupService {
     deleteManualBackup(key: string): Promise<void>;
     restoreBackup(key: string): Promise<void>;
     getBackupIndices(): Promise<BackupIndex[]>;
+    getBackupKeys(): Promise<string[]>;
+    getBackups(): Promise<GetCommandOutput[]>;
     createManualBackup(name: string): Promise<void>;
     createAutoBackup(): Promise<void>;
     pruneBackups(): Promise<void>;

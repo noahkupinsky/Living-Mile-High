@@ -1,9 +1,9 @@
 import { AxiosError } from "axios";
 import { CdnKeys } from "living-mile-high-lib";
-import { ContentType } from "~/@types/constants";
+import { ContentPrefix, ContentType } from "~/@types/constants";
 import { AppDataValidator } from "~/utils/AppDataValidator";
 import { services } from "~/di";
-import { downloadImage } from "~/utils/misc";
+import { downloadImage, streamToParsedJson } from "~/utils/misc";
 
 export async function updateSiteData(): Promise<void> {
     const { stateService, cdnAdapter, backupService } = services();
@@ -43,4 +43,33 @@ async function updateHomePageFirst(homePageImages: string[]): Promise<void> {
             throw error;
         }
     }
+}
+
+export async function pruneAssets(): Promise<void> {
+    const { stateService, cdnAdapter, backupService } = services();
+
+    await backupService.pruneBackups();
+
+    const backups = await backupService.getBackups();
+
+    const state = await stateService.getState();
+
+    const referencedAssets = new Set<string>();
+
+    // Extract keys from state data
+    const stateKeys = cdnAdapter.extractKeys(state);
+    stateKeys.forEach(key => referencedAssets.add(key));
+
+    // Extract keys from valid backups
+    for (const backup of backups) {
+        const data = await streamToParsedJson(backup.body);
+
+        const backupKeys = cdnAdapter.extractKeys(data);
+        backupKeys.forEach(key => referencedAssets.add(key));
+    }
+
+    const allAssets = await cdnAdapter.getKeys(ContentPrefix.ASSET);
+    const assetsToDelete = allAssets.filter(asset => !referencedAssets.has(asset));
+
+    cdnAdapter.deleteObjects(assetsToDelete);
 }
