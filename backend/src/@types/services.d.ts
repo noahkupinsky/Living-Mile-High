@@ -1,5 +1,5 @@
 import { SiteData, DeepPartial, BackupIndex } from "living-mile-high-lib";
-import { ContentPrefix, ContentType } from "./constants";
+import { ContentCategory, ContentType } from "./constants";
 import { GeneralData } from "./database";
 import {
     CopyObjectCommandOutput, DeleteObjectCommandOutput, GetObjectCommandOutput, PutObjectAclCommandOutput,
@@ -34,8 +34,9 @@ export type PutCommand = {
     key: string,
     body: any,
     contentType: ContentType,
-    prefix?: ContentPrefix,
-    metadata?: CdnMetadata
+    prefix?: ContentCategory,
+    metadata?: CdnMetadata,
+    permission?: ContentPermission
 }
 
 export type CdnContent = {
@@ -54,7 +55,7 @@ export interface CdnAdapter {
     public getObjects(keys: string[]): Promise<CdnContent[]>;
     public deleteObject(key: string): Promise<DeleteObjectCommandOutput>;
     public deleteObjects(keys: string[]): Promise<DeleteObjectCommandOutput[]>;
-    public getKeys(prefix?: ContentPrefix): Promise<string[]>
+    public getKeys(prefix?: ContentCategory): Promise<string[]>
     public updateObjectMetadata(key: string, updates: Partial<CdnMetadata>): Promise<void>;
 }
 
@@ -93,6 +94,7 @@ export interface BackupService {
     getBackupKeys(): Promise<string[]>;
     getBackups(): Promise<CdnContent[]>;
     createManualBackup(name: string): Promise<void>;
+    renameManualBackup(key: string, name: string): Promise<void>;
     createAutoBackup(): Promise<void>;
     pruneBackups(): Promise<void>;
     consolidateAutoBackups(): Promise<void>;

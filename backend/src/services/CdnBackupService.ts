@@ -2,7 +2,7 @@ import { BackupIndex } from "living-mile-high-lib";
 import { Readable } from "stream";
 import { PriorityQueue } from "typescript-collections";
 import { CdnAdapter, CdnContent, BackupService, StateService, CdnMetadata } from "~/@types";
-import { BACKUP_LOGARITHMIC_BASE, BACKUP_RETENTION_DAYS, BackupType, ContentPrefix, ContentType } from "~/@types/constants";
+import { BACKUP_LOGARITHMIC_BASE, BACKUP_RETENTION_DAYS, BackupType, ContentCategory, ContentType } from "~/@types/constants";
 import { inMemoryCdn } from "~/utils/inMemoryCdn";
 import { streamToString } from "~/utils/misc";
 
@@ -63,7 +63,7 @@ export class CdnBackupService implements BackupService {
     }
 
     async getBackupKeys(): Promise<string[]> {
-        return await this.cdn.getKeys(ContentPrefix.BACKUP);
+        return await this.cdn.getKeys(ContentCategory.BACKUP);
     }
 
     async getBackups(): Promise<CdnContent[]> {
@@ -73,6 +73,17 @@ export class CdnBackupService implements BackupService {
 
     async createManualBackup(name: string): Promise<void> {
         await this.createBackup(BackupType.MANUAL, name);
+    }
+
+    async renameManualBackup(key: string, name: string): Promise<void> {
+        const backup = await this.cdn.getObject(key);
+        const backupType = backup.metadata.backupType!;
+
+        if (backupType !== BackupType.MANUAL) {
+            throw new Error('Not a manual backup');
+        }
+
+        await this.cdn.updateObjectMetadata(key, { name: name });
     }
 
     async createAutoBackup(): Promise<void> {
@@ -100,7 +111,7 @@ export class CdnBackupService implements BackupService {
             key: key,
             body: backupData,
             contentType: ContentType.JSON,
-            prefix: ContentPrefix.BACKUP,
+            prefix: ContentCategory.BACKUP,
             metadata: metadata
         });
     }

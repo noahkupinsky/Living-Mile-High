@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 import { CdnKeys } from "living-mile-high-lib";
-import { ContentPrefix, ContentType } from "~/@types/constants";
+import { ContentCategory, ContentType } from "~/@types/constants";
 import { AppDataValidator } from "~/utils/AppDataValidator";
 import { services } from "~/di";
 import { downloadImage, streamToParsedJson } from "~/utils/misc";
@@ -68,7 +68,7 @@ export async function pruneAssets(): Promise<void> {
         backupKeys.forEach(key => referencedAssets.add(key));
     }
 
-    const allAssets = await cdnAdapter.getKeys(ContentPrefix.ASSET);
+    const allAssets = await cdnAdapter.getKeys(ContentCategory.ASSET);
     const assetsToDelete = allAssets.filter(asset => !referencedAssets.has(asset));
 
     cdnAdapter.deleteObjects(assetsToDelete);

@@ -1,4 +1,4 @@
-export enum ContentPrefix {
+export enum ContentCategory {
     ASSET = 'asset',
     BACKUP = 'backup'
 }
@@ -13,6 +13,11 @@ export enum ContentType {
     WEBP = 'image/webp',
     TIFF = 'image/tiff',
     SVG = 'image/svg+xml'
+}
+
+export enum ContentPermission {
+    PUBLIC = 'public-read',
+    PRIVATE = 'private'
 }
 
 export enum BackupType {

@@ -1,9 +1,10 @@
 import { CdnAdapter, CdnMetadata } from "~/@types";
-import { BackupType, ContentPrefix, ContentType } from "~/@types/constants";
+import { BackupType, ContentCategory, ContentPermission, ContentType } from "~/@types/constants";
 import { services } from "~/di";
 import { prefixKey } from "~/utils/misc";
 import { inMemoryCdn } from "~/utils/inMemoryCdn";
 import { Readable } from "stream";
+import { CdnKeys } from "living-mile-high-lib";
 
 let cdn: CdnAdapter;
 
@@ -29,7 +30,7 @@ describe('S3Service', () => {
         const key = 'test-key';
         const body = 'test-body';
         const contentType = ContentType.TEXT;
-        const prefix = ContentPrefix.ASSET;
+        const prefix = ContentCategory.ASSET;
 
         const prefixedKey = prefixKey(key, prefix);
 
@@ -77,7 +78,7 @@ describe('S3Service', () => {
     });
 
     it('should list specific prefix keys', async () => {
-        const prefix = ContentPrefix.ASSET;
+        const prefix = ContentCategory.ASSET;
 
         const prefixedKey = prefixKey('key1', prefix);
 
@@ -193,4 +194,60 @@ describe('S3Service', () => {
         expect(inMemoryCdn[key].metadata).toEqual({ ...originalMetadata, ...updatedMetadata });
     });
 });
+
+describe('putObject permissions', () => {
+    const createObject = async (key: string, prefix?: ContentCategory): Promise<string> => {
+        return await cdn.putObject({
+            key: key,
+            body: `{"data": "${key}"}`,
+            contentType: ContentType.JSON,
+            prefix: prefix
+        });
+    };
+
+    it('should set ACL to public-read for ASSET prefix', async () => {
+        const key = await createObject('assetKey', ContentCategory.ASSET);
+
+        expect(inMemoryCdn[key].acl).toBe(ContentPermission.PUBLIC);
+    });
+
+    it('should set ACL to public-read for fixed keys with no prefix', async () => {
+        const fixedKey = Object.values(CdnKeys)[0];
+        const key = await createObject(fixedKey);
+
+        expect(inMemoryCdn[key].acl).toBe(ContentPermission.PUBLIC);
+    });
+
+    it('should set ACL to private for fixed keys with any non-ASSET prefix, as fixed keys are exclusively prefixless', async () => {
+        const fixedKey = Object.values(CdnKeys)[0];
+        const key = await createObject(fixedKey, ContentCategory.BACKUP);
+
+        expect(inMemoryCdn[key].acl).toBe(ContentPermission.PRIVATE);
+    });
+
+    it('should set ACL to private for non-ASSET category', async () => {
+        const key = await createObject('anything', ContentCategory.BACKUP);
+
+        expect(inMemoryCdn[key].acl).toBe(ContentPermission.PRIVATE);
+    });
+
+    it('should set ACL to private for categoryless nonfixed key', async () => {
+        const nonFixedKey = Object.values(CdnKeys).join('');
+        const key = await createObject(nonFixedKey);
+
+        expect(inMemoryCdn[key].acl).toBe(ContentPermission.PRIVATE);
+    });
+
+    it('should allow explicit setting of permission', async () => {
+        const nonFixedKey = Object.values(CdnKeys).join('');
+        const key = await cdn.putObject({
+            key: nonFixedKey,
+            body: `{"data": "${nonFixedKey}"}`,
+            contentType: ContentType.JSON,
+            permission: ContentPermission.PUBLIC
+        });
+
+        expect(inMemoryCdn[key].acl).toBe(ContentPermission.PUBLIC);
+    });
+})
 

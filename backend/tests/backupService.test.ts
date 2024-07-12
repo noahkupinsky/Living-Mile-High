@@ -1,6 +1,6 @@
 import { Readable } from "stream";
 import { BackupService, CdnAdapter, GeneralDataService, HouseService } from "~/@types";
-import { ContentPrefix, ContentType, BackupType, BACKUP_LOGARITHMIC_BASE as BASE } from "~/@types/constants";
+import { ContentCategory, ContentType, BackupType, BACKUP_LOGARITHMIC_BASE as BASE } from "~/@types/constants";
 import { services } from "~/di";
 import { inMemoryCdn } from "~/utils/inMemoryCdn";
 import { prefixKey } from "~/utils/misc";
@@ -19,13 +19,13 @@ describe("backup service", () => {
         const name = "Hello World";
 
         const key = 'backup-key';
-        const prefixedKey = prefixKey(key, ContentPrefix.BACKUP);
+        const prefixedKey = prefixKey(key, ContentCategory.BACKUP);
 
         await cdnAdapter.putObject({
             key: key,
             body: 'body',
             contentType: ContentType.JSON,
-            prefix: ContentPrefix.BACKUP,
+            prefix: ContentCategory.BACKUP,
             metadata: {
                 name: name
             }
@@ -51,7 +51,7 @@ describe("backup service", () => {
     });
 
     test('deleteManualBackup should delete manual backup', async () => {
-        const backupKey = prefixKey('manual-backup-key', ContentPrefix.BACKUP);
+        const backupKey = prefixKey('manual-backup-key', ContentCategory.BACKUP);
         const backupMetadata = {
             backupType: BackupType.MANUAL,
             name: 'manual-backup-name'
@@ -69,7 +69,7 @@ describe("backup service", () => {
     });
 
     test('deleteManualBackup should delete manual backup', async () => {
-        const backupKey = prefixKey('manual-backup-key', ContentPrefix.BACKUP);
+        const backupKey = prefixKey('manual-backup-key', ContentCategory.BACKUP);
         const backupMetadata = {
             backupType: BackupType.AUTO,
             name: 'manual-backup-name'
@@ -154,8 +154,8 @@ describe("backup service", () => {
     });
 
     test('pruneBackups should delete expired automatic backups', async () => {
-        const backupKey1 = prefixKey('key-1', ContentPrefix.BACKUP);
-        const backupKey2 = prefixKey('key-2', ContentPrefix.BACKUP);
+        const backupKey1 = prefixKey('key-1', ContentCategory.BACKUP);
+        const backupKey2 = prefixKey('key-2', ContentCategory.BACKUP);
 
         const currentDate = new Date();
         const pastDate = new Date(currentDate.getTime() - 1000 * 60 * 60 * 24 * 10); // 10 days ago
@@ -188,7 +188,7 @@ describe("backup service", () => {
     });
 
     test('pruneBackups should not delete manual backups', async () => {
-        const backupKey1 = prefixKey('key-1', ContentPrefix.BACKUP);
+        const backupKey1 = prefixKey('key-1', ContentCategory.BACKUP);
 
         inMemoryCdn[backupKey1] = {
             body: 'backup-data-1',
@@ -203,6 +203,56 @@ describe("backup service", () => {
 
         expect(inMemoryCdn).toHaveProperty(backupKey1);
     });
+
+    test('renameManualBackup should rename a manual backup', async () => {
+        const initialName = 'Initial Backup';
+        const newName = 'Renamed Backup';
+
+        const key = await cdnAdapter.putObject({
+            key: 'manual-1',
+            body: `{"data": "${initialName}"}`,
+            contentType: ContentType.JSON,
+            prefix: ContentCategory.BACKUP,
+            metadata: {
+                name: initialName,
+                backupType: BackupType.MANUAL,
+                createdAt: new Date().toISOString()
+            }
+        });
+
+        // Verify the initial state
+        expect(inMemoryCdn[key].metadata.name).toBe(initialName);
+
+        // Perform the renaming
+        await backupService.renameManualBackup(key, newName);
+
+        // Verify the final state
+        expect(inMemoryCdn[key].metadata.name).toBe(newName);
+    });
+
+    test('renameManualBackup should throw error if not a manual backup', async () => {
+        const initialName = 'Initial Backup';
+
+        const key = await cdnAdapter.putObject({
+            key: 'auto-1',
+            body: `{"data": "${initialName}"}`,
+            contentType: ContentType.JSON,
+            prefix: ContentCategory.BACKUP,
+            metadata: {
+                name: initialName,
+                backupType: BackupType.AUTO,
+                createdAt: new Date().toISOString()
+            }
+        });
+
+        // Verify the initial state
+        expect(inMemoryCdn[key].metadata.name).toBe(initialName);
+
+        // Attempt to rename and expect an error
+        await expect(backupService.renameManualBackup(key, 'Renamed Backup'))
+            .rejects
+            .toThrow('Not a manual backup');
+    });
 });
 
 describe('backup consolidation', () => {
@@ -213,7 +263,7 @@ describe('backup consolidation', () => {
             key: name,
             body: `{"data": "${name}"}`,
             contentType: ContentType.JSON,
-            prefix: ContentPrefix.BACKUP,
+            prefix: ContentCategory.BACKUP,
             metadata: {
                 name: name,
                 backupType: BackupType.AUTO,

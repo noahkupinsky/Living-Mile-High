@@ -1,11 +1,11 @@
-import { ContentPrefix } from "~/@types/constants";
+import { ContentCategory } from "~/@types/constants";
 import { prefixKey, unprefixKey } from "~/utils/misc";
 
 describe('prefixing', () => {
     test('prefix key', () => {
         const key = 'key';
 
-        const prefix = ContentPrefix.ASSET;
+        const prefix = ContentCategory.ASSET;
 
         const prefixedKey = prefixKey(key, prefix);
 
@@ -15,7 +15,7 @@ describe('prefixing', () => {
     test('unprefix key', () => {
         const key = 'key';
 
-        const prefix = ContentPrefix.ASSET;
+        const prefix = ContentCategory.ASSET;
 
         expect(unprefixKey(prefixKey(key, prefix))).toEqual(key);
     });

@@ -12,8 +12,9 @@ import {
     GetObjectCommandOutput,
     MetadataDirective
 } from "@aws-sdk/client-s3";
+import { CdnKeys } from "living-mile-high-lib";
 import { CdnAdapter, CdnMetadata, CdnContent, PutCommand, S3Config } from '~/@types';
-import { ContentPrefix, ContentType } from "~/@types/constants";
+import { ContentCategory, ContentPermission, ContentType } from "~/@types/constants";
 import { prefixKey } from "~/utils/misc";
 
 function generateAlphanumericKey(length: number = 16): string {
@@ -46,9 +47,10 @@ export class S3CdnAdapter implements CdnAdapter {
     }
 
     public async putObject(command: PutCommand): Promise<string> {
-        const { key, body, contentType, prefix, metadata: optionalMetadata } = command;
+        const { key, body, contentType, prefix, permission: optionalPermission, metadata: optionalMetadata } = command;
 
         const metadata: CdnMetadata = optionalMetadata || {};
+        const permission = optionalPermission || this.inferPermission(key, prefix);
 
         const prefixedKey = prefixKey(key, prefix);
 
@@ -58,11 +60,19 @@ export class S3CdnAdapter implements CdnAdapter {
             Key: prefixedKey,
             Body: body,
             ContentType: contentType,
-            ACL: 'public-read',
+            ACL: permission,
         });
         await this.client.send(putObjectCommand);
 
         return prefixedKey;
+    }
+
+    private inferPermission(key: string, prefix?: ContentCategory): ContentPermission {
+        const isAsset = prefix === ContentCategory.ASSET;
+        const fixedKeys: string[] = Object.values(CdnKeys);
+        const isFixedKey = prefix === undefined && fixedKeys.includes(key);
+        const isPublic = isAsset || isFixedKey;
+        return isPublic ? ContentPermission.PUBLIC : ContentPermission.PRIVATE
     }
 
     public async deleteObject(key: string): Promise<DeleteObjectCommandOutput> {
@@ -104,7 +114,7 @@ export class S3CdnAdapter implements CdnAdapter {
         return keys;
     }
 
-    public async getKeys(prefix?: ContentPrefix): Promise<string[]> {
+    public async getKeys(prefix?: ContentCategory): Promise<string[]> {
         const allKeys: string[] = [];
         let isTruncated = true;
         let continuationToken: string | undefined = undefined;

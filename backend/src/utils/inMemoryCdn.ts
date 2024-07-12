@@ -18,7 +18,14 @@ import { mockClient } from "aws-sdk-client-mock";
 import { Readable } from "stream";
 
 // In-memory storage
-export const inMemoryCdn: { [key: string]: { body: any; contentType?: string; metadata: { [key: string]: string } } } = {};
+type InMemoryCdnObject = {
+    body: any;
+    contentType?: string;
+    metadata: { [key: string]: string };
+    acl?: string;
+};
+
+export const inMemoryCdn: { [key: string]: InMemoryCdnObject } = {};
 
 export function mockS3Cdn() {
     const s3Mock = mockClient(S3Client);
@@ -30,6 +37,7 @@ export function mockS3Cdn() {
             body,
             contentType: input.ContentType,
             metadata: input.Metadata || {},
+            acl: input.ACL
         };
 
         const result: PutObjectCommandOutput = {
@@ -114,11 +122,11 @@ export function mockS3Cdn() {
         }
 
         const sourceObject = inMemoryCdn[sourceKey];
+        const updatedMetadata = input.MetadataDirective === MetadataDirective.REPLACE ? input.Metadata : sourceObject.metadata;
 
         inMemoryCdn[destinationKey!] = {
-            body: sourceObject.body,
-            contentType: sourceObject.contentType,
-            metadata: input.MetadataDirective === MetadataDirective.REPLACE ? input.Metadata : sourceObject.metadata,
+            ...sourceObject,
+            metadata: updatedMetadata
         };
 
         const result: CopyObjectCommandOutput = {

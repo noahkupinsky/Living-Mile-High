@@ -1,5 +1,5 @@
 import { ImageService, CdnAdapter } from '~/@types';
-import { ContentPrefix, ContentType } from '~/@types/constants';
+import { ContentCategory, ContentType } from '~/@types/constants';
 
 export class CdnImageService implements ImageService {
     private cdn: CdnAdapter;
@@ -22,7 +22,7 @@ export class CdnImageService implements ImageService {
                 key: objectKey,
                 body: file.buffer,
                 contentType: contentType,
-                prefix: ContentPrefix.ASSET
+                prefix: ContentCategory.ASSET
             });
             return this.cdn.getObjectUrl(objectKey);
         } catch (error: any) {

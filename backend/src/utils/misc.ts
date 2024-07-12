@@ -1,7 +1,7 @@
 import axios from "axios";
 import { GeneralData, House, SiteData } from "living-mile-high-lib";
 import { Readable } from "stream";
-import { ContentPrefix, ContentType } from "~/@types/constants";
+import { ContentCategory, ContentType } from "~/@types/constants";
 
 export function constructUpdateObject(obj: any, prefix = ''): Record<string, any> {
     return Object.keys(obj).reduce((acc, key) => {
@@ -16,12 +16,12 @@ export function constructUpdateObject(obj: any, prefix = ''): Record<string, any
 }
 
 
-export function prefixKey(key: string, prefix?: ContentPrefix): string {
+export function prefixKey(key: string, prefix?: ContentCategory): string {
     return prefix ? `${prefix}-${key}` : key;
 }
 
 export function unprefixKey(key: string): string {
-    for (const prefix of Object.values(ContentPrefix)) {
+    for (const prefix of Object.values(ContentCategory)) {
         if (key.startsWith(prefix)) {
             return key.slice(prefix.length + 1);
         }

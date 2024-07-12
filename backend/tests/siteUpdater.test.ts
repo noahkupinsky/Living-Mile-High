@@ -4,7 +4,7 @@ import { BackupService, CdnAdapter, GeneralDataService, HouseService } from "~/@
 import { combineSiteData, downloadImage, prefixKey } from "~/utils/misc";
 import { inMemoryCdn } from "~/utils/inMemoryCdn";
 import { pruneAssets, updateSiteData } from "~/controllers/siteUpdateController";
-import { ContentPrefix, ContentType } from "~/@types/constants";
+import { ContentCategory, ContentType } from "~/@types/constants";
 
 let backupService: BackupService;
 let generalDataService: GeneralDataService;
@@ -53,7 +53,7 @@ describe('PruneAssets', () => {
             key: 'test-key',
             body: 'body',
             contentType: ContentType.TEXT,
-            prefix: ContentPrefix.ASSET
+            prefix: ContentCategory.ASSET
         });
 
         await pruneAssets();
@@ -81,7 +81,7 @@ describe('PruneAssets', () => {
             key: 'test-key',
             body: 'body',
             contentType: ContentType.TEXT,
-            prefix: ContentPrefix.ASSET
+            prefix: ContentCategory.ASSET
         });
         const assetUrl = cdn.getObjectUrl(assetKey);
 
@@ -112,7 +112,7 @@ describe('PruneAssets', () => {
             key: 'test-key',
             body: 'body',
             contentType: ContentType.TEXT,
-            prefix: ContentPrefix.ASSET
+            prefix: ContentCategory.ASSET
         });
         const assetUrl = cdn.getObjectUrl(assetKey);
 
@@ -147,14 +147,14 @@ describe('PruneAssets', () => {
             key: 'test-key1',
             body: 'body',
             contentType: ContentType.TEXT,
-            prefix: ContentPrefix.ASSET
+            prefix: ContentCategory.ASSET
         });
         const assetUrl1 = cdn.getObjectUrl(assetKey1);
         const assetKey2 = await cdn.putObject({
             key: 'test-key2',
             body: 'body',
             contentType: ContentType.TEXT,
-            prefix: ContentPrefix.ASSET
+            prefix: ContentCategory.ASSET
         });
         const assetUrl2 = cdn.getObjectUrl(assetKey2);
 
