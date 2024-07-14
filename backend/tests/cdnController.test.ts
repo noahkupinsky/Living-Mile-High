@@ -4,7 +4,7 @@ import { BackupService, CdnAdapter, GeneralDataService, HouseService } from "~/@
 import { combineSiteData, downloadImage } from "~/utils/misc";
 import { inMemoryCdn } from "~/utils/inMemoryCdn";
 import { ContentCategory, ContentType } from "~/@types/constants";
-import { pruneAssets, updateFixedKeys, updateHomePageFirst, updateSiteData } from "~/controllers/cdnController";
+import { pruneAssets, pruneCdn, updateFixedKeys, updateHomePageFirst, updateSiteData } from "~/controllers/cdnController";
 
 let backupService: BackupService;
 let generalDataService: GeneralDataService;
@@ -35,9 +35,25 @@ describe('update fixed keys', () => {
 
         expect(homePageFirst).toEqual(expectedHomePageFirst);
     });
+
+    test('updateFixedKeys should do both', async () => {
+        await updateFixedKeys();
+
+        const expectedSiteData = combineSiteData(DefaultGeneralData, []);
+        const siteDataString = inMemoryCdn[CdnKeys.SITE_DATA].body;
+
+        const siteData = JSON.parse(siteDataString) as SiteData;
+
+        expect(siteData).toEqual(expectedSiteData);
+
+        const expectedHomePageFirst = (await downloadImage(DefaultHomePageImages[0])).buffer;
+        const homePageFirst = inMemoryCdn[CdnKeys.HOME_PAGE_FIRST].body;
+
+        expect(homePageFirst).toEqual(expectedHomePageFirst);
+    });
 });
 
-describe('PruneAssets', () => {
+describe('pruning the cdn', () => {
     test('pruneAssets should delete assets that were never referred to', async () => {
         await updateFixedKeys();
 
@@ -149,5 +165,41 @@ describe('PruneAssets', () => {
         await pruneAssets();
         expect(inMemoryCdn[assetKey1]).toBeUndefined();
         expect(inMemoryCdn[assetKey2]).toBeDefined();
+    });
+
+    test('pruneCdn should prune backups and then prune assets', async () => {
+        // create asset
+        const assetKey = await cdn.putObject({
+            key: 'test-key',
+            body: 'body',
+            contentType: ContentType.TEXT,
+            prefix: ContentCategory.ASSET
+        });
+        const assetUrl = cdn.getObjectUrl(assetKey);
+
+        // add asset to site data
+        await generalDataService.update({
+            about: {
+                text: assetUrl
+            }
+        });
+        // update site data and create auto backup
+        await updateSiteData();
+        await backupService.createAutoBackup();
+
+        //manually expire the backup
+        const backupKey = (await backupService.getBackupKeys())[0];
+        inMemoryCdn[backupKey].metadata.expiration = new Date(Date.now() - 1000).toISOString();
+
+        // remove asset from current site data
+        await generalDataService.update({
+            about: {
+                text: 'about'
+            }
+        });
+
+        // prune and expect the asset to still be there due to backup reference
+        await pruneCdn();
+        expect(inMemoryCdn[assetKey]).toBeUndefined();
     });
 });
