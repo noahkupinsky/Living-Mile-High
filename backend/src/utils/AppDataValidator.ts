@@ -1,6 +1,6 @@
 import { SiteData } from "living-mile-high-lib";
 
-export class AppDataValidator {
+export class SiteDataValidator {
     public static validate(data: any): data is SiteData {
         if (typeof data !== 'object' || data === null) {
             throw new Error('AppData must be an object');

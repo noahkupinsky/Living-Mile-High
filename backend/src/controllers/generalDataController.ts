@@ -1,12 +1,12 @@
 import { SiteData, DeepPartial } from "living-mile-high-lib";
 import { ExpressEndpoint } from "~/@types";
 import { services } from "~/di";
-import { updateSiteData } from "~/controllers/siteUpdateController";
+import { updateFixedKeys } from "./cdnController";
 
 export const updateDataAndBroadcast = async (updates: DeepPartial<SiteData>) => {
     const { generalDataService } = services();
     await generalDataService.update(updates);
-    await updateSiteData();
+    await updateFixedKeys();
 }
 
 export const updateGeneralData: ExpressEndpoint = async (req, res) => {

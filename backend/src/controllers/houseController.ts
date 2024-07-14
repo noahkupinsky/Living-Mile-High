@@ -13,7 +13,7 @@ export const getHouses: ExpressEndpoint = async (req, res) => {
     }
 }
 
-export const saveHouse: ExpressEndpoint = async (req, res) => {
+export const upsertHouse: ExpressEndpoint = async (req, res) => {
     const house: House = req.body;
     try {
         await houseService().upsertHouse(house);

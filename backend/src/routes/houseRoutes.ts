@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import { getHouses, saveHouse } from '~/controllers/houseController';
+import { getHouses, upsertHouse } from '~/controllers/houseController';
 
 const router = Router();
 
 router.get('/', getHouses);
-router.post('/upsert', saveHouse);
+router.post('/upsert', upsertHouse);
 
 export default router
