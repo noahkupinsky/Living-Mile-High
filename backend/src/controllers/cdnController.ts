@@ -8,6 +8,8 @@ const cdn = () => services().cdnAdapter;
 const backupService = () => services().backupService;
 const getState = async () => services().stateService.getState();
 
+// INTERMEDIATES, NOT ROUTES
+
 export async function updateFixedKeys() {
     await updateSiteData();
     await updateHomePageFirst();

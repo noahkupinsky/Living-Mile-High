@@ -1,18 +1,14 @@
-import { SiteData, DeepPartial } from "living-mile-high-lib";
 import { ExpressEndpoint } from "~/@types";
 import { services } from "~/di";
-import { updateFixedKeys } from "./cdnController";
+import { updateSite } from "./updateController";
 
-export const updateDataAndBroadcast = async (updates: DeepPartial<SiteData>) => {
-    const { generalDataService } = services();
-    await generalDataService.update(updates);
-    await updateFixedKeys();
-}
+const generalDataService = () => services().generalDataService;
 
 export const updateGeneralData: ExpressEndpoint = async (req, res) => {
     const updates = req.body;
     try {
-        await updateDataAndBroadcast(updates);
+        await generalDataService().update(updates);
+        await updateSite();
         res.json({ success: true });
     } catch (error: any) {
         console.error(error);

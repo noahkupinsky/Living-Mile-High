@@ -11,7 +11,7 @@ export type HouseQueryContextProps = {
 
 const HouseQueryContext = ({ children }: HouseQueryContextProps) => {
     const { apiService } = useServices();
-    const { data, error, isLoading } = useFetch('/houses', apiService, {});
+    const { data, error, isLoading } = useFetch('/house', apiService, {});
     const houses = isLoading ? [] : data;
 
     return (

@@ -1,17 +1,6 @@
 import { Router } from 'express';
-import authRouter from './authRoutes';
-import houseRouter from './houseRoutes';
-import imageRouter from './imageRoutes';
 import eventRouter from './eventRoutes';
-import { updateGeneralData } from '../controllers/generalDataController';
-
-
-const apiRouter = Router();
-
-apiRouter.use('/auth', authRouter);
-apiRouter.use('/houses', houseRouter);
-apiRouter.use('/image', imageRouter);
-apiRouter.post('/general', updateGeneralData);
+import apiRouter from './apiRoutes';
 
 const router = Router();
 

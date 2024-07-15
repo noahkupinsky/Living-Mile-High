@@ -82,9 +82,9 @@ describe('GET /events/connect', () => {
                     receivedInitialMessage = true;
 
                     // Send the custom event message after receiving the initial message
-                    sendEventMessage(EventMessage.SITE_DATA_UPDATED);
+                    sendEventMessage(EventMessage.SITE_UPDATED);
                 } else {
-                    expect(data).toEqual(EventMessage.SITE_DATA_UPDATED);
+                    expect(data).toEqual(EventMessage.SITE_UPDATED);
                     close();
                 }
             }
