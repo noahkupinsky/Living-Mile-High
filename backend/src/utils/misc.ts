@@ -1,5 +1,5 @@
 import axios from "axios";
-import { GeneralData, House, SiteData } from "living-mile-high-lib";
+import { EventMessage, GeneralData, House, SiteData } from "living-mile-high-lib";
 import { Readable } from "stream";
 import { ContentCategory, ContentType } from "~/@types/constants";
 
@@ -59,4 +59,8 @@ export async function downloadImage(url: string): Promise<{ buffer: Buffer, cont
         buffer: Buffer.from(response.data),
         contentType: response.headers['content-type']
     };
+}
+
+export function formatEventMessage(message: EventMessage): string {
+    return `data: ${message}\n\n`;
 }

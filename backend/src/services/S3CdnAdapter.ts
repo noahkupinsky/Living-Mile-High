@@ -9,7 +9,7 @@ import {
     GetObjectCommandOutput,
     MetadataDirective
 } from "@aws-sdk/client-s3";
-import { CdnKeys } from "living-mile-high-lib";
+import { CdnFixedKey } from "living-mile-high-lib";
 import { CdnAdapter, CdnMetadata, CdnContent, PutCommand, S3Config } from '~/@types';
 import { ContentCategory, ContentPermission, ContentType } from "~/@types/constants";
 import { prefixKey } from "~/utils/misc";
@@ -66,7 +66,7 @@ export class S3CdnAdapter implements CdnAdapter {
 
     private inferPermission(key: string, prefix?: ContentCategory): ContentPermission {
         const isAsset = prefix === ContentCategory.ASSET;
-        const fixedKeys: string[] = Object.values(CdnKeys);
+        const fixedKeys: string[] = Object.values(CdnFixedKey);
         const isFixedKey = prefix === undefined && fixedKeys.includes(key);
         const isPublic = isAsset || isFixedKey;
         return isPublic ? ContentPermission.PUBLIC : ContentPermission.PRIVATE

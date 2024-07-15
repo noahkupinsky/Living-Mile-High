@@ -20,7 +20,12 @@ export const DefaultGeneralData: GeneralData = {
     homePageImages: DefaultHomePageImages
 }
 
-export enum CdnKeys {
+export enum CdnFixedKey {
     SITE_DATA = 'siteData',
     HOME_PAGE_FIRST = 'homePageFirst'
+}
+
+export enum EventMessage {
+    SITE_DATA_UPDATED = 'site-data-updated',
+    CONNECTED = 'connected'
 }

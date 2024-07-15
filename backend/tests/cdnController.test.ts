@@ -1,4 +1,4 @@
-import { CdnKeys, DefaultGeneralData, DefaultHomePageImages, House, SiteData } from "living-mile-high-lib";
+import { CdnFixedKey, DefaultGeneralData, DefaultHomePageImages, House, SiteData } from "living-mile-high-lib";
 import { services } from "~/di";
 import { BackupService, CdnAdapter, GeneralDataService, HouseService } from "~/@types";
 import { combineSiteData, downloadImage } from "~/utils/misc";
@@ -20,7 +20,7 @@ describe('update fixed keys', () => {
         await updateSiteData();
 
         const expectedSiteData = combineSiteData(DefaultGeneralData, []);
-        const siteDataString = inMemoryCdn[CdnKeys.SITE_DATA].body;
+        const siteDataString = inMemoryCdn[CdnFixedKey.SITE_DATA].body;
 
         const siteData = JSON.parse(siteDataString) as SiteData;
 
@@ -31,7 +31,7 @@ describe('update fixed keys', () => {
         await updateHomePageFirst();
 
         const expectedHomePageFirst = (await downloadImage(DefaultHomePageImages[0])).buffer;
-        const homePageFirst = inMemoryCdn[CdnKeys.HOME_PAGE_FIRST].body;
+        const homePageFirst = inMemoryCdn[CdnFixedKey.HOME_PAGE_FIRST].body;
 
         expect(homePageFirst).toEqual(expectedHomePageFirst);
     });
@@ -40,14 +40,14 @@ describe('update fixed keys', () => {
         await updateFixedKeys();
 
         const expectedSiteData = combineSiteData(DefaultGeneralData, []);
-        const siteDataString = inMemoryCdn[CdnKeys.SITE_DATA].body;
+        const siteDataString = inMemoryCdn[CdnFixedKey.SITE_DATA].body;
 
         const siteData = JSON.parse(siteDataString) as SiteData;
 
         expect(siteData).toEqual(expectedSiteData);
 
         const expectedHomePageFirst = (await downloadImage(DefaultHomePageImages[0])).buffer;
-        const homePageFirst = inMemoryCdn[CdnKeys.HOME_PAGE_FIRST].body;
+        const homePageFirst = inMemoryCdn[CdnFixedKey.HOME_PAGE_FIRST].body;
 
         expect(homePageFirst).toEqual(expectedHomePageFirst);
     });

@@ -1,4 +1,4 @@
-import { CdnKeys } from "living-mile-high-lib";
+import { CdnFixedKey } from "living-mile-high-lib";
 import { ContentCategory, ContentType } from "~/@types/constants";
 import { services } from "~/di";
 import { SiteDataValidator } from "~/utils/AppDataValidator";
@@ -26,7 +26,7 @@ export async function updateSiteData(): Promise<void> {
     const stringifiedSiteData = JSON.stringify(siteData);
 
     await cdn().putObject({
-        key: CdnKeys.SITE_DATA,
+        key: CdnFixedKey.SITE_DATA,
         body: stringifiedSiteData,
         contentType: ContentType.JSON
     });
@@ -42,7 +42,7 @@ export async function updateHomePageFirst(): Promise<void> {
     const { buffer, contentType } = await downloadImage(homePageFirst);
 
     await cdn().putObject({
-        key: CdnKeys.HOME_PAGE_FIRST,
+        key: CdnFixedKey.HOME_PAGE_FIRST,
         body: buffer,
         contentType: contentType
     });

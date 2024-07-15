@@ -4,7 +4,7 @@ import { services } from "~/di";
 import { prefixKey } from "~/utils/misc";
 import { inMemoryCdn } from "~/utils/inMemoryCdn";
 import { Readable } from "stream";
-import { CdnKeys } from "living-mile-high-lib";
+import { CdnFixedKey } from "living-mile-high-lib";
 
 let cdn: CdnAdapter;
 
@@ -212,14 +212,14 @@ describe('putObject permissions', () => {
     });
 
     it('should set ACL to public-read for fixed keys with no prefix', async () => {
-        const fixedKey = Object.values(CdnKeys)[0];
+        const fixedKey = Object.values(CdnFixedKey)[0];
         const key = await createObject(fixedKey);
 
         expect(inMemoryCdn[key].acl).toBe(ContentPermission.PUBLIC);
     });
 
     it('should set ACL to private for fixed keys with any non-ASSET prefix, as fixed keys are exclusively prefixless', async () => {
-        const fixedKey = Object.values(CdnKeys)[0];
+        const fixedKey = Object.values(CdnFixedKey)[0];
         const key = await createObject(fixedKey, ContentCategory.BACKUP);
 
         expect(inMemoryCdn[key].acl).toBe(ContentPermission.PRIVATE);
@@ -232,14 +232,14 @@ describe('putObject permissions', () => {
     });
 
     it('should set ACL to private for categoryless nonfixed key', async () => {
-        const nonFixedKey = Object.values(CdnKeys).join('');
+        const nonFixedKey = Object.values(CdnFixedKey).join('');
         const key = await createObject(nonFixedKey);
 
         expect(inMemoryCdn[key].acl).toBe(ContentPermission.PRIVATE);
     });
 
     it('should allow explicit setting of permission', async () => {
-        const nonFixedKey = Object.values(CdnKeys).join('');
+        const nonFixedKey = Object.values(CdnFixedKey).join('');
         const key = await cdn.putObject({
             key: nonFixedKey,
             body: `{"data": "${nonFixedKey}"}`,

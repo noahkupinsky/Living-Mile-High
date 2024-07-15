@@ -6,7 +6,6 @@ import cookieParser from 'cookie-parser';
 import passport from '~/config/passport';
 import router from '~/routes';
 import { connectServices, getServiceManager } from '~/di';
-import { SiteServiceManager } from '~/@types';
 
 const app = express();
 const server = http.createServer(app);

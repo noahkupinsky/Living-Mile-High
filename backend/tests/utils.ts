@@ -1,4 +1,5 @@
 import { GeneralData, House } from "living-mile-high-lib"
+import { getServer } from "~/app"
 
 const defaultMockGeneralData: GeneralData = {
     about: {
@@ -32,4 +33,27 @@ const mockHouseData = (data: Partial<House>): House => {
     return { ...defaultMockHouseData, ...data }
 }
 
-export { mockGeneralData, mockHouseData }
+const server = getServer();
+
+async function startListening(port?: number): Promise<string> {
+    await new Promise<void>((resolve) => {
+        server.listen(port, () => {
+            resolve();
+        });
+    });
+
+    const address = server.address() as any;
+    const url = `http://localhost:${address.port}`;
+
+    return url;
+}
+
+async function stopListening(): Promise<void> {
+    await new Promise<void>((resolve) => {
+        server.close(() => {
+            resolve();
+        });
+    });
+}
+
+export { mockGeneralData, mockHouseData, startListening, stopListening }

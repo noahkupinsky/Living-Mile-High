@@ -2,17 +2,20 @@ import { Router } from 'express';
 import authRouter from './authRoutes';
 import houseRouter from './houseRoutes';
 import imageRouter from './imageRoutes';
+import eventRouter from './eventRoutes';
 import { updateGeneralData } from '../controllers/generalDataController';
 
 
-const subRouter = Router();
+const apiRouter = Router();
 
-subRouter.use('/auth', authRouter);
-subRouter.use('/houses', houseRouter);
-subRouter.use('/image', imageRouter);
-subRouter.post('/general', updateGeneralData);
+apiRouter.use('/auth', authRouter);
+apiRouter.use('/houses', houseRouter);
+apiRouter.use('/image', imageRouter);
+apiRouter.post('/general', updateGeneralData);
 
 const router = Router();
-router.use('/api', subRouter);
+
+router.use('/api', apiRouter);
+router.use('/events', eventRouter);
 
 export default router;
