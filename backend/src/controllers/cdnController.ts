@@ -15,11 +15,6 @@ export async function updateFixedKeys() {
     await updateHomePageFirst();
 }
 
-export async function pruneCdn(): Promise<void> {
-    await backupService().pruneBackups();
-    await pruneAssets();
-}
-
 export async function updateSiteData(): Promise<void> {
     const siteData = await getState();
 

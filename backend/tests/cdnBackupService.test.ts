@@ -182,7 +182,7 @@ describe("backup service", () => {
             }
         };
 
-        await backupService.pruneBackups();
+        await backupService.pruneAutoBackups();
 
         expect(inMemoryCdn).not.toHaveProperty(backupKey1);
         expect(inMemoryCdn).toHaveProperty(backupKey2);
@@ -200,7 +200,7 @@ describe("backup service", () => {
             }
         };
 
-        await backupService.pruneBackups();
+        await backupService.pruneAutoBackups();
 
         expect(inMemoryCdn).toHaveProperty(backupKey1);
     });

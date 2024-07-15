@@ -119,7 +119,7 @@ export class CdnBackupService implements BackupService {
         return date.toISOString();
     }
 
-    async pruneBackups(): Promise<void> {
+    async pruneAutoBackups(): Promise<void> {
         const backups = await this.getBackups();
 
         backups.forEach(backup => this.pruneBackup(backup));

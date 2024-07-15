@@ -60,6 +60,17 @@ export const restoreBackup: ExpressEndpoint = async (req, res) => {
 }
 
 // INTERMEDIATE, NOT A ROUTE
-export const createAutoBackup = async () => {
+
+export const createPruneConsolidateAutoBackups = async () => {
     await backupService().createAutoBackup();
+    await backupService().pruneAutoBackups();
+    await backupService().consolidateAutoBackups();
 }
+
+/**
+ * Why do we need to prune before we consolidate?
+ * Suppose our base is N backups, and we have exactly N backups,
+ * with the oldest one being expired and the other N - 1 valid
+ * If you prune then consolidate, you lose the oldest backup
+ * If you consolidate then prune, you lose all but most recent backup
+ */

@@ -24,7 +24,7 @@ export interface BackupService {
     createManualBackup(name: string): Promise<void>;
     renameManualBackup(key: string, name: string): Promise<void>;
     createAutoBackup(): Promise<void>;
-    pruneBackups(): Promise<void>;
+    pruneAutoBackups(): Promise<void>;
     consolidateAutoBackups(): Promise<void>;
 }
 
