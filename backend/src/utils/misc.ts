@@ -66,21 +66,29 @@ export function formatEventMessage(message: EventMessage): string {
     return `data: ${message}\n\n`;
 }
 
-export const prefixMetadata = (metadata: CdnMetadata): { [key: string]: string } => {
-    const prefixedMetadata: { [key: string]: string } = {};
-    for (const [key, value] of Object.entries(metadata)) {
-        prefixedMetadata[`x-amz-meta-${key}`] = value;
-    }
-    return prefixedMetadata;
+const toSnakeCase = (str: string): string => {
+    return str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
 };
 
-export const unprefixMetadata = (metadata: { [key: string]: string }): CdnMetadata => {
-    const unprefixedMetadata: any = {};
+export const convertToS3Metadata = (metadata: CdnMetadata): { [key: string]: string } => {
+    const adaptedMetadata: { [key: string]: string } = {};
+    for (const [key, value] of Object.entries(metadata)) {
+        adaptedMetadata[`x-amz-meta-${toSnakeCase(key)}`] = value;
+    }
+    return adaptedMetadata;
+};
+
+const toCamelCase = (str: string): string => {
+    return str.replace(/_([a-z])/g, group => group[1].toUpperCase());
+};
+
+export const convertFromS3Metadata = (metadata: { [key: string]: string }): CdnMetadata => {
+    const convertedMetadata: any = {};
     for (const [key, value] of Object.entries(metadata)) {
         if (key.startsWith('x-amz-meta-')) {
-            const unprefixedKey = key.slice(11);
-            unprefixedMetadata[unprefixedKey] = value;
+            const unprefixedKey = toCamelCase(key.slice(11));
+            convertedMetadata[unprefixedKey] = value;
         }
     }
-    return unprefixedMetadata;
+    return convertedMetadata;
 };

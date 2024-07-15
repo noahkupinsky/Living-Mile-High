@@ -12,7 +12,7 @@ import {
 import { CdnFixedKey } from "living-mile-high-lib";
 import { CdnAdapter, CdnMetadata, CdnContent, PutCommand, S3Config } from '~/@types';
 import { ContentCategory, ContentPermission, ContentType } from "~/@types/constants";
-import { prefixKey, prefixMetadata, unprefixMetadata } from "~/utils/misc";
+import { prefixKey, convertToS3Metadata, convertFromS3Metadata } from "~/utils/misc";
 
 function generateAlphanumericKey(length: number = 16): string {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -50,11 +50,11 @@ export class S3CdnAdapter implements CdnAdapter {
         const permission = optionalPermission || this.inferPermission(key, prefix);
 
         const prefixedKey = prefixKey(key, prefix);
-        const prefixedMetadata = prefixMetadata(metadata);
+        const s3Metadata = convertToS3Metadata(metadata);
 
         const putObjectCommand = new PutObjectCommand({
             Bucket: this.bucket,
-            Metadata: prefixedMetadata,
+            Metadata: s3Metadata,
             Key: prefixedKey,
             Body: body,
             ContentType: contentType,
@@ -149,9 +149,9 @@ export class S3CdnAdapter implements CdnAdapter {
             const response: GetObjectCommandOutput = await this.client.send(command);
 
             const body = response.Body!;
-            const prefixedMetadata = response.Metadata!;
+            const s3Metadata = response.Metadata!;
             const contentType = response.ContentType! as ContentType;
-            const metadata = unprefixMetadata(prefixedMetadata);
+            const metadata = convertFromS3Metadata(s3Metadata);
 
             return {
                 key,
@@ -176,13 +176,13 @@ export class S3CdnAdapter implements CdnAdapter {
         const existingObject = await this.getObject(key);
         const metadata = { ...existingObject.metadata, ...updates };
 
-        const prefixedMetadata = prefixMetadata(metadata);
+        const s3Metadata = convertToS3Metadata(metadata);
 
         const command = new CopyObjectCommand({
             Bucket: this.bucket,
             CopySource: this.getObjectUrl(key),
             Key: key,
-            Metadata: prefixedMetadata,
+            Metadata: s3Metadata,
             MetadataDirective: MetadataDirective.REPLACE
         });
         await this.client.send(command);

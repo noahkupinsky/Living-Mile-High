@@ -16,7 +16,7 @@ import {
 } from "@aws-sdk/client-s3";
 import { mockClient } from "aws-sdk-client-mock";
 import { Readable } from "stream";
-import { prefixMetadata, unprefixMetadata } from "./misc";
+import { convertToS3Metadata, convertFromS3Metadata } from "./misc";
 
 // In-memory storage
 type InMemoryCdnObject = {
@@ -34,12 +34,14 @@ export function mockS3Cdn() {
     s3Mock.on(PutObjectCommand).callsFake((input) => {
         const body = input.Body;
 
-        const unprefixedMetadata = input.Metadata ? unprefixMetadata(input.Metadata) : {};
+        const prefixedMetadata = input.Metadata || {};
+        // and now we process the "s3 returned" metadata to get it back to where it was for easy property comparisons
+        const metadata = convertFromS3Metadata(prefixedMetadata);
 
         inMemoryCdn[input.Key] = {
             body,
             contentType: input.ContentType,
-            metadata: unprefixedMetadata,
+            metadata: metadata,
             acl: input.ACL
         };
 
@@ -106,9 +108,11 @@ export function mockS3Cdn() {
         stream.push(object.body);
         stream.push(null);
 
+        const adaptedMetadata = convertToS3Metadata(object.metadata);
+
         const result: GetObjectCommandOutput = {
             Body: stream,
-            Metadata: prefixMetadata(object.metadata),
+            Metadata: adaptedMetadata,
             ContentType: object.contentType,
             $metadata: {}
         };
@@ -125,7 +129,14 @@ export function mockS3Cdn() {
         }
 
         const sourceObject = inMemoryCdn[sourceKey];
-        const updatedMetadata = input.MetadataDirective === MetadataDirective.REPLACE ? unprefixMetadata(input.Metadata) : sourceObject.metadata;
+
+        const newS3Metadata = input.Metadata || {};
+        // and now we process the "s3 returned" metadata to get it back to where it was for easy property comparisons
+        const newMetadata = {
+            ...sourceObject.metadata, ...convertFromS3Metadata(newS3Metadata)
+        };
+
+        const updatedMetadata = input.MetadataDirective === MetadataDirective.REPLACE ? newMetadata : sourceObject.metadata;
 
         inMemoryCdn[destinationKey!] = {
             ...sourceObject,

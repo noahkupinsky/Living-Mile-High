@@ -95,7 +95,7 @@ export class CdnBackupService implements BackupService {
         const backupName = name || `${timestamp}`;
 
         const metadata: BackupMetadata = {
-            backupType,
+            backupType: backupType,
             createdAt: timestamp,
             backupPower: '0',
             name: backupName,
