@@ -1,4 +1,4 @@
-import { S3Client, ListBucketsCommandOutput, ListBucketsCommand, CreateBucketCommand } from "@aws-sdk/client-s3";
+import { S3Client, ListBucketsCommandOutput, ListBucketsCommand, CreateBucketCommand, PutBucketPolicyCommand } from "@aws-sdk/client-s3";
 import path from "path";
 import { Compose, config } from "../config";
 import { dockerDown, dockerRemoveVolumes, dockerRun } from "./dockerUtils";
@@ -60,6 +60,37 @@ async function createLocalBucket(compose: Compose, port: number) {
         } else {
             console.log(`Bucket already exists: ${CDN_BUCKET}`);
         }
+
+        // Define public policy
+        const publicPolicy = {
+            Version: "2012-10-17",
+            Statement: [
+                {
+                    Effect: "Allow",
+                    Principal: "*",
+                    Action: [
+                        "s3:GetBucketLocation",
+                        "s3:ListBucket"
+                    ],
+                    Resource: `arn:aws:s3:::${CDN_BUCKET}`
+                },
+                {
+                    Effect: "Allow",
+                    Principal: "*",
+                    Action: "s3:GetObject",
+                    Resource: `arn:aws:s3:::${CDN_BUCKET}/*`
+                }
+            ]
+        };
+
+        // Apply the bucket policy
+        const policyParams = {
+            Bucket: CDN_BUCKET,
+            Policy: JSON.stringify(publicPolicy)
+        };
+
+        await client.send(new PutBucketPolicyCommand(policyParams));
+        console.log(`Public policy set for bucket: ${CDN_BUCKET}`);
     } catch (err: any) {
         if (err.code !== 'BucketAlreadyOwnedByYou') {
             console.error('Error:', err);
