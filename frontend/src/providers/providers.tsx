@@ -3,7 +3,8 @@
 import React from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { NextTamaguiProvider } from './NextTamaguiProvider';
-import { ServiceProvider } from './ServiceProvider';
+import { AuthProvider } from '@/contexts/AuthContext';
+import { SiteDataProvider } from '@/contexts/SiteDataContext';
 
 const queryClient = new QueryClient();
 
@@ -15,9 +16,11 @@ const Providers = ({ children }: ProviderProps) => {
     return (
         <QueryClientProvider client={queryClient}>
             <NextTamaguiProvider>
-                <ServiceProvider>
-                    {children}
-                </ServiceProvider>
+                <AuthProvider>
+                    <SiteDataProvider>
+                        {children}
+                    </SiteDataProvider>
+                </AuthProvider>
             </NextTamaguiProvider>
         </QueryClientProvider>
 

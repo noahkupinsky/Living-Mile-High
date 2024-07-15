@@ -5,7 +5,7 @@ import { mockS3Cdn } from "./inMemoryCdn";
 function generateBaseUrl(endpoint: string, bucket: string, region: string): string {
     if (endpoint.includes('digitaloceanspaces.com')) {
         return `https://${bucket}.${region}.cdn.digitaloceanspaces.com`;
-    } else if (endpoint.includes('localhost')) {
+    } else if (endpoint.includes('localhost') || endpoint.includes('minio')) {
         return `${endpoint}/${bucket}`;
     } else {
         throw new Error("failed to construct base url");

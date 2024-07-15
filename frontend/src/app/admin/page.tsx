@@ -1,18 +1,18 @@
 "use client";
 
 import { useState, useEffect } from 'react'
-import { useServices } from '@/providers/ServiceProvider';
+import { useAuth } from '@/contexts/AuthContext';
+import BackendProvider from '@/providers/BackendProvider';
 
 const AdminPanel = () => {
-  const { apiService } = useServices();
-  const [adminData, setAdminData] = useState(null)
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const { isAuthenticated, login } = useAuth()
+  const [adminData, setAdminData] = useState({})
   const [password, setPassword] = useState('')
   const [username, setUsername] = useState('')
 
   const handleLogin = async () => {
     try {
-      setIsAuthenticated(await apiService.login(username, password));
+      await login(username, password);
     } catch (error) {
       console.error('Login failed', error)
     }
@@ -20,9 +20,9 @@ const AdminPanel = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      apiService.fetch('/auth/data').then(data => setAdminData(data))
+      BackendProvider.axios().backend.get('api/auth/data').then((res) => setAdminData(res.data));
     }
-  }, [apiService, isAuthenticated])
+  }, [isAuthenticated])
 
   return (
     <div>

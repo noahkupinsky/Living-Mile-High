@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { HouseProvider } from './HouseContext';
-import { useFetch, useServices } from '@/providers/ServiceProvider';
+import { useSiteData } from '@/contexts/SiteDataContext';
 
 
 export type HouseQueryContextProps = {
@@ -10,9 +10,8 @@ export type HouseQueryContextProps = {
 }
 
 const HouseQueryContext = ({ children }: HouseQueryContextProps) => {
-    const { apiService } = useServices();
-    const { data, error, isLoading } = useFetch('/house', apiService, {});
-    const houses = isLoading ? [] : data;
+    const { queryHouses, isLoading } = useSiteData();
+    const houses = isLoading ? [] : queryHouses({});
 
     return (
         <HouseProvider value={{ houses }}>

@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { useHouseContext } from './HouseContext';
 import { Stack, Text, Image, styled } from 'tamagui';
+import BackendProvider from '@/providers/BackendProvider';
+import { CdnFixedKey } from 'living-mile-high-lib';
 
 export type RotatingHouseDisplayProps = {
     interval: number
@@ -61,7 +63,7 @@ const RotatingHouseDisplay = ({ interval }: RotatingHouseDisplayProps) => {
             shadowRadius={8}
         >
             <AutoImage
-                src={"http://localhost:9000/miniocdn/home-first"}
+                src={BackendProvider.cdnKeyToUrl(CdnFixedKey.HOME_PAGE_FIRST)}
                 alt={"Couldn't load home first"}
             />
             {houses.length > 0 ? (

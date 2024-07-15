@@ -7,3 +7,5 @@ export interface ApiService {
 export type Services = {
     apiService: ApiService;
 }
+
+export type EventHandler = (data: any) => void

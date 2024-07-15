@@ -49,6 +49,8 @@ export class S3CdnAdapter implements CdnAdapter {
         const metadata: CdnMetadata = optionalMetadata || {};
         const permission = optionalPermission || this.inferPermission(key, prefix);
 
+        console.log(key, permission);
+
         const prefixedKey = prefixKey(key, prefix);
 
         const putObjectCommand = new PutObjectCommand({
