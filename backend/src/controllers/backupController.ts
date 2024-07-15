@@ -1,5 +1,6 @@
 import { ExpressEndpoint } from "~/@types";
 import { services } from "~/di";
+import { updateSite } from "./updateController";
 
 const backupService = () => services().backupService;
 
@@ -51,6 +52,7 @@ export const restoreBackup: ExpressEndpoint = async (req, res) => {
 
     try {
         await backupService().restoreBackup(key);
+        await updateSite();
         res.status(200).json({ success: true });
     } catch (error: any) {
         res.status(500).json({ success: false, error: error.message });
