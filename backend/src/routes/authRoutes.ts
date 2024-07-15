@@ -6,7 +6,7 @@ const router = Router();
 
 router.post('/login', login);
 
-router.post('/verify', verifyToken, verify);
+router.get('/verify', verifyToken, verify);
 
 router.get('/data', verifyToken, async (req, res) => {
     res.json({ data: 'yo' });

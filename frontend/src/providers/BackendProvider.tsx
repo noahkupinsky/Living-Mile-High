@@ -24,12 +24,14 @@ class BackendProvider {
         return BackendProvider.instance;
     }
 
-    backendRouteToUrl(route: string) {
-        return `${backend_url()}/${route}`;
+    backendRouteToUrl(route: string): string {
+        const url = `${backend_url()}/${route}`;
+        return url;
     }
 
-    cdnKeyToUrl(key: string) {
-        return `${cdn_url()}/${key}`
+    cdnKeyToUrl(key: string): string {
+        const url = `${cdn_url()}/${key}`;
+        return url;
     }
 
     axios(): AxiosInstances {
@@ -89,7 +91,6 @@ class BackendProvider {
             const response = await this.axios().backend.get('api/auth/verify');
             return response.status === 200;
         } catch (error) {
-            console.error('Failed to verify authentication:', error);
             return false;
         }
     }
@@ -99,7 +100,6 @@ class BackendProvider {
             const response = await this.axios().backend.post('api/auth/login', { username, password });
             return response.status === 200;
         } catch (error) {
-            console.error('Failed to login:', error);
             return false;
         }
     }
