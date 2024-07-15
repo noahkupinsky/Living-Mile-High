@@ -1,6 +1,7 @@
 import axios from "axios";
 import { EventMessage, GeneralData, House, SiteData } from "living-mile-high-lib";
 import { Readable } from "stream";
+import { CdnMetadata } from "~/@types";
 import { ContentCategory, ContentType } from "~/@types/constants";
 
 export function constructUpdateObject(obj: any, prefix = ''): Record<string, any> {
@@ -64,3 +65,22 @@ export async function downloadImage(url: string): Promise<{ buffer: Buffer, cont
 export function formatEventMessage(message: EventMessage): string {
     return `data: ${message}\n\n`;
 }
+
+export const prefixMetadata = (metadata: CdnMetadata): { [key: string]: string } => {
+    const prefixedMetadata: { [key: string]: string } = {};
+    for (const [key, value] of Object.entries(metadata)) {
+        prefixedMetadata[`x-amz-meta-${key}`] = value;
+    }
+    return prefixedMetadata;
+};
+
+export const unprefixMetadata = (metadata: { [key: string]: string }): CdnMetadata => {
+    const unprefixedMetadata: any = {};
+    for (const [key, value] of Object.entries(metadata)) {
+        if (key.startsWith('x-amz-meta-')) {
+            const unprefixedKey = key.slice(11);
+            unprefixedMetadata[unprefixedKey] = value;
+        }
+    }
+    return unprefixedMetadata;
+};

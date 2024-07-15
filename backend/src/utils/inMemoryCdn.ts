@@ -16,6 +16,7 @@ import {
 } from "@aws-sdk/client-s3";
 import { mockClient } from "aws-sdk-client-mock";
 import { Readable } from "stream";
+import { prefixMetadata, unprefixMetadata } from "./misc";
 
 // In-memory storage
 type InMemoryCdnObject = {
@@ -33,10 +34,12 @@ export function mockS3Cdn() {
     s3Mock.on(PutObjectCommand).callsFake((input) => {
         const body = input.Body;
 
+        const unprefixedMetadata = input.Metadata ? unprefixMetadata(input.Metadata) : {};
+
         inMemoryCdn[input.Key] = {
             body,
             contentType: input.ContentType,
-            metadata: input.Metadata || {},
+            metadata: unprefixedMetadata,
             acl: input.ACL
         };
 
@@ -105,7 +108,7 @@ export function mockS3Cdn() {
 
         const result: GetObjectCommandOutput = {
             Body: stream,
-            Metadata: object.metadata,
+            Metadata: prefixMetadata(object.metadata),
             ContentType: object.contentType,
             $metadata: {}
         };
@@ -122,7 +125,7 @@ export function mockS3Cdn() {
         }
 
         const sourceObject = inMemoryCdn[sourceKey];
-        const updatedMetadata = input.MetadataDirective === MetadataDirective.REPLACE ? input.Metadata : sourceObject.metadata;
+        const updatedMetadata = input.MetadataDirective === MetadataDirective.REPLACE ? unprefixMetadata(input.Metadata) : sourceObject.metadata;
 
         inMemoryCdn[destinationKey!] = {
             ...sourceObject,
