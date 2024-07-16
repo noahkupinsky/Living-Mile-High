@@ -12,6 +12,7 @@ import {
 import { CdnFixedKey } from "living-mile-high-lib";
 import { CdnAdapter, CdnMetadata, CdnContent, PutCommand, S3Config } from '~/@types';
 import { ContentCategory, ContentPermission, ContentType } from "~/@types/constants";
+import withLock from "~/utils/locks";
 import { prefixKey, convertToS3Metadata, convertFromS3Metadata } from "~/utils/misc";
 
 function generateAlphanumericKey(length: number = 16): string {
@@ -60,7 +61,10 @@ export class S3CdnAdapter implements CdnAdapter {
             ContentType: contentType,
             ACL: permission,
         });
-        await this.client.send(putObjectCommand);
+
+        await withLock(prefixedKey, async () => {
+            await this.client.send(putObjectCommand);
+        });
 
         return prefixedKey;
     }
@@ -78,7 +82,10 @@ export class S3CdnAdapter implements CdnAdapter {
             Bucket: this.bucket,
             Key: key,
         });
-        await this.client.send(command);
+
+        await withLock(key, async () => {
+            await this.client.send(command);
+        })
     }
 
     public async deleteObjects(keys: string[]): Promise<void> {
@@ -185,6 +192,9 @@ export class S3CdnAdapter implements CdnAdapter {
             Metadata: s3Metadata,
             MetadataDirective: MetadataDirective.REPLACE
         });
-        await this.client.send(command);
+
+        await withLock(key, async () => {
+            await this.client.send(command);
+        });
     }
 }

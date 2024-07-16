@@ -1,6 +1,7 @@
 import { DeepPartial, House } from 'living-mile-high-lib';
 import { HouseService } from '~/@types';
 import HouseModel, { HouseDocument, houseDocumentToObject, houseObjectToNewDocument } from '~/models/HouseModel';
+import withLock from '~/utils/locks';
 import { constructUpdateObject } from '~/utils/misc';
 
 export class MongoHouseService implements HouseService {
@@ -20,13 +21,15 @@ export class MongoHouseService implements HouseService {
     }
 
     private async updateHouse(id: any, house: DeepPartial<House>): Promise<void> {
-        const updateFields = constructUpdateObject(house);
+        await withLock(id, async () => {
+            const updateFields = constructUpdateObject(house);
 
-        const foundHouse = await HouseModel.findByIdAndUpdate(id, { $set: updateFields }, { new: true });
+            const foundHouse = await HouseModel.findByIdAndUpdate(id, { $set: updateFields }, { new: true });
 
-        if (!foundHouse) {
-            throw new Error('House not found');
-        }
+            if (!foundHouse) {
+                throw new Error('House not found');
+            }
+        });
     }
 
     private async insertHouse(house: House): Promise<void> {

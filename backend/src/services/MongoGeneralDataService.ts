@@ -1,15 +1,18 @@
 import { DeepPartial, DefaultGeneralData } from "living-mile-high-lib";
 import { GeneralData, GeneralDataService } from "~/@types";
 import GeneralDataModel, { GeneralDataDocument, generalDocumentToObject, generalObjectToNewDocument } from "~/models/GeneralDataModel";
+import withLock from "~/utils/locks";
 import { constructUpdateObject } from "~/utils/misc";
 
 export class MongoGeneralDataService implements GeneralDataService {
     async update(updates: DeepPartial<GeneralData>): Promise<void> {
-        const existing: GeneralDataDocument = await this.getSingletonDocument();
+        await withLock("general", async () => {
+            const existing: GeneralDataDocument = await this.getSingletonDocument();
 
-        const updateFields: DeepPartial<GeneralDataDocument> = constructUpdateObject(updates);
+            const updateFields: DeepPartial<GeneralDataDocument> = constructUpdateObject(updates);
 
-        await GeneralDataModel.findByIdAndUpdate(existing._id, { $set: updateFields }, { new: true });
+            await GeneralDataModel.findByIdAndUpdate(existing._id, { $set: updateFields }, { new: true });
+        });
     }
 
     async getGeneralData(): Promise<GeneralData> {

@@ -13,7 +13,8 @@ export const login: ExpressMiddleware = (req, res, next) => {
             return res.status(401).json({ message: `Invalid username or password` });
         }
 
-        const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, { expiresIn: '1h' });
+        const sessionId = Date.now().toString(); // Generate a unique session ID
+        const token = jwt.sign({ id: user.id, sessionId }, JWT_SECRET, { expiresIn: '1h' });
 
         res.cookie('token', token, {
             httpOnly: true,
