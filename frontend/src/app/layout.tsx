@@ -1,7 +1,7 @@
 import React from 'react';
 import { Metadata } from 'next';
 import Providers from '@/providers/providers';
-import Header from '@/components/Header';
+import Header from '@/components/HeaderComplex';
 import { PublicEnvScript } from 'next-runtime-env';
 import Footer from '@/components/Footer';
 import { Container, Main } from '@/components/LayoutComponents';

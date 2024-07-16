@@ -1,37 +1,12 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { useHouseContext } from './HouseContext';
-import { Stack, Text, Image, styled } from 'tamagui';
+import { Stack, Text } from 'tamagui';
 import services from '@/di';
+import { AutoImage } from './ImageComponents';
 
 export type RotatingHouseDisplayProps = {
     interval: number
-}
-
-const StyledImage = styled(Image, {
-    name: 'StyledImage',
-});
-
-export function AutoImage({ src, alt, ...props }: any) {
-    const [dimensions, setDimensions] = useState<any>({ width: 'auto', height: 'auto' });
-
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            const img = new window.Image();
-            img.src = src;
-            img.onload = () => {
-                setDimensions({ width: img.width, height: img.height });
-            };
-        }
-    }, [src]);
-
-    return (
-        <StyledImage
-            source={{ uri: src, width: dimensions.width, height: dimensions.height }}
-            alt={alt}
-            {...props}
-        />
-    );
 }
 
 const RotatingHouseDisplay = ({ interval }: RotatingHouseDisplayProps) => {

@@ -1,11 +1,11 @@
 import React, { createContext, useState, useEffect, useContext, useCallback } from 'react';
-import { EventMessage, SiteData } from 'living-mile-high-lib';
+import { EventMessage, GeneralData, SiteData } from 'living-mile-high-lib';
 import services from '@/di';
 
 type SiteDataContextType = {
-    siteData: SiteData | undefined;
     isLoading: boolean;
     queryHouses: (filter: any) => void;
+    getGeneralData: () => GeneralData | undefined;
 }
 
 const SiteDataContext = createContext<SiteDataContextType | undefined>(undefined);
@@ -53,8 +53,15 @@ export const SiteDataProvider = ({ children }: SiteDataProviderProps) => {
         return siteData.houses;
     }, [siteData]);
 
+    const getGeneralData = useCallback((): GeneralData | undefined => {
+        if (!siteData) return undefined;
+
+        const { houses: _, ...generalData } = siteData;
+        return generalData;
+    }, [siteData]);
+
     return (
-        <SiteDataContext.Provider value={{ siteData, queryHouses, isLoading }}>
+        <SiteDataContext.Provider value={{ getGeneralData, queryHouses, isLoading }}>
             {children}
         </SiteDataContext.Provider>
     );

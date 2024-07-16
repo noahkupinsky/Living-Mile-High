@@ -1,11 +1,53 @@
 'use client';
 
 import { Stack, Text, YStack } from 'tamagui';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
+import Image from 'next/image';
+
+const nonAdminPageNames = ['About', 'Contact'];
+const adminPageNames = ['Admin'];
+
+type NavTab = {
+    name: string;
+    path: string;
+    color: string;
+}
+
+const nonAdminTabData = (name: string): NavTab => {
+    return {
+        name,
+        path: `/${name.toLowerCase()}`,
+        color: '$primary',
+    };
+}
+
+const adminTabData = (name: string): NavTab => {
+    return {
+        name,
+        path: `/${name.toLowerCase()}`,
+        color: 'red',
+    };
+}
+
+const nonAdminTabs: NavTab[] = nonAdminPageNames.map(n => nonAdminTabData(n));
+const adminTabs: NavTab[] = adminPageNames.map(n => adminTabData(n));
 
 const Header = () => {
-    const router = useRouter()
-    const pathname = usePathname()
+    const router = useRouter();
+    const { isAuthenticated } = useAuth();
+
+    const renderTab = (tab: NavTab) => (
+        <Text
+            key={tab.name}
+            onPress={() => router.push(tab.path)}
+            fontSize="$2"
+            color={tab.color}
+            cursor="pointer"
+        >
+            {tab.name}
+        </Text>
+    );
 
     return (
         <Stack
@@ -18,36 +60,31 @@ const Header = () => {
         >
             <Text
                 onPress={() => router.push('/')}
-                //fontFamily="$heading"
                 fontSize="$3"
                 cursor="pointer"
                 color="$text"
             >
-                {/* Replace with your logo */}
-                Company Logo
+                <Image
+                    src="/company-logo.png"
+                    alt="Company Logo"
+                    width={50}
+                    height={50}
+                />
             </Text>
             <YStack flexDirection="row" gap="$3">
-                {['About', 'Services', 'Contact'].map((tab) => (
-                    <Text
-                        key={tab}
-                        onPress={() => router.push(`/${tab.toLowerCase()}`)}
-                        // fontFamily="$body"
-                        fontSize="$2"
-                        color={pathname === `/${tab.toLowerCase()}` ? '$text' : '$primary'}
-                        cursor="pointer"
-                    >
-                        {tab}
-                    </Text>
-                ))}
+                {nonAdminTabs.concat(isAuthenticated ? adminTabs : []).map(renderTab)}
                 <Text
                     onPress={() => window.open('https://instagram.com', '_blank')}
-                    // fontFamily="$body"
                     fontSize="$2"
                     cursor="pointer"
                     color="$text"
                 >
-                    {/* Replace with Instagram logo */}
-                    Instagram
+                    <Image
+                        src="/instagram-logo.png"
+                        alt="Instagram"
+                        width={24}
+                        height={24}
+                    />
                 </Text>
             </YStack>
         </Stack>

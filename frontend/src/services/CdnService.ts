@@ -1,3 +1,5 @@
+'use client';
+
 import axios, { AxiosInstance } from 'axios';
 import { CdnFixedKey } from 'living-mile-high-lib';
 import { env } from 'next-runtime-env';

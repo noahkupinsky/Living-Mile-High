@@ -1,3 +1,5 @@
+'use client';
+
 import axios, { AxiosInstance } from 'axios';
 import { env } from 'next-runtime-env';
 

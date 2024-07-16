@@ -1,3 +1,5 @@
+'use client';
+
 import { SseHandler } from '@/types';
 import { env } from 'next-runtime-env';
 
