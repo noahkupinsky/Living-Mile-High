@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { useHouseContext } from './HouseContext';
 import { Stack, Text, Image, styled } from 'tamagui';
-import BackendProvider from '@/providers/BackendProvider';
 import { CdnFixedKey } from 'living-mile-high-lib';
+import services from '@/di';
 
 export type RotatingHouseDisplayProps = {
     interval: number
@@ -38,6 +38,7 @@ export function AutoImage({ src, alt, ...props }: any) {
 const RotatingHouseDisplay = ({ interval }: RotatingHouseDisplayProps) => {
     const { houses } = useHouseContext();
     const [currentIndex, setCurrentIndex] = useState(0);
+    const { cdnService } = services();
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -63,7 +64,7 @@ const RotatingHouseDisplay = ({ interval }: RotatingHouseDisplayProps) => {
             shadowRadius={8}
         >
             <AutoImage
-                src={BackendProvider.cdnKeyToUrl(CdnFixedKey.HOME_PAGE_FIRST)}
+                src={cdnService.cdnKeyToUrl(CdnFixedKey.HOME_PAGE_FIRST)}
                 alt={"Couldn't load home first"}
             />
             {houses.length > 0 ? (

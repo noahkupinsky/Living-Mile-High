@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, useContext, useCallback } from 'react';
-import BackendProvider from '@/providers/BackendProvider';
 import { EventMessage, SiteData } from 'living-mile-high-lib';
+import services from '@/di';
 
 type SiteDataContextType = {
     siteData: SiteData | undefined;
@@ -17,18 +17,19 @@ type SiteDataProviderProps = {
 export const SiteDataProvider = ({ children }: SiteDataProviderProps) => {
     const [siteData, setSiteData] = useState<SiteData>();
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const { sseService, cdnService } = services();
 
     const fetchSiteData = useCallback(async () => {
         setIsLoading(true);
         try {
-            const data = await BackendProvider.fetchSiteData();
+            const data = await cdnService.fetchSiteData();
             setSiteData(data);
         } catch (error) {
             console.error('Failed to fetch site data:', error);
         } finally {
             setIsLoading(false);
         }
-    }, []);
+    }, [cdnService]);
 
     useEffect(() => {
         const handleEvent = (data: string) => {
@@ -37,14 +38,14 @@ export const SiteDataProvider = ({ children }: SiteDataProviderProps) => {
             }
         };
 
-        BackendProvider.addEventHandler(handleEvent);
+        sseService.addEventHandler(handleEvent);
 
         fetchSiteData();
 
         return () => {
-            BackendProvider.removeEventHandler(handleEvent);
+            sseService.removeEventHandler(handleEvent);
         };
-    }, [fetchSiteData]);
+    }, [fetchSiteData, sseService]);
 
     const queryHouses = useCallback((filter: any) => {
         if (!siteData) return [];

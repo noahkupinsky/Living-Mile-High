@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext';
-import BackendProvider from '@/providers/BackendProvider';
 
 const AdminPanel = () => {
   const { isAuthenticated, login } = useAuth()
@@ -20,7 +19,7 @@ const AdminPanel = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      BackendProvider.axios().backend.get('api/auth/data').then((res) => setAdminData(res.data));
+      setAdminData({ data: "Authenticated" });
     }
   }, [isAuthenticated])
 
