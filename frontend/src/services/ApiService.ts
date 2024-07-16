@@ -8,7 +8,7 @@ export class ApiService {
 
     constructor() {
         this.backendAxios = axios.create({
-            baseURL: backend_url(),
+            baseURL: `${backend_url()}/api`,
             withCredentials: true
         });
     }
@@ -19,7 +19,7 @@ export class ApiService {
 
     async verifyAuthenticated() {
         try {
-            const response = await this.backendAxios.get('api/auth/verify');
+            const response = await this.backendAxios.get('auth/verify');
             return response.status === 200;
         } catch (error) {
             return false;
@@ -28,7 +28,7 @@ export class ApiService {
 
     async login(username: string, password: string) {
         try {
-            const response = await this.backendAxios.post('api/auth/login', { username, password });
+            const response = await this.backendAxios.post('auth/login', { username, password });
             return response.status === 200;
         } catch (error) {
             return false;

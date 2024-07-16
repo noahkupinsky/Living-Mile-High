@@ -1,5 +1,5 @@
+import services from '@/di';
 import React, { createContext, useState, useEffect, useContext, useCallback } from 'react';
-import BackendProvider from '@/providers/BackendProvider';
 
 type AuthContextType = {
     isAuthenticated: boolean;
@@ -14,23 +14,24 @@ type AuthProviderProps = {
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const { apiService } = services();
 
     const checkAuthentication = useCallback(async () => {
-        const authenticated = await BackendProvider.verifyAuthenticated();
+        const authenticated = await apiService.verifyAuthenticated();
         setIsAuthenticated(authenticated);
-    }, []);
+    }, [apiService]);
 
     useEffect(() => {
         checkAuthentication();
     }, [checkAuthentication]);
 
     const login = useCallback(async (username: string, password: string) => {
-        const success = await BackendProvider.login(username, password);
+        const success = await apiService.login(username, password);
         if (success) {
             setIsAuthenticated(true);
         }
         return success;
-    }, []);
+    }, [apiService]);
 
     return (
         <AuthContext.Provider value={{ isAuthenticated, login }}>

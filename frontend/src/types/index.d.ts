@@ -8,4 +8,4 @@ export type Services = {
     apiService: ApiService;
 }
 
-export type EventHandler = (data: any) => void
+export type SseHandler = (data: any) => void

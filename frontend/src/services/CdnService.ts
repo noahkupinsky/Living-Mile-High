@@ -13,8 +13,8 @@ export class CdnService {
         });
     }
 
-    cdnKeyToUrl(key: string): string {
-        return `${cdn_url()}/${key}`;
+    getHomePageFirstUrl(): string {
+        return `${cdn_url()}/${CdnFixedKey.HOME_PAGE_FIRST}`;
     }
 
     async fetchSiteData() {

@@ -1,20 +1,19 @@
-import { EventHandler } from '@/types';
+import { SseHandler } from '@/types';
 import { env } from 'next-runtime-env';
 
 const backend_url = () => env('NEXT_PUBLIC_BACKEND_URL')!;
 
 export class SseService {
     private eventSource: EventSource | null = null;
-    private eventHandlers: EventHandler[] = [];
+    private eventHandlers: SseHandler[] = [];
 
-    backendRouteToUrl(route: string): string {
-        return `${backend_url()}/${route}`;
+    private getConnectUrl() {
+        return `${backend_url()}/events/connect`;
     }
 
     connectToSSE() {
         if (!this.eventSource) {
-            const connectUrl = this.backendRouteToUrl('events/connect');
-            this.eventSource = new EventSource(connectUrl);
+            this.eventSource = new EventSource(this.getConnectUrl());
             this.eventSource.onmessage = (event) => {
                 this.eventHandlers.forEach(handler => handler(event.data));
             };
@@ -26,12 +25,12 @@ export class SseService {
         }
     }
 
-    addEventHandler(handler: EventHandler) {
+    addEventHandler(handler: SseHandler) {
         this.eventHandlers.push(handler);
         this.connectToSSE();
     }
 
-    removeEventHandler(handler: EventHandler) {
+    removeEventHandler(handler: SseHandler) {
         this.eventHandlers = this.eventHandlers.filter(h => h !== handler);
     }
 }
