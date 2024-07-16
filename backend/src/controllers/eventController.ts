@@ -1,39 +1,33 @@
 import { EventMessage } from "living-mile-high-lib";
-import { ExpressEndpoint } from "~/@types";
+import { Server } from "http";
+import { WebSocketServer, WebSocket } from "ws";
 import { formatEventMessage } from "~/utils/misc";
 
-let clients: any = [];
+let clients: Map<number, WebSocket> = new Map();
+let nextClientId = 0;
 
-export const connectToEvents: ExpressEndpoint = (req, res) => {
-    const headers = {
-        'Content-Type': 'text/event-stream',
-        'Connection': 'keep-alive',
-        'Cache-Control': 'no-cache'
-    };
-    res.writeHead(200, headers);
+export const setupWebSocketServer = (server: Server) => {
+    const wss = new WebSocketServer({ server, path: "/events" });
 
-    const connectedMessage = formatEventMessage(EventMessage.CONNECTED);
+    wss.on('connection', (ws: WebSocket) => {
 
-    res.write(connectedMessage);
+        const clientId = nextClientId++;
+        clients.set(clientId, ws);
 
-    const clientId = Date.now();
+        const connectedMessage = formatEventMessage(EventMessage.CONNECTED);
+        ws.send(connectedMessage);
 
-
-    const newClient = {
-        id: clientId,
-        res
-    };
-
-    clients.push(newClient);
-
-    req.on('close', () => {
-        clients = clients.filter((client: any) => client.id !== clientId);
+        ws.on('close', () => {
+            clients.delete(clientId);
+        });
     });
 };
 
 export const sendEventMessage = (message: EventMessage) => {
-    clients.forEach((client: any) => {
-        const formattedMessage = formatEventMessage(message);
-        client.res.write(formattedMessage);
+    const formattedMessage = formatEventMessage(message);
+    clients.forEach((ws) => {
+        if (ws.readyState === WebSocket.OPEN) {
+            ws.send(formattedMessage);
+        }
     });
-}
+};

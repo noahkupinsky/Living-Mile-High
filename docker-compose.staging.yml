@@ -3,6 +3,7 @@ version: "3.9"
 services:
   https-portal:
     image: steveltn/https-portal:latest
+    container_name: https-portal
     ports:
       - "80:80"
       - "443:443"
@@ -19,6 +20,7 @@ services:
 
   nginx:
     image: nginx:latest
+    container_name: nginx
     volumes:
       - ./nginx.conf.template:/etc/nginx/nginx.conf.template:ro
     command: >
@@ -39,6 +41,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+    container_name: frontend
     depends_on:
       - backend
     expose:
@@ -52,6 +55,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    container_name: backend
     expose:
       - "${BPORT}"
     env_file:
@@ -64,7 +68,7 @@ services:
 
   mongo:
     image: mongo:latest
-    container_name: mongodb
+    container_name: mongo_staging
     expose:
       - "27017"
     volumes:
@@ -74,6 +78,7 @@ services:
 
   minio:
     image: "minio/minio:latest"
+    container_name: minio_staging
     ports:
       - "9000:9000"
       - "9090:9090"

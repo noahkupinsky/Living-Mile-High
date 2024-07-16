@@ -31,7 +31,7 @@ const ExampleComponent = () => {
     );
 };
 
-const ExamplePage = ({ id }: { id?: string }) => {
+const ExamplePage = () => {
     const { getGeneralData } = useSiteData();
 
     const getAboutText = () => {

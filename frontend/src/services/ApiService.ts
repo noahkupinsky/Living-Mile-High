@@ -3,20 +3,20 @@
 import axios, { AxiosInstance } from 'axios';
 import { env } from 'next-runtime-env';
 
-const backend_url = () => env('NEXT_PUBLIC_BACKEND_URL')!;
+const backendUrl = () => env('NEXT_PUBLIC_BACKEND_URL')!;
 
 export class ApiService {
     private backendAxios: AxiosInstance;
 
     constructor() {
         this.backendAxios = axios.create({
-            baseURL: `${backend_url()}/api`,
+            baseURL: `${backendUrl()}/api`,
             withCredentials: true
         });
     }
 
     backendRouteToUrl(route: string): string {
-        return `${backend_url()}/${route}`;
+        return `${backendUrl()}/${route}`;
     }
 
     async verifyAuthenticated() {

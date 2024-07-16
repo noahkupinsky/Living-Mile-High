@@ -1,7 +1,8 @@
-import EventSource from "eventsource";
+import WebSocket from 'ws';
 import { EventMessage } from "living-mile-high-lib";
 import { startListening, stopListening } from "./utils";
 import { sendEventMessage } from "~/controllers/eventController";
+import { formatEventMessage } from '~/utils/misc';
 
 let url: string;
 
@@ -13,78 +14,78 @@ afterAll(async () => {
     await stopListening();
 });
 
-const createEventSourceTimeout = (done: any, eventSource: EventSource) => {
+const createWebSocketTimeout = (done: any, ws: WebSocket) => {
     const timeout = setTimeout(() => {
         done(new Error('onmessage event not triggered within the expected time'));
-        eventSource.close();
+        ws.close();
     }, 5000);
     return timeout;
-}
+};
 
-function handleEventSourceMessages(
-    eventSource: EventSource,
+function handleWebSocketMessages(
+    ws: WebSocket,
     done: (error?: Error) => void,
     timeout: NodeJS.Timeout,
     onMessage: (data: any, close: () => void) => void
 ) {
-    eventSource.onmessage = (event) => {
+    ws.onmessage = (event) => {
         try {
             const close = () => {
                 clearTimeout(timeout);
-                eventSource.close();
+                ws.close();
                 done();
             };
             onMessage(event.data, close);
         } catch (error: any) {
             done(error);
-            eventSource.close();
+            ws.close();
         }
     };
 
-    eventSource.onerror = (error: any) => {
+    ws.onerror = (error: any) => {
         clearTimeout(timeout);
-        eventSource.close();
+        ws.close();
         done(error);
     };
 }
 
-describe('GET /events/connect', () => {
+describe('WebSocket /events/connect', () => {
     it('should keep the connection open and send initial message', (done) => {
-        const eventSource = new EventSource(`${url}/events/connect`);
+        const ws = new WebSocket(`${url}/events`);
 
-        const timeout = createEventSourceTimeout(done, eventSource);
+        const timeout = createWebSocketTimeout(done, ws);
 
-        handleEventSourceMessages(
-            eventSource,
+        handleWebSocketMessages(
+            ws,
             done,
             timeout,
             (data: any, close) => {
-                expect(data).toEqual(EventMessage.CONNECTED);
+                expect(data).toEqual(formatEventMessage(EventMessage.CONNECTED));
                 close();
             }
-        )
+        );
     });
 
     it('should send event messages', (done) => {
-        const eventSource = new EventSource(`${url}/events/connect`);
+        const ws = new WebSocket(`${url}/events`);
 
         let receivedInitialMessage = false;
 
-        const timeout = createEventSourceTimeout(done, eventSource);
+        const timeout = createWebSocketTimeout(done, ws);
 
-        handleEventSourceMessages(
-            eventSource,
+        handleWebSocketMessages(
+            ws,
             done,
             timeout,
             (data: any, close) => {
                 if (!receivedInitialMessage) {
-                    expect(data).toBe(EventMessage.CONNECTED);
+                    expect(data).toBe(formatEventMessage(EventMessage.CONNECTED));
                     receivedInitialMessage = true;
 
                     // Send the custom event message after receiving the initial message
                     sendEventMessage(EventMessage.SITE_UPDATED);
                 } else {
-                    expect(data).toEqual(EventMessage.SITE_UPDATED);
+                    expect(data).toEqual(formatEventMessage(EventMessage.SITE_UPDATED));
                     close();
                 }
             }

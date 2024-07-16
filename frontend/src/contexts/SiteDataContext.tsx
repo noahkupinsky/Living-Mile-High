@@ -21,7 +21,7 @@ export const SiteDataProvider = ({ children }: SiteDataProviderProps) => {
     const [siteData, setSiteData] = useState<SiteData>();
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [version, setVersion] = useState<number>(0);
-    const { sseService, cdnService } = services();
+    const { eventService: sseService, cdnService } = services();
 
     const fetchSiteData = useCallback(async () => {
         try {
@@ -36,8 +36,8 @@ export const SiteDataProvider = ({ children }: SiteDataProviderProps) => {
     }, [cdnService]);
 
     useEffect(() => {
-        const handleEvent = (data: string) => {
-            if (data === EventMessage.SITE_UPDATED) {
+        const handleEvent = (data: any) => {
+            if (data.message === EventMessage.SITE_UPDATED) {
                 fetchSiteData();
             }
         };

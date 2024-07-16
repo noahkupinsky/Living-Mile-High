@@ -63,7 +63,7 @@ export async function downloadImage(url: string): Promise<{ buffer: Buffer, cont
 }
 
 export function formatEventMessage(message: EventMessage): string {
-    return `data: ${message}\n\n`;
+    return JSON.stringify({ message });
 }
 
 const toSnakeCase = (str: string): string => {

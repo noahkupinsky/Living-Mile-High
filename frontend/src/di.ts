@@ -2,7 +2,7 @@ import * as Services from './services';
 
 let serviceDict: {
     apiService: Services.ApiService,
-    sseService: Services.SseService,
+    eventService: Services.EventService,
     cdnService: Services.CdnService
 }
 
@@ -10,7 +10,7 @@ const services = () => {
     if (!serviceDict) {
         serviceDict = {
             apiService: new Services.ApiService(),
-            sseService: new Services.SseService(),
+            eventService: new Services.EventService(),
             cdnService: new Services.CdnService()
         };
     }
