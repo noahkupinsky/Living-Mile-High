@@ -1,3 +1,5 @@
+'use client'
+
 import services from '@/di';
 import React, { createContext, useState, useEffect, useContext, useCallback } from 'react';
 

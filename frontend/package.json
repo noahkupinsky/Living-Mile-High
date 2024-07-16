@@ -15,6 +15,7 @@
     "@tamagui/themes": "^1.100.6",
     "axios": "^1.7.2",
     "dotenv": "^16.4.5",
+    "eventsource": "^2.0.2",
     "living-mile-high-lib": "^1.0.39",
     "next": "^14.2.4",
     "next-runtime-env": "^3.2.2",
@@ -27,6 +28,7 @@
     "tamagui": "^1.100.5"
   },
   "devDependencies": {
+    "@types/eventsource": "^1.1.15",
     "@types/node": "^20",
     "@types/react": "^18.3.3",
     "@types/react-native": "^0.73.0",

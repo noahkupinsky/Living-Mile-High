@@ -1,7 +1,5 @@
 'use client';
 
-import ProtectedRoute from '@/components/ProtectedRoute';
-
 const AdminPanel = () => {
     return (
         <div>
@@ -10,10 +8,4 @@ const AdminPanel = () => {
     );
 };
 
-const AdminPage = () => (
-    <ProtectedRoute>
-        <AdminPanel />
-    </ProtectedRoute>
-);
-
-export default AdminPage;
+export default AdminPanel;

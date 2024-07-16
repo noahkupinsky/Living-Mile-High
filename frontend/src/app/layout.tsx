@@ -1,22 +1,17 @@
 import React from 'react';
-import { Metadata } from 'next';
-import Providers from '@/providers/providers';
+import Providers from '@/providers';
 import Header from '@/components/HeaderComplex';
 import { PublicEnvScript } from 'next-runtime-env';
 import Footer from '@/components/Footer';
 import { Container, Main } from '@/components/LayoutComponents';
 
-export const metadata: Metadata = {
-  title: 'Living Mile High',
-  description: 'LMH Development website',
-  icons: '/favicon.ico',
-}
-
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning={true}>
       <head>
+        <title>Living Mile High</title>
+        <meta name="description" content="LMH Development website" />
+        <link rel="icon" href="/favicon.ico" />
         <PublicEnvScript />
       </head>
       <body>

@@ -1,3 +1,5 @@
+'use client'
+
 import React, { createContext, useState, useEffect, useContext, useCallback } from 'react';
 import { EventMessage, GeneralData, SiteData } from 'living-mile-high-lib';
 import services from '@/di';
@@ -6,24 +8,26 @@ type SiteDataContextType = {
     isLoading: boolean;
     queryHouses: (filter: any) => void;
     getGeneralData: () => GeneralData | undefined;
-}
+    version: number;
+};
 
 const SiteDataContext = createContext<SiteDataContextType | undefined>(undefined);
 
 type SiteDataProviderProps = {
     children: React.ReactNode;
-}
+};
 
 export const SiteDataProvider = ({ children }: SiteDataProviderProps) => {
     const [siteData, setSiteData] = useState<SiteData>();
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [version, setVersion] = useState<number>(0);
     const { sseService, cdnService } = services();
 
     const fetchSiteData = useCallback(async () => {
-        setIsLoading(true);
         try {
             const data = await cdnService.fetchSiteData();
             setSiteData(data);
+            setVersion(prevVersion => prevVersion + 1);
         } catch (error) {
             console.error('Failed to fetch site data:', error);
         } finally {
@@ -38,9 +42,9 @@ export const SiteDataProvider = ({ children }: SiteDataProviderProps) => {
             }
         };
 
-        sseService.addEventHandler(handleEvent);
-
         fetchSiteData();
+
+        sseService.addEventHandler(handleEvent);
 
         return () => {
             sseService.removeEventHandler(handleEvent);
@@ -61,7 +65,7 @@ export const SiteDataProvider = ({ children }: SiteDataProviderProps) => {
     }, [siteData]);
 
     return (
-        <SiteDataContext.Provider value={{ getGeneralData, queryHouses, isLoading }}>
+        <SiteDataContext.Provider value={{ getGeneralData, queryHouses, isLoading, version }}>
             {children}
         </SiteDataContext.Provider>
     );

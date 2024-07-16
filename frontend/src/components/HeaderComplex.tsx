@@ -69,6 +69,7 @@ const Header = () => {
                     alt="Company Logo"
                     width={50}
                     height={50}
+                    priority
                 />
             </Text>
             <YStack flexDirection="row" gap="$3">
