@@ -1,35 +1,16 @@
 version: "3.9"
 
 services:
-  https-portal:
-    image: steveltn/https-portal:latest
-    container_name: https-portal
+  caddy:
+    image: caddy:latest
+    container_name: caddy
     ports:
       - "80:80"
       - "443:443"
-    environment:
-      DOMAINS: |
-        localhost -> http://nginx
-      STAGE: local
     volumes:
-      - ./https-portal/certs:/var/lib/https-portal
-    depends_on:
-      - nginx
-    networks:
-      - proxy
-
-  nginx:
-    image: nginx:latest
-    container_name: nginx
-    volumes:
-      - ./nginx.conf.template:/etc/nginx/nginx.conf.template:ro
-    command: >
-      /bin/bash -c "
-      envsubst '\$${FPORT} \$${BPORT}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf &&
-      nginx -g 'daemon off;'"
-    depends_on:
-      - frontend
-      - backend
+      - ./Caddyfile.staging:/etc/caddy/Caddyfile
+      - caddy_data_staging:/data
+      - caddy_config_staging:/config
     environment:
       FPORT: ${FPORT}
       BPORT: ${BPORT}
@@ -110,3 +91,7 @@ volumes:
       type: none
       device: ./.data/mongo/staging
       o: bind
+  caddy_data_staging:
+    driver: local
+  caddy_config_staging:
+    driver: local

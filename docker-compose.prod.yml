@@ -1,35 +1,24 @@
 version: "3.9"
 
 services:
-  https-portal:
-    image: steveltn/https-portal:latest
-    container_name: https-portal
+  caddy:
+    image: caddy:latest
+    container_name: caddy
     ports:
       - "80:80"
       - "443:443"
+    volumes:
+      - ./Caddyfile.prod:/etc/caddy/Caddyfile:ro
+      - caddy_data_prod:/data
+      - caddy_config_prod:/config
     environment:
-      DOMAINS: |
-        ${HOST} -> http://nginx
-      STAGE: staging
-    volumes:
-      - ./https-portal/certs:/var/lib/https-portal
+      DOMAIN: ${HOST}
+      FPORT: ${FPORT}
+      BPORT: ${BPORT}
     depends_on:
       - frontend
       - backend
     networks:
-      - proxy
-
-  nginx:
-    image: nginx:latest
-    container_name: nginx
-    volumes:
-      - ./nginx.conf.template:/etc/nginx/nginx.conf.template:ro
-    command: /bin/bash -c "envsubst '$${FPORT} $${BPORT}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
-    depends_on:
-      - frontend
-      - backend
-    networks:
-      - proxy
       - internal
 
   frontend:
@@ -61,3 +50,9 @@ networks:
     external: false
   internal:
     external: false
+
+volumes:
+  caddy_data_prod:
+    driver: local
+  caddy_config_prod:
+    driver: local
