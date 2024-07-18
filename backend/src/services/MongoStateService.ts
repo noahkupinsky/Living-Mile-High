@@ -30,6 +30,17 @@ export class MongoStateService implements StateService {
     }
 
     async deserializeState(state: string): Promise<void> {
+        const oldState = await this.serializeState();
+        try {
+            await this.forceDeserializeState(state);
+        } catch (error) {
+            await this.forceDeserializeState(oldState);
+            throw error;
+        }
+
+    }
+
+    private async forceDeserializeState(state: string): Promise<void> {
         const { houseData, generalData } = JSON.parse(state);
 
         await HouseModel.deleteMany({});
