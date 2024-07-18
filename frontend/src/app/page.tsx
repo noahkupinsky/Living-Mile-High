@@ -1,14 +1,11 @@
 "use client";
 
-import RotatingHouseDisplay from '@/components/RotatingHouseDisplay';
-import HouseQueryContext from '@/components/HouseQueryContext';
+import HomePageImages from '@/components/HomePageImages';
 
 const Home: React.FC = () => {
     return (
         <div>
-            <HouseQueryContext>
-                <RotatingHouseDisplay interval={3000} />
-            </HouseQueryContext>
+            <HomePageImages />
         </div>
     );
 };

@@ -3,11 +3,10 @@
 import React from 'react';
 import LoadingComponent from '@/components/LoadingComponent';
 import { useSiteData } from '@/contexts/SiteDataContext';
-import { AutoImage } from '@/components/ImageComponents';
+import { AutoImage } from '@/components/images/AutoImage';
 
 const ContactPage = () => {
-    const { getGeneralData } = useSiteData();
-    const generalData = getGeneralData();
+    const { generalData } = useSiteData();
 
     if (!generalData) {
         return null;

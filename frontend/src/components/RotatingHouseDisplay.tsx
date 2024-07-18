@@ -1,18 +1,16 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { useHouseContext } from './HouseContext';
 import { Stack, Text } from 'tamagui';
-import services from '@/di';
-import { AutoImage } from './ImageComponents';
+import { AutoImage } from './images/AutoImage';
+import { useHouseQuery } from '@/contexts/HouseQueryContext';
 
 export type RotatingHouseDisplayProps = {
     interval: number
 }
 
 const RotatingHouseDisplay = ({ interval }: RotatingHouseDisplayProps) => {
-    const { houses } = useHouseContext();
+    const { houses } = useHouseQuery();
     const [currentIndex, setCurrentIndex] = useState(0);
-    const { cdnService } = services();
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -37,10 +35,6 @@ const RotatingHouseDisplay = ({ interval }: RotatingHouseDisplayProps) => {
             shadowOpacity={0.1}
             shadowRadius={8}
         >
-            <AutoImage
-                src={cdnService.getHomePageFirstUrl()}
-                alt={"Couldn't load home first"}
-            />
             {houses.length > 0 ? (
                 <>
                     <AutoImage

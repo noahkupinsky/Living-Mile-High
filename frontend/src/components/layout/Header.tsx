@@ -4,34 +4,8 @@ import { Stack, Text, YStack } from 'tamagui';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import Image from 'next/image';
-
-const nonAdminPageNames = ['About', 'Contact'];
-const adminPageNames = ['Admin'];
-
-type NavTab = {
-    name: string;
-    path: string;
-    color: string;
-}
-
-const nonAdminTabData = (name: string): NavTab => {
-    return {
-        name,
-        path: `/${name.toLowerCase()}`,
-        color: '$primary',
-    };
-}
-
-const adminTabData = (name: string): NavTab => {
-    return {
-        name,
-        path: `/${name.toLowerCase()}`,
-        color: 'red',
-    };
-}
-
-const nonAdminTabs: NavTab[] = nonAdminPageNames.map(n => nonAdminTabData(n));
-const adminTabs: NavTab[] = adminPageNames.map(n => adminTabData(n));
+import { NavTab } from '@/types';
+import { filterNavTabs } from '@/config/navTabs';
 
 const Header = () => {
     const router = useRouter();
@@ -42,7 +16,7 @@ const Header = () => {
             key={tab.name}
             onPress={() => router.push(tab.path)}
             fontSize="$2"
-            color={tab.color}
+            color={tab.isAdmin ? 'red' : '$text'}
             cursor="pointer"
         >
             {tab.name}
@@ -67,13 +41,13 @@ const Header = () => {
                 <Image
                     src="/company-logo.png"
                     alt="Company Logo"
-                    width={50}
-                    height={50}
+                    width={150}
+                    height={150}
                     priority
                 />
             </Text>
             <YStack flexDirection="row" gap="$3">
-                {nonAdminTabs.concat(isAuthenticated ? adminTabs : []).map(renderTab)}
+                {filterNavTabs(isAuthenticated).map(renderTab)}
                 <Text
                     onPress={() => window.open('https://instagram.com', '_blank')}
                     fontSize="$2"

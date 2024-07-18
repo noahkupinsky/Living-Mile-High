@@ -9,3 +9,17 @@ export type Services = {
 }
 
 export type SiteEventHandler = (data: any) => void
+
+type NavTab = {
+    name: string;
+    path: string;
+    isAdmin: boolean;
+}
+
+type HouseQuery = {
+    isSelectedWork?: boolean;
+    isForSale?: boolean;
+    isDeveloped?: boolean;
+    addressContains?: string;
+    neighborhoodContains?: string;
+};

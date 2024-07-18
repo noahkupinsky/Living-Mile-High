@@ -1,13 +1,13 @@
 'use client'
 
 import React, { createContext, useState, useEffect, useContext, useCallback } from 'react';
-import { EventMessage, GeneralData, SiteData } from 'living-mile-high-lib';
+import { EventMessage, GeneralData, House, SiteData } from 'living-mile-high-lib';
 import services from '@/di';
 
 type SiteDataContextType = {
     isLoading: boolean;
-    queryHouses: (filter: any) => void;
-    getGeneralData: () => GeneralData | undefined;
+    houses: House[];
+    generalData: GeneralData | undefined;
     version: number;
 };
 
@@ -21,12 +21,17 @@ export const SiteDataProvider = ({ children }: SiteDataProviderProps) => {
     const [siteData, setSiteData] = useState<SiteData>();
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [version, setVersion] = useState<number>(0);
-    const { eventService: sseService, cdnService } = services();
+    const [generalData, setGeneralData] = useState<GeneralData | undefined>(undefined);
+    const [houses, setHouses] = useState<House[]>([]);
+    const { eventService, cdnService } = services();
 
     const fetchSiteData = useCallback(async () => {
         try {
             const data = await cdnService.fetchSiteData();
+            const { houses: newHouses, ...newGeneralData } = data;
             setSiteData(data);
+            setGeneralData(newGeneralData);
+            setHouses(newHouses);
             setVersion(prevVersion => prevVersion + 1);
         } catch (error) {
             console.error('Failed to fetch site data:', error);
@@ -44,28 +49,15 @@ export const SiteDataProvider = ({ children }: SiteDataProviderProps) => {
 
         fetchSiteData();
 
-        sseService.addEventHandler(handleEvent);
+        eventService.addEventHandler(handleEvent);
 
         return () => {
-            sseService.removeEventHandler(handleEvent);
+            eventService.removeEventHandler(handleEvent);
         };
-    }, [fetchSiteData, sseService]);
-
-    const queryHouses = useCallback((filter: any) => {
-        if (!siteData) return [];
-
-        return siteData.houses;
-    }, [siteData]);
-
-    const getGeneralData = useCallback((): GeneralData | undefined => {
-        if (!siteData) return undefined;
-
-        const { houses: _, ...generalData } = siteData;
-        return generalData;
-    }, [siteData]);
+    }, [fetchSiteData, eventService]);
 
     return (
-        <SiteDataContext.Provider value={{ getGeneralData, queryHouses, isLoading, version }}>
+        <SiteDataContext.Provider value={{ generalData, houses, isLoading, version }}>
             {children}
         </SiteDataContext.Provider>
     );

@@ -20,15 +20,6 @@ export type HouseStats = {
     garageSpaces?: number,
 }
 
-export type HouseQuery = {
-    isDeveloped?: boolean,
-    isForSale?: boolean,
-    isSelectedWork?: boolean,
-    address?: string,
-    neighborhood?: string,
-    mainImage?: string
-}
-
 export type AboutData = {
     text: string,
     image: string,

@@ -6,8 +6,7 @@ import { useSiteData } from '@/contexts/SiteDataContext';
 
 const ExampleComponent = () => {
     const { isValid, setIsValid } = useLock();
-    const { getGeneralData } = useSiteData();
-    const generalData = getGeneralData();
+    const { generalData } = useSiteData();
 
     useEffect(() => {
         if (!isValid) {
@@ -32,12 +31,11 @@ const ExampleComponent = () => {
 };
 
 const ExamplePage = () => {
-    const { getGeneralData } = useSiteData();
+    const { generalData } = useSiteData();
 
     const getAboutText = () => {
-        const generalData = getGeneralData();
         if (!generalData) {
-            return null;
+            return "Couldn't load data";
         }
 
         const aboutText = generalData.about.text;

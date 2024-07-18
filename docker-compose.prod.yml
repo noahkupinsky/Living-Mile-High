@@ -12,7 +12,7 @@ services:
       - caddy_data_prod:/data
       - caddy_config_prod:/config
     environment:
-      DOMAIN: ${HOST}
+      HOST: ${HOST}
       FPORT: ${FPORT}
       BPORT: ${BPORT}
     depends_on:

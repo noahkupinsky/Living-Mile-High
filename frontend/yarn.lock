@@ -1185,9 +1185,9 @@
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
 "@mongodb-js/saslprep@^1.1.5":
-  version "1.1.7"
-  resolved "https://registry.yarnpkg.com/@mongodb-js/saslprep/-/saslprep-1.1.7.tgz#d1700facfd6916c50c2c88fd6d48d363a56c702f"
-  integrity sha512-dCHW/oEX0KJ4NjDULBo3JiOaK5+6axtpBbS+ao2ZInoAL9/YRQLhXzSNAFz7hP4nzLkIqsfYAK/PDE3+XHny0Q==
+  version "1.1.8"
+  resolved "https://registry.yarnpkg.com/@mongodb-js/saslprep/-/saslprep-1.1.8.tgz#d39744540be8800d17749990b0da95b4271840d1"
+  integrity sha512-qKwC/M/nNNaKUBMQ0nuzm47b7ZYWQHN3pcXq4IIcoSBc2hOIrflAxJduIvvqmhoz3gR2TacTAs8vlsCVPkiEdQ==
   dependencies:
     sparse-bitfield "^3.0.3"
 
@@ -5896,10 +5896,10 @@ lighthouse-logger@^1.0.0:
     debug "^2.6.9"
     marky "^1.2.2"
 
-living-mile-high-lib@^1.0.39:
-  version "1.0.39"
-  resolved "https://registry.yarnpkg.com/living-mile-high-lib/-/living-mile-high-lib-1.0.39.tgz#b2a57709f8f2b229eb9794229555c6ad220e0ab7"
-  integrity sha512-LNdMgka5buRexsedBTfborh9UsYpJtIFgn8z6Sq4p//H+jrdCzYMLSQXe9rY7QYTBWbgOQdV4YIcJF7/oRQxaA==
+living-mile-high-lib@^1.0.40:
+  version "1.0.40"
+  resolved "https://registry.yarnpkg.com/living-mile-high-lib/-/living-mile-high-lib-1.0.40.tgz#1bdef56f1e55a09319988f3a91c24701adfcc41c"
+  integrity sha512-T09xO3vDSg/QAngGkVm0XdsZBkCT80loMfi5cJS20nLsfnr4e2fbDoP2kVmL0yn7V6ZCrEr1t7OJzjbzAk5dtA==
   dependencies:
     bcryptjs "^2.4.3"
     mongoose "^8.4.4"

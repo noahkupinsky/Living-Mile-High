@@ -15,8 +15,8 @@ export class CdnService {
         });
     }
 
-    getHomePageFirstUrl(): string {
-        return `${cdnUrl()}/${CdnFixedKey.HOME_PAGE_FIRST}`;
+    defaultHomePageImages(): string[] {
+        return [`${cdnUrl()}/${CdnFixedKey.HOME_PAGE_FIRST}`];
     }
 
     async fetchSiteData() {

@@ -1,9 +1,9 @@
 import React from 'react';
 import Providers from '@/providers';
-import Header from '@/components/HeaderComplex';
 import { PublicEnvScript } from 'next-runtime-env';
-import Footer from '@/components/Footer';
-import { Container, Main } from '@/components/LayoutComponents';
+import { Container, Main } from '@/components/layout/LayoutComponents';
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
