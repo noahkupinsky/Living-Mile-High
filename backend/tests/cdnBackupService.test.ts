@@ -1,6 +1,6 @@
-import { Readable } from "stream";
+import { BackupType } from "living-mile-high-lib";
 import { BackupService, CdnAdapter, GeneralDataService, HouseService } from "~/@types";
-import { ContentCategory, ContentType, BackupType, BACKUP_LOGARITHMIC_BASE as BASE } from "~/@types/constants";
+import { ContentCategory, ContentType, BACKUP_LOGARITHMIC_BASE as BASE } from "~/@types/constants";
 import { services } from "~/di";
 import { inMemoryCdn } from "~/utils/inMemoryCdn";
 import { prefixKey } from "~/utils/misc";

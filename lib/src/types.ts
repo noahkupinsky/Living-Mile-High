@@ -1,3 +1,5 @@
+import { BackupType } from "./defaults"
+
 export type House = {
     id?: string,
     isDeveloped: boolean,
@@ -52,4 +54,5 @@ export type BackupIndex = {
     key: string,
     name: string,
     createdAt: Date
+    backupType: BackupType
 }

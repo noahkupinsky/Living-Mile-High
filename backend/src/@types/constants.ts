@@ -20,10 +20,5 @@ export enum ContentPermission {
     PRIVATE = 'private'
 }
 
-export enum BackupType {
-    AUTO = 'auto',
-    MANUAL = 'manual'
-}
-
 export const BACKUP_RETENTION_DAYS = 365;
 export const BACKUP_LOGARITHMIC_BASE = 5;

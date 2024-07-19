@@ -29,3 +29,8 @@ export enum EventMessage {
     SITE_UPDATED = 'site-updated',
     CONNECTED = 'connected'
 }
+
+export enum BackupType {
+    MANUAL = 'manual',
+    AUTO = 'auto'
+}

@@ -7,10 +7,10 @@ import { env } from 'next-runtime-env';
 const cdnUrl = () => env('NEXT_PUBLIC_CDN_URL')!;
 
 export class CdnService {
-    private cdnAxios: AxiosInstance;
+    private cdn: AxiosInstance;
 
     constructor() {
-        this.cdnAxios = axios.create({
+        this.cdn = axios.create({
             baseURL: cdnUrl(),
         });
     }
@@ -21,7 +21,7 @@ export class CdnService {
 
     async fetchSiteData() {
         try {
-            const response = await this.cdnAxios.get(CdnFixedKey.SITE_DATA);
+            const response = await this.cdn.get(CdnFixedKey.SITE_DATA);
             return response.data;
         } catch (error) {
             console.error('Failed to fetch site data:', error);

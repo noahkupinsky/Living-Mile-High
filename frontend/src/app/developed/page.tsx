@@ -2,7 +2,7 @@
 
 import { useHouseQuery, HouseQueryProvider } from "@/contexts/HouseQueryContext";
 import React, { useState } from "react";
-import SimpleColumnDisplay from "@/components/houses/simple/SimpleColumnDisplay";
+import SimpleColumnDisplay from "@/components/houses/SimpleColumnDisplay";
 import SiteDataLoader from "@/components/layout/SiteDataLoader";
 
 

@@ -389,10 +389,10 @@ kareem@2.6.3:
   resolved "https://registry.yarnpkg.com/kareem/-/kareem-2.6.3.tgz#23168ec8ffb6c1abfd31b7169a6fb1dd285992ac"
   integrity sha512-C3iHfuGUXK2u8/ipq9LfjFfXFxAZMQJJq7vLS45r3D9Y2xQ/m4S8zaR4zMLFWh9AsNPXmcFfUDhTEO8UIC/V6Q==
 
-living-mile-high-lib@^1.0.40:
-  version "1.0.40"
-  resolved "https://registry.yarnpkg.com/living-mile-high-lib/-/living-mile-high-lib-1.0.40.tgz#1bdef56f1e55a09319988f3a91c24701adfcc41c"
-  integrity sha512-T09xO3vDSg/QAngGkVm0XdsZBkCT80loMfi5cJS20nLsfnr4e2fbDoP2kVmL0yn7V6ZCrEr1t7OJzjbzAk5dtA==
+living-mile-high-lib@^1.0.41:
+  version "1.0.41"
+  resolved "https://registry.yarnpkg.com/living-mile-high-lib/-/living-mile-high-lib-1.0.41.tgz#b44195a67e68cbb54b2516b2d50ea8294ad80999"
+  integrity sha512-ycX+e0XWMCcbUHZtSJvPrefer6CR+knmexfQvY06nbEzFUNJvDArlnkHbSIeJ9SEERcW0QhCIy7Ps4l2ROZ9tQ==
   dependencies:
     bcryptjs "^2.4.3"
     mongoose "^8.4.4"

@@ -1,3 +1,5 @@
+import { HouseStats } from 'living-mile-high-lib';
+
 export interface ApiService {
     fetch(route: string, params: Record<string, any> = {}): Promise<any>;
     verifyAuthenticated(): Promise<boolean>;
@@ -10,16 +12,18 @@ export type Services = {
 
 export type SiteEventHandler = (data: any) => void
 
-type NavTab = {
+export type NavTab = {
     name: string;
     path: string;
     isAdmin: boolean;
 }
 
-type HouseQuery = {
+export type HouseQuery = {
     isSelectedWork?: boolean;
     isForSale?: boolean;
     isDeveloped?: boolean;
     addressContains?: string;
     neighborhoodContains?: string;
 };
+
+export type HouseStatKeys = keyof HouseStats

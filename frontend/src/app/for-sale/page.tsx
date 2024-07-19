@@ -1,9 +1,31 @@
-const ForSale = () => {
-    return (
-        <div>
-            <h1>Projects For Sale</h1>
-        </div>
-    );
+'use client'
+
+import SiteDataLoader from "@/components/layout/SiteDataLoader";
+import { HouseQueryProvider, useHouseQuery } from "@/contexts/HouseQueryContext";
+import { useEffect, useState } from "react";
+import ForSaleHouseColumn from "./ForSaleHouseColumn";
+
+const ForSaleComponent = () => {
+    const { houses, setQuery } = useHouseQuery();
+    const [query] = useState({
+        isForSale: true,
+    })
+
+    useEffect(() => {
+        setQuery(query);
+    }, [setQuery, query]);
+
+    return <ForSaleHouseColumn houses={houses} imageWidth={400} textWidth={300} />;
 };
 
-export default ForSale;
+const ForSalePage = () => {
+    return (
+        <SiteDataLoader>
+            <HouseQueryProvider>
+                <ForSaleComponent />
+            </HouseQueryProvider>
+        </SiteDataLoader>
+    )
+}
+
+export default ForSalePage;

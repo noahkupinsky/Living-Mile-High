@@ -1,18 +1,19 @@
 'use client'
 
-import SelectedWorkDisplay from '@/components/houses/selected-work/SelectedWorkDisplay';
+import SelectedWorkDisplay from './SelectedWorkDisplay';
 import SiteDataLoader from '@/components/layout/SiteDataLoader';
 import { HouseQueryProvider, useHouseQuery } from '@/contexts/HouseQueryContext';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const SelectedWorkComponent: React.FC = () => {
     const { houses, setQuery } = useHouseQuery();
+    const [query] = useState({
+        isSelectedWork: true,
+    })
 
     useEffect(() => {
-        setQuery({
-            isSelectedWork: true,
-        });
-    }, [setQuery]);
+        setQuery(query);
+    }, [setQuery, query]);
 
     return <SelectedWorkDisplay
         width={300}

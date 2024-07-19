@@ -2,7 +2,7 @@
 
 import { useHouseQuery, HouseQueryProvider } from "@/contexts/HouseQueryContext";
 import React, { useState } from "react";
-import SimpleNeighborhoodGrouping from "@/components/houses/simple/SimpleNeighborhoodGrouping";
+import SimpleNeighborhoodGrouping from "@/components/houses/SimpleNeighborhoodGrouping";
 import SiteDataLoader from "@/components/layout/SiteDataLoader";
 
 

@@ -1,7 +1,7 @@
-import { BackupIndex } from "living-mile-high-lib";
+import { BackupIndex, BackupType } from "living-mile-high-lib";
 import { PriorityQueue } from "typescript-collections";
 import { CdnAdapter, BackupService, StateService, Backup, BackupMetadata } from "~/@types";
-import { BACKUP_LOGARITHMIC_BASE, BACKUP_RETENTION_DAYS, BackupType, ContentCategory, ContentType } from "~/@types/constants";
+import { BACKUP_LOGARITHMIC_BASE, BACKUP_RETENTION_DAYS, ContentCategory, ContentType } from "~/@types/constants";
 import { streamToString } from "~/utils/misc";
 
 type BackupPriority = { key: string; createdAt: Date; backupPower: number }

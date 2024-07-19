@@ -1,5 +1,5 @@
-import { BackupIndex } from "living-mile-high-lib";
-import { ContentCategory, ContentType, ContentPermission, BackupType } from "./constants";
+import { BackupIndex, BackupType } from "living-mile-high-lib";
+import { ContentCategory, ContentType, ContentPermission } from "./constants";
 
 export type BackupMetadata = {
     backupType: BackupType,

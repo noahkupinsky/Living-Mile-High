@@ -1,8 +1,7 @@
 import React from 'react';
 import { View } from 'tamagui';
-import RowContainer from './SimpleRowContainer';
-import { useHouseQuery } from '@/contexts/HouseQueryContext';
 import { House } from 'living-mile-high-lib';
+import SimpleRowContainer from './SimpleRowContainer';
 
 interface SimpleColumnDisplayProps {
     houses: House[];
@@ -19,7 +18,7 @@ const SimpleColumnDisplay: React.FC<SimpleColumnDisplayProps> = ({ houses, colum
     return (
         <View>
             {rows.map((row, rowIndex) => (
-                <RowContainer key={rowIndex} width={width} houses={row} />
+                <SimpleRowContainer key={rowIndex} width={width} houses={row} />
             ))}
         </View>
     );
