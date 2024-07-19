@@ -4362,10 +4362,10 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.2.4.tgz#eca284f75d2965079309dc0ad9255abb2ebc1632"
   integrity sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==
 
-living-mile-high-lib@^1.0.41:
-  version "1.0.41"
-  resolved "https://registry.yarnpkg.com/living-mile-high-lib/-/living-mile-high-lib-1.0.41.tgz#b44195a67e68cbb54b2516b2d50ea8294ad80999"
-  integrity sha512-ycX+e0XWMCcbUHZtSJvPrefer6CR+knmexfQvY06nbEzFUNJvDArlnkHbSIeJ9SEERcW0QhCIy7Ps4l2ROZ9tQ==
+living-mile-high-lib@^1.0.43:
+  version "1.0.43"
+  resolved "https://registry.yarnpkg.com/living-mile-high-lib/-/living-mile-high-lib-1.0.43.tgz#f0152f60e3db985f32e01449edf556730bb5afdf"
+  integrity sha512-POENJ2qRBQ10BNBFJd978qsiaXTZZhpuqXgAL9YZ7gVM5JH2F9TzcBucKnTHu0VU2tfpfDeA8ofWwS2mGKkfOQ==
   dependencies:
     bcryptjs "^2.4.3"
     mongoose "^8.4.4"

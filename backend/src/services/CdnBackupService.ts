@@ -53,7 +53,8 @@ export class CdnBackupService implements BackupService {
         const indices = backups.map(backup => ({
             key: backup.key,
             name: backup.metadata.name!,
-            createdAt: new Date(backup.metadata.createdAt)
+            createdAt: new Date(backup.metadata.createdAt),
+            backupType: backup.metadata.backupType!,
         }));
 
         return indices;

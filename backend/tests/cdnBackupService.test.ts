@@ -27,7 +27,8 @@ describe("backup service", () => {
             contentType: ContentType.JSON,
             prefix: ContentCategory.BACKUP,
             metadata: {
-                name: name
+                name: name,
+                backupType: BackupType.AUTO
             }
         });
 
@@ -37,6 +38,7 @@ describe("backup service", () => {
             name: name,
             key: prefixedKey,
             createdAt: expect.any(Date),
+            backupType: BackupType.AUTO
         }]);
     });
 
