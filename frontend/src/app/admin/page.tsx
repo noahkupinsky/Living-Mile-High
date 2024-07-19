@@ -1,10 +1,21 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+import { Button, XStack } from 'tamagui';
+
 const AdminPanel = () => {
+    const router = useRouter();
+
+    const gotoBackups = () => {
+        router.push('/admin/backups');
+    }
+
     return (
-        <div>
-            <h1>Admin Panel</h1>
-        </div>
+        <XStack justifyContent="center" alignItems="center">
+            <Button color="blue" onPress={gotoBackups}>
+                Go to Backups
+            </Button>
+        </XStack>
     );
 };
 

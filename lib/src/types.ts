@@ -53,6 +53,6 @@ export type AdminRecord = {
 export type BackupIndex = {
     key: string,
     name: string,
-    createdAt: Date
+    createdAt: string
     backupType: BackupType
 }

@@ -21,6 +21,8 @@ describe("backup service", () => {
         const key = 'backup-key';
         const prefixedKey = prefixKey(key, ContentCategory.BACKUP);
 
+        const dateString = new Date().toISOString();
+
         await cdnAdapter.putObject({
             key: key,
             body: 'body',
@@ -28,7 +30,8 @@ describe("backup service", () => {
             prefix: ContentCategory.BACKUP,
             metadata: {
                 name: name,
-                backupType: BackupType.AUTO
+                backupType: BackupType.AUTO,
+                createdAt: dateString,
             }
         });
 
@@ -37,7 +40,7 @@ describe("backup service", () => {
         expect(backups).toEqual([{
             name: name,
             key: prefixedKey,
-            createdAt: expect.any(Date),
+            createdAt: dateString,
             backupType: BackupType.AUTO
         }]);
     });
@@ -150,10 +153,6 @@ describe("backup service", () => {
         const newHouses = await houseService.getHouseObjects();
         expect(newHouses).toHaveLength(1);
         expect(newHouses[0].neighborhood).toBe(neighborhood);
-
-        // make sure restores created new backups
-        const restoreBackups = await backupService.getBackupIndices();
-        expect(restoreBackups).toHaveLength(4);
     });
 
     test('pruneBackups should delete expired automatic backups', async () => {

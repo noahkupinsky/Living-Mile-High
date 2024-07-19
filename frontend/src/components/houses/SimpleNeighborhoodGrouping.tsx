@@ -19,7 +19,6 @@ const compareNeighborhoodGroups = (a: string[], b: string[]): number => {
             score += normalizedSortOrder.indexOf(neighborhood);
         }
         const average = score / group.length;
-        console.log(group, average);
         return average;
     };
 

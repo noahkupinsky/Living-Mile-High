@@ -43,8 +43,6 @@ export class CdnBackupService implements BackupService {
         const dataString = await streamToString(backup.body);
 
         await this.stateService.deserializeState(dataString);
-
-        await this.createBackup(BackupType.AUTO);
     }
 
     async getBackupIndices(): Promise<BackupIndex[]> {
@@ -53,7 +51,7 @@ export class CdnBackupService implements BackupService {
         const indices = backups.map(backup => ({
             key: backup.key,
             name: backup.metadata.name!,
-            createdAt: new Date(backup.metadata.createdAt),
+            createdAt: backup.metadata.createdAt!,
             backupType: backup.metadata.backupType!,
         }));
 

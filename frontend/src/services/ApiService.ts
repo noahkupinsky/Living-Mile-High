@@ -1,7 +1,7 @@
 'use client';
 
 import axios, { AxiosInstance } from 'axios';
-import { DeepPartial, GeneralData, House } from 'living-mile-high-lib';
+import { BackupIndex, DeepPartial, GeneralData, House } from 'living-mile-high-lib';
 import { env } from 'next-runtime-env';
 
 const backendUrl = () => env('NEXT_PUBLIC_BACKEND_URL')!;
@@ -65,11 +65,15 @@ export class ApiService {
         }
     }
 
-    async getBackupIndices() {
+    async getBackupIndices(): Promise<BackupIndex[]> {
         try {
-            const response = await this.api.get('backup/indices');
-            return response.data;
+            const response = await this.api.get('backup');
+            const indices: BackupIndex[] = response.data;
+            // sort by most recent date
+            const sortedIndices = indices.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+            return sortedIndices;
         } catch (error) {
+            console.log(error);
             return [];
         }
     }
