@@ -1,9 +1,32 @@
-const Developed = () => {
+'use client'
+
+import { useHouseQuery, HouseQueryProvider } from "@/contexts/HouseQueryContext";
+import React, { useState } from "react";
+import SimpleColumnDisplay from "@/components/houses/simple/SimpleColumnDisplay";
+import SiteDataLoader from "@/components/layout/SiteDataLoader";
+
+
+const DevelopedComponent: React.FC = () => {
+    const { houses, setQuery } = useHouseQuery();
+    const [query] = useState({
+        isDeveloped: true,
+    });
+
+    React.useEffect(() => {
+        setQuery(query);
+    }, [setQuery, query]);
+
     return (
-        <div>
-            <h1>Developed</h1>
-        </div>
+        <SimpleColumnDisplay houses={houses} width={200} columns={4} />
     );
 };
 
-export default Developed;
+const DevelopedPage: React.FC = () => (
+    <SiteDataLoader>
+        <HouseQueryProvider>
+            <DevelopedComponent />
+        </HouseQueryProvider>
+    </SiteDataLoader>
+);
+
+export default DevelopedPage;

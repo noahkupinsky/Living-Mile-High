@@ -2,6 +2,8 @@ import { House } from 'living-mile-high-lib';
 import React, { useState, useEffect } from 'react';
 import { View } from 'tamagui';
 import SimpleHouseDisplay from './SimpleHouseDisplay';
+import { calculateMaxHeight } from '@/utils/houseRendering';
+import Loader from '@/components/layout/Loader';
 
 interface SimpleRowContainerProps {
     houses: House[];
@@ -13,26 +15,15 @@ const SimpleRowContainer: React.FC<SimpleRowContainerProps> = ({ houses, width }
 
     useEffect(() => {
         let isMounted = true;
-        const heights: number[] = [];
 
-        const promises = houses.map((house, index) => {
-            return new Promise<void>((resolve) => {
-                const img = new window.Image();
-                img.src = house.mainImage;
-                img.onload = () => {
-                    const aspectRatio = img.width / img.height;
-                    const height = width / aspectRatio; // Calculate height based on fixed width and aspect ratio
-                    heights[index] = height;
-                    resolve();
-                };
-            });
-        });
-
-        Promise.all(promises).then(() => {
+        const loadMaxHeight = async () => {
+            const maxHeight = await calculateMaxHeight(houses, width);
             if (isMounted) {
-                setMaxHeight(Math.max(...heights));
+                setMaxHeight(maxHeight);
             }
-        });
+        };
+
+        loadMaxHeight();
 
         return () => {
             isMounted = false;
@@ -40,11 +31,13 @@ const SimpleRowContainer: React.FC<SimpleRowContainerProps> = ({ houses, width }
     }, [houses, width]);
 
     return (
-        <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
-            {houses.map((house) => (
-                <SimpleHouseDisplay key={house.id} house={house} width={width} height={maxHeight} />
-            ))}
-        </View>
+        <Loader isLoading={maxHeight === undefined}>
+            <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
+                {houses.map((house) => (
+                    <SimpleHouseDisplay key={house.id} house={house} width={width} height={maxHeight} />
+                ))}
+            </View>
+        </Loader>
     );
 };
 

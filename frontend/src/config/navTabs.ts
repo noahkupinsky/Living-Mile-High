@@ -1,14 +1,21 @@
 import { NavTab } from "@/types";
 
+const HOME_TEXT = 'Home';
+
 export const navTabs: NavTab[] = [
     {
-        name: 'Selected Work',
-        path: '/selected-work',
+        name: HOME_TEXT,
+        path: '/',
         isAdmin: false
     },
     {
         name: 'Projects For Sale',
         path: '/for-sale',
+        isAdmin: false
+    },
+    {
+        name: 'Selected Work',
+        path: '/selected-work',
         isAdmin: false
     },
     {
@@ -38,6 +45,6 @@ export const navTabs: NavTab[] = [
     }
 ];
 
-export const filterNavTabs = (isAuthenticated: boolean): NavTab[] => {
-    return navTabs.filter(tab => !tab.isAdmin || isAuthenticated);
+export const filterNavTabs = (isAuthenticated: boolean, includeHome: boolean): NavTab[] => {
+    return navTabs.filter(tab => (includeHome || tab.name !== HOME_TEXT) && (!tab.isAdmin || isAuthenticated));
 }

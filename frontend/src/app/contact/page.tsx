@@ -1,9 +1,9 @@
 'use client';
 
 import React from 'react';
-import LoadingComponent from '@/components/LoadingComponent';
 import { useSiteData } from '@/contexts/SiteDataContext';
 import { AutoImage } from '@/components/images/AutoImage';
+import SiteDataLoader from '@/components/layout/SiteDataLoader';
 
 const ContactPage = () => {
     const { generalData } = useSiteData();
@@ -15,13 +15,13 @@ const ContactPage = () => {
     const { text, image } = generalData.contact;
 
     return (
-        <LoadingComponent>
+        <SiteDataLoader>
             <div>
                 <h1>Contact Us</h1>
                 <AutoImage src={image} alt="Contact Us" />
                 <p>{text}</p>
             </div>
-        </LoadingComponent>
+        </SiteDataLoader>
     );
 };
 

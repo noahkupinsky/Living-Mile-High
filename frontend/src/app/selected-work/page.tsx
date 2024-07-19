@@ -1,9 +1,31 @@
-const SelectedWork = () => {
-    return (
-        <div>
-            <h1>Selected Work</h1>
-        </div>
-    );
+'use client'
+
+import SelectedWorkDisplay from '@/components/houses/selected-work/SelectedWorkDisplay';
+import SiteDataLoader from '@/components/layout/SiteDataLoader';
+import { HouseQueryProvider, useHouseQuery } from '@/contexts/HouseQueryContext';
+import { useEffect } from 'react';
+
+const SelectedWorkComponent: React.FC = () => {
+    const { houses, setQuery } = useHouseQuery();
+
+    useEffect(() => {
+        setQuery({
+            isSelectedWork: true,
+        });
+    }, [setQuery]);
+
+    return <SelectedWorkDisplay
+        width={300}
+        houses={houses}
+    />;
 };
 
-export default SelectedWork;
+const SelectedWorkPage: React.FC = () => (
+    <SiteDataLoader>
+        <HouseQueryProvider>
+            <SelectedWorkComponent />
+        </HouseQueryProvider>
+    </SiteDataLoader>
+);
+
+export default SelectedWorkPage;

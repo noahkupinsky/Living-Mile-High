@@ -2,26 +2,13 @@
 
 import { Stack, Text, YStack } from 'tamagui';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/contexts/AuthContext';
 import Image from 'next/image';
-import { NavTab } from '@/types';
-import { filterNavTabs } from '@/config/navTabs';
+import NavTabsComponent from './NavTabsComponent';
 
 const Header = () => {
     const router = useRouter();
-    const { isAuthenticated } = useAuth();
 
-    const renderTab = (tab: NavTab) => (
-        <Text
-            key={tab.name}
-            onPress={() => router.push(tab.path)}
-            fontSize="$2"
-            color={tab.isAdmin ? 'red' : '$text'}
-            cursor="pointer"
-        >
-            {tab.name}
-        </Text>
-    );
+
 
     return (
         <Stack
@@ -47,7 +34,7 @@ const Header = () => {
                 />
             </Text>
             <YStack flexDirection="row" gap="$3">
-                {filterNavTabs(isAuthenticated).map(renderTab)}
+                <NavTabsComponent includeHome={false} />
                 <Text
                     onPress={() => window.open('https://instagram.com', '_blank')}
                     fontSize="$2"

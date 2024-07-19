@@ -1,21 +1,16 @@
 'use client'
 
-import LoadingComponent from "@/components/LoadingComponent";
 import { useHouseQuery, HouseQueryProvider } from "@/contexts/HouseQueryContext";
 import React, { useState } from "react";
 import SimpleNeighborhoodGrouping from "@/components/houses/simple/SimpleNeighborhoodGrouping";
-import { NEIGHBORHOOD_GROUPS } from "@/config/constants";
-import { House } from "living-mile-high-lib";
+import SiteDataLoader from "@/components/layout/SiteDataLoader";
 
 
-const SoldColumnDisplay: React.FC = () => {
+const SoldComponent: React.FC = () => {
     const { houses, setQuery } = useHouseQuery();
     const [query] = useState({
-        isSelectedWork: true,
+        isDeveloped: false,
     });
-
-
-
 
     React.useEffect(() => {
         setQuery(query);
@@ -27,11 +22,11 @@ const SoldColumnDisplay: React.FC = () => {
 };
 
 const SoldPage: React.FC = () => (
-    <LoadingComponent>
+    <SiteDataLoader>
         <HouseQueryProvider>
-            <SoldColumnDisplay />
+            <SoldComponent />
         </HouseQueryProvider>
-    </LoadingComponent>
+    </SiteDataLoader>
 );
 
 export default SoldPage;

@@ -13,7 +13,7 @@ export const Main = styled(View, {
     name: 'Main',
     flex: 1,
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
 
 });
