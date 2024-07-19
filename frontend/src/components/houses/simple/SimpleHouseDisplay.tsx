@@ -26,13 +26,13 @@ const AddressText = styled(Text, {
     textAlign: 'left',
 });
 
-export interface HouseComponentProps {
+export interface SimpleHouseDisplayProps {
     house: House;
     width: number
     height?: number;
 }
 
-const HouseComponent: React.FC<HouseComponentProps> = ({ house, width, height }) => {
+const SimpleHouseDisplay: React.FC<SimpleHouseDisplayProps> = ({ house, width, height }) => {
     return (
         <Container>
             <BodyContainer style={{ height }
@@ -46,4 +46,4 @@ const HouseComponent: React.FC<HouseComponentProps> = ({ house, width, height })
     );
 };
 
-export default HouseComponent;
+export default SimpleHouseDisplay;

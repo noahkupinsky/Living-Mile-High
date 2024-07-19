@@ -1,14 +1,14 @@
 import { House } from 'living-mile-high-lib';
 import React, { useState, useEffect } from 'react';
 import { View } from 'tamagui';
+import SimpleHouseDisplay from './SimpleHouseDisplay';
 
-interface RowContainerProps {
+interface SimpleRowContainerProps {
     houses: House[];
     width: number;
-    renderHouse: (house: House, width: number, height?: number) => React.ReactNode;
 }
 
-const RowContainer: React.FC<RowContainerProps> = ({ houses, width, renderHouse }) => {
+const SimpleRowContainer: React.FC<SimpleRowContainerProps> = ({ houses, width }) => {
     const [maxHeight, setMaxHeight] = useState<number | undefined>(undefined);
 
     useEffect(() => {
@@ -41,9 +41,11 @@ const RowContainer: React.FC<RowContainerProps> = ({ houses, width, renderHouse 
 
     return (
         <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
-            {houses.map((house) => renderHouse(house, width, maxHeight))}
+            {houses.map((house) => (
+                <SimpleHouseDisplay key={house.id} house={house} width={width} height={maxHeight} />
+            ))}
         </View>
     );
 };
 
-export default RowContainer;
+export default SimpleRowContainer;

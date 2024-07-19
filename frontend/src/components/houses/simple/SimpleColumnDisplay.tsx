@@ -1,17 +1,16 @@
 import React from 'react';
 import { View } from 'tamagui';
-import RowContainer from '@/components/houses/RowContainer';;
+import RowContainer from './SimpleRowContainer';
 import { useHouseQuery } from '@/contexts/HouseQueryContext';
 import { House } from 'living-mile-high-lib';
 
-interface ColumnDisplayProps {
+interface SimpleColumnDisplayProps {
+    houses: House[];
     columns: number;
     width: number;
-    renderHouse: (house: House, width: number, height?: number) => React.ReactNode;
 }
 
-const ColumnDisplay: React.FC<ColumnDisplayProps> = ({ columns, width, renderHouse }) => {
-    const { houses } = useHouseQuery();
+const SimpleColumnDisplay: React.FC<SimpleColumnDisplayProps> = ({ houses, columns, width }) => {
     const rows = [];
     for (let i = 0; i < houses.length; i += columns) {
         rows.push(houses.slice(i, i + columns));
@@ -20,10 +19,10 @@ const ColumnDisplay: React.FC<ColumnDisplayProps> = ({ columns, width, renderHou
     return (
         <View>
             {rows.map((row, rowIndex) => (
-                <RowContainer key={rowIndex} width={width} houses={row} renderHouse={renderHouse} />
+                <RowContainer key={rowIndex} width={width} houses={row} />
             ))}
         </View>
     );
 };
 
-export default ColumnDisplay;
+export default SimpleColumnDisplay;
