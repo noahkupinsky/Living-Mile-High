@@ -1,4 +1,4 @@
-import { HouseStats } from 'living-mile-high-lib';
+import { House, HouseStats } from 'living-mile-high-lib';
 
 export interface ApiService {
     fetch(route: string, params: Record<string, any> = {}): Promise<any>;
@@ -27,3 +27,10 @@ export type HouseQuery = {
 };
 
 export type HouseStatKeys = keyof HouseStats
+
+export type FormImage = string | ArrayBuffer
+
+export type FormDataHouse = Omit<House, 'mainImage' | 'images'> & {
+    mainImage: FormImage;
+    images: FormImage[];
+};

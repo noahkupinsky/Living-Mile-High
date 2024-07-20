@@ -22,6 +22,8 @@ export type HouseStats = {
     garageSpaces?: number,
 }
 
+export type HouseBoolean = 'isDeveloped' | 'isForSale' | 'isSelectedWork'
+
 export type AboutData = {
     text: string,
     image: string,

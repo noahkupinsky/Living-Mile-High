@@ -1,21 +1,30 @@
 'use client';
 
+import HouseList from '@/components/houses/HouseList';
 import { useRouter } from 'next/navigation';
-import { Button, XStack } from 'tamagui';
+import { Button, YStack } from 'tamagui';
 
 const AdminPanel = () => {
     const router = useRouter();
 
-    const gotoBackups = () => {
+    const handleGotoBackups = () => {
         router.push('/admin/backups');
     }
 
+    const handleCreateNew = () => {
+        router.push('admin/upsert-house');
+    };
+
     return (
-        <XStack justifyContent="center" alignItems="center">
-            <Button color="blue" onPress={gotoBackups}>
+        <YStack justifyContent="center" alignItems="center">
+            <Button color="blue" onPress={handleGotoBackups}>
                 Go to Backups
             </Button>
-        </XStack>
+            <Button onPress={handleCreateNew}>
+                Create New House
+            </Button>
+            <HouseList />
+        </YStack>
     );
 };
 

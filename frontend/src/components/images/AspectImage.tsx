@@ -12,9 +12,10 @@ type AspectImageProps = {
     alt?: string;
     width?: number;
     height?: number;
+    onClick?: () => void;
 };
 
-const AspectImage: React.FC<AspectImageProps> = ({ src, width, height, alt, ...props }) => {
+const AspectImage: React.FC<AspectImageProps> = ({ src, width, height, alt, onClick, ...props }) => {
     const [dimensions, setDimensions] = useState<{ width: number; height: number } | null>(null);
 
     useEffect(() => {
@@ -45,6 +46,7 @@ const AspectImage: React.FC<AspectImageProps> = ({ src, width, height, alt, ...p
             source={{ uri: src, width: dimensions.width, height: dimensions.height }}
             alt={alt}
             {...props}
+            onClick={onClick}
         />
     );
 };

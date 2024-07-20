@@ -130,21 +130,12 @@ describe('Other HouseService Methods', () => {
         ]);
     });
 
-
-    describe('allNeighborhoods', () => {
-        it('should return all unique neighborhoods', async () => {
-            const neighborhoods = await houseService.allNeighborhoods();
-            expect(neighborhoods).toEqual(expect.arrayContaining(['Downtown', 'Suburbia']));
-            expect(neighborhoods).toHaveLength(2);
-        });
-    });
-
-    describe('allPhotos', () => {
-        it('should return all photos including mainPhoto and additional photos', async () => {
-            const photos = await houseService.allImages();
-            expect(photos).toEqual(expect.arrayContaining(['photo1.jpg', 'photo2.jpg', 'photo3.jpg', 'photo4.jpg', 'photo5.jpg', 'photo6.jpg']));
-            expect(photos).toHaveLength(6);
-        });
+    it('should delete a house', async () => {
+        const house = await HouseModel.findOne({ address: '123 Main St' });
+        expect(house).not.toBeNull();
+        await houseService.deleteHouse(house!.id!);
+        const deletedHouse = await HouseModel.findOne({ address: '123 Main St' });
+        expect(deletedHouse).toBeNull();
     });
 });
 

@@ -10,17 +10,17 @@ export class MongoHouseService implements HouseService {
         return houses.map(house => houseDocumentToObject(house));
     };
 
-    async upsertHouse(house: DeepPartial<House>): Promise<void> {
+    async upsertHouse(house: DeepPartial<House>): Promise<string> {
         const id = house.id;
 
         if (id) {
-            await this.updateHouse(id, house);
+            return await this.updateHouse(id, house);
         } else {
-            await this.insertHouse(house as House);
+            return await this.insertHouse(house as House);
         }
     }
 
-    private async updateHouse(id: any, house: DeepPartial<House>): Promise<void> {
+    private async updateHouse(id: any, house: DeepPartial<House>): Promise<string> {
         await withLock(id, async () => {
             const updateFields = constructUpdateObject(house);
 
@@ -30,21 +30,21 @@ export class MongoHouseService implements HouseService {
                 throw new Error('House not found');
             }
         });
+
+        return id;
     }
 
-    private async insertHouse(house: House): Promise<void> {
+
+    async deleteHouse(id: string): Promise<boolean> {
+        const deletedHouse = await HouseModel.findByIdAndDelete({ _id: id });
+
+        return !!deletedHouse;
+    }
+
+    private async insertHouse(house: House): Promise<string> {
         const doc = houseObjectToNewDocument(house);
-        const savedHouse = new HouseModel(doc);
-        await savedHouse.save();
-    }
-
-    async allImages(): Promise<string[]> {
-        const houses = await HouseModel.find();
-        return houses.flatMap((house: any) => [house.mainImage, ...house.images]);
-    }
-
-    async allNeighborhoods(): Promise<string[]> {
-        const houses = await HouseModel.find();
-        return houses.map((house: any) => house.neighborhood);
+        const houseModel = new HouseModel(doc);
+        const savedHouse = await houseModel.save();
+        return savedHouse.id;
     }
 }

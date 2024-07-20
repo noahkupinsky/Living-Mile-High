@@ -26,7 +26,7 @@ export const createManualBackup: ExpressEndpoint = async (req, res) => {
 }
 
 export const deleteManualBackup: ExpressEndpoint = async (req, res) => {
-    const key = req.params.key;
+    const key = req.body.key;
 
     try {
         await backupService().deleteManualBackup(key);

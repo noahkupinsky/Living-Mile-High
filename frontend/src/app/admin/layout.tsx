@@ -1,5 +1,5 @@
 import React from 'react';
-import ProtectedRoute from '@/components/ProtectedRoute';
+import ProtectedRoute from '@/components/layout/ProtectedRoute';
 import SiteDataLoader from '@/components/layout/SiteDataLoader';
 
 const AdminLayout = ({ children }: any) => {

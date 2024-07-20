@@ -18,5 +18,8 @@
   "devDependencies": {
     "concurrently": "^8.2.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@tamagui/next-plugin": "^1.102.3",
+    "@tamagui/switch": "^1.102.3"
+  }
 }

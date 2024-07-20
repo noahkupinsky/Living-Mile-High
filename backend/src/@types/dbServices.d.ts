@@ -2,9 +2,8 @@ import { DeepPartial, House, GeneralData, SiteData } from "living-mile-high-lib"
 
 export interface HouseService {
     getHouseObjects(): Promise<House[]>;
-    upsertHouse(house: DeepPartial<House>): Promise<void>;
-    allImages(): Promise<string[]>;
-    allNeighborhoods(): Promise<string[]>;
+    upsertHouse(house: DeepPartial<House>): Promise<string>;
+    deleteHouse(id: string): Promise<boolean>;
 }
 
 export interface AdminService {

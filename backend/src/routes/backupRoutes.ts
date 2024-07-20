@@ -11,6 +11,6 @@ router.post('/create/', createManualBackup);
 
 router.post('/rename/', renameManualBackup);
 
-router.delete('/delete/:key', deleteManualBackup);
+router.post('/delete/', deleteManualBackup);
 
 export default router

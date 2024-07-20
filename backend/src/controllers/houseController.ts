@@ -18,9 +18,20 @@ export const upsertHouse: ExpressEndpoint = async (req, res) => {
     const house: House = req.body;
 
     try {
-        await houseService().upsertHouse(house);
+        const id = await houseService().upsertHouse(house);
         await updateSite();
-        res.json({ success: true });
+        res.json({ success: true, id });
+    } catch (error: any) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+}
+
+export const deleteHouse: ExpressEndpoint = async (req, res) => {
+    const id = req.body.id;
+    try {
+        const success = await houseService().deleteHouse(id);
+        await updateSite();
+        res.json({ success });
     } catch (error: any) {
         res.status(500).json({ success: false, error: error.message });
     }
