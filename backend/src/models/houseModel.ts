@@ -27,6 +27,8 @@ const HouseModel = model<HouseDocument>('House', HouseSchema);
 
 export function houseDocumentToObject(doc: HouseDocument): House {
     const { id, isDeveloped, isForSale, isSelectedWork, address, mainImage, images, neighborhood, stats, createdAt, updatedAt } = doc;
+    const createdAtString = createdAt?.toISOString();
+    const updatedAtString = updatedAt?.toISOString();
 
     const house: House = {
         id,
@@ -38,8 +40,8 @@ export function houseDocumentToObject(doc: HouseDocument): House {
         images,
         neighborhood,
         stats,
-        createdAt,
-        updatedAt,
+        createdAt: createdAtString,
+        updatedAt: updatedAtString,
     };
 
     return house;

@@ -10,8 +10,8 @@ export type House = {
     images: string[],
     neighborhood: string,
     stats: HouseStats,
-    createdAt?: Date,
-    updatedAt?: Date,
+    createdAt?: string,
+    updatedAt?: string,
 }
 
 export type HouseStats = {
