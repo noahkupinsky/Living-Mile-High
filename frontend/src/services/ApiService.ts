@@ -20,9 +20,9 @@ export class ApiService {
         return `${backendUrl()}/${route}`;
     }
 
-    async uploadImage(file: ArrayBuffer): Promise<string> {
+    async uploadImage(image: ArrayBuffer): Promise<string> {
         try {
-            const response = await this.api.post('image/upload', file);
+            const response = await this.api.post('image/upload', { image });
             if (response.status === 200) {
                 return response.data.imageUrl;
             } else {
@@ -33,9 +33,9 @@ export class ApiService {
         }
     }
 
-    async updateGeneralData(generalData: DeepPartial<GeneralData>) {
+    async updateGeneralData(data: DeepPartial<GeneralData>) {
         try {
-            const response = await this.api.post('general/update', generalData);
+            const response = await this.api.post('general/update', { data });
             return response.status === 200;
         } catch (error) {
             return false;
@@ -51,7 +51,19 @@ export class ApiService {
                 throw new Error('Failed to upload image');
             }
         } catch (error) {
-            throw error
+            throw error;
+        }
+    }
+
+    async deleteHouse(id: string): Promise<void> {
+        try {
+            const response = await this.api.post('house/delete', { id });
+            const success = response.status === 200 && response.data.success;
+            if (!success) {
+                throw new Error('Failed to delete house');
+            }
+        } catch (error) {
+            throw error;
         }
     }
 

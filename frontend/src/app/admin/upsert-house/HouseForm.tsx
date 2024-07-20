@@ -87,7 +87,7 @@ const HouseForm: React.FC<{ house?: House }> = ({ house }) => {
             const id = await apiService.upsertHouse(finalData);
             setFormData(prev => ({ ...prev, id }));
             alert(
-                isUpdate ? `House updated successfully with ID ${id}` : `House created successfully with ID ${id}`
+                isUpdate ? `House updated successfully` : `House created successfully`
             );
         } catch (error) {
             alert('An error occurred while submitting the form. Please try again.');

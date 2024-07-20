@@ -15,7 +15,7 @@ export const getHouses: ExpressEndpoint = async (req, res) => {
 }
 
 export const upsertHouse: ExpressEndpoint = async (req, res) => {
-    const house: House = req.body;
+    const { house } = req.body;
 
     try {
         const id = await houseService().upsertHouse(house);
@@ -27,7 +27,8 @@ export const upsertHouse: ExpressEndpoint = async (req, res) => {
 }
 
 export const deleteHouse: ExpressEndpoint = async (req, res) => {
-    const id = req.body.id;
+    const { id } = req.body;
+
     try {
         const success = await houseService().deleteHouse(id);
         await updateSite();

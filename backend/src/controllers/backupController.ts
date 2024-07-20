@@ -14,7 +14,7 @@ export const getBackupIndices: ExpressEndpoint = async (req, res) => {
 }
 
 export const createManualBackup: ExpressEndpoint = async (req, res) => {
-    const name = req.body.name;
+    const { name } = req.body;
 
     try {
         await backupService().createManualBackup(name);
@@ -26,7 +26,7 @@ export const createManualBackup: ExpressEndpoint = async (req, res) => {
 }
 
 export const deleteManualBackup: ExpressEndpoint = async (req, res) => {
-    const key = req.body.key;
+    const { key } = req.body;
 
     try {
         await backupService().deleteManualBackup(key);
@@ -48,7 +48,7 @@ export const renameManualBackup: ExpressEndpoint = async (req, res) => {
 }
 
 export const restoreBackup: ExpressEndpoint = async (req, res) => {
-    const key = req.body.key;
+    const { key } = req.body;
 
     try {
         await backupService().restoreBackup(key);

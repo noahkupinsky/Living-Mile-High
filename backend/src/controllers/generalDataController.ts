@@ -5,9 +5,9 @@ import { updateSite } from "./updateController";
 const generalDataService = () => services().generalDataService;
 
 export const updateGeneralData: ExpressEndpoint = async (req, res) => {
-    const updates = req.body;
+    const { data } = req.body;
     try {
-        await generalDataService().update(updates);
+        await generalDataService().update(data);
         await updateSite();
         res.json({ success: true });
     } catch (error: any) {

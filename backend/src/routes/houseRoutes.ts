@@ -1,8 +1,9 @@
 import { Router } from 'express';
-import { upsertHouse } from '~/controllers/houseController';
+import { deleteHouse, upsertHouse } from '~/controllers/houseController';
 
 const router = Router();
 
 router.post('/upsert', upsertHouse);
+router.post('/delete', deleteHouse);
 
 export default router
