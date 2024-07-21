@@ -23,7 +23,8 @@ import {
     UploadAssetResponse,
     UpsertHouseRequest,
     UpsertHouseResponse,
-    VerifyResponse
+    VerifyResponse,
+    createUploadAssetRequest
 } from 'living-mile-high-lib';
 import { env } from 'next-runtime-env';
 
@@ -43,13 +44,8 @@ export class ApiService {
         return `${backendUrl()}/${route}`;
     }
 
-    axios(): AxiosInstance {
-        return this.apiAxios;
-    }
-
     async uploadAsset(file: File): Promise<string> {
-        const formData = new FormData();
-        formData.append('file', file);
+        const formData = createUploadAssetRequest(file);
 
         const response = await this.apiAxios.post('asset/upload', formData, {
             headers: {
@@ -65,8 +61,8 @@ export class ApiService {
         }
     }
 
-    async updateGeneralData(data: DeepPartial<GeneralData>) {
-        const req: UpdateGeneralDataRequest = { data };
+    async updateGeneralData(data: DeepPartial<GeneralData>, eventId: string): Promise<void> {
+        const req: UpdateGeneralDataRequest = { data, eventId };
         const response = await this.apiAxios.post('general/update', req);
         const resBody: UpdateGeneralDataResponse = response.data;
 
@@ -77,8 +73,8 @@ export class ApiService {
         }
     }
 
-    async upsertHouse(house: DeepPartial<House>): Promise<string> {
-        const req: UpsertHouseRequest = { house };
+    async upsertHouse(house: DeepPartial<House>, eventId: string): Promise<string> {
+        const req: UpsertHouseRequest = { house, eventId };
         const response = await this.apiAxios.post('house/upsert', req);
         const resBody: UpsertHouseResponse = response.data;
 
@@ -89,8 +85,8 @@ export class ApiService {
         }
     }
 
-    async deleteHouse(id: string): Promise<void> {
-        const req: DeleteHouseRequest = { id };
+    async deleteHouse(id: string, eventId: string): Promise<void> {
+        const req: DeleteHouseRequest = { id, eventId };
         const response = await this.apiAxios.post('house/delete', req);
         const resBody: DeleteHouseResponse = response.data;
 
@@ -101,8 +97,8 @@ export class ApiService {
         }
     }
 
-    async restoreBackup(key: string): Promise<void> {
-        const req: RestoreBackupRequest = { key };
+    async restoreBackup(key: string, eventId: string): Promise<void> {
+        const req: RestoreBackupRequest = { key, eventId };
         const response = await this.apiAxios.post('backup/restore', req);
         const resBody: RestoreBackupResponse = response.data;
 

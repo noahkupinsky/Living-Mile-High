@@ -7,9 +7,11 @@ import { PageContainer } from './StyledBackupComponents';
 import BackupItem from './BackupItem';
 import { LockProvider, useLock } from '@/contexts/LockContext';
 import CreateBackupSection from './CreateBackupSection';
+import { useSiteData } from '@/contexts/SiteDataContext';
 
 const BackupComponent = () => {
     const { apiService } = services();
+    const { restoreBackup } = useSiteData();
     const [backups, setBackups] = useState<BackupIndex[]>([]);
     const [newBackupName, setNewBackupName] = useState('');
     const [editingBackupKey, setEditingBackupKey] = useState('');

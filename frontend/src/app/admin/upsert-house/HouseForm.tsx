@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, Button, styled } from 'tamagui';
 import { useSiteData } from '@/contexts/SiteDataContext';
-import services from '@/di';
 import { House } from 'living-mile-high-lib';
 import HouseFormBooleans from './HouseFormBooleans';
 import HouseFormStats from './HouseFormStats';
@@ -32,8 +31,7 @@ const RightColumn = styled(View, {
 });
 
 const HouseForm: React.FC<{ house?: House }> = ({ house }) => {
-    const { apiService } = services();
-    const { houses } = useSiteData();
+    const { houses, upsertHouse } = useSiteData();
     const [formData, setFormData] = useState<House>(house ? house : {
         isDeveloped: false,
         isForSale: false,
@@ -53,7 +51,7 @@ const HouseForm: React.FC<{ house?: House }> = ({ house }) => {
             ...formData
         };
         try {
-            const id = await apiService.upsertHouse(finalData);
+            const id = await upsertHouse(finalData);
             setFormData(prev => ({ ...prev, id }));
             alert(
                 isUpdate ? `House updated successfully` : `House created successfully`

@@ -1,7 +1,7 @@
 'use client';
 
 import axios, { AxiosInstance } from 'axios';
-import { CdnFixedKey } from 'living-mile-high-lib';
+import { CdnFixedKey, SiteData } from 'living-mile-high-lib';
 import { env } from 'next-runtime-env';
 
 const cdnUrl = () => env('NEXT_PUBLIC_CDN_URL')!;
@@ -19,7 +19,7 @@ export class CdnService {
         return [`${cdnUrl()}/${CdnFixedKey.HOME_PAGE_FIRST}`];
     }
 
-    async fetchSiteData() {
+    async fetchSiteData(): Promise<SiteData> {
         try {
             const response = await this.cdn.get(CdnFixedKey.SITE_DATA);
             return response.data;
