@@ -59,7 +59,7 @@ const HouseForm: React.FC<{ house?: House }> = ({ house }) => {
             return image;
         }
         try {
-            const uploadedUrl = await apiService.uploadImage(image);
+            const uploadedUrl = await apiService.uploadAsset(image);
             return uploadedUrl;
         } catch (e) {
             alert(`Failed to save image. ${e}`);

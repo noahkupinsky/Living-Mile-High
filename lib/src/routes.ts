@@ -86,6 +86,6 @@ export type UpdateGeneralDataResponse = SuccessResponse;
 
 //image upload request sends form data field "image" which then gets put into req.file
 
-export type UploadImageResponse = {
-    imageUrl: string;
+export type UploadAssetResponse = SuccessResponse & {
+    url?: string;
 };

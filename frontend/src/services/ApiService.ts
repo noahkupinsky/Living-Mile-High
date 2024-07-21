@@ -1,7 +1,30 @@
 'use client';
 
 import axios, { AxiosInstance } from 'axios';
-import { BackupIndex, CreateBackupRequest, CreateBackupResponse, DeepPartial, DeleteBackupRequest, DeleteBackupResponse, DeleteHouseRequest, DeleteHouseResponse, GeneralData, GetBackupIndicesResponse, House, LoginRequest, LoginResponse, RenameBackupRequest, RenameBackupResponse, RestoreBackupRequest, RestoreBackupResponse, UpdateGeneralDataRequest, UpdateGeneralDataResponse, UploadImageResponse, UpsertHouseRequest, UpsertHouseResponse, VerifyResponse } from 'living-mile-high-lib';
+import {
+    BackupIndex,
+    DeepPartial,
+    GeneralData,
+    House,
+    CreateBackupRequest,
+    CreateBackupResponse,
+    DeleteBackupRequest,
+    DeleteBackupResponse,
+    DeleteHouseRequest,
+    DeleteHouseResponse,
+    GetBackupIndicesResponse,
+    LoginRequest,
+    RenameBackupRequest,
+    RenameBackupResponse,
+    RestoreBackupRequest,
+    RestoreBackupResponse,
+    UpdateGeneralDataRequest,
+    UpdateGeneralDataResponse,
+    UploadAssetResponse,
+    UpsertHouseRequest,
+    UpsertHouseResponse,
+    VerifyResponse
+} from 'living-mile-high-lib';
 import { env } from 'next-runtime-env';
 
 const backendUrl = () => env('NEXT_PUBLIC_BACKEND_URL')!;
@@ -20,21 +43,21 @@ export class ApiService {
         return `${backendUrl()}/${route}`;
     }
 
-    async uploadImage(file: File): Promise<string> {
+    async uploadAsset(file: File): Promise<string> {
         const formData = new FormData();
-        formData.append('image', file);
+        formData.append('file', file);
 
-        const response = await this.api.post('image/upload', formData, {
+        const response = await this.api.post('asset/upload', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
         });
-        const resBody: UploadImageResponse = response.data;
+        const resBody: UploadAssetResponse = response.data;
 
         if (response.status === 200) {
-            return resBody.imageUrl;
+            return resBody.url!;
         } else {
-            throw new Error('Failed to upload image');
+            throw new Error('Failed to upload asset');
         }
     }
 

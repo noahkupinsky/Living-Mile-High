@@ -1,16 +1,19 @@
+import { UploadAssetResponse } from "living-mile-high-lib";
 import { ExpressEndpoint } from "~/@types";
 import { services } from "~/di";
 
-const imageService = () => services().assetService;
+const assetService = () => services().assetService;
 
-export const uploadImage: ExpressEndpoint = async (req, res) => {
+export const uploadAsset: ExpressEndpoint = async (req, res) => {
     const file = req.file;
 
     try {
-        const imageUrl = await imageService().uploadAsset(file);
-        res.json({ imageUrl });
+        const url = await assetService().uploadAsset(file);
+
+        const successResponse: UploadAssetResponse = { success: true, url };
+        res.json(successResponse);
     } catch (error: any) {
-        console.error(error);
-        res.status(500).json({ error: error.message });
+        const errorResponse: UploadAssetResponse = { success: false, error: error.message };
+        res.status(500).json(errorResponse);
     }
 }

@@ -1,11 +1,10 @@
 import express from 'express';
-import multer from 'multer';
-import { ExpressMiddleware } from '~/@types';
-import { uploadImage } from '~/controllers/assetController';
+import { uploadAsset } from '~/controllers/assetController';
+import { handleFormData } from '~/middleware/assetMiddleware';
 
 const router = express.Router();
-const upload = multer();
 
-router.post('/upload', upload.single('image'), uploadImage);
+
+router.post('/upload', handleFormData, uploadAsset);
 
 export default router;
