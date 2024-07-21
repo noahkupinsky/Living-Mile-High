@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Label, Switch, styled } from 'tamagui';
 import { House, HouseBoolean } from 'living-mile-high-lib';
-import { FormDataHouse } from '@/types';
 
 const BooleanContainer = styled(View, {
     display: 'flex',
@@ -33,8 +32,8 @@ const BooleanRow = styled(View, {
 });
 
 type HouseFormBooleansProps = {
-    formData: FormDataHouse;
-    setFormData: React.Dispatch<React.SetStateAction<FormDataHouse>>;
+    formData: House;
+    setFormData: React.Dispatch<React.SetStateAction<House>>;
 };
 
 const HOUSE_BOOLEAN_LABELS: Record<HouseBoolean, string> = {

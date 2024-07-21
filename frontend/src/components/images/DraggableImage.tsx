@@ -26,7 +26,7 @@ const DeleteButton = styled(Button, {
 });
 
 type DraggableImageProps = {
-    img: ImageFormat;
+    url: string;
     index: number;
     moveImage: (dragIndex: number, hoverIndex: number) => void;
     deleteImage: (index: number) => void;
@@ -34,7 +34,7 @@ type DraggableImageProps = {
     height?: number;
 };
 
-const DraggableImage: React.FC<DraggableImageProps> = ({ img, index, moveImage, deleteImage, width, height }) => {
+const DraggableImage: React.FC<DraggableImageProps> = ({ url, index, moveImage, deleteImage, width, height }) => {
     const ref = React.useRef<HTMLDivElement>(null);
 
     const [{ handlerId }, drop] = useDrop({
@@ -88,7 +88,7 @@ const DraggableImage: React.FC<DraggableImageProps> = ({ img, index, moveImage, 
     return (
         <DraggableImageContainer ref={ref} style={{ opacity, width, height }}>
             <AspectImage
-                src={imageFormatToUrl(img)}
+                src={url}
                 width={width}
                 height={height}
             />

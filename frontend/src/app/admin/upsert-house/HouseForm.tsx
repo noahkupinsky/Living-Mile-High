@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { View, Button, styled } from 'tamagui';
 import { useSiteData } from '@/contexts/SiteDataContext';
 import services from '@/di';
-import { FormDataHouse, ImageFormat } from '@/types';
 import { House } from 'living-mile-high-lib';
 import HouseFormBooleans from './HouseFormBooleans';
 import HouseFormStats from './HouseFormStats';
@@ -35,7 +34,7 @@ const RightColumn = styled(View, {
 const HouseForm: React.FC<{ house?: House }> = ({ house }) => {
     const { apiService } = services();
     const { houses } = useSiteData();
-    const [formData, setFormData] = useState<FormDataHouse>(house ? house : {
+    const [formData, setFormData] = useState<House>(house ? house : {
         isDeveloped: false,
         isForSale: false,
         isSelectedWork: false,
@@ -54,34 +53,10 @@ const HouseForm: React.FC<{ house?: House }> = ({ house }) => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const processImage = async (image: ImageFormat): Promise<string | undefined> => {
-        if (typeof image === 'string') {
-            return image;
-        }
-        try {
-            const uploadedUrl = await apiService.uploadAsset(image);
-            return uploadedUrl;
-        } catch (e) {
-            alert(`Failed to save image. ${e}`);
-            return undefined;
-        }
-    }
-
     const handleFormSubmit = async () => {
-        const unfilteredProcessedImages = await Promise.all(formData.images.map(async image => await processImage(image)));
-        const processedImages = unfilteredProcessedImages.filter(image => image !== undefined) as string[];
-        const processedMainImage = await processImage(formData.mainImage);
-
-        if (!processedMainImage) {
-            alert('Failed to save main image. Aborting submission.');
-            return;
-        }
-
         const isUpdate = formData.id !== undefined;
         const finalData = {
-            ...formData,
-            mainImage: processedMainImage,
-            images: processedImages
+            ...formData
         };
         try {
             const id = await apiService.upsertHouse(finalData);

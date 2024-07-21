@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View, Input, Label, styled, Button } from 'tamagui';
-import { FormDataHouse } from '@/types';
 import { House } from 'living-mile-high-lib';
 
 const TextContainer = styled(View, {
@@ -62,8 +61,8 @@ const DropdownItem = styled(Button, {
 });
 
 type HouseFormTextProps = {
-    formData: FormDataHouse;
-    setFormData: React.Dispatch<React.SetStateAction<FormDataHouse>>;
+    formData: House;
+    setFormData: React.Dispatch<React.SetStateAction<House>>;
     houses: House[];
 };
 

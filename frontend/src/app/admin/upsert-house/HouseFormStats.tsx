@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Label, Input, styled } from 'tamagui';
-import { HouseStats } from 'living-mile-high-lib';
-import { FormDataHouse } from '@/types';
+import { House, HouseStats } from 'living-mile-high-lib';
 
 const StatsContainer = styled(View, {
     marginBottom: 15,
@@ -36,8 +35,8 @@ const StatInput = styled(Input, {
 });
 
 type HouseFormStatsProps = {
-    formData: FormDataHouse;
-    setFormData: React.Dispatch<React.SetStateAction<FormDataHouse>>;
+    formData: House;
+    setFormData: React.Dispatch<React.SetStateAction<House>>;
 };
 
 const HOUSE_STAT_LABELS: Record<keyof HouseStats, string> = {
