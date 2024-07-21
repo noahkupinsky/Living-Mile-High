@@ -92,3 +92,10 @@ export const convertFromS3Metadata = (metadata: { [key: string]: string }): CdnM
     }
     return convertedMetadata;
 };
+
+export function createExpirationDate(daysFromToday: number): string {
+    const date = new Date();
+    const expirationTime = date.getTime() + daysFromToday * 24 * 60 * 60 * 1000;
+    date.setTime(expirationTime);
+    return date.toISOString();
+}

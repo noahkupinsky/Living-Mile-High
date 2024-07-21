@@ -2,7 +2,7 @@ import { BackupIndex, BackupType } from "living-mile-high-lib";
 import { PriorityQueue } from "typescript-collections";
 import { CdnAdapter, BackupService, StateService, Backup, BackupMetadata } from "~/@types";
 import { BACKUP_LOGARITHMIC_BASE, BACKUP_RETENTION_DAYS, ContentCategory, ContentType } from "~/@types/constants";
-import { streamToString } from "~/utils/misc";
+import { createExpirationDate, streamToString } from "~/utils/misc";
 
 type BackupPriority = { key: string; createdAt: Date; backupPower: number }
 
@@ -90,7 +90,7 @@ export class CdnBackupService implements BackupService {
         const backupData = await this.stateService.serializeState();
         const timestamp = new Date().toISOString();
 
-        const expiration = backupType === BackupType.AUTO ? { expiration: this.getExpirationDate() } : {};
+        const expiration = backupType === BackupType.AUTO ? { expiration: createExpirationDate(BACKUP_RETENTION_DAYS) } : {};
         const backupName = name || `${timestamp}`;
 
         const metadata: BackupMetadata = {
@@ -110,12 +110,6 @@ export class CdnBackupService implements BackupService {
             prefix: ContentCategory.BACKUP,
             metadata: metadata
         });
-    }
-
-    private getExpirationDate(): string {
-        const date = new Date();
-        date.setDate(date.getDate() + BACKUP_RETENTION_DAYS);
-        return date.toISOString();
     }
 
     async pruneAutoBackups(): Promise<void> {

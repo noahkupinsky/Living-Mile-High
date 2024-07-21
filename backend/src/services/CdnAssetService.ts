@@ -1,6 +1,7 @@
 import { ImageService, CdnAdapter } from '~/@types';
 import { AssetMetadata, CdnContent } from '~/@types/cdnServices';
 import { ASSSET_RETENTION_DAYS, ContentCategory, ContentType } from '~/@types/constants';
+import { createExpirationDate } from '~/utils/misc';
 
 export class CdnAssetService implements ImageService {
     private cdn: CdnAdapter;
@@ -19,7 +20,7 @@ export class CdnAssetService implements ImageService {
         }
 
         const metadata: AssetMetadata = {
-            expiration: this.getExpirationDate()
+            expiration: createExpirationDate(ASSSET_RETENTION_DAYS)
         };
 
         try {
@@ -34,12 +35,6 @@ export class CdnAssetService implements ImageService {
         } catch (error: any) {
             throw new Error(`Failed to upload image: ${error.message}`);
         }
-    }
-
-    private getExpirationDate(): string {
-        const date = new Date();
-        date.setDate(date.getDate() + ASSSET_RETENTION_DAYS);
-        return date.toISOString();
     }
 
     public async getExpiredAssets(keys: string[]): Promise<string[]> {

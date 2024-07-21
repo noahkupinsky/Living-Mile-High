@@ -84,7 +84,6 @@ const HouseFormImages: React.FC<HouseFormImagesProps> = ({
         }
     }
 
-
     const handleMainImageUpload = async (image: ImageFormat) => {
         const processedImage = await processImage(image);
         if (processedImage) {

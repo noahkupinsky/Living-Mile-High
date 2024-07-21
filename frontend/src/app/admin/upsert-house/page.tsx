@@ -10,14 +10,7 @@ const HouseFormPage: React.FC = () => {
     const searchParams = useSearchParams();
     const id = searchParams.get('id');
     const { houses } = useSiteData();
-    const [house, setHouse] = useState<House | undefined>(undefined);
-
-    useEffect(() => {
-        if (id) {
-            const selectedHouse = houses.find(house => house.id === id);
-            setHouse(selectedHouse);
-        }
-    }, [id, houses]);
+    const [house] = useState<House | undefined>(id ? houses.find(house => house.id === id) : undefined);
 
     return (
         <HouseForm house={house} />

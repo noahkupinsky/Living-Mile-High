@@ -45,12 +45,6 @@ const HouseForm: React.FC<{ house?: House }> = ({ house }) => {
         stats: {},
     });
 
-    useEffect(() => {
-        if (house) {
-            setFormData(house);
-        }
-    }, [house]);
-
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleFormSubmit = async () => {
