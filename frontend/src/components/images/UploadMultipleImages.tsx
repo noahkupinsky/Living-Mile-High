@@ -1,3 +1,4 @@
+import { ImageFormat } from '@/types';
 import React, { useState } from 'react';
 import { View, Input, Button, styled } from 'tamagui';
 
@@ -7,19 +8,19 @@ const ImageUploadContainer = styled(View, {
 });
 
 type UploadMultipleImagesProps = {
-    onImagesUpload: (images: (string | ArrayBuffer)[]) => void;
+    onImagesUpload: (images: ImageFormat[]) => void;
 };
 
 const UploadMultipleImages: React.FC<UploadMultipleImagesProps> = ({ onImagesUpload }) => {
     const [imageURLs, setImageURLs] = useState<string[]>([]);
-    const [localFiles, setLocalFiles] = useState<ArrayBuffer[]>([]);
+    const [localFiles, setLocalFiles] = useState<File[]>([]);
 
     const handleURLChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setImageURLs(value.split(',').map(url => url.trim()));
     };
 
-    const handleAddURLs = () => {
+    const handleAddImages = () => {
         onImagesUpload([...imageURLs, ...localFiles]);
     };
 
@@ -27,22 +28,7 @@ const UploadMultipleImages: React.FC<UploadMultipleImagesProps> = ({ onImagesUpl
         const files = e.target.files;
         if (files) {
             const filesArray = Array.from(files);
-            const fileReaders = filesArray.map(file => {
-                return new Promise<ArrayBuffer>((resolve, reject) => {
-                    const reader = new FileReader();
-                    reader.onload = () => {
-                        if (reader.result) {
-                            resolve(reader.result as ArrayBuffer);
-                        }
-                    };
-                    reader.onerror = reject;
-                    reader.readAsArrayBuffer(file);
-                });
-            });
-
-            Promise.all(fileReaders)
-                .then(results => setLocalFiles(prevFiles => [...prevFiles, ...results]))
-                .catch(error => console.error('File reading failed:', error));
+            setLocalFiles(prevFiles => [...prevFiles, ...filesArray]);
         }
     };
 
@@ -54,7 +40,7 @@ const UploadMultipleImages: React.FC<UploadMultipleImagesProps> = ({ onImagesUpl
                 onChange={handleURLChange}
             />
             <input type="file" multiple onChange={handleFileChange} />
-            <Button onPress={handleAddURLs}>Add Images</Button>
+            <Button onPress={handleAddImages}>Add Images</Button>
         </ImageUploadContainer>
     );
 };

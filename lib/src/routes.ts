@@ -81,3 +81,13 @@ export type UpdateGeneralDataRequest = {
 };
 
 export type UpdateGeneralDataResponse = SuccessResponse;
+
+// IMAGE
+
+export type UploadImageRequest = {
+    file: Express.Multer.File;
+};
+
+export type UploadImageResponse = {
+    imageUrl: string;
+};

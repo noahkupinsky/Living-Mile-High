@@ -3,12 +3,13 @@ import { Button, View, Label, styled } from 'tamagui';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
 import { useSiteData } from '@/contexts/SiteDataContext';
-import { FormDataHouse } from '@/types';
+import { FormDataHouse, ImageFormat } from '@/types';
 import DraggableImage from '@/components/images/DraggableImage';
 import Modal from '@/components/layout/Modal';
 import UploadSingleImage from '@/components/images/UploadSingleImage';
 import UploadMultipleImages from '@/components/images/UploadMultipleImages';
 import AspectImage from '@/components/images/AspectImage';
+import { imageFormatToUrl } from '@/utils/misc';
 
 const ImageContainer = styled(View, {
     marginBottom: 15,
@@ -67,12 +68,12 @@ const HouseFormImages: React.FC<HouseFormImagesProps> = ({
         }));
     };
 
-    const handleMainImageUpload = (image: string | ArrayBuffer) => {
+    const handleMainImageUpload = (image: ImageFormat) => {
         setFormData(prev => ({ ...prev, mainImage: image }));
         setIsModalOpen(false);
     };
 
-    const handleImagesUpload = (images: (string | ArrayBuffer)[]) => {
+    const handleImagesUpload = (images: ImageFormat[]) => {
         setFormData(prev => ({ ...prev, images: [...prev.images, ...images] }));
         setIsModalOpen(false);
     };
@@ -84,7 +85,7 @@ const HouseFormImages: React.FC<HouseFormImagesProps> = ({
         setFormData({ ...formData, images: updatedImages });
     };
 
-    const mainImageUrl = formData.mainImage && typeof formData.mainImage === 'string' ? formData.mainImage : URL.createObjectURL(new Blob([formData.mainImage]));
+    const mainImageUrl = formData.mainImage === '' ? undefined : imageFormatToUrl(formData.mainImage);
 
     return (
         <ImageContainer>
@@ -97,7 +98,7 @@ const HouseFormImages: React.FC<HouseFormImagesProps> = ({
                 ))}
             </ImageList>
             <MainImageContainer>
-                {mainImageUrl !== '' && (
+                {mainImageUrl && (
                     <AspectImage
                         src={mainImageUrl}
                         height={200}

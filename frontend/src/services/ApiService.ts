@@ -1,7 +1,7 @@
 'use client';
 
 import axios, { AxiosInstance } from 'axios';
-import { BackupIndex, CreateBackupRequest, CreateBackupResponse, DeepPartial, DeleteBackupRequest, DeleteBackupResponse, DeleteHouseRequest, DeleteHouseResponse, GeneralData, GetBackupIndicesResponse, House, LoginRequest, LoginResponse, RenameBackupRequest, RenameBackupResponse, RestoreBackupRequest, RestoreBackupResponse, UpdateGeneralDataRequest, UpdateGeneralDataResponse, UpsertHouseRequest, UpsertHouseResponse, VerifyResponse } from 'living-mile-high-lib';
+import { BackupIndex, CreateBackupRequest, CreateBackupResponse, DeepPartial, DeleteBackupRequest, DeleteBackupResponse, DeleteHouseRequest, DeleteHouseResponse, GeneralData, GetBackupIndicesResponse, House, LoginRequest, LoginResponse, RenameBackupRequest, RenameBackupResponse, RestoreBackupRequest, RestoreBackupResponse, UpdateGeneralDataRequest, UpdateGeneralDataResponse, UploadImageResponse, UpsertHouseRequest, UpsertHouseResponse, VerifyResponse } from 'living-mile-high-lib';
 import { env } from 'next-runtime-env';
 
 const backendUrl = () => env('NEXT_PUBLIC_BACKEND_URL')!;
@@ -20,11 +20,19 @@ export class ApiService {
         return `${backendUrl()}/${route}`;
     }
 
-    async uploadImage(image: ArrayBuffer): Promise<string> {
-        const response = await this.api.post('image/upload', { image });
+    async uploadImage(file: File): Promise<string> {
+        const formData = new FormData();
+        formData.append('image', file);
+
+        const response = await this.api.post('image/upload', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        const resBody: UploadImageResponse = response.data;
 
         if (response.status === 200) {
-            return response.data.imageUrl;
+            return resBody.imageUrl;
         } else {
             throw new Error('Failed to upload image');
         }
@@ -143,7 +151,6 @@ export class ApiService {
         try {
             const req: LoginRequest = { username, password };
             const response = await this.api.post('auth/login', req);
-            const resBody: LoginResponse = response.data;
 
             return (response.status === 200);
         } catch (error) {

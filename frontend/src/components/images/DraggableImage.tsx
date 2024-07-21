@@ -2,6 +2,8 @@ import React from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { View, Button, styled } from 'tamagui';
 import AspectImage from './AspectImage';
+import { ImageFormat } from '@/types';
+import { imageFormatToUrl } from '@/utils/misc';
 
 const DraggableImageContainer = styled(View, {
     position: 'relative',
@@ -24,7 +26,7 @@ const DeleteButton = styled(Button, {
 });
 
 type DraggableImageProps = {
-    img: string | ArrayBuffer;
+    img: ImageFormat;
     index: number;
     moveImage: (dragIndex: number, hoverIndex: number) => void;
     deleteImage: (index: number) => void;
@@ -86,7 +88,7 @@ const DraggableImage: React.FC<DraggableImageProps> = ({ img, index, moveImage, 
     return (
         <DraggableImageContainer ref={ref} style={{ opacity, width, height }}>
             <AspectImage
-                src={typeof img === 'string' ? img : URL.createObjectURL(new Blob([img]))}
+                src={imageFormatToUrl(img)}
                 width={width}
                 height={height}
             />

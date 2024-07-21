@@ -4362,13 +4362,15 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.2.4.tgz#eca284f75d2965079309dc0ad9255abb2ebc1632"
   integrity sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==
 
-living-mile-high-lib@^1.0.51:
-  version "1.0.51"
-  resolved "https://registry.yarnpkg.com/living-mile-high-lib/-/living-mile-high-lib-1.0.51.tgz#4bad7359c9f16bfb1075f8c47de3f884ecd6127b"
-  integrity sha512-WtMe73GyzeCgvtUMSJpdXMaW5XV9CFpnfKGB1+3nADJ14rymOfWc/LKW4fvH/pq8iKQ3AbMeiyj6PXCX+XFS3Q==
+living-mile-high-lib@^1.0.52:
+  version "1.0.52"
+  resolved "https://registry.yarnpkg.com/living-mile-high-lib/-/living-mile-high-lib-1.0.52.tgz#148e190f1be53f85a2a446b8eafaee8dddc5e10e"
+  integrity sha512-Zj8HHJJMNmtvwwHdeWdCglJFSNYJilFN6MRm0bCw4HGITAx/Her9/jS59Z4xRazPaJfjIImBRyqYlz7w6yDUig==
   dependencies:
     bcryptjs "^2.4.3"
+    express "^4.19.2"
     mongoose "^8.4.4"
+    multer "^1.4.5-lts.1"
 
 locate-path@^5.0.0:
   version "5.0.0"

@@ -28,9 +28,9 @@ export type HouseQuery = {
 
 export type HouseStatKeys = keyof HouseStats
 
-export type FormImage = string | ArrayBuffer
+export type ImageFormat = string | File
 
 export type FormDataHouse = Omit<House, 'mainImage' | 'images'> & {
-    mainImage: FormImage;
-    images: FormImage[];
+    mainImage: ImageFormat;
+    images: ImageFormat[];
 };
