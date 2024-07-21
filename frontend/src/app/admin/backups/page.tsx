@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import services from '@/di';
 import { BackupIndex } from 'living-mile-high-lib';
 import { PageContainer } from './StyledBackupComponents';

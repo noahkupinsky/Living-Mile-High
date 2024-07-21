@@ -9,9 +9,13 @@ type ProtectedRouteProps = {
 }
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, checkAuthentication } = useAuth();
     const pathname = usePathname();
     const router = useRouter();
+
+    useEffect(() => {
+        checkAuthentication();
+    }, [checkAuthentication]);
 
     useEffect(() => {
         if (!isAuthenticated) {

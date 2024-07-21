@@ -107,7 +107,7 @@ export class ApiService {
         const resBody: GetBackupIndicesResponse = response.data;
 
         if (response.status === 200 && resBody.success) {
-            const indices: BackupIndex[] = response.data;
+            const indices: BackupIndex[] = resBody.indices!;
             // sort by most recent date
             const sortedIndices = indices.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
             return sortedIndices;
@@ -129,17 +129,25 @@ export class ApiService {
     }
 
     async verifyAuthenticated(): Promise<boolean> {
-        const response = await this.api.get('auth/verify');
-        const resBody: VerifyResponse = response.data;
+        try {
+            const response = await this.api.get('auth/verify');
+            const resBody: VerifyResponse = response.data;
 
-        return (response.status === 200 && resBody.success);
+            return (response.status === 200 && resBody.success);
+        } catch (error) {
+            return false;
+        }
     }
 
     async login(username: string, password: string): Promise<boolean> {
-        const req: LoginRequest = { username, password };
-        const response = await this.api.post('auth/login', req);
-        const resBody: LoginResponse = response.data;
+        try {
+            const req: LoginRequest = { username, password };
+            const response = await this.api.post('auth/login', req);
+            const resBody: LoginResponse = response.data;
 
-        return (response.status === 200);
+            return (response.status === 200);
+        } catch (error) {
+            return false;
+        }
     }
 }

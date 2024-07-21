@@ -6,6 +6,7 @@ import React, { createContext, useState, useEffect, useContext, useCallback } fr
 type AuthContextType = {
     isAuthenticated: boolean;
     login: (username: string, password: string) => Promise<boolean>;
+    checkAuthentication: () => Promise<void>; // Expose this method
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -23,10 +24,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         setIsAuthenticated(authenticated);
     }, [apiService]);
 
-    useEffect(() => {
-        checkAuthentication();
-    }, [checkAuthentication]);
-
     const login = useCallback(async (username: string, password: string) => {
         const success = await apiService.login(username, password);
         if (success) {
@@ -36,7 +33,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }, [apiService]);
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, login }}>
+        <AuthContext.Provider value={{ isAuthenticated, login, checkAuthentication }}>
             {children}
         </AuthContext.Provider>
     );
