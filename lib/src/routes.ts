@@ -84,9 +84,7 @@ export type UpdateGeneralDataResponse = SuccessResponse;
 
 // IMAGE
 
-export type UploadImageRequest = {
-    file: Express.Multer.File;
-};
+//image upload request sends form data field "image" which then gets put into req.file
 
 export type UploadImageResponse = {
     imageUrl: string;

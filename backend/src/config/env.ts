@@ -35,7 +35,6 @@ const projectRoot = path.join(__dirname, projectRootRelative);
 
 if (envFile && allowedEnvFiles.includes(envFile)) {
     const envPath = path.join(projectRoot, `.env.${envFile}`);
-    console.log(envPath);
     dotenv.config({ path: envPath });
 }
 

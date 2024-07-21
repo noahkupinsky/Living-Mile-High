@@ -15,7 +15,6 @@ const HouseFormPage: React.FC = () => {
     useEffect(() => {
         if (id) {
             const selectedHouse = houses.find(house => house.id === id);
-            console.log(selectedHouse);
             setHouse(selectedHouse);
         }
     }, [id, houses]);

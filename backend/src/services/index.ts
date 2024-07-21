@@ -1,4 +1,4 @@
-export { CdnImageService } from "./CdnImageService";
+export { CdnAssetService } from "./CdnAssetService";
 export { MongoAdminService } from "./MongoAdminService";
 export { CdnBackupService } from "./CdnBackupService";
 export { MongoGeneralDataService } from "./MongoGeneralDataService";

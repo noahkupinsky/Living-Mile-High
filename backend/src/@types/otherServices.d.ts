@@ -5,7 +5,7 @@ import {
 } from "@aws-sdk/client-s3";
 import {
     CdnAdapter,
-    ImageService,
+    AssetService,
     BackupService,
 } from "./cdnServices";
 import {
@@ -23,7 +23,7 @@ export interface ServiceManager<T> {
 export type ServiceDict = {
     houseService: HouseService;
     adminService: AdminService;
-    imageService: ImageService;
+    assetService: AssetService;
     cdnAdapter: CdnAdapter;
     generalDataService: GeneralDataService;
     stateService: StateService;

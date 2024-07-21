@@ -34,7 +34,7 @@ export class RealServiceManager implements SiteServiceManager {
             houseService: houseService,
             generalDataService: generalDataService,
             adminService: new Services.MongoAdminService(),
-            imageService: new Services.CdnImageService(cdn),
+            assetService: new Services.CdnAssetService(cdn),
             stateService: stateService,
             backupService: new Services.CdnBackupService(stateService, cdn),
         }

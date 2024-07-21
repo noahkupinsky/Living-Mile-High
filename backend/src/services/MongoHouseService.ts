@@ -22,7 +22,6 @@ export class MongoHouseService implements HouseService {
 
     private async updateHouse(id: any, house: DeepPartial<House>): Promise<string> {
         await withLock(id, async () => {
-            console.log(id);
             const updateFields = constructUpdateObject(house);
 
             const foundHouse = await HouseModel.findByIdAndUpdate(id, { $set: updateFields }, { new: true });

@@ -28,8 +28,17 @@ export interface BackupService {
     consolidateAutoBackups(): Promise<void>;
 }
 
+export type AssetMetadata = {
+    expiration: string,
+}
+
+export interface AssetService {
+    uploadAsset(file: any): Promise<string>;
+    getExpiredAssets(keys: string[]): Promise<string[]>;
+}
+
 // CdnMetadata is a superset of all metadatas
-export type CdnMetadata = Partial<BackupMetadata>
+export type CdnMetadata = Partial<BackupMetadata> & Partial<AssetMetadata>;
 
 export type PutCommand = {
     key: string,
@@ -64,9 +73,5 @@ export type S3Config = {
     client: S3Client,
     bucket: string,
     baseUrl: string
-}
-
-export interface ImageService {
-    uploadImage(file: any): Promise<string>;
 }
 

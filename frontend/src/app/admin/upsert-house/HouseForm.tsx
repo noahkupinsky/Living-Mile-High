@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Button, styled } from 'tamagui';
 import { useSiteData } from '@/contexts/SiteDataContext';
 import services from '@/di';
-import { FormDataHouse } from '@/types';
+import { FormDataHouse, ImageFormat } from '@/types';
 import { House } from 'living-mile-high-lib';
 import HouseFormBooleans from './HouseFormBooleans';
 import HouseFormStats from './HouseFormStats';
@@ -54,15 +54,15 @@ const HouseForm: React.FC<{ house?: House }> = ({ house }) => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const processImage = async (image: string | ArrayBuffer): Promise<string | undefined> => {
+    const processImage = async (image: ImageFormat): Promise<string | undefined> => {
         if (typeof image === 'string') {
             return image;
         }
         try {
             const uploadedUrl = await apiService.uploadImage(image);
             return uploadedUrl;
-        } catch (error) {
-            alert('Failed to save image');
+        } catch (e) {
+            alert(`Failed to save image. ${e}`);
             return undefined;
         }
     }

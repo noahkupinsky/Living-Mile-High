@@ -6,6 +6,7 @@ import { downloadImage, streamToParsedJson } from "~/utils/misc";
 
 const cdn = () => services().cdnAdapter;
 const backupService = () => services().backupService;
+const assetService = () => services().assetService;
 const getState = async () => services().stateService.getState();
 
 // INTERMEDIATES, NOT ROUTES
@@ -65,7 +66,8 @@ export async function pruneAssets(): Promise<void> {
     }
 
     const allAssets = await cdn().getKeys(ContentCategory.ASSET);
-    const assetsToDelete = allAssets.filter(asset => !referencedAssets.has(asset));
+    const unreferencedAssets = allAssets.filter(asset => !referencedAssets.has(asset));
+    const expiredUnreferencedAssets = await assetService().getExpiredAssets(unreferencedAssets);
 
-    cdn().deleteObjects(assetsToDelete);
+    cdn().deleteObjects(expiredUnreferencedAssets);
 }

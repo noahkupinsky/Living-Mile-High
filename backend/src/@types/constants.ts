@@ -22,3 +22,5 @@ export enum ContentPermission {
 
 export const BACKUP_RETENTION_DAYS = 365;
 export const BACKUP_LOGARITHMIC_BASE = 5;
+
+export const ASSSET_RETENTION_DAYS = 1;

@@ -1,6 +1,7 @@
 import express from 'express';
 import multer from 'multer';
-import { uploadImage } from '~/controllers/imageController';
+import { ExpressMiddleware } from '~/@types';
+import { uploadImage } from '~/controllers/assetController';
 
 const router = express.Router();
 const upload = multer();

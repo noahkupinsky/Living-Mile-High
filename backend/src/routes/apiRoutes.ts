@@ -1,7 +1,7 @@
 import { Router } from "express";
 import authRouter from './authRoutes';
 import houseRouter from './houseRoutes';
-import imageRouter from './imageRoutes';
+import imageRouter from './assetRoutes';
 import backupRouter from './backupRoutes';
 import generalDataRouter from './generalDataRoutes';
 import verifyToken from '~/middleware/authMiddleware';
@@ -17,6 +17,6 @@ router.use('/auth', authRouter);
 router.use('/house', verifyToken, houseRouter);
 router.use('/general', verifyToken, generalDataRouter);
 router.use('/backup', verifyToken, backupRouter);
-router.use('/image', verifyToken, imageRouter);
+router.use('/asset', verifyToken, imageRouter);
 
 export default router;

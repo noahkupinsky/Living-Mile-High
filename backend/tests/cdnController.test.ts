@@ -15,6 +15,12 @@ beforeAll(() => {
     ({ houseService, generalDataService, backupService, cdnAdapter: cdn } = services());
 });
 
+function getPastDateString(days: number = 1): string {
+    const currentDate = new Date();
+    const pastDate = new Date(currentDate.getTime() - 1000 * 60 * 60 * 24 * days);
+    return pastDate.toISOString();
+}
+
 describe('update fixed keys', () => {
     test('updateSiteData should update site data', async () => {
         await updateSiteData();
@@ -54,14 +60,17 @@ describe('update fixed keys', () => {
 });
 
 describe('pruning assets', () => {
-    test('pruneAssets should delete assets that were never referred to', async () => {
+    test('pruneAssets should delete expired assets that were never referred to', async () => {
         await updateFixedKeys();
 
         const assetKey = await cdn.putObject({
             key: 'test-key',
             body: 'body',
             contentType: ContentType.TEXT,
-            prefix: ContentCategory.ASSET
+            prefix: ContentCategory.ASSET,
+            metadata: {
+                expiration: getPastDateString()
+            }
         });
 
         await pruneAssets();
@@ -69,13 +78,33 @@ describe('pruning assets', () => {
         expect(inMemoryCdn[assetKey]).toBeUndefined();
     });
 
-    test('pruneAssets should leave non ASSET-prefixed content alone', async () => {
+    test('pruneAssets should leave non ASSET-prefixed content alone, even if it has a past expiration', async () => {
         await updateSiteData();
 
         const assetKey = await cdn.putObject({
             key: 'test-key',
             body: 'body',
             contentType: ContentType.TEXT,
+            metadata: {
+                expiration: getPastDateString()
+            }
+        });
+
+        await pruneAssets();
+
+        expect(inMemoryCdn[assetKey]).toBeDefined();
+    });
+
+    test('pruneAssets should leave non-expired assets alone', async () => {
+        await updateSiteData();
+
+        const assetKey = await cdn.putObject({
+            key: 'test-key',
+            body: 'body',
+            contentType: ContentType.TEXT,
+            metadata: {
+                expiration: getPastDateString(-1) // 1 day in the future
+            }
         });
 
         await pruneAssets();
@@ -89,7 +118,10 @@ describe('pruning assets', () => {
             key: 'test-key',
             body: 'body',
             contentType: ContentType.TEXT,
-            prefix: ContentCategory.ASSET
+            prefix: ContentCategory.ASSET,
+            metadata: {
+                expiration: getPastDateString()
+            }
         });
         const assetUrl = cdn.getObjectUrl(assetKey);
 
@@ -121,14 +153,20 @@ describe('pruning assets', () => {
             key: 'test-key1',
             body: 'body',
             contentType: ContentType.TEXT,
-            prefix: ContentCategory.ASSET
+            prefix: ContentCategory.ASSET,
+            metadata: {
+                expiration: getPastDateString()
+            }
         });
         const assetUrl1 = cdn.getObjectUrl(assetKey1);
         const assetKey2 = await cdn.putObject({
             key: 'test-key2',
             body: 'body',
             contentType: ContentType.TEXT,
-            prefix: ContentCategory.ASSET
+            prefix: ContentCategory.ASSET,
+            metadata: {
+                expiration: getPastDateString()
+            }
         });
         const assetUrl2 = cdn.getObjectUrl(assetKey2);
 
