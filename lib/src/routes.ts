@@ -1,4 +1,4 @@
-import { randomUUID } from "crypto";
+import uuid from "uuid";
 import { BackupIndex, DeepPartial, GeneralData, House } from "./types";
 
 export type SuccessResponse = {
@@ -7,15 +7,11 @@ export type SuccessResponse = {
 }
 
 export type SiteUpdateRequest = {
-    siteUpdateId?: string;
+    eventId?: string;
 }
 
-export type SiteUpdateResponse = {
-    siteUpdateId: string;
-}
-
-export function generateSiteUpdateId(siteUpdateId?: string): string {
-    return siteUpdateId ? siteUpdateId : randomUUID();
+export function generateEventId(eventId?: string): string {
+    return eventId ? eventId : uuid.v4();
 }
 
 // AUTH
@@ -67,7 +63,7 @@ export type RestoreBackupRequest = SiteUpdateRequest & {
     key: string;
 };
 
-export type RestoreBackupResponse = SiteUpdateResponse & SuccessResponse;
+export type RestoreBackupResponse = SuccessResponse;
 
 
 // HOUSES
@@ -76,7 +72,7 @@ export type UpsertHouseRequest = SiteUpdateRequest & {
     house: DeepPartial<House>;
 };
 
-export type UpsertHouseResponse = SiteUpdateResponse & SuccessResponse & {
+export type UpsertHouseResponse = SuccessResponse & {
     id?: string;
 };
 
@@ -84,7 +80,7 @@ export type DeleteHouseRequest = SiteUpdateRequest & {
     id: string;
 };
 
-export type DeleteHouseResponse = SiteUpdateResponse & SuccessResponse;
+export type DeleteHouseResponse = SuccessResponse;
 
 
 // GENERAL DATA
@@ -93,19 +89,16 @@ export type UpdateGeneralDataRequest = SiteUpdateRequest & {
     data: DeepPartial<GeneralData>;
 };
 
-export type UpdateGeneralDataResponse = SiteUpdateResponse & SuccessResponse;
+export type UpdateGeneralDataResponse = SuccessResponse;
 
 // IMAGE
 
-export function createUploadAssetRequest(file: File, siteUpdateId?: string): FormData {
+export function createUploadAssetRequest(file: File): FormData {
     const formData = new FormData();
     formData.append('file', file);
-    if (siteUpdateId) {
-        formData.append('siteUpdateId', siteUpdateId);
-    }
     return formData;
 }
 
-export type UploadAssetResponse = SiteUpdateResponse & SuccessResponse & {
+export type UploadAssetResponse = SuccessResponse & {
     url?: string;
 };

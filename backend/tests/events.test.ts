@@ -83,9 +83,9 @@ describe('WebSocket /events/connect', () => {
                     receivedInitialMessage = true;
 
                     // Send the custom event message after receiving the initial message
-                    sendEventMessage(EventMessage.SITE_UPDATED);
+                    sendEventMessage(EventMessage.SITE_UPDATED, 'test-event-id');
                 } else {
-                    expect(data).toEqual(formatEventMessage(EventMessage.SITE_UPDATED));
+                    expect(data).toEqual(formatEventMessage(EventMessage.SITE_UPDATED, 'test-event-id'));
                     close();
                 }
             }

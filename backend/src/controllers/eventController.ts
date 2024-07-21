@@ -23,8 +23,8 @@ export const setupWebSocketServer = (server: Server) => {
     });
 };
 
-export const sendEventMessage = (message: EventMessage) => {
-    const formattedMessage = formatEventMessage(message);
+export const sendEventMessage = (message: EventMessage, eventId?: string) => {
+    const formattedMessage = formatEventMessage(message, eventId);
     clients.forEach((ws) => {
         if (ws.readyState === WebSocket.OPEN) {
             ws.send(formattedMessage);

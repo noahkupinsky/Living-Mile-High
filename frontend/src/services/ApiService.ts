@@ -30,10 +30,10 @@ import { env } from 'next-runtime-env';
 const backendUrl = () => env('NEXT_PUBLIC_BACKEND_URL')!;
 
 export class ApiService {
-    private api: AxiosInstance;
+    private apiAxios: AxiosInstance;
 
     constructor() {
-        this.api = axios.create({
+        this.apiAxios = axios.create({
             baseURL: `${backendUrl()}/api`,
             withCredentials: true
         });
@@ -43,11 +43,15 @@ export class ApiService {
         return `${backendUrl()}/${route}`;
     }
 
+    axios(): AxiosInstance {
+        return this.apiAxios;
+    }
+
     async uploadAsset(file: File): Promise<string> {
         const formData = new FormData();
         formData.append('file', file);
 
-        const response = await this.api.post('asset/upload', formData, {
+        const response = await this.apiAxios.post('asset/upload', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
@@ -63,7 +67,7 @@ export class ApiService {
 
     async updateGeneralData(data: DeepPartial<GeneralData>) {
         const req: UpdateGeneralDataRequest = { data };
-        const response = await this.api.post('general/update', req);
+        const response = await this.apiAxios.post('general/update', req);
         const resBody: UpdateGeneralDataResponse = response.data;
 
         if (response.status === 200 && resBody.success) {
@@ -75,7 +79,7 @@ export class ApiService {
 
     async upsertHouse(house: DeepPartial<House>): Promise<string> {
         const req: UpsertHouseRequest = { house };
-        const response = await this.api.post('house/upsert', req);
+        const response = await this.apiAxios.post('house/upsert', req);
         const resBody: UpsertHouseResponse = response.data;
 
         if (response.status === 200 && resBody.success) {
@@ -87,7 +91,7 @@ export class ApiService {
 
     async deleteHouse(id: string): Promise<void> {
         const req: DeleteHouseRequest = { id };
-        const response = await this.api.post('house/delete', req);
+        const response = await this.apiAxios.post('house/delete', req);
         const resBody: DeleteHouseResponse = response.data;
 
         if (response.status === 200 && resBody.success) {
@@ -99,7 +103,7 @@ export class ApiService {
 
     async restoreBackup(key: string): Promise<void> {
         const req: RestoreBackupRequest = { key };
-        const response = await this.api.post('backup/restore', req);
+        const response = await this.apiAxios.post('backup/restore', req);
         const resBody: RestoreBackupResponse = response.data;
 
         if (response.status === 200 && resBody.success) {
@@ -111,7 +115,7 @@ export class ApiService {
 
     async deleteBackup(key: string): Promise<void> {
         const req: DeleteBackupRequest = { key };
-        const response = await this.api.post('backup/delete', req);
+        const response = await this.apiAxios.post('backup/delete', req);
         const resBody: DeleteBackupResponse = response.data;
 
         if (response.status === 200 && resBody.success) {
@@ -123,7 +127,7 @@ export class ApiService {
 
     async createBackup(name: string): Promise<void> {
         const req: CreateBackupRequest = { name };
-        const response = await this.api.post('backup/create', req);
+        const response = await this.apiAxios.post('backup/create', req);
         const resBody: CreateBackupResponse = response.data;
 
         if (response.status === 200 && resBody.success) {
@@ -134,7 +138,7 @@ export class ApiService {
     }
 
     async getBackupIndices(): Promise<BackupIndex[]> {
-        const response = await this.api.get('backup');
+        const response = await this.apiAxios.get('backup');
         const resBody: GetBackupIndicesResponse = response.data;
 
         if (response.status === 200 && resBody.success) {
@@ -149,7 +153,7 @@ export class ApiService {
 
     async renameBackup(key: string, name: string): Promise<void> {
         const req: RenameBackupRequest = { key, name };
-        const response = await this.api.post('backup/rename', req);
+        const response = await this.apiAxios.post('backup/rename', req);
         const resBody: RenameBackupResponse = response.data;
 
         if (response.status === 200 && resBody.success) {
@@ -161,7 +165,7 @@ export class ApiService {
 
     async verifyAuthenticated(): Promise<boolean> {
         try {
-            const response = await this.api.get('auth/verify');
+            const response = await this.apiAxios.get('auth/verify');
             const resBody: VerifyResponse = response.data;
 
             return (response.status === 200 && resBody.success);
@@ -173,7 +177,7 @@ export class ApiService {
     async login(username: string, password: string): Promise<boolean> {
         try {
             const req: LoginRequest = { username, password };
-            const response = await this.api.post('auth/login', req);
+            const response = await this.apiAxios.post('auth/login', req);
 
             return (response.status === 200);
         } catch (error) {

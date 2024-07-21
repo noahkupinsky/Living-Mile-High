@@ -2158,6 +2158,11 @@
     "@types/methods" "^1.1.4"
     "@types/superagent" "^8.1.0"
 
+"@types/uuid@^10.0.0":
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-10.0.0.tgz#e9c07fe50da0f53dc24970cca94d619ff03f6f6d"
+  integrity sha512-7gqG38EyHgyP1S+7+xomFtL+ZNHcKv6DwNaCZmJmo1vgMugyF3TCnXVg4t1uk89mLNwnLtnY3TpOpCOyp1/xHQ==
+
 "@types/uuid@^9.0.8":
   version "9.0.8"
   resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-9.0.8.tgz#7545ba4fc3c003d6c756f651f3bf163d8f0f29ba"
@@ -4362,15 +4367,17 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.2.4.tgz#eca284f75d2965079309dc0ad9255abb2ebc1632"
   integrity sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==
 
-living-mile-high-lib@^1.0.57:
-  version "1.0.57"
-  resolved "https://registry.yarnpkg.com/living-mile-high-lib/-/living-mile-high-lib-1.0.57.tgz#a6d620f5d092bd66a7bac695d004b30d3eb95666"
-  integrity sha512-KA0nx7qhrHGLOXSNXK7Losfk3YmbUnlnRWlRlAHR9LYdREqGQEH7X+oNV74+dpC1xo3l+IvxTsyXVY951igcug==
+living-mile-high-lib@^1.0.60:
+  version "1.0.60"
+  resolved "https://registry.yarnpkg.com/living-mile-high-lib/-/living-mile-high-lib-1.0.60.tgz#bba879e86ac5fa88c882dda32a3c6008c90e0d64"
+  integrity sha512-aIgsI3Uc2RDXIwdDoLDi70NQb/vJ0ksPY17KglqlXxaX+wdv6UX5NtqLMNYCPI9MsXPOFVKuLICh9gNGQT9Vtg==
   dependencies:
+    "@types/uuid" "^10.0.0"
     bcryptjs "^2.4.3"
     express "^4.19.2"
     mongoose "^8.4.4"
     multer "^1.4.5-lts.1"
+    uuid "^10.0.0"
 
 locate-path@^5.0.0:
   version "5.0.0"
