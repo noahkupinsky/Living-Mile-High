@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import services from '@/di';
 import { BackupIndex } from 'living-mile-high-lib';
 import { PageContainer } from './StyledBackupComponents';
@@ -19,44 +19,50 @@ const BackupComponent = () => {
 
     useEffect(() => {
         if (!isValid) {
-            if (window.confirm("Site data update detected. Please reload the page.")) {
-                window.location.reload();
-            } else {
-                window.location.reload();
-            }
+            alert("Site data update detected. Please reload the page.");
+            window.location.reload();
         }
     }, [isValid]);
 
-    useEffect(() => {
-        fetchBackups();
-    }, []);
-
     const fetchBackups = async () => {
-        const backupIndices = await apiService.getBackupIndices();
-        setBackups(backupIndices);
+        try {
+            const backupIndices = await apiService.getBackupIndices();
+            setBackups(backupIndices);
+        } catch (e) {
+            alert(`Failed to fetch backups. ${e}`);
+        }
     };
 
+    useEffect(() => {
+        fetchBackups();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+
     const handleCreateBackup = async () => {
-        const success = await apiService.createBackup(newBackupName);
-        if (success) {
+        try {
+            await apiService.createBackup(newBackupName);
             alert('Backup created successfully');
-            fetchBackups();
+
+            await fetchBackups();
             setNewBackupName('');
-        } else {
-            alert('Failed to create backup');
+        } catch (e) {
+            alert(`Failed to create backup. ${e}`);
         }
     };
 
     const handleRenameBackup = async () => {
         if (editingBackupKey && renameBackupName) {
-            const success = await apiService.renameBackup(editingBackupKey, renameBackupName);
-            if (success) {
+            try {
+                await apiService.renameBackup(editingBackupKey, renameBackupName);
                 alert('Backup renamed successfully');
-                fetchBackups();
+
+                await fetchBackups();
+
                 setEditingBackupKey('');
                 setRenameBackupName('');
-            } else {
-                alert('Failed to rename backup');
+            } catch (e) {
+                alert(`Failed to rename backup. ${e}`);
             }
         }
     };
@@ -64,12 +70,13 @@ const BackupComponent = () => {
     const handleDeleteBackup = async (key: string) => {
         const confirm = window.confirm('Are you sure you want to delete this backup?');
         if (confirm) {
-            const success = await apiService.deleteBackup(key);
-            if (success) {
+            try {
+                await apiService.deleteBackup(key);
                 alert('Backup deleted successfully');
-                fetchBackups();
-            } else {
-                alert('Failed to delete backup');
+
+                await fetchBackups();
+            } catch (e) {
+                alert(`Failed to delete backup. ${e}`);
             }
         }
     };
@@ -78,12 +85,13 @@ const BackupComponent = () => {
         const confirm = window.confirm('Are you sure you want to restore this backup?');
         if (confirm) {
             expectChange();
-            const success = await apiService.restoreBackup(key);
-            if (success) {
+            try {
+                await apiService.restoreBackup(key);
                 alert('Backup restored successfully');
-                fetchBackups();
-            } else {
-                alert('Failed to restore backup');
+
+                await fetchBackups();
+            } catch (e) {
+                alert(`Failed to delete backup. ${e}`);
                 unexpectChange();
             }
         }

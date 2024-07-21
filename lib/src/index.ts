@@ -1,6 +1,7 @@
 export * from './types';
 export * from './AdminSchema';
 export * from './defaults';
+export * from './routes';
 
 import { hash } from "bcryptjs";
 

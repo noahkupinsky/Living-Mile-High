@@ -1,17 +1,23 @@
 import { ExpressEndpoint } from "~/@types";
 import { services } from "~/di";
 import { updateSite } from "./updateController";
+import { UpdateGeneralDataRequest, UpdateGeneralDataResponse } from "living-mile-high-lib";
 
 const generalDataService = () => services().generalDataService;
 
 export const updateGeneralData: ExpressEndpoint = async (req, res) => {
-    const { data } = req.body;
+    const body: UpdateGeneralDataRequest = req.body;
+    const { data } = body;
+
     try {
         await generalDataService().update(data);
         await updateSite();
-        res.json({ success: true });
+
+        const successResponse: UpdateGeneralDataResponse = { success: true };
+        res.json(successResponse);
     } catch (error: any) {
-        console.error(error);
-        res.status(500).json({ success: false, error: error.message });
+
+        const errorResponse: UpdateGeneralDataResponse = { success: false, error: error.message };
+        res.status(500).json(errorResponse);
     }
 }

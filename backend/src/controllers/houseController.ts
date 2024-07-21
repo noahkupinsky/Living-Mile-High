@@ -1,39 +1,39 @@
-import { House } from "living-mile-high-lib";
+import { DeleteHouseRequest, DeleteHouseResponse, House, UpsertHouseRequest, UpsertHouseResponse } from "living-mile-high-lib";
 import { ExpressEndpoint } from "~/@types";
 import { services } from "~/di";
 import { updateSite } from "./updateController";
 
 const houseService = () => services().houseService;
 
-export const getHouses: ExpressEndpoint = async (req, res) => {
-    try {
-        const houses = await houseService().getHouseObjects();
-        res.status(200).json(houses);
-    } catch (error: any) {
-        res.status(500).json({ success: false, error: error.message });
-    }
-}
-
 export const upsertHouse: ExpressEndpoint = async (req, res) => {
-    const { house } = req.body;
+    const body: UpsertHouseRequest = req.body;
+    const { house } = body;
 
     try {
         const id = await houseService().upsertHouse(house);
         await updateSite();
-        res.json({ success: true, id });
+
+        const successResponse: UpsertHouseResponse = { success: true, id };
+        res.json(successResponse);
     } catch (error: any) {
-        res.status(500).json({ success: false, error: error.message });
+
+        const errorResponse: UpsertHouseResponse = { success: false, error: error.message };
+        res.status(500).json(errorResponse);
     }
 }
 
 export const deleteHouse: ExpressEndpoint = async (req, res) => {
-    const { id } = req.body;
+    const body: DeleteHouseRequest = req.body;
+    const { id } = body;
 
     try {
         const success = await houseService().deleteHouse(id);
         await updateSite();
-        res.json({ success });
+
+        const booleanResponse: DeleteHouseResponse = { success };
+        res.json(booleanResponse);
     } catch (error: any) {
-        res.status(500).json({ success: false, error: error.message });
+        const errorResponse: DeleteHouseResponse = { success: false, error: error.message };
+        res.status(500).json(errorResponse);
     }
 }

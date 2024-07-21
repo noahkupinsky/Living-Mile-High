@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import { LoginResponse, VerifyResponse } from 'living-mile-high-lib';
 import { ExpressEndpoint, ExpressMiddleware } from '~/@types';
 import env from '~/config/env';
 import passport from '~/config/passport';
@@ -10,7 +11,8 @@ export const login: ExpressMiddleware = (req, res, next) => {
 
     const localJwtLogin: PassportCallback = async (err, user, info) => {
         if (err || !user) {
-            return res.status(401).json({ message: `Invalid username or password` });
+            const errorResponse: LoginResponse = { message: 'Invalid username or password' };
+            return res.status(401).json(errorResponse);
         }
 
         const sessionId = Date.now().toString(); // Generate a unique session ID
@@ -20,12 +22,14 @@ export const login: ExpressMiddleware = (req, res, next) => {
             httpOnly: true,
         });
 
-        res.status(200).json({ message: 'Logged in successfully' });
+        const successResponse: LoginResponse = { message: 'Logged in successfully' };
+        res.json(successResponse);
     }
 
     passport.authenticate('local', localJwtLogin)(req, res, next);
 };
 
 export const verify: ExpressEndpoint = (req, res) => {
-    res.json({ success: true });
+    const successResponse: VerifyResponse = { success: true };
+    res.json(successResponse);
 }
