@@ -33,19 +33,19 @@ export class CdnAssetService implements ImageService {
             });
             return this.cdn.getObjectUrl(prefixedKey);
         } catch (error: any) {
-            throw new Error(`Failed to upload image: ${error.message}`);
+            throw new Error(`Failed to upload asset: ${error.message}`);
         }
     }
 
     public async getExpiredAssets(keys: string[]): Promise<string[]> {
-        const images = await this.cdn.getObjects(keys);
-        const expiredImages = images.filter(image => this.isImageExpired(image));
-        const expiredKeys = expiredImages.map(image => image.key);
+        const assets = await this.cdn.getObjects(keys);
+        const expiredAssets = assets.filter(asset => this.isAssetExpired(asset));
+        const expiredKeys = expiredAssets.map(asset => asset.key);
         return expiredKeys;
     }
 
-    private isImageExpired(image: CdnContent): boolean {
-        const expirationString = image.metadata.expiration;
+    private isAssetExpired(asset: CdnContent): boolean {
+        const expirationString = asset.metadata.expiration;
         return !expirationString || new Date(expirationString!) < new Date();
     }
 }
