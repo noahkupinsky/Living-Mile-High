@@ -1,7 +1,7 @@
 import { ExpressEndpoint } from "~/@types";
 import { services } from "~/di";
 import { updateSite } from "./updateController";
-import { CreateBackupRequest, CreateBackupResponse, DeleteBackupRequest, DeleteBackupResponse, GetBackupIndicesResponse, RenameBackupRequest, RenameBackupResponse, RestoreBackupRequest, RestoreBackupResponse } from "living-mile-high-lib";
+import { CreateBackupRequest, CreateBackupResponse, DeleteBackupRequest, DeleteBackupResponse, generateSiteUpdateId, GetBackupIndicesResponse, RenameBackupRequest, RenameBackupResponse, RestoreBackupRequest, RestoreBackupResponse } from "living-mile-high-lib";
 
 const backupService = () => services().backupService;
 
@@ -64,16 +64,17 @@ export const renameManualBackup: ExpressEndpoint = async (req, res) => {
 
 export const restoreBackup: ExpressEndpoint = async (req, res) => {
     const body: RestoreBackupRequest = req.body;
-    const { key } = body;
+    const { key, siteUpdateId } = body;
+    const resUpdateId = generateSiteUpdateId(siteUpdateId);
 
     try {
         await backupService().restoreBackup(key);
         await updateSite();
 
-        const successResponse: RestoreBackupResponse = { success: true };
+        const successResponse: RestoreBackupResponse = { success: true, siteUpdateId: resUpdateId };
         res.json(successResponse);
     } catch (error: any) {
-        const errorResponse: RestoreBackupResponse = { success: false, error: error.message };
+        const errorResponse: RestoreBackupResponse = { success: false, siteUpdateId: resUpdateId, error: error.message };
         res.status(500).json(errorResponse);
     }
 }

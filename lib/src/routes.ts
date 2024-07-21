@@ -1,4 +1,22 @@
+import { randomUUID } from "crypto";
 import { BackupIndex, DeepPartial, GeneralData, House } from "./types";
+
+export type SuccessResponse = {
+    success: boolean;
+    error?: string;
+}
+
+export type SiteUpdateRequest = {
+    siteUpdateId?: string;
+}
+
+export type SiteUpdateResponse = {
+    siteUpdateId: string;
+}
+
+export function generateSiteUpdateId(siteUpdateId?: string): string {
+    return siteUpdateId ? siteUpdateId : randomUUID();
+}
 
 // AUTH
 
@@ -16,11 +34,6 @@ export type LoginResponse = {
 export type VerifyResponse = {
     success: boolean;
 };
-
-export type SuccessResponse = {
-    success: boolean;
-    error?: string;
-}
 
 // BACKUPS
 
@@ -50,42 +63,49 @@ export type RenameBackupRequest = {
 
 export type RenameBackupResponse = SuccessResponse;
 
-export type RestoreBackupRequest = {
+export type RestoreBackupRequest = SiteUpdateRequest & {
     key: string;
 };
 
-export type RestoreBackupResponse = SuccessResponse;
+export type RestoreBackupResponse = SiteUpdateResponse & SuccessResponse;
 
 
 // HOUSES
 
-export type UpsertHouseRequest = {
+export type UpsertHouseRequest = SiteUpdateRequest & {
     house: DeepPartial<House>;
 };
 
-export type UpsertHouseResponse = SuccessResponse & {
+export type UpsertHouseResponse = SiteUpdateResponse & SuccessResponse & {
     id?: string;
 };
 
-export type DeleteHouseRequest = {
+export type DeleteHouseRequest = SiteUpdateRequest & {
     id: string;
 };
 
-export type DeleteHouseResponse = SuccessResponse;
+export type DeleteHouseResponse = SiteUpdateResponse & SuccessResponse;
 
 
 // GENERAL DATA
 
-export type UpdateGeneralDataRequest = {
+export type UpdateGeneralDataRequest = SiteUpdateRequest & {
     data: DeepPartial<GeneralData>;
 };
 
-export type UpdateGeneralDataResponse = SuccessResponse;
+export type UpdateGeneralDataResponse = SiteUpdateResponse & SuccessResponse;
 
 // IMAGE
 
-//image upload request sends form data field "image" which then gets put into req.file
+export function createUploadAssetRequest(file: File, siteUpdateId?: string): FormData {
+    const formData = new FormData();
+    formData.append('file', file);
+    if (siteUpdateId) {
+        formData.append('siteUpdateId', siteUpdateId);
+    }
+    return formData;
+}
 
-export type UploadAssetResponse = SuccessResponse & {
+export type UploadAssetResponse = SiteUpdateResponse & SuccessResponse & {
     url?: string;
 };

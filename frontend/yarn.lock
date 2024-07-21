@@ -6367,10 +6367,10 @@ lighthouse-logger@^1.0.0:
     debug "^2.6.9"
     marky "^1.2.2"
 
-living-mile-high-lib@^1.0.55:
-  version "1.0.55"
-  resolved "https://registry.yarnpkg.com/living-mile-high-lib/-/living-mile-high-lib-1.0.55.tgz#4564dac9353a1557b95702ef782cdeeb83f1e478"
-  integrity sha512-bLa928EDkXuDTdnHUXiBjYSGEijaDzagoXYHiNkambu4COm50xRDox8OW60AKPA+4qVRsakt3S2gFZatKGqyAQ==
+living-mile-high-lib@^1.0.57:
+  version "1.0.57"
+  resolved "https://registry.yarnpkg.com/living-mile-high-lib/-/living-mile-high-lib-1.0.57.tgz#a6d620f5d092bd66a7bac695d004b30d3eb95666"
+  integrity sha512-KA0nx7qhrHGLOXSNXK7Losfk3YmbUnlnRWlRlAHR9LYdREqGQEH7X+oNV74+dpC1xo3l+IvxTsyXVY951igcug==
   dependencies:
     bcryptjs "^2.4.3"
     express "^4.19.2"
