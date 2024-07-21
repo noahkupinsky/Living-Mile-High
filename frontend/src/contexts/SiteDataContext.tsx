@@ -1,14 +1,14 @@
 'use client'
 
 import React, { createContext, useState, useEffect, useContext, useCallback } from 'react';
-import { DeepPartial, EventMessage, GeneralData, generateEventId, House, SiteData } from 'living-mile-high-lib';
+import { DeepPartial, EventMessage, EventObject, GeneralData, generateEventId, House, SiteData } from 'living-mile-high-lib';
 import services from '@/di';
 
 type SiteDataContextType = {
     isLoading: boolean;
     houses: House[];
     generalData: GeneralData | undefined;
-    version: number;
+    foreignEventId: string | undefined;
     updateGeneralData: (data: DeepPartial<GeneralData>) => Promise<void>
     upsertHouse: (house: DeepPartial<House>) => Promise<string>
     deleteHouse: (id: string) => Promise<void>
@@ -24,9 +24,10 @@ type SiteDataProviderProps = {
 
 export const SiteDataProvider = ({ children }: SiteDataProviderProps) => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [version, setVersion] = useState<number>(0);
     const [generalData, setGeneralData] = useState<GeneralData | undefined>(undefined);
     const [houses, setHouses] = useState<House[]>([]);
+    const [localEventIds, setLocalEventIds] = useState<string[]>([]);
+    const [foreignEventId, setForeignEventId] = useState<string | undefined>(undefined);
     const { eventService, cdnService, apiService } = services();
 
     const fetchSiteData = useCallback(async () => {
@@ -35,7 +36,6 @@ export const SiteDataProvider = ({ children }: SiteDataProviderProps) => {
             const { houses: newHouses, ...newGeneralData } = data;
             setGeneralData(newGeneralData);
             setHouses(newHouses);
-            setVersion(prevVersion => prevVersion + 1);
         } catch (error) {
             console.error('Failed to fetch site data:', error);
         } finally {
@@ -45,7 +45,15 @@ export const SiteDataProvider = ({ children }: SiteDataProviderProps) => {
 
     useEffect(() => {
         const handleEvent = (data: any) => {
-            if (data.message === EventMessage.SITE_UPDATED) {
+            const { message, eventId }: EventObject = data;
+            if (message === EventMessage.SITE_UPDATED) {
+                if (eventId) {
+                    if (localEventIds.includes(eventId)) {
+                        setLocalEventIds(prevIds => prevIds.filter(id => id !== eventId));
+                    } else {
+                        setForeignEventId(eventId);
+                    }
+                }
                 fetchSiteData();
             }
         };
@@ -57,26 +65,33 @@ export const SiteDataProvider = ({ children }: SiteDataProviderProps) => {
         return () => {
             eventService.removeEventHandler(handleEvent);
         };
-    }, [fetchSiteData, eventService]);
+    }, [fetchSiteData, eventService, localEventIds]);
+
+    const withEventId = async <T extends any>(fn: (eventId: string) => Promise<T>): Promise<T> => {
+        const id = generateEventId();
+        setLocalEventIds(prevIds => [...prevIds, id]);
+        try {
+            return await fn(id);
+        } catch (error) {
+            setLocalEventIds(prevIds => prevIds.filter(id => id !== id));
+            throw error;
+        }
+    }
 
     const updateGeneralData = async (data: DeepPartial<GeneralData>): Promise<void> => {
-        const eventId = generateEventId();
-        return await apiService.updateGeneralData(data, eventId);
+        return await withEventId(eventId => apiService.updateGeneralData(data, eventId));
     }
 
     const upsertHouse = async (house: DeepPartial<House>): Promise<string> => {
-        const eventId = generateEventId();
-        return await apiService.upsertHouse(house, eventId);
+        return await withEventId(eventId => apiService.upsertHouse(house, eventId));
     }
 
     const deleteHouse = async (id: string): Promise<void> => {
-        const eventId = generateEventId();
-        return await apiService.deleteHouse(id, eventId);
+        return await withEventId(eventId => apiService.deleteHouse(id, eventId));
     }
 
     const restoreBackup = async (key: string): Promise<void> => {
-        const eventId = generateEventId();
-        return await apiService.restoreBackup(key, eventId);
+        return await withEventId(eventId => apiService.restoreBackup(key, eventId));
     }
 
     return (
@@ -84,7 +99,7 @@ export const SiteDataProvider = ({ children }: SiteDataProviderProps) => {
             generalData,
             houses,
             isLoading,
-            version,
+            foreignEventId,
             updateGeneralData,
             upsertHouse,
             deleteHouse,

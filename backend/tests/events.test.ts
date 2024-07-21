@@ -2,7 +2,7 @@ import WebSocket from 'ws';
 import { EventMessage } from "living-mile-high-lib";
 import { startListening, stopListening } from "./utils";
 import { sendEventMessage } from "~/controllers/eventController";
-import { formatEventMessage } from '~/utils/misc';
+import { createEventObjectString } from '~/utils/misc';
 
 let url: string;
 
@@ -60,7 +60,7 @@ describe('WebSocket /events/connect', () => {
             done,
             timeout,
             (data: any, close) => {
-                expect(data).toEqual(formatEventMessage(EventMessage.CONNECTED));
+                expect(data).toEqual(createEventObjectString(EventMessage.CONNECTED));
                 close();
             }
         );
@@ -79,13 +79,13 @@ describe('WebSocket /events/connect', () => {
             timeout,
             (data: any, close) => {
                 if (!receivedInitialMessage) {
-                    expect(data).toBe(formatEventMessage(EventMessage.CONNECTED));
+                    expect(data).toBe(createEventObjectString(EventMessage.CONNECTED));
                     receivedInitialMessage = true;
 
                     // Send the custom event message after receiving the initial message
                     sendEventMessage(EventMessage.SITE_UPDATED, 'test-event-id');
                 } else {
-                    expect(data).toEqual(formatEventMessage(EventMessage.SITE_UPDATED, 'test-event-id'));
+                    expect(data).toEqual(createEventObjectString(EventMessage.SITE_UPDATED, 'test-event-id'));
                     close();
                 }
             }

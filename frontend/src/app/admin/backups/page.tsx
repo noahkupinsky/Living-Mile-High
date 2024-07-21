@@ -17,7 +17,7 @@ const BackupComponent = () => {
     const [editingBackupKey, setEditingBackupKey] = useState('');
     const [renameBackupName, setRenameBackupName] = useState('');
 
-    const { isValid, expectChange, unexpectChange } = useLock();
+    const { isValid } = useLock();
 
     useEffect(() => {
         if (!isValid) {
@@ -86,15 +86,13 @@ const BackupComponent = () => {
     const handleRestoreBackup = async (key: string) => {
         const confirm = window.confirm('Are you sure you want to restore this backup?');
         if (confirm) {
-            expectChange();
             try {
-                await apiService.restoreBackup(key);
+                await restoreBackup(key);
                 alert('Backup restored successfully');
 
                 await fetchBackups();
             } catch (e) {
                 alert(`Failed to delete backup. ${e}`);
-                unexpectChange();
             }
         }
     };

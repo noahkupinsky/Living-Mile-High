@@ -1,5 +1,5 @@
 import axios from "axios";
-import { EventMessage, GeneralData, House, SiteData } from "living-mile-high-lib";
+import { EventMessage, EventObject, GeneralData, House, SiteData } from "living-mile-high-lib";
 import { Readable } from "stream";
 import { CdnMetadata } from "~/@types";
 import { ContentCategory, ContentType } from "~/@types/constants";
@@ -62,8 +62,9 @@ export async function downloadImage(url: string): Promise<{ buffer: Buffer, cont
     };
 }
 
-export function formatEventMessage(message: EventMessage, eventId?: string): string {
-    return JSON.stringify(eventId ? { eventId, message } : { message });
+export function createEventObjectString(message: EventMessage, eventId?: string): string {
+    const eventObject: EventObject = eventId ? { eventId, message } : { message };
+    return JSON.stringify(eventObject);
 }
 
 const toSnakeCase = (str: string): string => {

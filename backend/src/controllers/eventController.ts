@@ -1,7 +1,7 @@
 import { EventMessage } from "living-mile-high-lib";
 import { Server } from "http";
 import { WebSocketServer, WebSocket } from "ws";
-import { formatEventMessage } from "~/utils/misc";
+import { createEventObjectString } from "~/utils/misc";
 
 let clients: Map<number, WebSocket> = new Map();
 let nextClientId = 0;
@@ -14,7 +14,7 @@ export const setupWebSocketServer = (server: Server) => {
         const clientId = nextClientId++;
         clients.set(clientId, ws);
 
-        const connectedMessage = formatEventMessage(EventMessage.CONNECTED);
+        const connectedMessage = createEventObjectString(EventMessage.CONNECTED);
         ws.send(connectedMessage);
 
         ws.on('close', () => {
@@ -24,7 +24,7 @@ export const setupWebSocketServer = (server: Server) => {
 };
 
 export const sendEventMessage = (message: EventMessage, eventId?: string) => {
-    const formattedMessage = formatEventMessage(message, eventId);
+    const formattedMessage = createEventObjectString(message, eventId);
     clients.forEach((ws) => {
         if (ws.readyState === WebSocket.OPEN) {
             ws.send(formattedMessage);

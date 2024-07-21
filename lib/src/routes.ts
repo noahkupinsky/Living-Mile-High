@@ -14,6 +14,11 @@ export function generateEventId(eventId?: string): string {
     return eventId ? eventId : uuid.v4();
 }
 
+export type EventObject = {
+    message: string;
+    eventId?: string;
+}
+
 // AUTH
 
 export type LoginRequest = {
