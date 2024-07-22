@@ -15,9 +15,10 @@ interface ForSaleHouseColumnProps {
     houses: House[];
     imageWidth: number;
     textWidth: number;
+    onClick: (house: House) => void;
 }
 
-const ForSaleHouseColumn: React.FC<ForSaleHouseColumnProps> = ({ houses, imageWidth, textWidth }) => {
+const ForSaleHouseColumn: React.FC<ForSaleHouseColumnProps> = ({ houses, imageWidth, textWidth, onClick }) => {
     return (
         <ColumnContainer>
             {houses.map((house) => (
@@ -26,6 +27,7 @@ const ForSaleHouseColumn: React.FC<ForSaleHouseColumnProps> = ({ houses, imageWi
                     house={house}
                     imageWidth={imageWidth}
                     textWidth={textWidth}
+                    onClick={onClick}
                 />
             ))}
         </ColumnContainer>

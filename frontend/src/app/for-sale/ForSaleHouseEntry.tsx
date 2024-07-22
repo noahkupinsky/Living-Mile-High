@@ -17,12 +17,13 @@ interface HouseEntryProps {
     house: House;
     imageWidth: number;
     textWidth: number;
+    onClick: (house: House) => void;
 }
 
-const HouseEntry: React.FC<HouseEntryProps> = ({ house, imageWidth, textWidth }) => {
+const HouseEntry: React.FC<HouseEntryProps> = ({ house, imageWidth, textWidth, onClick }) => {
     return (
         <EntryContainer>
-            <ForSaleHouseImage house={house} width={imageWidth} />
+            <ForSaleHouseImage house={house} width={imageWidth} onClick={onClick} />
             <ForSaleHouseTextArea house={house} width={textWidth} />
         </EntryContainer>
     );

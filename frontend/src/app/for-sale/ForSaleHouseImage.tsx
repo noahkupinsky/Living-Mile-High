@@ -17,13 +17,19 @@ const BodyContainer = styled(View, {
 interface ForSaleHouseImageProps {
     house: House;
     width: number;
+    onClick: (house: House) => void;
 }
 
-const ForSaleHouseImage: React.FC<ForSaleHouseImageProps> = ({ house, width }) => {
+const ForSaleHouseImage: React.FC<ForSaleHouseImageProps> = ({ house, width, onClick }) => {
     return (
         <Container style={{ width }}>
             <BodyContainer>
-                <AspectImage src={house.mainImage} width={width} alt={house.address} />
+                <AspectImage
+                    src={house.mainImage}
+                    width={width}
+                    alt={house.address}
+                    onClick={() => onClick(house)}
+                />
             </BodyContainer>
         </Container>
     );

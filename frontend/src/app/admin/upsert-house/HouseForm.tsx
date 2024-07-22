@@ -1,13 +1,13 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Button, styled } from 'tamagui';
 import { useSiteData } from '@/contexts/SiteDataContext';
-import { House, SiteData } from 'living-mile-high-lib';
+import { House } from 'living-mile-high-lib';
 import HouseFormBooleans from './HouseFormBooleans';
 import HouseFormStats from './HouseFormStats';
 import HouseFormImages from './HouseFormImages';
 import HouseFormText from './HouseFormText';
 import services from '@/di';
-import { SiteUpdateHandler } from '@/types';
+import { objectsEqualTimestampless } from '@/utils/misc';
 
 const FormContainer = styled(View, {
     display: 'flex',
@@ -33,10 +33,8 @@ const RightColumn = styled(View, {
 });
 
 const HouseForm: React.FC<{ house?: House }> = ({ house }) => {
-    const { addUpdateHandler, removeUpdateHandler } = useSiteData();
     const { apiService } = services();
     const { houses } = useSiteData();
-    const [initialHouse, setInitialHouse] = useState<House | undefined>(house);
     const [formData, setFormData] = useState<House>(house ? house : {
         isDeveloped: false,
         isForSale: false,
@@ -47,30 +45,17 @@ const HouseForm: React.FC<{ house?: House }> = ({ house }) => {
         neighborhood: '',
         stats: {},
     });
-    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
-        const handleUpdate: SiteUpdateHandler = async (isLocal, siteData) => {
-            const newHouse = siteData.houses.find(house => house.id === formData.id);
-            if (!newHouse) {
-                return;
-            }
-            if (isLocal) {
-                setInitialHouse(newHouse);
-            } else {
-                if (newHouse !== initialHouse) {
-                    alert('House update detected. Repopulating house form...');
-                }
-            }
-            setFormData(newHouse);
+        const newHouse = houses.find(house => house.id === formData.id);
+        if (!newHouse) {
+            return;
         }
-
-        addUpdateHandler(handleUpdate);
-
-        return () => {
-            removeUpdateHandler(handleUpdate);
+        if (!objectsEqualTimestampless(newHouse, formData)) {
+            alert('House update detected. Repopulating house form...');
         }
-    }, [addUpdateHandler, removeUpdateHandler, formData, initialHouse]);
+        setFormData(newHouse);
+    }, [houses]);
 
     const handleFormSubmit = async () => {
         const isUpdate = formData.id !== undefined;
@@ -96,8 +81,6 @@ const HouseForm: React.FC<{ house?: House }> = ({ house }) => {
                     <HouseFormImages
                         formData={formData}
                         setFormData={setFormData}
-                        isModalOpen={isModalOpen}
-                        setIsModalOpen={setIsModalOpen}
                     />
                 </LeftColumn>
                 <RightColumn>

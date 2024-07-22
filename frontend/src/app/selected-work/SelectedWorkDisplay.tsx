@@ -22,9 +22,10 @@ const Column = styled(View, {
 interface SelectedWorkDisplayProps {
     houses: House[];
     width: number;
+    onClick: (house: House) => void;
 }
 
-const SelectedWorkDisplay: React.FC<SelectedWorkDisplayProps> = ({ houses, width }) => {
+const SelectedWorkDisplay: React.FC<SelectedWorkDisplayProps> = ({ houses, width, onClick }) => {
     const [heights, setHeights] = useState<number[]>([]);
 
     useEffect(() => {
@@ -60,12 +61,24 @@ const SelectedWorkDisplay: React.FC<SelectedWorkDisplayProps> = ({ houses, width
             <DisplayContainer>
                 <Column style={{ width: width }}>
                     {leftColumnHouses.map((house, index) => (
-                        <SelectedWorkHouse key={house.id} house={house} height={heights[index]} width={width} />
+                        <SelectedWorkHouse
+                            key={house.id}
+                            house={house}
+                            height={heights[index]}
+                            width={width}
+                            onClick={onClick}
+                        />
                     ))}
                 </Column>
                 <Column style={{ width: width }}>
                     {rightColumnHouses.map((house, index) => (
-                        <SelectedWorkHouse key={house.id} house={house} height={heights[index]} width={width} />
+                        <SelectedWorkHouse
+                            key={house.id}
+                            house={house}
+                            height={heights[index]}
+                            width={width}
+                            onClick={onClick}
+                        />
                     ))}
                 </Column>
             </DisplayContainer>

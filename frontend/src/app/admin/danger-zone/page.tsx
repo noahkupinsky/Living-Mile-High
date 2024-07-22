@@ -5,8 +5,7 @@ import services from '@/di';
 import { BackupIndex, EventMessage } from 'living-mile-high-lib';
 import BackupItem from './BackupItem';
 import CreateBackupSection from './CreateBackupSection';
-import { useSiteData } from '@/contexts/SiteDataContext';
-import { SiteEventHandler, SiteUpdateHandler } from '@/types';
+import { SiteEventHandler } from '@/types';
 
 import { Button, YStack, styled } from 'tamagui';
 

@@ -1,26 +1,15 @@
 import React, { useState } from 'react';
-import { Button, View, Label, styled } from 'tamagui';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { DndProvider } from 'react-dnd';
+import { Button, View, XStack, styled } from 'tamagui';
 import { useSiteData } from '@/contexts/SiteDataContext';
-import { ImageFormat } from '@/types';
-import DraggableImage from '@/components/images/DraggableImage';
 import Modal from '@/components/layout/Modal';
 import UploadSingleImage from '@/components/images/UploadSingleImage';
 import UploadMultipleImages from '@/components/images/UploadMultipleImages';
 import AspectImage from '@/components/images/AspectImage';
+import ReorderableImageRow from '@/components/images/ReorderableImageRow';
 import { imageFormatToUrl } from '@/utils/misc';
 import { House } from 'living-mile-high-lib';
-import services from '@/di';
 
 const ImageContainer = styled(View, {
-    marginBottom: 15,
-});
-
-const ImageList = styled(View, {
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
     marginBottom: 15,
 });
 
@@ -38,6 +27,11 @@ const MainImageContainer = styled(View, {
     justifyContent: 'center',
 });
 
+const DefaultImagesContainer = styled(XStack, {
+    width: '100%',
+    marginBottom: 10,
+})
+
 const LabelButtonRow = styled(View, {
     display: 'flex',
     flexDirection: 'row',
@@ -50,26 +44,15 @@ const LabelButtonRow = styled(View, {
 type HouseFormImagesProps = {
     formData: House;
     setFormData: React.Dispatch<React.SetStateAction<House>>;
-    isModalOpen: boolean;
-    setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const HouseFormImages: React.FC<HouseFormImagesProps> = ({
     formData,
     setFormData,
-    isModalOpen,
-    setIsModalOpen
 }) => {
-    const { apiService } = services();
     const { generalData } = useSiteData();
     const [uploadType, setUploadType] = useState<'mainImage' | 'images'>('mainImage');
-
-    const deleteImage = (index: number) => {
-        setFormData(prev => ({
-            ...prev,
-            images: prev.images.filter((_, i) => i !== index)
-        }));
-    };
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleMainImageUpload = async (url?: string) => {
         if (url) {
@@ -83,11 +66,11 @@ const HouseFormImages: React.FC<HouseFormImagesProps> = ({
         setIsModalOpen(false);
     };
 
-    const moveImage = (dragIndex: number, hoverIndex: number) => {
-        const updatedImages = [...formData.images];
-        const [draggedImage] = updatedImages.splice(dragIndex, 1);
-        updatedImages.splice(hoverIndex, 0, draggedImage);
-        setFormData({ ...formData, images: updatedImages });
+    const setImages = (images: React.SetStateAction<string[]>) => {
+        setFormData(prev => {
+            const newImages = typeof images === 'function' ? images(prev.images) : images;
+            return { ...prev, images: newImages };
+        });
     };
 
     const mainImageUrl = formData.mainImage === '' ? undefined : imageFormatToUrl(formData.mainImage);
@@ -97,7 +80,7 @@ const HouseFormImages: React.FC<HouseFormImagesProps> = ({
             <LabelButtonRow>
                 <LabelButton onPress={() => { setUploadType('mainImage'); setIsModalOpen(true); }}>Upload Main Image</LabelButton>
             </LabelButtonRow>
-            <ImageList>
+            <DefaultImagesContainer>
                 {generalData!.defaultImages.map(url => (
                     <AspectImage
                         key={url}
@@ -106,7 +89,7 @@ const HouseFormImages: React.FC<HouseFormImagesProps> = ({
                         width={100}
                         onClick={() => handleMainImageUpload(url)} />
                 ))}
-            </ImageList>
+            </DefaultImagesContainer>
             <MainImageContainer>
                 {mainImageUrl && (
                     <AspectImage
@@ -120,19 +103,10 @@ const HouseFormImages: React.FC<HouseFormImagesProps> = ({
             <LabelButtonRow>
                 <LabelButton onPress={() => { setUploadType('images'); setIsModalOpen(true); }}>Upload Images</LabelButton>
             </LabelButtonRow>
-            <DndProvider backend={HTML5Backend}>
-                <ImageList>
-                    {formData.images.map((url, index) => (
-                        <DraggableImage
-                            key={index}
-                            index={index}
-                            url={url}
-                            moveImage={moveImage}
-                            deleteImage={deleteImage}
-                            width={100} />
-                    ))}
-                </ImageList>
-            </DndProvider>
+            <ReorderableImageRow
+                images={formData.images}
+                setImages={setImages}
+            />
 
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
                 {uploadType === 'mainImage' ? (

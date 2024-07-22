@@ -31,13 +31,19 @@ interface SelectedWorkHouseProps {
     house: House;
     width: number;
     height: number;
+    onClick: (house: House) => void;
 }
 
-const SelectedWorkHouse: React.FC<SelectedWorkHouseProps> = ({ house, width, height }) => {
+const SelectedWorkHouse: React.FC<SelectedWorkHouseProps> = ({ house, width, height, onClick }) => {
     return (
         <Container>
             <BodyContainer style={{ height }}>
-                <AspectImage src={house.mainImage} width={width} alt={house.address} />
+                <AspectImage
+                    src={house.mainImage}
+                    width={width}
+                    alt={house.address}
+                    onClick={() => onClick(house)}
+                />
             </BodyContainer>
             <AddressContainer>
                 <AddressText>{house.address}</AddressText>

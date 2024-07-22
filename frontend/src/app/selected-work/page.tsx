@@ -1,24 +1,53 @@
 'use client'
 
+import Modal from '@/components/layout/Modal';
 import SelectedWorkDisplay from './SelectedWorkDisplay';
 import SiteDataLoader from '@/components/layout/SiteDataLoader';
 import { HouseQueryProvider, useHouseQuery } from '@/contexts/HouseQueryContext';
+import { House } from 'living-mile-high-lib';
 import { useEffect, useState } from 'react';
+import ImageCarousel from '@/components/images/ImageCarousel';
 
 const SelectedWorkComponent: React.FC = () => {
     const { houses, setQuery } = useHouseQuery();
-    const [query] = useState({
-        isSelectedWork: true,
-    })
+    const [selectedHouse, setSelectedHouse] = useState<House | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
-        setQuery(query);
-    }, [setQuery, query]);
+        setQuery({
+            isSelectedWork: true,
+        });
+    }, [setQuery]);
 
-    return <SelectedWorkDisplay
-        width={300}
-        houses={houses}
-    />;
+
+    const handleImageClick = (house: House) => {
+        setSelectedHouse(house);
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
+
+    const houseImages = selectedHouse ? [selectedHouse.mainImage].concat(selectedHouse.images) : [];
+
+    return (
+        <>
+            <SelectedWorkDisplay
+                width={300}
+                houses={houses}
+                onClick={handleImageClick}
+            />
+            <Modal
+                isOpen={isModalOpen}
+                onClose={handleCloseModal}
+            >
+                <ImageCarousel
+                    images={houseImages}
+                />
+            </Modal>
+        </>
+    );
 };
 
 const SelectedWorkPage: React.FC = () => (

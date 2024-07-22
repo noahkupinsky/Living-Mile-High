@@ -79,6 +79,10 @@ const AdminPanel = () => {
         router.push('/admin/danger-zone');
     }
 
+    const handleGeneralData = () => {
+        router.push('/admin/general');
+    }
+
     const handleCreateNew = () => {
         router.push('admin/upsert-house');
     };
@@ -95,6 +99,9 @@ const AdminPanel = () => {
 
     return (
         <YStack justifyContent="center" alignItems="center">
+            <Button marginBottom={20} color="blue" onPress={handleGeneralData}>
+                Edit General Data
+            </Button>
             <Button color="#0a8" onPress={handleCreateNew}>
                 Create New House
             </Button>
