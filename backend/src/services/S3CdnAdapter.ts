@@ -7,10 +7,12 @@ import {
     CopyObjectCommand,
     GetObjectCommand,
     GetObjectCommandOutput,
-    MetadataDirective
+    MetadataDirective,
+    HeadObjectCommand,
+    HeadObjectCommandOutput
 } from "@aws-sdk/client-s3";
 import { CdnFixedKey } from "living-mile-high-lib";
-import { CdnAdapter, CdnMetadata, CdnContent, PutCommand, S3Config } from '~/@types';
+import { CdnAdapter, CdnMetadata, CdnContent, PutCommand, S3Config, CdnHead } from '~/@types';
 import { ContentCategory, ContentPermission, ContentType } from "~/@types/constants";
 import withLock from "~/utils/locks";
 import { prefixKey, convertToS3Metadata, convertFromS3Metadata } from "~/utils/misc";
@@ -147,6 +149,33 @@ export class S3CdnAdapter implements CdnAdapter {
         return allKeys;
     }
 
+    public async getHead(key: string): Promise<CdnHead> {
+        try {
+            const command = new HeadObjectCommand({
+                Bucket: this.bucket,
+                Key: key,
+            });
+            const response: HeadObjectCommandOutput = await this.client.send(command);
+
+            const s3Metadata = response.Metadata || {};
+            const metadata = convertFromS3Metadata(s3Metadata);
+            const contentType = response.ContentType! as ContentType;
+
+            return {
+                key,
+                metadata,
+                contentType,
+            };
+        } catch (error: any) {
+            throw new Error(`Failed to get metadata for object ${key}: ${error.message}`);
+        }
+    }
+
+    public async getHeads(keys: string[]): Promise<CdnHead[]> {
+        const getHeadPromises = keys.map(key => this.getHead(key));
+        return await Promise.all(getHeadPromises);
+    }
+
     public async getObject(key: string): Promise<CdnContent> {
         try {
             const command = new GetObjectCommand({
@@ -180,7 +209,7 @@ export class S3CdnAdapter implements CdnAdapter {
     }
 
     public async updateObjectMetadata(key: string, updates: Partial<CdnMetadata>): Promise<void> {
-        const existingObject = await this.getObject(key);
+        const existingObject = await this.getHead(key);
         const metadata = { ...existingObject.metadata, ...updates };
 
         const s3Metadata = convertToS3Metadata(metadata);

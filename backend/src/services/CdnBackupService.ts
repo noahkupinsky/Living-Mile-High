@@ -1,6 +1,6 @@
 import { BackupIndex, BackupType } from "living-mile-high-lib";
 import { PriorityQueue } from "typescript-collections";
-import { CdnAdapter, BackupService, StateService, Backup, BackupMetadata } from "~/@types";
+import { CdnAdapter, BackupHead, BackupService, StateService, Backup, BackupMetadata } from "~/@types";
 import { BackupConfig, ContentCategory, ContentType } from "~/@types/constants";
 import { createExpirationDate, streamToString } from "~/utils/misc";
 
@@ -16,7 +16,7 @@ export class CdnBackupService implements BackupService {
     }
 
     async deleteManualBackup(key: string): Promise<void> {
-        const backup = await this.cdn.getObject(key);
+        const backup = await this.cdn.getHead(key);
         const backupType = backup.metadata.backupType;
 
         if (!backupType) {
@@ -46,9 +46,9 @@ export class CdnBackupService implements BackupService {
     }
 
     async getBackupIndices(): Promise<BackupIndex[]> {
-        const backups = await this.getBackups();
+        const backupHeads = await this.getBackupHeads();
 
-        const indices = backups.map(backup => ({
+        const indices = backupHeads.map(backup => ({
             key: backup.key,
             name: backup.metadata.name!,
             createdAt: backup.metadata.createdAt!,
@@ -62,6 +62,11 @@ export class CdnBackupService implements BackupService {
         return await this.cdn.getKeys(ContentCategory.BACKUP);
     }
 
+    async getBackupHeads(): Promise<BackupHead[]> {
+        const keys = await this.getBackupKeys();
+        return await this.cdn.getHeads(keys) as BackupHead[];
+    }
+
     async getBackups(): Promise<Backup[]> {
         const keys = await this.getBackupKeys();
         return await this.cdn.getObjects(keys) as Backup[];
@@ -72,7 +77,7 @@ export class CdnBackupService implements BackupService {
     }
 
     async renameManualBackup(key: string, name: string): Promise<void> {
-        const backup = await this.cdn.getObject(key);
+        const backup = await this.cdn.getHead(key);
         const backupType = backup.metadata.backupType!;
 
         if (backupType !== BackupType.MANUAL) {
@@ -113,20 +118,20 @@ export class CdnBackupService implements BackupService {
     }
 
     async pruneAutoBackups(): Promise<void> {
-        const backups = await this.getBackups();
+        const backups = await this.getBackupHeads();
 
         backups.forEach(backup => this.pruneBackup(backup));
     }
 
-    private async pruneBackup(backup: Backup): Promise<void> {
-        if (this.isBackupExpired(backup)) {
-            await this.cdn.deleteObject(backup.key);
+    private async pruneBackup(backupHead: BackupHead): Promise<void> {
+        if (this.isBackupExpired(backupHead)) {
+            await this.cdn.deleteObject(backupHead.key);
         }
     }
 
-    private isBackupExpired(backup: Backup): boolean {
+    private isBackupExpired(backupHead: BackupHead): boolean {
         const currentDate = new Date();
-        const metadata = backup.metadata;
+        const metadata = backupHead.metadata;
 
         const isAutoBackup = (metadata.backupType === BackupType.AUTO);
 
@@ -175,9 +180,9 @@ export class CdnBackupService implements BackupService {
     }
 
     private async createConsolidationPriorityQueue(): Promise<PriorityQueue<BackupPriority>> {
-        const backups = await this.getBackups();
-        const autoBackups = backups.filter(backup => backup.metadata.backupType === BackupType.AUTO);
-        const nonMaximalAutoBackups = autoBackups.filter(backup => this.getBackupPower(backup) < BackupConfig.MAXIMUM_POWER);
+        const backupHeads = await this.getBackupHeads();
+        const autoBackups = backupHeads.filter(head => head.metadata.backupType === BackupType.AUTO);
+        const nonMaximalAutoBackups = autoBackups.filter(head => this.getBackupPower(head) < BackupConfig.MAXIMUM_POWER);
 
         // Create a priority queue to sort backups by date and power
         const backupQueue = new PriorityQueue<BackupPriority>((a, b) => {
@@ -199,7 +204,7 @@ export class CdnBackupService implements BackupService {
         return backupQueue;
     }
 
-    private getBackupPower(backup: Backup): number {
-        return parseInt(backup.metadata.backupPower!);
+    private getBackupPower(backupHead: BackupHead): number {
+        return parseInt(backupHead.metadata.backupPower!);
     }
 }

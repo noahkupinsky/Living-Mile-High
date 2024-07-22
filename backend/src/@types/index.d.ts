@@ -16,9 +16,12 @@ export {
     SiteServiceManager,
 } from './otherServices'
 export {
+    AssetMetadata,
     BackupMetadata,
+    BackupHead,
     Backup,
     BackupService,
+    CdnHead,
     CdnMetadata,
     CdnContent,
     PutCommand,

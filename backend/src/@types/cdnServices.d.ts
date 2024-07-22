@@ -9,9 +9,12 @@ export type BackupMetadata = {
     expiration?: string,
 }
 
-export type Backup = {
+export type BackupHead = {
     key: string,
-    metadata: BackupMetadata,
+    metadata: BackupMetadata
+}
+
+export type Backup = BackupHead & {
     body: any
 }
 
@@ -20,6 +23,7 @@ export interface BackupService {
     restoreBackup(key: string): Promise<void>;
     getBackupIndices(): Promise<BackupIndex[]>;
     getBackupKeys(): Promise<string[]>;
+    getBackupHeads(): Promise<BackupHead[]>;
     getBackups(): Promise<Backup[]>;
     createManualBackup(name: string): Promise<void>;
     renameManualBackup(key: string, name: string): Promise<void>;
@@ -49,11 +53,14 @@ export type PutCommand = {
     permission?: ContentPermission
 }
 
-export type CdnContent = {
+export type CdnHead = {
     key: string,
+    metadata: CdnMetadata,
+    contentType: ContentType
+}
+
+export type CdnContent = CdnHead & {
     body: StreamingBlobPayloadOutputTypes,
-    contentType: ContentType,
-    metadata: CdnMetadata
 }
 
 export interface CdnAdapter {
@@ -63,6 +70,8 @@ export interface CdnAdapter {
     public putObject(command: PutCommand): Promise<string>;
     public getObject(key: string): Promise<CdnContent>;
     public getObjects(keys: string[]): Promise<CdnContent[]>;
+    public getHead(key: string): Promise<CdnHead>;
+    public getHeads(keys: string[]): Promise<CdnHead[]>
     public deleteObject(key: string): Promise<void>;
     public deleteObjects(keys: string[]): Promise<void>;
     public getKeys(prefix?: ContentCategory): Promise<string[]>

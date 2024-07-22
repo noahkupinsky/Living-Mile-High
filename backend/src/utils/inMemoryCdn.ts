@@ -12,6 +12,8 @@ import {
     GetObjectCommandOutput,
     CopyObjectCommand,
     CopyObjectCommandOutput,
+    HeadObjectCommand,
+    HeadObjectCommandOutput,
     MetadataDirective
 } from "@aws-sdk/client-s3";
 import { mockClient } from "aws-sdk-client-mock";
@@ -144,6 +146,26 @@ export function mockS3Cdn() {
         };
 
         const result: CopyObjectCommandOutput = {
+            $metadata: {}
+        };
+
+        return Promise.resolve(result);
+    });
+
+
+    // Mock HeadObjectCommand
+    s3Mock.on(HeadObjectCommand).callsFake((input) => {
+        const object = inMemoryCdn[input.Key];
+
+        if (!object) {
+            throw new Error(`Object ${input.Key} does not exist`);
+        }
+
+        const adaptedMetadata = convertToS3Metadata(object.metadata);
+
+        const result: HeadObjectCommandOutput = {
+            Metadata: adaptedMetadata,
+            ContentType: object.contentType,
             $metadata: {}
         };
 

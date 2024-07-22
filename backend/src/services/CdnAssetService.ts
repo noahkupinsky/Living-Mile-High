@@ -1,5 +1,4 @@
-import { ImageService, CdnAdapter } from '~/@types';
-import { AssetMetadata, CdnContent } from '~/@types/cdnServices';
+import { ImageService, CdnAdapter, AssetMetadata, CdnHead } from '~/@types';
 import { AssetConfig, ContentCategory, ContentType } from '~/@types/constants';
 import { createExpirationDate } from '~/utils/misc';
 
@@ -38,13 +37,13 @@ export class CdnAssetService implements ImageService {
     }
 
     public async getExpiredAssets(keys: string[]): Promise<string[]> {
-        const assets = await this.cdn.getObjects(keys);
+        const assets = await this.cdn.getHeads(keys);
         const expiredAssets = assets.filter(asset => this.isAssetExpired(asset));
         const expiredKeys = expiredAssets.map(asset => asset.key);
         return expiredKeys;
     }
 
-    private isAssetExpired(asset: CdnContent): boolean {
+    private isAssetExpired(asset: CdnHead): boolean {
         const expirationString = asset.metadata.expiration;
         return !expirationString || new Date(expirationString!) < new Date();
     }
