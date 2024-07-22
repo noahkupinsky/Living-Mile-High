@@ -35,7 +35,6 @@ const DangerButton = styled(Button, {
 
 const DangerZonePage = () => {
     const { apiService, updateService } = services();
-    const { restoreBackup } = useSiteData();
     const [backups, setBackups] = useState<BackupIndex[]>([]);
     const [newBackupName, setNewBackupName] = useState('');
     const [editingBackupKey, setEditingBackupKey] = useState('');
@@ -119,7 +118,7 @@ const DangerZonePage = () => {
         const confirm = window.confirm('Are you sure you want to restore this backup?');
         if (confirm) {
             try {
-                await restoreBackup(key);
+                await apiService.restoreBackup(key);
                 alert('Backup restored successfully');
 
                 await fetchBackups();

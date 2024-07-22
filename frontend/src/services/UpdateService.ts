@@ -1,6 +1,6 @@
 'use client';
 
-import { SiteUpdateHandler, SiteUpdater } from '@/types';
+import { EventIdInjector, SiteUpdateHandler, SiteUpdater } from '@/types';
 import { EventMessage, EventObject, generateEventId } from 'living-mile-high-lib';
 import { env } from 'next-runtime-env';
 
@@ -54,22 +54,23 @@ export class UpdateService {
         }
     }
 
-    private checkLocalAndConsumeEvent(eventId?: string): boolean {
-        const isLocal = eventId !== undefined && this.expectedEventIds.includes(eventId);
+    private checkLocalAndConsumeEvent(eventId: string): boolean {
+        const isLocal = this.expectedEventIds.includes(eventId);
         if (isLocal) {
-            this.rejectEvent(eventId);
+            this.expectedEventIds = this.expectedEventIds.filter(id => id !== eventId);
         }
         return isLocal;
     }
 
-    expectEvent(): string {
+    injectEventId: EventIdInjector = async (fn) => {
         const eventId = generateEventId();
         this.expectedEventIds.push(eventId);
-        return eventId;
-    }
-
-    rejectEvent(eventId: string) {
-        this.expectedEventIds = this.expectedEventIds.filter(id => id !== eventId);
+        try {
+            return await fn(eventId);
+        } catch (error) {
+            this.expectedEventIds = this.expectedEventIds.filter(id => id !== eventId);
+            throw error;
+        }
     }
 
     setSiteUpdater(siteUpdater: SiteUpdater) {

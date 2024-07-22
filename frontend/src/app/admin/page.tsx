@@ -55,7 +55,8 @@ const HouseAddress = styled(Text, {
 
 const AdminPanel = () => {
     const router = useRouter();
-    const { houses, deleteHouse } = useSiteData();
+    const { apiService } = services();
+    const { houses } = useSiteData();
 
     const handleEdit = (id: string) => {
         router.push(`admin/upsert-house?id=${id}`);
@@ -66,7 +67,7 @@ const AdminPanel = () => {
         if (!confirmed) return;
 
         try {
-            await deleteHouse(id);
+            await apiService.deleteHouse(id);
             alert(`House deleted successfully.`);
             // Optionally, you can refresh the house list after deletion
         } catch (error) {

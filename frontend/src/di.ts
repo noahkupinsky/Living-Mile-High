@@ -8,8 +8,9 @@ let serviceDict: {
 
 const services = () => {
     if (!serviceDict) {
+        const updateService = new Services.UpdateService();
         serviceDict = {
-            apiService: new Services.ApiService(),
+            apiService: new Services.ApiService(updateService.injectEventId),
             updateService: new Services.UpdateService(),
             cdnService: new Services.CdnService()
         };

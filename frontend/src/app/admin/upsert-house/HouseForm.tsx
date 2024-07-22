@@ -33,8 +33,8 @@ const RightColumn = styled(View, {
 });
 
 const HouseForm: React.FC<{ house?: House }> = ({ house }) => {
-    const { updateService } = services();
-    const { houses, upsertHouse } = useSiteData();
+    const { apiService, updateService } = services();
+    const { houses } = useSiteData();
     const [initialHouse, setInitialHouse] = useState<House | undefined>(house);
     const [formData, setFormData] = useState<House>(house ? house : {
         isDeveloped: false,
@@ -77,7 +77,7 @@ const HouseForm: React.FC<{ house?: House }> = ({ house }) => {
             ...formData
         };
         try {
-            const id = await upsertHouse(finalData);
+            const id = await apiService.upsertHouse(finalData);
             setFormData(prev => ({ ...prev, id }));
             alert(
                 isUpdate ? `House updated successfully` : `House created successfully`
