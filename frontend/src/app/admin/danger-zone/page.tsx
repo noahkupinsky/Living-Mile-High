@@ -74,10 +74,10 @@ const DangerZonePage = () => {
 
     const handleCreateBackup = async () => {
         try {
-            await apiService.createBackup(newBackupName);
+            const newIndices = await apiService.createBackup(newBackupName);
+            setBackups(newIndices);
             alert('Backup created successfully');
 
-            await fetchBackups();
             setNewBackupName('');
         } catch (e) {
             alert(`Failed to create backup. ${e}`);
@@ -87,10 +87,9 @@ const DangerZonePage = () => {
     const handleRenameBackup = async () => {
         if (editingBackupKey && renameBackupName) {
             try {
-                await apiService.renameBackup(editingBackupKey, renameBackupName);
+                const newIndices = await apiService.renameBackup(editingBackupKey, renameBackupName);
+                setBackups(newIndices);
                 alert('Backup renamed successfully');
-
-                await fetchBackups();
 
                 setEditingBackupKey('');
                 setRenameBackupName('');
@@ -104,10 +103,9 @@ const DangerZonePage = () => {
         const confirm = window.confirm('Are you sure you want to delete this backup?');
         if (confirm) {
             try {
-                await apiService.deleteBackup(key);
+                const newIndices = await apiService.deleteBackup(key);
+                setBackups(newIndices);
                 alert('Backup deleted successfully');
-
-                await fetchBackups();
             } catch (e) {
                 alert(`Failed to delete backup. ${e}`);
             }
@@ -118,10 +116,9 @@ const DangerZonePage = () => {
         const confirm = window.confirm('Are you sure you want to restore this backup?');
         if (confirm) {
             try {
-                await apiService.restoreBackup(key);
+                const newIndices = await apiService.restoreBackup(key);
+                setBackups(newIndices);
                 alert('Backup restored successfully');
-
-                await fetchBackups();
             } catch (e) {
                 alert(`Failed to restore backup. ${e}`);
             }
@@ -139,10 +136,9 @@ const DangerZonePage = () => {
             'Are you sure that you want to proceed ? ');
         if (confirm) {
             try {
-                await apiService.pruneSiteData();
+                const newIndices = await apiService.pruneSiteData();
+                setBackups(newIndices);
                 alert('Site data pruned successfully');
-
-                await fetchBackups();
             } catch (e) {
                 alert(`Failed to prune site data. ${e}`);
             }

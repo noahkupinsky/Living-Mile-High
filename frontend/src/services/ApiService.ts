@@ -66,12 +66,12 @@ export class ApiService {
         }
     }
 
-    async pruneSiteData(): Promise<void> {
+    async pruneSiteData(): Promise<BackupIndex[]> {
         const response = await this.apiAxios.post('prune');
         const resBody: PruneSiteResponse = response.data;
 
         if (response.status === 200 && resBody.success) {
-            return;
+            return resBody.indices!;
         } else {
             throw new Error(resBody.error);
         }
@@ -119,39 +119,39 @@ export class ApiService {
         });
     }
 
-    async restoreBackup(key: string): Promise<void> {
+    async restoreBackup(key: string): Promise<BackupIndex[]> {
         return await this.injectEventId(async eventId => {
             const req: RestoreBackupRequest = { key, eventId };
             const response = await this.apiAxios.post('backup/restore', req);
             const resBody: RestoreBackupResponse = response.data;
 
             if (response.status === 200 && resBody.success) {
-                return;
+                return resBody.indices!;
             } else {
                 throw new Error(resBody.error);
             }
         });
     }
 
-    async deleteBackup(key: string): Promise<void> {
+    async deleteBackup(key: string): Promise<BackupIndex[]> {
         const req: DeleteBackupRequest = { key };
         const response = await this.apiAxios.post('backup/delete', req);
         const resBody: DeleteBackupResponse = response.data;
 
         if (response.status === 200 && resBody.success) {
-            return;
+            return resBody.indices!;
         } else {
             throw new Error(resBody.error);
         }
     }
 
-    async createBackup(name: string): Promise<void> {
+    async createBackup(name: string): Promise<BackupIndex[]> {
         const req: CreateBackupRequest = { name };
         const response = await this.apiAxios.post('backup/create', req);
         const resBody: CreateBackupResponse = response.data;
 
         if (response.status === 200 && resBody.success) {
-            return;
+            return resBody.indices!;
         } else {
             throw new Error(resBody.error);
         }
@@ -162,22 +162,19 @@ export class ApiService {
         const resBody: GetBackupIndicesResponse = response.data;
 
         if (response.status === 200 && resBody.success) {
-            const indices: BackupIndex[] = resBody.indices!;
-            // sort by most recent date
-            const sortedIndices = indices.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-            return sortedIndices;
+            return resBody.indices!;
         } else {
             throw new Error(resBody.error);
         }
     }
 
-    async renameBackup(key: string, name: string): Promise<void> {
+    async renameBackup(key: string, name: string): Promise<BackupIndex[]> {
         const req: RenameBackupRequest = { key, name };
         const response = await this.apiAxios.post('backup/rename', req);
         const resBody: RenameBackupResponse = response.data;
 
         if (response.status === 200 && resBody.success) {
-            return;
+            return resBody.indices!;
         } else {
             throw new Error(resBody.error);
         }

@@ -39,37 +39,41 @@ export type VerifyResponse = {
 
 // BACKUPS
 
+export type BackupResponse = SuccessResponse & {
+    indices?: BackupIndex[];
+};
+
 // getBackupIndices has no request
 export type GetBackupIndicesResponse = SuccessResponse & {
     indices?: BackupIndex[];
 };
 
-export type GetBackupResponse = SuccessResponse;
+export type GetBackupResponse = BackupResponse;
 
 export type CreateBackupRequest = {
     name: string;
 };
 
-export type CreateBackupResponse = SuccessResponse;
+export type CreateBackupResponse = BackupResponse;
 
 export type DeleteBackupRequest = {
     key: string;
 };
 
-export type DeleteBackupResponse = SuccessResponse;
+export type DeleteBackupResponse = BackupResponse;
 
 export type RenameBackupRequest = {
     key: string;
     name: string;
 };
 
-export type RenameBackupResponse = SuccessResponse;
+export type RenameBackupResponse = BackupResponse;
 
 export type RestoreBackupRequest = SiteUpdateRequest & {
     key: string;
 };
 
-export type RestoreBackupResponse = SuccessResponse;
+export type RestoreBackupResponse = BackupResponse;
 
 
 // HOUSES
@@ -112,4 +116,4 @@ export type UploadAssetResponse = SuccessResponse & {
 // PRUNE
 
 // is a get route - has no req body
-export type PruneSiteResponse = SuccessResponse;
+export type PruneSiteResponse = BackupResponse;

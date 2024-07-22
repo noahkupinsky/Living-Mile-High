@@ -23,8 +23,9 @@ export const createManualBackup: ExpressEndpoint = async (req, res) => {
 
     try {
         await backupService().createManualBackup(name);
+        const indices = await backupService().getBackupIndices();
 
-        const successResponse: CreateBackupResponse = { success: true };
+        const successResponse: GetBackupIndicesResponse = { success: true, indices };
         res.json(successResponse);
     } catch (error: any) {
         const errorResponse: CreateBackupResponse = { success: false, error: error.message };
@@ -38,8 +39,9 @@ export const deleteManualBackup: ExpressEndpoint = async (req, res) => {
 
     try {
         await backupService().deleteManualBackup(key);
+        const indices = await backupService().getBackupIndices();
 
-        const successResponse: DeleteBackupResponse = { success: true };
+        const successResponse: GetBackupIndicesResponse = { success: true, indices };
         res.json(successResponse);
     } catch (error: any) {
         const errorResponse: DeleteBackupResponse = { success: false, error: error.message };
@@ -53,8 +55,9 @@ export const renameManualBackup: ExpressEndpoint = async (req, res) => {
 
     try {
         await backupService().renameManualBackup(key, name);
+        const indices = await backupService().getBackupIndices();
 
-        const successResponse: RenameBackupResponse = { success: true };
+        const successResponse: GetBackupIndicesResponse = { success: true, indices };
         res.json(successResponse);
     } catch (error: any) {
         const errorResponse: RenameBackupResponse = { success: false, error: error.message };
@@ -69,8 +72,9 @@ export const restoreBackup: ExpressEndpoint = async (req, res) => {
     try {
         await backupService().restoreBackup(key);
         await updateSite(eventId);
+        const indices = await backupService().getBackupIndices();
 
-        const successResponse: RestoreBackupResponse = { success: true };
+        const successResponse: GetBackupIndicesResponse = { success: true, indices };
         res.json(successResponse);
     } catch (error: any) {
         const errorResponse: RestoreBackupResponse = { success: false, error: error.message };

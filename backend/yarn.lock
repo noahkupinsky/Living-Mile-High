@@ -4367,10 +4367,10 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.2.4.tgz#eca284f75d2965079309dc0ad9255abb2ebc1632"
   integrity sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==
 
-living-mile-high-lib@^1.0.65:
-  version "1.0.65"
-  resolved "https://registry.yarnpkg.com/living-mile-high-lib/-/living-mile-high-lib-1.0.65.tgz#e568f0b139915ee97f5621114f1cf9e22171a639"
-  integrity sha512-JoPXfkRGksYy7kzadfjv+PMY8vG8EjVTj5eFb4BoD+WTk4KRuXn6YzSnqS/qmdxVG00UFKzFEJcLb93VMjsYSg==
+living-mile-high-lib@^1.0.67:
+  version "1.0.67"
+  resolved "https://registry.yarnpkg.com/living-mile-high-lib/-/living-mile-high-lib-1.0.67.tgz#b4b8535143fc1095da1cc43067c5046feb5a793b"
+  integrity sha512-EdpYHaztHp44VoCE0MCAx/hRYobH+G0viQjCiHt9Qip7EnmK0S1SZzBnR5aYBjJ8iwjehsLKOS4sca2LsLfKsg==
   dependencies:
     "@types/uuid" "^10.0.0"
     bcryptjs "^2.4.3"

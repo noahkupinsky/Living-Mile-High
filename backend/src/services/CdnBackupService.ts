@@ -48,14 +48,16 @@ export class CdnBackupService implements BackupService {
     async getBackupIndices(): Promise<BackupIndex[]> {
         const backupHeads = await this.getBackupHeads();
 
-        const indices = backupHeads.map(backup => ({
-            key: backup.key,
-            name: backup.metadata.name!,
-            createdAt: backup.metadata.createdAt!,
-            backupType: backup.metadata.backupType!,
+        const indices = backupHeads.map(head => ({
+            key: head.key,
+            name: head.metadata.name!,
+            createdAt: head.metadata.createdAt!,
+            backupType: head.metadata.backupType!,
         }));
 
-        return indices;
+        const sortedIndices = indices.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
+        return sortedIndices;
     }
 
     async getBackupKeys(): Promise<string[]> {

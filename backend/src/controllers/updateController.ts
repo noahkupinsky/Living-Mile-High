@@ -19,8 +19,9 @@ export const pruneSite: ExpressEndpoint = async (req, res) => {
         await backupService().pruneAutoBackups();
         await backupService().consolidateAutoBackups();
         await pruneAssets();
+        const indices = await backupService().getBackupIndices();
 
-        const successResponse: PruneSiteResponse = { success: true };
+        const successResponse: PruneSiteResponse = { success: true, indices: indices };
         res.json(successResponse);
     } catch (error: any) {
         const errorResponse: PruneSiteResponse = { success: false, error: error.message };
