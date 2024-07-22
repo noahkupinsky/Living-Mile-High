@@ -34,7 +34,8 @@ const DangerButton = styled(Button, {
 });
 
 const DangerZonePage = () => {
-    const { apiService, updateService } = services();
+    const { addUpdateHandler, removeUpdateHandler } = useSiteData();
+    const { apiService } = services();
     const [backups, setBackups] = useState<BackupIndex[]>([]);
     const [newBackupName, setNewBackupName] = useState('');
     const [editingBackupKey, setEditingBackupKey] = useState('');
@@ -57,12 +58,12 @@ const DangerZonePage = () => {
             }
         };
 
-        updateService.addUpdateHandler(handleUpdate);
+        addUpdateHandler(handleUpdate);
 
         return () => {
-            updateService.removeUpdateHandler(handleUpdate);
+            removeUpdateHandler(handleUpdate);
         };
-    }, [updateService, fetchBackups]);
+    }, [addUpdateHandler, fetchBackups, removeUpdateHandler]);
 
 
 

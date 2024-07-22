@@ -10,7 +10,7 @@ export type Services = {
     apiService: ApiService;
 }
 
-export type SiteUpdater = () => Promise<SiteData>
+export type SiteEventHandler = (event: EventObject, isLocal: boolean) => Promise<void>;
 export type SiteUpdateHandler = (isLocal: boolean, siteData: SiteData) => Promise<void>
 export type EventIdInjector = <T>(fn: (eventId: string) => Promise<T>) => Promise<T>
 

@@ -2,16 +2,16 @@ import * as Services from './services';
 
 let serviceDict: {
     apiService: Services.ApiService,
-    updateService: Services.UpdateService,
+    eventService: Services.EventService,
     cdnService: Services.CdnService
 }
 
 const services = () => {
     if (!serviceDict) {
-        const updateService = new Services.UpdateService();
+        const eventService = new Services.EventService();
         serviceDict = {
-            apiService: new Services.ApiService(updateService.injectEventId),
-            updateService: updateService,
+            apiService: new Services.ApiService(eventService.injectEventId),
+            eventService: eventService,
             cdnService: new Services.CdnService()
         };
     }

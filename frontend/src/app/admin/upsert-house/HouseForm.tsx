@@ -33,7 +33,8 @@ const RightColumn = styled(View, {
 });
 
 const HouseForm: React.FC<{ house?: House }> = ({ house }) => {
-    const { apiService, updateService } = services();
+    const { addUpdateHandler, removeUpdateHandler } = useSiteData();
+    const { apiService } = services();
     const { houses } = useSiteData();
     const [initialHouse, setInitialHouse] = useState<House | undefined>(house);
     const [formData, setFormData] = useState<House>(house ? house : {
@@ -64,12 +65,12 @@ const HouseForm: React.FC<{ house?: House }> = ({ house }) => {
             setFormData(newHouse);
         }
 
-        updateService.addUpdateHandler(handleUpdate);
+        addUpdateHandler(handleUpdate);
 
         return () => {
-            updateService.removeUpdateHandler(handleUpdate);
+            removeUpdateHandler(handleUpdate);
         }
-    }, [updateService, formData, initialHouse]);
+    }, [addUpdateHandler, removeUpdateHandler, formData, initialHouse]);
 
     const handleFormSubmit = async () => {
         const isUpdate = formData.id !== undefined;

@@ -1,13 +1,16 @@
 'use client'
 
 import React, { createContext, useState, useEffect, useContext, useCallback } from 'react';
-import { GeneralData, House, SiteData } from 'living-mile-high-lib';
+import { EventMessage, GeneralData, House, SiteData } from 'living-mile-high-lib';
 import services from '@/di';
+import { SiteEventHandler, SiteUpdateHandler } from '@/types';
 
 type SiteDataContextType = {
     isLoading: boolean;
     houses: House[];
     generalData: GeneralData | undefined;
+    addUpdateHandler: (handler: SiteUpdateHandler) => void;
+    removeUpdateHandler: (handler: SiteUpdateHandler) => void;
 };
 
 const SiteDataContext = createContext<SiteDataContextType | undefined>(undefined);
@@ -20,7 +23,8 @@ export const SiteDataProvider = ({ children }: SiteDataProviderProps) => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [generalData, setGeneralData] = useState<GeneralData | undefined>(undefined);
     const [houses, setHouses] = useState<House[]>([]);
-    const { updateService, cdnService } = services();
+    const { eventService, cdnService } = services();
+    const [updateHandlers, setUpdateHandlers] = useState<SiteUpdateHandler[]>([]);
 
     const fetchSiteData = useCallback(async () => {
         try {
@@ -38,24 +42,37 @@ export const SiteDataProvider = ({ children }: SiteDataProviderProps) => {
     }, [cdnService]);
 
     useEffect(() => {
-        const siteUpdater = async () => {
-            return await fetchSiteData();
+        const siteUpdater: SiteEventHandler = async (event, isLocal) => {
+            if (event.message = EventMessage.SITE_UPDATED) {
+                const newData = await fetchSiteData();
+                updateHandlers.forEach(handler => handler(isLocal, newData));
+            }
         };
 
         fetchSiteData();
 
-        updateService.setSiteUpdater(siteUpdater);
+        eventService.addEventHandler(siteUpdater);
 
         return () => {
-            updateService.unsetSiteUpdater();
+            eventService.removeEventHandler(siteUpdater);
         };
-    }, [fetchSiteData, updateService]);
+    }, [fetchSiteData, eventService, updateHandlers]);
+
+    const addUpdateHandler = (handler: SiteUpdateHandler) => {
+        setUpdateHandlers([...updateHandlers, handler]);
+    };
+
+    const removeUpdateHandler = (handler: SiteUpdateHandler) => {
+        setUpdateHandlers(updateHandlers.filter(h => h !== handler));
+    };
 
     return (
         <SiteDataContext.Provider value={{
             generalData,
             houses,
             isLoading,
+            addUpdateHandler,
+            removeUpdateHandler
         }}>
             {children}
         </SiteDataContext.Provider>

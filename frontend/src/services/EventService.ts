@@ -1,15 +1,14 @@
 'use client';
 
-import { EventIdInjector, SiteUpdateHandler, SiteUpdater } from '@/types';
-import { EventMessage, EventObject, generateEventId } from 'living-mile-high-lib';
+import { EventIdInjector, SiteEventHandler } from '@/types';
+import { EventObject, generateEventId } from 'living-mile-high-lib';
 import { env } from 'next-runtime-env';
 
 const backendUrl = () => env('NEXT_PUBLIC_BACKEND_URL')!;
 
-export class UpdateService {
+export class EventService {
     private websocket: WebSocket | null = null;
-    private siteUpdater: SiteUpdater | null = null;
-    private updateHandlers: SiteUpdateHandler[] = [];
+    private eventHandlers: SiteEventHandler[] = [];
     private expectedEventIds: string[] = [];
 
     private getConnectUrl() {
@@ -30,16 +29,10 @@ export class UpdateService {
             this.websocket = this.createWebSocket(this.getConnectUrl());
 
             this.websocket.onmessage = async (event) => {
-                const { message, eventId }: EventObject = JSON.parse(event.data);
-                const isLocal = this.checkLocalAndConsumeEvent(eventId);
+                const eventObject: EventObject = JSON.parse(event.data);
+                const isLocal = this.checkLocalAndConsumeEvent(eventObject.eventId);
 
-                if (message === EventMessage.SITE_UPDATED && this.siteUpdater) {
-                    const siteData = await this.siteUpdater();
-                    // create a 1 second delay to allow the site to update
-                    setTimeout(() => {
-                        this.updateHandlers.map(handler => handler(isLocal, siteData));
-                    }, 50)
-                }
+                this.eventHandlers.map(handler => handler(eventObject, isLocal));
             };
 
             this.websocket.onerror = (error) => {
@@ -73,20 +66,12 @@ export class UpdateService {
         }
     }
 
-    setSiteUpdater(siteUpdater: SiteUpdater) {
-        this.siteUpdater = siteUpdater;
-    }
-
-    unsetSiteUpdater() {
-        this.siteUpdater = null;
-    }
-
-    addUpdateHandler(handler: SiteUpdateHandler) {
-        this.updateHandlers.push(handler);
+    addEventHandler(handler: SiteEventHandler) {
+        this.eventHandlers.push(handler);
         this.connectToEvents();
     }
 
-    removeUpdateHandler(handler: SiteUpdateHandler) {
-        this.updateHandlers = this.updateHandlers.filter(h => h !== handler);
+    removeEventHandler(handler: SiteEventHandler) {
+        this.eventHandlers = this.eventHandlers.filter(h => h !== handler);
     }
 }
