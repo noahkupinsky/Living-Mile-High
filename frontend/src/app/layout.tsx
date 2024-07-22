@@ -4,6 +4,7 @@ import { PublicEnvScript } from 'next-runtime-env';
 import { Container, Main } from '@/components/layout/LayoutComponents';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import BonusFeatures from '@/components/bonus/BonusFeatures';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -22,6 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               {children}
             </Main>
             <Footer />
+            <BonusFeatures />
           </Container>
         </Providers>
       </body>

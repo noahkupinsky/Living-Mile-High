@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Button, Input, Text, styled } from 'tamagui';
 import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
-import { ImageFormat } from '@/types';
+import { processImage } from '@/utils/imageProcessing';
 
 const ImageUploadContainer = styled(View, {
     padding: 20,
@@ -9,7 +9,7 @@ const ImageUploadContainer = styled(View, {
 });
 
 type ImageUploadProps = {
-    onImageUpload: (image: ImageFormat) => void;
+    onImageUpload: (url?: string) => void;
 };
 
 const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload }) => {
@@ -30,10 +30,11 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload }) => {
         }
     };
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
-            onImageUpload(file);
+            const fileUrl = await processImage(file);
+            onImageUpload(fileUrl);
             setError(null);
         } else {
             setError('Please select a valid file');

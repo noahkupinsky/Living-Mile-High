@@ -22,3 +22,9 @@ export const STAT_TEMPLATES: [HouseStatKeys, string][] = [
     ["bathrooms", "$ bathrooms"],
     ["garageSpaces", "$ garage spaces"],
 ];
+
+// cheat code type beat so that you don't have to change the url manually
+export const LOGIN_SEQUENCE = [
+    'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
+    'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight'
+];

@@ -89,6 +89,7 @@ const DraggableImage: React.FC<DraggableImageProps> = ({ url, index, moveImage, 
         <DraggableImageContainer ref={ref} style={{ opacity, width, height }}>
             <AspectImage
                 src={url}
+                alt={`House image ${url}`}
                 width={width}
                 height={height}
             />

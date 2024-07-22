@@ -1,4 +1,5 @@
 import { ImageFormat } from '@/types';
+import { processImage } from '@/utils/imageProcessing';
 import React, { useState } from 'react';
 import { View, Input, Button, styled } from 'tamagui';
 
@@ -8,7 +9,7 @@ const ImageUploadContainer = styled(View, {
 });
 
 type UploadMultipleImagesProps = {
-    onImagesUpload: (images: ImageFormat[]) => void;
+    onImagesUpload: (urls: string[]) => void;
 };
 
 const UploadMultipleImages: React.FC<UploadMultipleImagesProps> = ({ onImagesUpload }) => {
@@ -20,8 +21,10 @@ const UploadMultipleImages: React.FC<UploadMultipleImagesProps> = ({ onImagesUpl
         setImageURLs(value.split(',').map(url => url.trim()));
     };
 
-    const handleAddImages = () => {
-        onImagesUpload([...imageURLs, ...localFiles]);
+    const handleAddImages = async () => {
+        const fileUrls = await Promise.all(localFiles.map(file => processImage(file)));
+        const validFileUrls = fileUrls.filter(url => url !== undefined) as string[];
+        onImagesUpload([...imageURLs, ...validFileUrls]);
     };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {

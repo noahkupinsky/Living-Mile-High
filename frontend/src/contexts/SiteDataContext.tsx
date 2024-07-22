@@ -58,13 +58,13 @@ export const SiteDataProvider = ({ children }: SiteDataProviderProps) => {
         };
     }, [fetchSiteData, eventService, updateHandlers]);
 
-    const addUpdateHandler = (handler: SiteUpdateHandler) => {
-        setUpdateHandlers([...updateHandlers, handler]);
-    };
+    const addUpdateHandler = useCallback((handler: SiteUpdateHandler) => {
+        setUpdateHandlers(prevHandlers => [...prevHandlers, handler]);
+    }, []);
 
-    const removeUpdateHandler = (handler: SiteUpdateHandler) => {
-        setUpdateHandlers(updateHandlers.filter(h => h !== handler));
-    };
+    const removeUpdateHandler = useCallback((handler: SiteUpdateHandler) => {
+        setUpdateHandlers(prevHandlers => prevHandlers.filter(h => h !== handler));
+    }, []);
 
     return (
         <SiteDataContext.Provider value={{

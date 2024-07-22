@@ -71,32 +71,15 @@ const HouseFormImages: React.FC<HouseFormImagesProps> = ({
         }));
     };
 
-    const processImage = async (image: ImageFormat): Promise<string | undefined> => {
-        if (typeof image === 'string') {
-            return image;
+    const handleMainImageUpload = async (url?: string) => {
+        if (url) {
+            setFormData(prev => ({ ...prev, mainImage: url }));
         }
-        try {
-            const uploadedUrl = await apiService.uploadAsset(image);
-            return uploadedUrl;
-        } catch (e) {
-            alert(`Failed to save image ${image.name}: ${e}`);
-            return undefined;
-        }
-    }
-
-    const handleMainImageUpload = async (image: ImageFormat) => {
-        const processedImage = await processImage(image);
-        if (processedImage) {
-            setFormData(prev => ({ ...prev, mainImage: processedImage }));
-        }
-
         setIsModalOpen(false);
     };
 
-    const handleImagesUpload = async (images: ImageFormat[]) => {
-        const processedImages = await Promise.all(images.map(async image => await processImage(image)));
-        const filteredImages = processedImages.filter(image => image !== undefined) as string[];
-        setFormData(prev => ({ ...prev, images: [...prev.images, ...filteredImages] }));
+    const handleImagesUpload = async (urls: string[]) => {
+        setFormData(prev => ({ ...prev, images: [...prev.images, ...urls] }));
         setIsModalOpen(false);
     };
 
@@ -116,13 +99,19 @@ const HouseFormImages: React.FC<HouseFormImagesProps> = ({
             </LabelButtonRow>
             <ImageList>
                 {generalData!.defaultImages.map(url => (
-                    <AspectImage key={url} src={url} width={100} onClick={() => handleMainImageUpload(url)} />
+                    <AspectImage
+                        key={url}
+                        alt={`House default image ${url}`}
+                        src={url}
+                        width={100}
+                        onClick={() => handleMainImageUpload(url)} />
                 ))}
             </ImageList>
             <MainImageContainer>
                 {mainImageUrl && (
                     <AspectImage
                         src={mainImageUrl}
+                        alt={'House main image'}
                         height={200}
                     />
                 )}

@@ -1,13 +1,15 @@
 'use client'
 
 import { useState, useEffect } from "react";
-import { styled, Image } from "tamagui";
+import ClickableImage from "./ClickableImage";
 
-export const StyledImage = styled(Image, {
-    name: 'StyledImage',
-});
+type AutoImageProps = {
+    src: string;
+    alt: string;
+    onClick?: () => void;
+}
 
-export const AutoImage = ({ src, alt, ...props }: any) => {
+export const AutoImage: React.FC<AutoImageProps> = ({ src, alt, onClick, ...props }) => {
     const [dimensions, setDimensions] = useState<any>({ width: 'auto', height: 'auto' });
 
     useEffect(() => {
@@ -21,9 +23,10 @@ export const AutoImage = ({ src, alt, ...props }: any) => {
     }, [src]);
 
     return (
-        <StyledImage
+        <ClickableImage
             source={{ uri: src, width: dimensions.width, height: dimensions.height }}
             alt={alt}
+            onClick={onClick}
             {...props}
         />
     );
