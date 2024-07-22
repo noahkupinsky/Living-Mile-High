@@ -2,11 +2,11 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import services from '@/di';
-import { BackupIndex } from 'living-mile-high-lib';
+import { BackupIndex, EventMessage } from 'living-mile-high-lib';
 import BackupItem from './BackupItem';
 import CreateBackupSection from './CreateBackupSection';
 import { useSiteData } from '@/contexts/SiteDataContext';
-import { SiteUpdateHandler } from '@/types';
+import { SiteEventHandler, SiteUpdateHandler } from '@/types';
 
 import { Button, YStack, styled } from 'tamagui';
 
@@ -34,8 +34,7 @@ const DangerButton = styled(Button, {
 });
 
 const DangerZonePage = () => {
-    const { addUpdateHandler, removeUpdateHandler } = useSiteData();
-    const { apiService } = services();
+    const { apiService, eventService } = services();
     const [backups, setBackups] = useState<BackupIndex[]>([]);
     const [newBackupName, setNewBackupName] = useState('');
     const [editingBackupKey, setEditingBackupKey] = useState('');
@@ -51,19 +50,21 @@ const DangerZonePage = () => {
     }, [apiService]);
 
     useEffect(() => {
-        const handleUpdate: SiteUpdateHandler = async (isLocal) => {
-            if (!isLocal) {
-                alert("Someone else just edited the website. Please be patient while we fetch the latest backups.");
+        const handler: SiteEventHandler = async (event, isLocal) => {
+            if (event.messages.includes(EventMessage.BACKUPS_UPDATED)) {
+                if (!isLocal) {
+                    alert("Another admin just completed an action that affected the site's backups. It is strongly advised that you avoid doing any Danger Zone operations while another admin is working, to avoid overwriting their work.");
+                }
                 await fetchBackups();
             }
         };
 
-        addUpdateHandler(handleUpdate);
+        eventService.addEventHandler(handler);
 
         return () => {
-            removeUpdateHandler(handleUpdate);
+            eventService.removeEventHandler(handler);
         };
-    }, [addUpdateHandler, fetchBackups, removeUpdateHandler]);
+    }, [eventService, fetchBackups]);
 
 
 
@@ -75,8 +76,7 @@ const DangerZonePage = () => {
 
     const handleCreateBackup = async () => {
         try {
-            const newIndices = await apiService.createBackup(newBackupName);
-            setBackups(newIndices);
+            await apiService.createBackup(newBackupName);
             alert('Backup created successfully');
 
             setNewBackupName('');
@@ -88,8 +88,7 @@ const DangerZonePage = () => {
     const handleRenameBackup = async () => {
         if (editingBackupKey && renameBackupName) {
             try {
-                const newIndices = await apiService.renameBackup(editingBackupKey, renameBackupName);
-                setBackups(newIndices);
+                await apiService.renameBackup(editingBackupKey, renameBackupName);
                 alert('Backup renamed successfully');
 
                 setEditingBackupKey('');
@@ -104,8 +103,7 @@ const DangerZonePage = () => {
         const confirm = window.confirm('Are you sure you want to delete this backup?');
         if (confirm) {
             try {
-                const newIndices = await apiService.deleteBackup(key);
-                setBackups(newIndices);
+                await apiService.deleteBackup(key);
                 alert('Backup deleted successfully');
             } catch (e) {
                 alert(`Failed to delete backup. ${e}`);
@@ -117,8 +115,7 @@ const DangerZonePage = () => {
         const confirm = window.confirm('Are you sure you want to restore this backup?');
         if (confirm) {
             try {
-                const newIndices = await apiService.restoreBackup(key);
-                setBackups(newIndices);
+                await apiService.restoreBackup(key);
                 alert('Backup restored successfully');
             } catch (e) {
                 alert(`Failed to restore backup. ${e}`);
@@ -137,8 +134,7 @@ const DangerZonePage = () => {
             'Are you sure that you want to proceed ? ');
         if (confirm) {
             try {
-                const newIndices = await apiService.pruneSiteData();
-                setBackups(newIndices);
+                await apiService.pruneSiteData();
                 alert('Site data pruned successfully');
             } catch (e) {
                 alert(`Failed to prune site data. ${e}`);

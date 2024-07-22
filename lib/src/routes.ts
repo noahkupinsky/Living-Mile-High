@@ -7,7 +7,7 @@ export type SuccessResponse = {
     error?: string;
 }
 
-export type SiteUpdateRequest = {
+export type EventRequest = {
     eventId?: string;
 }
 
@@ -16,7 +16,7 @@ export function generateEventId(eventId?: string): string {
 }
 
 export type EventObject = {
-    message: EventMessage;
+    messages: EventMessage[];
     eventId: string;
 }
 
@@ -39,46 +39,40 @@ export type VerifyResponse = {
 
 // BACKUPS
 
-export type BackupResponse = SuccessResponse & {
-    indices?: BackupIndex[];
-};
-
 // getBackupIndices has no request
 export type GetBackupIndicesResponse = SuccessResponse & {
     indices?: BackupIndex[];
 };
 
-export type GetBackupResponse = BackupResponse;
-
-export type CreateBackupRequest = {
+export type CreateBackupRequest = EventRequest & {
     name: string;
 };
 
-export type CreateBackupResponse = BackupResponse;
+export type CreateBackupResponse = SuccessResponse;
 
-export type DeleteBackupRequest = {
+export type DeleteBackupRequest = EventRequest & {
     key: string;
 };
 
-export type DeleteBackupResponse = BackupResponse;
+export type DeleteBackupResponse = SuccessResponse;
 
-export type RenameBackupRequest = {
+export type RenameBackupRequest = EventRequest & {
     key: string;
     name: string;
 };
 
-export type RenameBackupResponse = BackupResponse;
+export type RenameBackupResponse = SuccessResponse;
 
-export type RestoreBackupRequest = SiteUpdateRequest & {
+export type RestoreBackupRequest = EventRequest & {
     key: string;
 };
 
-export type RestoreBackupResponse = BackupResponse;
+export type RestoreBackupResponse = SuccessResponse;
 
 
 // HOUSES
 
-export type UpsertHouseRequest = SiteUpdateRequest & {
+export type UpsertHouseRequest = EventRequest & {
     house: DeepPartial<House>;
 };
 
@@ -86,7 +80,7 @@ export type UpsertHouseResponse = SuccessResponse & {
     id?: string;
 };
 
-export type DeleteHouseRequest = SiteUpdateRequest & {
+export type DeleteHouseRequest = EventRequest & {
     id: string;
 };
 
@@ -95,7 +89,7 @@ export type DeleteHouseResponse = SuccessResponse;
 
 // GENERAL DATA
 
-export type UpdateGeneralDataRequest = SiteUpdateRequest & {
+export type UpdateGeneralDataRequest = EventRequest & {
     data: DeepPartial<GeneralData>;
 };
 
@@ -115,5 +109,6 @@ export type UploadAssetResponse = SuccessResponse & {
 
 // PRUNE
 
-// is a get route - has no req body
-export type PruneSiteResponse = BackupResponse;
+export type PruneSiteRequest = EventRequest;
+
+export type PruneSiteResponse = SuccessResponse;

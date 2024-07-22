@@ -43,7 +43,7 @@ export const SiteDataProvider = ({ children }: SiteDataProviderProps) => {
 
     useEffect(() => {
         const siteUpdater: SiteEventHandler = async (event, isLocal) => {
-            if (event.message = EventMessage.SITE_UPDATED) {
+            if (event.messages.includes(EventMessage.SITE_UPDATED)) {
                 const newData = await fetchSiteData();
                 updateHandlers.forEach(handler => handler(isLocal, newData));
             }

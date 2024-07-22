@@ -1,8 +1,7 @@
 import WebSocket from 'ws';
 import { EventMessage, EventObject } from "living-mile-high-lib";
 import { startListening, stopListening } from "./utils";
-import { sendEventMessage } from "~/controllers/eventController";
-import { createEventObjectString } from '~/utils/misc';
+import { sendEvent } from "~/controllers/eventController";
 
 let url: string;
 
@@ -60,8 +59,8 @@ describe('WebSocket /events/connect', () => {
             done,
             timeout,
             (data: any, close) => {
-                const { message }: EventObject = JSON.parse(data);
-                expect(message).toEqual(EventMessage.CONNECTED);
+                const { messages }: EventObject = JSON.parse(data);
+                expect(messages).toEqual([EventMessage.CONNECTED]);
                 close();
             }
         );
@@ -81,15 +80,15 @@ describe('WebSocket /events/connect', () => {
             done,
             timeout,
             (data: any, close) => {
-                const { message, eventId }: EventObject = JSON.parse(data);
+                const { messages, eventId }: EventObject = JSON.parse(data);
                 if (!receivedInitialMessage) {
-                    expect(message).toBe(EventMessage.CONNECTED);
+                    expect(messages).toBe(EventMessage.CONNECTED);
                     receivedInitialMessage = true;
 
                     // Send the custom event message after receiving the initial message
-                    sendEventMessage(EventMessage.SITE_UPDATED, testEventId);
+                    sendEvent([EventMessage.SITE_UPDATED, EventMessage.BACKUPS_UPDATED], testEventId);
                 } else {
-                    expect(message).toBe(EventMessage.SITE_UPDATED);
+                    expect(messages).toBe([EventMessage.SITE_UPDATED, EventMessage.BACKUPS_UPDATED]);
                     expect(eventId).toBe(testEventId);
                     close();
                 }

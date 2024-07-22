@@ -27,6 +27,7 @@ export enum CdnFixedKey {
 
 export enum EventMessage {
     SITE_UPDATED = 'site-updated',
+    BACKUPS_UPDATED = 'backups-updated',
     CONNECTED = 'connected'
 }
 

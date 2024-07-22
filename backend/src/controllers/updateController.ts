@@ -1,6 +1,6 @@
-import { EventMessage, PruneSiteResponse } from "living-mile-high-lib";
+import { PruneSiteRequest, PruneSiteResponse } from "living-mile-high-lib";
 import { pruneAssets, updateFixedKeys } from "./cdnController";
-import { sendEventMessage } from "./eventController";
+import { sendBackupsUpdatedEvent, sendSiteAndBackupsUpdatedEvent } from "./eventController";
 import { services } from "~/di";
 import { ExpressEndpoint } from "~/@types";
 
@@ -11,17 +11,20 @@ const backupService = () => services().backupService;
 export async function updateSite(eventId?: string) {
     await updateFixedKeys();
     await backupService().createAutoBackup();
-    sendEventMessage(EventMessage.SITE_UPDATED, eventId);
+    sendSiteAndBackupsUpdatedEvent(eventId);
 }
 
 export const pruneSite: ExpressEndpoint = async (req, res) => {
+    const body: PruneSiteRequest = req.body;
+    const { eventId } = body;
+
     try {
         await backupService().pruneAutoBackups();
         await backupService().consolidateAutoBackups();
         await pruneAssets();
-        const indices = await backupService().getBackupIndices();
+        sendBackupsUpdatedEvent(eventId);
 
-        const successResponse: PruneSiteResponse = { success: true, indices: indices };
+        const successResponse: PruneSiteResponse = { success: true };
         res.json(successResponse);
     } catch (error: any) {
         const errorResponse: PruneSiteResponse = { success: false, error: error.message };
