@@ -11,7 +11,7 @@ const services = () => {
         const updateService = new Services.UpdateService();
         serviceDict = {
             apiService: new Services.ApiService(updateService.injectEventId),
-            updateService: new Services.UpdateService(),
+            updateService: updateService,
             cdnService: new Services.CdnService()
         };
     }
