@@ -20,7 +20,12 @@ export enum ContentPermission {
     PRIVATE = 'private'
 }
 
-export const BACKUP_RETENTION_DAYS = 365;
-export const BACKUP_LOGARITHMIC_BASE = 5;
+export enum BackupConfig {
+    RETENTION_DAYS = 365,
+    LOGARITHMIC_BASE = 5, // >= 2
+    MAXIMUM_POWER = 1 // >= 1
+}
 
-export const ASSSET_RETENTION_DAYS = 1;
+export enum AssetConfig {
+    RETENTION_DAYS = 1
+}

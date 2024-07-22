@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, Button, styled } from 'tamagui';
 import { useSiteData } from '@/contexts/SiteDataContext';
-import { House } from 'living-mile-high-lib';
+import { House, SiteData } from 'living-mile-high-lib';
 import HouseFormBooleans from './HouseFormBooleans';
 import HouseFormStats from './HouseFormStats';
 import HouseFormImages from './HouseFormImages';
 import HouseFormText from './HouseFormText';
-import { LockProvider } from '@/contexts/LockContext';
+import services from '@/di';
+import { SiteUpdateHandler } from '@/types';
 
 const FormContainer = styled(View, {
     display: 'flex',
@@ -32,7 +33,9 @@ const RightColumn = styled(View, {
 });
 
 const HouseForm: React.FC<{ house?: House }> = ({ house }) => {
+    const { updateService } = services();
     const { houses, upsertHouse } = useSiteData();
+    const [initialHouse, setInitialHouse] = useState<House | undefined>(house);
     const [formData, setFormData] = useState<House>(house ? house : {
         isDeveloped: false,
         isForSale: false,
@@ -43,8 +46,30 @@ const HouseForm: React.FC<{ house?: House }> = ({ house }) => {
         neighborhood: '',
         stats: {},
     });
-
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    useEffect(() => {
+        const handleUpdate: SiteUpdateHandler = async (isLocal, siteData) => {
+            const newHouse = siteData.houses.find(house => house.id === formData.id);
+            if (!newHouse) {
+                return;
+            }
+            if (isLocal) {
+                setInitialHouse(newHouse);
+            } else {
+                if (newHouse !== initialHouse) {
+                    alert('House update detected. Repopulating house form...');
+                }
+            }
+            setFormData(newHouse);
+        }
+
+        updateService.addUpdateHandler(handleUpdate);
+
+        return () => {
+            updateService.removeUpdateHandler(handleUpdate);
+        }
+    }, [updateService, formData, initialHouse]);
 
     const handleFormSubmit = async () => {
         const isUpdate = formData.id !== undefined;
@@ -62,35 +87,25 @@ const HouseForm: React.FC<{ house?: House }> = ({ house }) => {
         }
     };
 
-    const getter = () => {
-        if (!formData.id) {
-            return null;
-        } else {
-            return houses.find(house => house.id === formData.id);
-        }
-    }
-
     return (
-        <LockProvider getter={getter}>
-            <FormContainer>
-                <ColumnsContainer>
-                    <LeftColumn>
-                        <HouseFormText formData={formData} setFormData={setFormData} houses={houses} />
-                        <HouseFormImages
-                            formData={formData}
-                            setFormData={setFormData}
-                            isModalOpen={isModalOpen}
-                            setIsModalOpen={setIsModalOpen}
-                        />
-                    </LeftColumn>
-                    <RightColumn>
-                        <HouseFormStats formData={formData} setFormData={setFormData} />
-                        <HouseFormBooleans formData={formData} setFormData={setFormData} />
-                    </RightColumn>
-                </ColumnsContainer>
-                <Button onPress={handleFormSubmit}>Submit</Button>
-            </FormContainer>
-        </LockProvider>
+        <FormContainer>
+            <ColumnsContainer>
+                <LeftColumn>
+                    <HouseFormText formData={formData} setFormData={setFormData} houses={houses} />
+                    <HouseFormImages
+                        formData={formData}
+                        setFormData={setFormData}
+                        isModalOpen={isModalOpen}
+                        setIsModalOpen={setIsModalOpen}
+                    />
+                </LeftColumn>
+                <RightColumn>
+                    <HouseFormStats formData={formData} setFormData={setFormData} />
+                    <HouseFormBooleans formData={formData} setFormData={setFormData} />
+                </RightColumn>
+            </ColumnsContainer>
+            <Button onPress={handleFormSubmit}>Submit</Button>
+        </FormContainer>
     );
 };
 

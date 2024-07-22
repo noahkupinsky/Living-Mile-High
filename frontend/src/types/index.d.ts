@@ -1,4 +1,4 @@
-import { EventMessage, EventObject, House, HouseStats } from 'living-mile-high-lib';
+import { EventMessage, EventObject, House, HouseStats, SiteData } from 'living-mile-high-lib';
 
 export interface ApiService {
     fetch(route: string, params: Record<string, any> = {}): Promise<any>;
@@ -10,8 +10,8 @@ export type Services = {
     apiService: ApiService;
 }
 
-export type SiteUpdater = () => Promise<void>
-export type SiteUpdateHandler = (isLocal: boolean) => Promise<void>
+export type SiteUpdater = () => Promise<SiteData>
+export type SiteUpdateHandler = (isLocal: boolean, siteData: SiteData) => Promise<void>
 
 export type NavTab = {
     name: string;

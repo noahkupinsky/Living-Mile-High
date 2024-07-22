@@ -33,9 +33,12 @@ export class UpdateService {
                 const { message, eventId }: EventObject = JSON.parse(event.data);
                 const isLocal = this.checkLocalAndConsumeEvent(eventId);
 
-                if (message === EventMessage.SITE_UPDATED) {
-                    await this.siteUpdater?.();
-                    this.updateHandlers.forEach(handler => handler(isLocal));
+                if (message === EventMessage.SITE_UPDATED && this.siteUpdater) {
+                    const siteData = await this.siteUpdater();
+                    // create a 1 second delay to allow the site to update
+                    setTimeout(() => {
+                        this.updateHandlers.map(handler => handler(isLocal, siteData));
+                    }, 50)
                 }
             };
 

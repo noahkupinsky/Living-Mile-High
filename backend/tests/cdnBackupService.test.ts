@@ -1,6 +1,6 @@
 import { BackupType } from "living-mile-high-lib";
 import { BackupService, CdnAdapter, GeneralDataService, HouseService } from "~/@types";
-import { ContentCategory, ContentType, BACKUP_LOGARITHMIC_BASE as BASE } from "~/@types/constants";
+import { ContentCategory, ContentType, BackupConfig } from "~/@types/constants";
 import { services } from "~/di";
 import { inMemoryCdn } from "~/utils/inMemoryCdn";
 import { prefixKey } from "~/utils/misc";
@@ -13,6 +13,8 @@ let generalDataService: GeneralDataService;
 beforeAll(() => {
     ({ backupService, cdnAdapter, houseService, generalDataService } = services());
 });
+
+const BASE = BackupConfig.LOGARITHMIC_BASE;
 
 describe("backup service", () => {
     test('getBackupIndices should get backup indices correctly', async () => {
@@ -310,7 +312,7 @@ describe('backup consolidation', () => {
     // Test consolidating multiple levels of backups
     test('consolidateAutoBackups should handle multiple consolidation levels', async () => {
         const backupKeys = [];
-        for (let i = 1; i <= BASE * 2; i++) {
+        for (let i = 1; i <= BASE * BASE; i++) {
             backupKeys.push(await createBackup(`backup-${i}`, i * 1000, 0));
         }
 
@@ -320,11 +322,9 @@ describe('backup consolidation', () => {
         // Expect two consolidated backups with power 1
         const keys = Object.keys(inMemoryCdn);
         const consolidatedBackup1 = inMemoryCdn[keys[0]];
-        const consolidatedBackup2 = inMemoryCdn[keys[1]];
 
-        expect(consolidatedBackup1.metadata.backupPower).toBe('1');
-        expect(consolidatedBackup2.metadata.backupPower).toBe('1');
-        expect(keys.length).toBe(2);
+        expect(keys.length).toBe(1);
+        expect(consolidatedBackup1.metadata.backupPower).toBe('2');
     });
 
     // Test handling previously consolidated backups

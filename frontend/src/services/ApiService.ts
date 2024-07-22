@@ -24,7 +24,8 @@ import {
     UpsertHouseRequest,
     UpsertHouseResponse,
     VerifyResponse,
-    createUploadAssetRequest
+    createUploadAssetRequest,
+    PruneSiteResponse
 } from 'living-mile-high-lib';
 import { env } from 'next-runtime-env';
 
@@ -58,6 +59,17 @@ export class ApiService {
             return resBody.url!;
         } else {
             throw new Error('Failed to upload asset');
+        }
+    }
+
+    async pruneSiteData(): Promise<void> {
+        const response = await this.apiAxios.post('prune');
+        const resBody: PruneSiteResponse = response.data;
+
+        if (response.status === 200 && resBody.success) {
+            return;
+        } else {
+            throw new Error(resBody.error);
         }
     }
 

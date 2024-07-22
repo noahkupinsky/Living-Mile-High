@@ -5,6 +5,7 @@ import assetRouter from './assetRoutes';
 import backupRouter from './backupRoutes';
 import generalDataRouter from './generalDataRoutes';
 import verifyToken from '~/middleware/authMiddleware';
+import { pruneSite } from "~/controllers/updateController";
 
 const router = Router();
 
@@ -18,5 +19,6 @@ router.use('/house', verifyToken, houseRouter);
 router.use('/general', verifyToken, generalDataRouter);
 router.use('/backup', verifyToken, backupRouter);
 router.use('/asset', verifyToken, assetRouter);
+router.post('/prune', verifyToken, pruneSite);
 
 export default router;

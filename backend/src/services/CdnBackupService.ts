@@ -1,7 +1,7 @@
 import { BackupIndex, BackupType } from "living-mile-high-lib";
 import { PriorityQueue } from "typescript-collections";
 import { CdnAdapter, BackupService, StateService, Backup, BackupMetadata } from "~/@types";
-import { BACKUP_LOGARITHMIC_BASE, BACKUP_RETENTION_DAYS, ContentCategory, ContentType } from "~/@types/constants";
+import { BackupConfig, ContentCategory, ContentType } from "~/@types/constants";
 import { createExpirationDate, streamToString } from "~/utils/misc";
 
 type BackupPriority = { key: string; createdAt: Date; backupPower: number }
@@ -90,7 +90,7 @@ export class CdnBackupService implements BackupService {
         const backupData = await this.stateService.serializeState();
         const timestamp = new Date().toISOString();
 
-        const expiration = backupType === BackupType.AUTO ? { expiration: createExpirationDate(BACKUP_RETENTION_DAYS) } : {};
+        const expiration = backupType === BackupType.AUTO ? { expiration: createExpirationDate(BackupConfig.RETENTION_DAYS) } : {};
         const backupName = name || `${timestamp}`;
 
         const metadata: BackupMetadata = {
@@ -144,11 +144,11 @@ export class CdnBackupService implements BackupService {
             const currentPower = backupQueue.peek()!.backupPower;
             const backupsToConsolidate: BackupPriority[] = [];
 
-            while (!backupQueue.isEmpty() && backupQueue.peek()!.backupPower === currentPower && backupsToConsolidate.length < BACKUP_LOGARITHMIC_BASE) {
+            while (!backupQueue.isEmpty() && backupQueue.peek()!.backupPower === currentPower && backupsToConsolidate.length < BackupConfig.LOGARITHMIC_BASE) {
                 backupsToConsolidate.push(backupQueue.dequeue()!);
             }
 
-            if (backupsToConsolidate.length >= BACKUP_LOGARITHMIC_BASE) {
+            if (backupsToConsolidate.length >= BackupConfig.LOGARITHMIC_BASE) {
                 const consolidatedBackup = await this.consolidateBackupSet(backupsToConsolidate);
                 backupQueue.enqueue(consolidatedBackup);
             }
@@ -176,17 +176,19 @@ export class CdnBackupService implements BackupService {
 
     private async createConsolidationPriorityQueue(): Promise<PriorityQueue<BackupPriority>> {
         const backups = await this.getBackups();
-        const automaticBackups = backups.filter(backup => backup.metadata.backupType === BackupType.AUTO);
+        const autoBackups = backups.filter(backup => backup.metadata.backupType === BackupType.AUTO);
+        const nonMaximalAutoBackups = autoBackups.filter(backup => this.getBackupPower(backup) < BackupConfig.MAXIMUM_POWER);
 
         // Create a priority queue to sort backups by date and power
         const backupQueue = new PriorityQueue<BackupPriority>((a, b) => {
             if (a.backupPower !== b.backupPower) {
-                return a.backupPower - b.backupPower;
+                // reversed to consolidate smaller backups first, ensuring maximum consolidation
+                return b.backupPower - a.backupPower;
             }
             return a.createdAt.getTime() - b.createdAt.getTime();
         });
 
-        automaticBackups.forEach(backup => {
+        nonMaximalAutoBackups.forEach(backup => {
             backupQueue.enqueue({
                 key: backup.key,
                 createdAt: new Date(backup.metadata.createdAt!),

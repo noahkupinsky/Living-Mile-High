@@ -108,3 +108,8 @@ export function createUploadAssetRequest(file: File): FormData {
 export type UploadAssetResponse = SuccessResponse & {
     url?: string;
 };
+
+// PRUNE
+
+// is a get route - has no req body
+export type PruneSiteResponse = SuccessResponse;

@@ -1,39 +1,71 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import services from '@/di';
 import { BackupIndex } from 'living-mile-high-lib';
-import { PageContainer } from './StyledBackupComponents';
 import BackupItem from './BackupItem';
-import { LockProvider, useLock } from '@/contexts/LockContext';
 import CreateBackupSection from './CreateBackupSection';
 import { useSiteData } from '@/contexts/SiteDataContext';
+import { SiteUpdateHandler } from '@/types';
 
-const BackupComponent = () => {
-    const { apiService } = services();
+import { Button, YStack, styled } from 'tamagui';
+
+export const PageContainer = styled(YStack, {
+    justifyContent: 'center',
+    space: 'lg',
+});
+
+const DangerButton = styled(Button, {
+    backgroundColor: 'red',
+    color: 'white',
+    fontSize: 18,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    margin: 20,
+    textalign: 'center',
+    cursor: 'pointer',
+    hoverStyle: {
+        backgroundColor: 'darkred',
+    },
+    pressStyle: {
+        backgroundColor: 'maroon',
+    },
+});
+
+const DangerZonePage = () => {
+    const { apiService, updateService } = services();
     const { restoreBackup } = useSiteData();
     const [backups, setBackups] = useState<BackupIndex[]>([]);
     const [newBackupName, setNewBackupName] = useState('');
     const [editingBackupKey, setEditingBackupKey] = useState('');
     const [renameBackupName, setRenameBackupName] = useState('');
 
-    const { isValid } = useLock();
-
-    useEffect(() => {
-        if (!isValid) {
-            alert("Site data update detected. Please reload the page.");
-            window.location.reload();
-        }
-    }, [isValid]);
-
-    const fetchBackups = async () => {
+    const fetchBackups = useCallback(async () => {
         try {
             const backupIndices = await apiService.getBackupIndices();
             setBackups(backupIndices);
         } catch (e) {
             alert(`Failed to fetch backups. ${e}`);
         }
-    };
+    }, [apiService]);
+
+    useEffect(() => {
+        const handleUpdate: SiteUpdateHandler = async (isLocal) => {
+            if (!isLocal) {
+                alert("Someone else just edited the website. Please be patient while we fetch the latest backups.");
+                await fetchBackups();
+            }
+        };
+
+        updateService.addUpdateHandler(handleUpdate);
+
+        return () => {
+            updateService.removeUpdateHandler(handleUpdate);
+        };
+    }, [updateService, fetchBackups]);
+
+
 
     useEffect(() => {
         fetchBackups();
@@ -97,6 +129,27 @@ const BackupComponent = () => {
         }
     };
 
+    const handlePruneSiteData = async () => {
+        const confirm = window.confirm(
+            'Caution! This will remove all expired automatic backups, ' +
+            'and considerably consolidate the remaining automatic backups. ' +
+            'It will then permanently delete all assets (images) that are no ' +
+            'longer used by neither the site nor a backup of the site. ' +
+            'This operation is safe, with regard to the current data on the website. ' +
+            'It will leave manual backups and currently used assets completely untouched. ' +
+            'Are you sure that you want to proceed ? ');
+        if (confirm) {
+            try {
+                await apiService.pruneSiteData();
+                alert('Site data pruned successfully');
+
+                await fetchBackups();
+            } catch (e) {
+                alert(`Failed to prune site data. ${e}`);
+            }
+        }
+    };
+
     return (
         <PageContainer>
             <CreateBackupSection
@@ -127,16 +180,12 @@ const BackupComponent = () => {
                     onDelete={() => handleDeleteBackup(backup.key)}
                 />
             ))}
+
+            <DangerButton onPress={handlePruneSiteData}>
+                Prune Site Data
+            </DangerButton>
         </PageContainer>
     );
 };
 
-const BackupPage = () => {
-    return (
-        <LockProvider>
-            <BackupComponent />
-        </LockProvider>
-    );
-};
-
-export default BackupPage;
+export default DangerZonePage;

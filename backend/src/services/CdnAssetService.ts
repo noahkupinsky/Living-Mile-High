@@ -1,6 +1,6 @@
 import { ImageService, CdnAdapter } from '~/@types';
 import { AssetMetadata, CdnContent } from '~/@types/cdnServices';
-import { ASSSET_RETENTION_DAYS, ContentCategory, ContentType } from '~/@types/constants';
+import { AssetConfig, ContentCategory, ContentType } from '~/@types/constants';
 import { createExpirationDate } from '~/utils/misc';
 
 export class CdnAssetService implements ImageService {
@@ -20,7 +20,7 @@ export class CdnAssetService implements ImageService {
         }
 
         const metadata: AssetMetadata = {
-            expiration: createExpirationDate(ASSSET_RETENTION_DAYS)
+            expiration: createExpirationDate(AssetConfig.RETENTION_DAYS)
         };
 
         try {

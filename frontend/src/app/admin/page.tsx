@@ -74,8 +74,8 @@ const AdminPanel = () => {
         }
     };
 
-    const handleGotoBackups = () => {
-        router.push('/admin/backups');
+    const handleDangerZone = () => {
+        router.push('/admin/danger-zone');
     }
 
     const handleCreateNew = () => {
@@ -113,7 +113,7 @@ const AdminPanel = () => {
                 ))}
             </ListContainer>
 
-            <Button color="red" onPress={handleGotoBackups}>
+            <Button color="red" onPress={handleDangerZone}>
                 Danger Zone
             </Button>
         </YStack>

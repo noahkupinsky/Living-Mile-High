@@ -1,7 +1,39 @@
 import React from 'react';
 import { BackupIndex, BackupType } from 'living-mile-high-lib';
-import { Input, Text } from 'tamagui';
-import { BackupListItem, TitleArea, ButtonArea, StyledButton } from './StyledBackupComponents';
+import { Input, Text, ListItem, XStack, YStack, styled, Button } from 'tamagui';
+
+export const BackupListItem = styled(ListItem, {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 10,
+    width: '100%',
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    marginBottom: 8,
+});
+
+export const TitleArea = styled(XStack, {
+    flex: 1,
+    justifyContent: 'flex-start',
+    overflow: 'hidden',
+    flexGrow: 1,
+    flexShrink: 1,
+});
+
+export const ButtonArea = styled(YStack, {
+    justifyContent: 'flex-end',
+    gap: 5, // Adjusted for smaller padding between buttons
+});
+
+export const StyledButton = styled(Button, {
+    borderRadius: 8,
+    padding: 0,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    size: 20
+});
 
 type BackupItemProps = {
     backup: BackupIndex;

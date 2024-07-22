@@ -6,6 +6,7 @@ import services from '@/di';
 
 type SiteDataContextType = {
     isLoading: boolean;
+    siteData: SiteData | undefined;
     houses: House[];
     generalData: GeneralData | undefined;
     updateGeneralData: (data: DeepPartial<GeneralData>) => Promise<void>
@@ -22,6 +23,7 @@ type SiteDataProviderProps = {
 };
 
 export const SiteDataProvider = ({ children }: SiteDataProviderProps) => {
+    const [siteData, setSiteData] = useState<SiteData | undefined>(undefined);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [generalData, setGeneralData] = useState<GeneralData | undefined>(undefined);
     const [houses, setHouses] = useState<House[]>([]);
@@ -31,10 +33,13 @@ export const SiteDataProvider = ({ children }: SiteDataProviderProps) => {
         try {
             const data: SiteData = await cdnService.fetchSiteData();
             const { houses: newHouses, ...newGeneralData } = data;
+            setSiteData(data);
             setGeneralData(newGeneralData);
             setHouses(newHouses);
+            return data;
         } catch (error) {
             console.error('Failed to fetch site data:', error);
+            throw error;
         } finally {
             setIsLoading(false);
         }
@@ -42,7 +47,7 @@ export const SiteDataProvider = ({ children }: SiteDataProviderProps) => {
 
     useEffect(() => {
         const siteUpdater = async () => {
-            await fetchSiteData();
+            return await fetchSiteData();
         };
 
         fetchSiteData();
@@ -82,6 +87,7 @@ export const SiteDataProvider = ({ children }: SiteDataProviderProps) => {
 
     return (
         <SiteDataContext.Provider value={{
+            siteData,
             generalData,
             houses,
             isLoading,
