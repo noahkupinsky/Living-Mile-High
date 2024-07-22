@@ -1,14 +1,13 @@
 'use client'
 
 import React, { createContext, useState, useEffect, useContext, useCallback } from 'react';
-import { DeepPartial, EventMessage, EventObject, GeneralData, generateEventId, House, SiteData } from 'living-mile-high-lib';
+import { DeepPartial, GeneralData, House, SiteData } from 'living-mile-high-lib';
 import services from '@/di';
 
 type SiteDataContextType = {
     isLoading: boolean;
     houses: House[];
     generalData: GeneralData | undefined;
-    foreignEventId: string | undefined;
     updateGeneralData: (data: DeepPartial<GeneralData>) => Promise<void>
     upsertHouse: (house: DeepPartial<House>) => Promise<string>
     deleteHouse: (id: string) => Promise<void>
@@ -26,9 +25,7 @@ export const SiteDataProvider = ({ children }: SiteDataProviderProps) => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [generalData, setGeneralData] = useState<GeneralData | undefined>(undefined);
     const [houses, setHouses] = useState<House[]>([]);
-    const [localEventIds, setLocalEventIds] = useState<string[]>([]);
-    const [foreignEventId, setForeignEventId] = useState<string | undefined>(undefined);
-    const { eventService, cdnService, apiService } = services();
+    const { updateService, cdnService, apiService } = services();
 
     const fetchSiteData = useCallback(async () => {
         try {
@@ -44,36 +41,25 @@ export const SiteDataProvider = ({ children }: SiteDataProviderProps) => {
     }, [cdnService]);
 
     useEffect(() => {
-        const handleEvent = (data: any) => {
-            const { message, eventId }: EventObject = data;
-            if (message === EventMessage.SITE_UPDATED) {
-                if (eventId) {
-                    if (localEventIds.includes(eventId)) {
-                        setLocalEventIds(prevIds => prevIds.filter(id => id !== eventId));
-                    } else {
-                        setForeignEventId(eventId);
-                    }
-                }
-                fetchSiteData();
-            }
+        const siteUpdater = async () => {
+            await fetchSiteData();
         };
 
         fetchSiteData();
 
-        eventService.addEventHandler(handleEvent);
+        updateService.setSiteUpdater(siteUpdater);
 
         return () => {
-            eventService.removeEventHandler(handleEvent);
+            updateService.unsetSiteUpdater();
         };
-    }, [fetchSiteData, eventService, localEventIds]);
+    }, [fetchSiteData, updateService]);
 
     const withEventId = async <T extends any>(fn: (eventId: string) => Promise<T>): Promise<T> => {
-        const id = generateEventId();
-        setLocalEventIds(prevIds => [...prevIds, id]);
+        const id = updateService.expectEvent();
         try {
             return await fn(id);
         } catch (error) {
-            setLocalEventIds(prevIds => prevIds.filter(id => id !== id));
+            updateService.rejectEvent(id);
             throw error;
         }
     }
@@ -99,7 +85,6 @@ export const SiteDataProvider = ({ children }: SiteDataProviderProps) => {
             generalData,
             houses,
             isLoading,
-            foreignEventId,
             updateGeneralData,
             upsertHouse,
             deleteHouse,

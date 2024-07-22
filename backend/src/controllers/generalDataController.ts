@@ -7,8 +7,7 @@ const generalDataService = () => services().generalDataService;
 
 export const updateGeneralData: ExpressEndpoint = async (req, res) => {
     const body: UpdateGeneralDataRequest = req.body;
-    const { data, eventId: optionalEventId } = body;
-    const eventId = generateEventId(optionalEventId);
+    const { data, eventId } = body;
 
     try {
         await generalDataService().update(data);

@@ -6,6 +6,7 @@ import HouseFormBooleans from './HouseFormBooleans';
 import HouseFormStats from './HouseFormStats';
 import HouseFormImages from './HouseFormImages';
 import HouseFormText from './HouseFormText';
+import { LockProvider } from '@/contexts/LockContext';
 
 const FormContainer = styled(View, {
     display: 'flex',
@@ -61,25 +62,35 @@ const HouseForm: React.FC<{ house?: House }> = ({ house }) => {
         }
     };
 
+    const getter = () => {
+        if (!formData.id) {
+            return null;
+        } else {
+            return houses.find(house => house.id === formData.id);
+        }
+    }
+
     return (
-        <FormContainer>
-            <ColumnsContainer>
-                <LeftColumn>
-                    <HouseFormText formData={formData} setFormData={setFormData} houses={houses} />
-                    <HouseFormImages
-                        formData={formData}
-                        setFormData={setFormData}
-                        isModalOpen={isModalOpen}
-                        setIsModalOpen={setIsModalOpen}
-                    />
-                </LeftColumn>
-                <RightColumn>
-                    <HouseFormStats formData={formData} setFormData={setFormData} />
-                    <HouseFormBooleans formData={formData} setFormData={setFormData} />
-                </RightColumn>
-            </ColumnsContainer>
-            <Button onPress={handleFormSubmit}>Submit</Button>
-        </FormContainer>
+        <LockProvider getter={getter}>
+            <FormContainer>
+                <ColumnsContainer>
+                    <LeftColumn>
+                        <HouseFormText formData={formData} setFormData={setFormData} houses={houses} />
+                        <HouseFormImages
+                            formData={formData}
+                            setFormData={setFormData}
+                            isModalOpen={isModalOpen}
+                            setIsModalOpen={setIsModalOpen}
+                        />
+                    </LeftColumn>
+                    <RightColumn>
+                        <HouseFormStats formData={formData} setFormData={setFormData} />
+                        <HouseFormBooleans formData={formData} setFormData={setFormData} />
+                    </RightColumn>
+                </ColumnsContainer>
+                <Button onPress={handleFormSubmit}>Submit</Button>
+            </FormContainer>
+        </LockProvider>
     );
 };
 

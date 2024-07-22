@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import HouseForm from './HouseForm';
 import { useSiteData } from '@/contexts/SiteDataContext';
 import { House } from 'living-mile-high-lib';
+import { LockProvider } from '@/contexts/LockContext';
 
 const HouseFormPage: React.FC = () => {
     const searchParams = useSearchParams();

@@ -92,7 +92,7 @@ const BackupComponent = () => {
 
                 await fetchBackups();
             } catch (e) {
-                alert(`Failed to delete backup. ${e}`);
+                alert(`Failed to restore backup. ${e}`);
             }
         }
     };

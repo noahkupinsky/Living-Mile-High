@@ -5,7 +5,7 @@ import { sendEventMessage } from "./eventController";
 
 // INTERMEDIATE, NOT A ROUTE
 
-export async function updateSite(eventId: string) {
+export async function updateSite(eventId?: string) {
     await updateFixedKeys();
     await createPruneConsolidateAutoBackups();
     await pruneAssets();

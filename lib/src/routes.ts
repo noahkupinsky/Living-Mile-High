@@ -1,5 +1,6 @@
-import uuid from "uuid";
+import { v4 as uuidv4 } from "uuid";
 import { BackupIndex, DeepPartial, GeneralData, House } from "./types";
+import { EventMessage } from "./defaults";
 
 export type SuccessResponse = {
     success: boolean;
@@ -11,12 +12,12 @@ export type SiteUpdateRequest = {
 }
 
 export function generateEventId(eventId?: string): string {
-    return eventId ? eventId : uuid.v4();
+    return eventId ? eventId : uuidv4();
 }
 
 export type EventObject = {
-    message: string;
-    eventId?: string;
+    message: EventMessage;
+    eventId: string;
 }
 
 // AUTH

@@ -1,7 +1,8 @@
 'use client'
 
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import { useSiteData } from '@/contexts/SiteDataContext';
+import { SiteUpdateHandler } from '@/types';
+import services from '@/di';
 
 type LockContextType = {
     isValid: boolean;
@@ -15,21 +16,30 @@ type LockProviderProps = {
 };
 
 export const LockProvider = ({ children, getter }: LockProviderProps) => {
-    const { foreignEventId } = useSiteData();
     const [isValid, setIsValid] = useState<boolean>(true);
-
-    const [initialState] = useState(getter ? getter() : null);
-    const [initialForeignEventId] = useState(foreignEventId);
+    const { updateService } = services();
+    const [lockedState, setLockedState] = useState(getter ? getter() : null);
 
     useEffect(() => {
-        const foreignEventOccurred = foreignEventId !== initialForeignEventId;
-        const newState = getter ? getter() : null;
-        const stateChanged = foreignEventOccurred && (!getter || initialState !== newState);
+        const handleUpdate: SiteUpdateHandler = async (isLocal) => {
+            if (isLocal) {
+                if (getter) {
+                    setLockedState(getter());
+                }
+            } else {
+                const stateChanged = !getter || getter() !== lockedState;
+                if (stateChanged) {
+                    setIsValid(false);
+                }
+            }
+        };
 
-        if (stateChanged) {
-            setIsValid(false);
-        }
-    }, [getter, foreignEventId, initialForeignEventId, initialState]);
+        updateService.addUpdateHandler(handleUpdate);
+
+        return () => {
+            updateService.removeUpdateHandler(handleUpdate);
+        };
+    }, [getter, lockedState, updateService]);
 
     return (
         <LockContext.Provider value={{ isValid }}>

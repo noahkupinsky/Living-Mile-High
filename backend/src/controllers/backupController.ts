@@ -64,8 +64,7 @@ export const renameManualBackup: ExpressEndpoint = async (req, res) => {
 
 export const restoreBackup: ExpressEndpoint = async (req, res) => {
     const body: RestoreBackupRequest = req.body;
-    const { key, eventId: optionalEventId } = body;
-    const eventId = generateEventId(optionalEventId);
+    const { key, eventId } = body;
 
     try {
         await backupService().restoreBackup(key);

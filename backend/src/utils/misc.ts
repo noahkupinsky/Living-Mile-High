@@ -1,5 +1,5 @@
 import axios from "axios";
-import { EventMessage, EventObject, GeneralData, House, SiteData } from "living-mile-high-lib";
+import { EventMessage, EventObject, GeneralData, generateEventId, House, SiteData } from "living-mile-high-lib";
 import { Readable } from "stream";
 import { CdnMetadata } from "~/@types";
 import { ContentCategory, ContentType } from "~/@types/constants";
@@ -63,7 +63,10 @@ export async function downloadImage(url: string): Promise<{ buffer: Buffer, cont
 }
 
 export function createEventObjectString(message: EventMessage, eventId?: string): string {
-    const eventObject: EventObject = eventId ? { eventId, message } : { message };
+    const eventObject = {
+        message: message,
+        eventId: (eventId || generateEventId())
+    }
     return JSON.stringify(eventObject);
 }
 

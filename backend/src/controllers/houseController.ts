@@ -7,8 +7,7 @@ const houseService = () => services().houseService;
 
 export const upsertHouse: ExpressEndpoint = async (req, res) => {
     const body: UpsertHouseRequest = req.body;
-    const { house, eventId: optionalEventId } = body;
-    const eventId = generateEventId(optionalEventId);
+    const { house, eventId } = body;
 
     try {
         const id = await houseService().upsertHouse(house);
@@ -25,8 +24,7 @@ export const upsertHouse: ExpressEndpoint = async (req, res) => {
 
 export const deleteHouse: ExpressEndpoint = async (req, res) => {
     const body: DeleteHouseRequest = req.body;
-    const { id, eventId: optionalEventId } = body;
-    const eventId = generateEventId(optionalEventId);
+    const { id, eventId } = body;
 
     try {
         const success = await houseService().deleteHouse(id);

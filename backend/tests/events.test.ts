@@ -1,5 +1,5 @@
 import WebSocket from 'ws';
-import { EventMessage } from "living-mile-high-lib";
+import { EventMessage, EventObject } from "living-mile-high-lib";
 import { startListening, stopListening } from "./utils";
 import { sendEventMessage } from "~/controllers/eventController";
 import { createEventObjectString } from '~/utils/misc';
@@ -60,7 +60,8 @@ describe('WebSocket /events/connect', () => {
             done,
             timeout,
             (data: any, close) => {
-                expect(data).toEqual(createEventObjectString(EventMessage.CONNECTED));
+                const { message }: EventObject = JSON.parse(data);
+                expect(message).toEqual(EventMessage.CONNECTED);
                 close();
             }
         );
@@ -68,6 +69,8 @@ describe('WebSocket /events/connect', () => {
 
     it('should send event messages', (done) => {
         const ws = new WebSocket(`${url}/events`);
+
+        const testEventId = 'test-event-id';
 
         let receivedInitialMessage = false;
 
@@ -78,14 +81,16 @@ describe('WebSocket /events/connect', () => {
             done,
             timeout,
             (data: any, close) => {
+                const { message, eventId }: EventObject = JSON.parse(data);
                 if (!receivedInitialMessage) {
-                    expect(data).toBe(createEventObjectString(EventMessage.CONNECTED));
+                    expect(message).toBe(EventMessage.CONNECTED);
                     receivedInitialMessage = true;
 
                     // Send the custom event message after receiving the initial message
-                    sendEventMessage(EventMessage.SITE_UPDATED, 'test-event-id');
+                    sendEventMessage(EventMessage.SITE_UPDATED, testEventId);
                 } else {
-                    expect(data).toEqual(createEventObjectString(EventMessage.SITE_UPDATED, 'test-event-id'));
+                    expect(message).toBe(EventMessage.SITE_UPDATED);
+                    expect(eventId).toBe(testEventId);
                     close();
                 }
             }
