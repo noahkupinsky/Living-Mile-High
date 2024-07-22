@@ -26,7 +26,8 @@ import {
     UpsertHouseResponse,
     VerifyResponse,
     createUploadAssetRequest,
-    PruneSiteResponse
+    PruneSiteResponse,
+    PruneSiteRequest
 } from 'living-mile-high-lib';
 import { env } from 'next-runtime-env';
 
@@ -67,12 +68,15 @@ export class ApiService {
     }
 
     async pruneSiteData(): Promise<void> {
-        const response = await this.apiAxios.post('prune');
-        const resBody: PruneSiteResponse = response.data;
+        return await this.injectEventId(async eventId => {
+            const req: PruneSiteRequest = { eventId };
+            const response = await this.apiAxios.post('prune', req);
+            const resBody: PruneSiteResponse = response.data;
 
-        if (response.status !== 200 || !resBody.success) {
-            throw new Error(resBody.error);
-        }
+            if (response.status !== 200 || !resBody.success) {
+                throw new Error(resBody.error);
+            }
+        });
     }
 
     async updateGeneralData(data: DeepPartial<GeneralData>): Promise<void> {
@@ -126,23 +130,27 @@ export class ApiService {
     }
 
     async deleteBackup(key: string): Promise<void> {
-        const req: DeleteBackupRequest = { key };
-        const response = await this.apiAxios.post('backup/delete', req);
-        const resBody: DeleteBackupResponse = response.data;
+        return await this.injectEventId(async eventId => {
+            const req: DeleteBackupRequest = { key, eventId };
+            const response = await this.apiAxios.post('backup/delete', req);
+            const resBody: DeleteBackupResponse = response.data;
 
-        if (response.status !== 200 || !resBody.success) {
-            throw new Error(resBody.error);
-        }
+            if (response.status !== 200 || !resBody.success) {
+                throw new Error(resBody.error);
+            }
+        });
     }
 
     async createBackup(name: string): Promise<void> {
-        const req: CreateBackupRequest = { name };
-        const response = await this.apiAxios.post('backup/create', req);
-        const resBody: CreateBackupResponse = response.data;
+        return await this.injectEventId(async eventId => {
+            const req: CreateBackupRequest = { name, eventId };
+            const response = await this.apiAxios.post('backup/create', req);
+            const resBody: CreateBackupResponse = response.data;
 
-        if (response.status !== 200 || !resBody.success) {
-            throw new Error(resBody.error);
-        }
+            if (response.status !== 200 || !resBody.success) {
+                throw new Error(resBody.error);
+            }
+        });
     }
 
     async getBackupIndices(): Promise<BackupIndex[]> {
@@ -157,13 +165,15 @@ export class ApiService {
     }
 
     async renameBackup(key: string, name: string): Promise<void> {
-        const req: RenameBackupRequest = { key, name };
-        const response = await this.apiAxios.post('backup/rename', req);
-        const resBody: RenameBackupResponse = response.data;
+        return await this.injectEventId(async eventId => {
+            const req: RenameBackupRequest = { key, name, eventId };
+            const response = await this.apiAxios.post('backup/rename', req);
+            const resBody: RenameBackupResponse = response.data;
 
-        if (response.status !== 200 || !resBody.success) {
-            throw new Error(resBody.error);
-        }
+            if (response.status !== 200 || !resBody.success) {
+                throw new Error(resBody.error);
+            }
+        });
     }
 
     async verifyAuthenticated(): Promise<boolean> {

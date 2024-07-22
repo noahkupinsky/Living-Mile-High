@@ -73,7 +73,6 @@ export const restoreBackup: ExpressEndpoint = async (req, res) => {
     try {
         await backupService().restoreBackup(key);
         await updateSite(eventId);
-        sendBackupsUpdatedEvent(eventId);
 
         const successResponse: RestoreBackupResponse = { success: true };
         res.json(successResponse);

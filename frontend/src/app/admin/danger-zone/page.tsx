@@ -53,7 +53,11 @@ const DangerZonePage = () => {
         const handler: SiteEventHandler = async (event, isLocal) => {
             if (event.messages.includes(EventMessage.BACKUPS_UPDATED)) {
                 if (!isLocal) {
-                    alert("Another admin just completed an action that affected the site's backups. It is strongly advised that you avoid doing any Danger Zone operations while another admin is working, to avoid overwriting their work.");
+                    alert("Another admin just completed an action that affected the site's backups. " +
+                        "It is strongly advised that you avoid doing any Danger Zone operations " +
+                        "while another admin is working, to avoid overwriting their work. " +
+                        "The updated backups will now be fetched."
+                    );
                 }
                 await fetchBackups();
             }
