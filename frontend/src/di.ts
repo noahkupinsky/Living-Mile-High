@@ -1,3 +1,4 @@
+import { generateEventId } from 'living-mile-high-lib';
 import * as Services from './services';
 
 let serviceDict: {
@@ -8,10 +9,10 @@ let serviceDict: {
 
 const services = () => {
     if (!serviceDict) {
-        const eventService = new Services.EventService();
+        const localEventId = generateEventId();
         serviceDict = {
-            apiService: new Services.ApiService(eventService.injectEventId),
-            eventService: eventService,
+            apiService: new Services.ApiService(localEventId),
+            eventService: new Services.EventService(localEventId),
             cdnService: new Services.CdnService()
         };
     }

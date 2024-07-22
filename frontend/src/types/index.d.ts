@@ -12,7 +12,6 @@ export type Services = {
 
 export type SiteEventHandler = (event: EventObject, isLocal: boolean) => Promise<void>;
 export type SiteUpdateHandler = (isLocal: boolean, siteData: SiteData) => Promise<void>
-export type EventIdInjector = <T>(fn: (eventId: string) => Promise<T>) => Promise<T>
 
 export type NavTab = {
     name: string;

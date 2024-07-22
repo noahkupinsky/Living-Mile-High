@@ -1,6 +1,4 @@
 'use client';
-
-import { EventIdInjector } from '@/types';
 import axios, { AxiosInstance } from 'axios';
 import {
     BackupIndex,
@@ -35,15 +33,15 @@ const backendUrl = () => env('NEXT_PUBLIC_BACKEND_URL')!;
 
 export class ApiService {
     private apiAxios: AxiosInstance;
-    private injectEventId: EventIdInjector;
+    private localEventId: string;
 
-    constructor(injectEventId: EventIdInjector) {
+    constructor(localEventId: string) {
         this.apiAxios = axios.create({
             baseURL: `${backendUrl()}/api`,
             withCredentials: true
         });
 
-        this.injectEventId = injectEventId;
+        this.localEventId = localEventId;
     }
 
     backendRouteToUrl(route: string): string {
@@ -68,89 +66,75 @@ export class ApiService {
     }
 
     async pruneSiteData(): Promise<void> {
-        return await this.injectEventId(async eventId => {
-            const req: PruneSiteRequest = { eventId };
-            const response = await this.apiAxios.post('prune', req);
-            const resBody: PruneSiteResponse = response.data;
+        const req: PruneSiteRequest = { eventId: this.localEventId };
+        const response = await this.apiAxios.post('prune', req);
+        const resBody: PruneSiteResponse = response.data;
 
-            if (response.status !== 200 || !resBody.success) {
-                throw new Error(resBody.error);
-            }
-        });
+        if (response.status !== 200 || !resBody.success) {
+            throw new Error(resBody.error);
+        }
     }
 
     async updateGeneralData(data: DeepPartial<GeneralData>): Promise<void> {
-        return await this.injectEventId(async eventId => {
-            const req: UpdateGeneralDataRequest = { data, eventId };
-            const response = await this.apiAxios.post('general/update', req);
-            const resBody: UpdateGeneralDataResponse = response.data;
+        const req: UpdateGeneralDataRequest = { data, eventId: this.localEventId };
+        const response = await this.apiAxios.post('general/update', req);
+        const resBody: UpdateGeneralDataResponse = response.data;
 
-            if (response.status !== 200 || !resBody.success) {
-                throw new Error(resBody.error);
-            }
-        });
+        if (response.status !== 200 || !resBody.success) {
+            throw new Error(resBody.error);
+        }
     }
 
     async upsertHouse(house: DeepPartial<House>): Promise<string> {
-        return await this.injectEventId(async eventId => {
-            const req: UpsertHouseRequest = { house, eventId };
-            const response = await this.apiAxios.post('house/upsert', req);
-            const resBody: UpsertHouseResponse = response.data;
+        const req: UpsertHouseRequest = { house, eventId: this.localEventId };
+        const response = await this.apiAxios.post('house/upsert', req);
+        const resBody: UpsertHouseResponse = response.data;
 
-            if (response.status === 200 && resBody.success) {
-                return resBody.id!;
-            } else {
-                throw new Error(resBody.error);
-            }
-        });
+        if (response.status === 200 && resBody.success) {
+            return resBody.id!;
+        } else {
+            throw new Error(resBody.error);
+        }
     }
 
     async deleteHouse(id: string): Promise<void> {
-        return await this.injectEventId(async eventId => {
-            const req: DeleteHouseRequest = { id, eventId };
-            const response = await this.apiAxios.post('house/delete', req);
-            const resBody: DeleteHouseResponse = response.data;
+        const req: DeleteHouseRequest = { id, eventId: this.localEventId };
+        const response = await this.apiAxios.post('house/delete', req);
+        const resBody: DeleteHouseResponse = response.data;
 
-            if (response.status !== 200 || !resBody.success) {
-                throw new Error(resBody.error);
-            }
-        });
+        if (response.status !== 200 || !resBody.success) {
+            throw new Error(resBody.error);
+        }
     }
 
     async restoreBackup(key: string): Promise<void> {
-        return await this.injectEventId(async eventId => {
-            const req: RestoreBackupRequest = { key, eventId };
-            const response = await this.apiAxios.post('backup/restore', req);
-            const resBody: RestoreBackupResponse = response.data;
+        const req: RestoreBackupRequest = { key, eventId: this.localEventId };
+        const response = await this.apiAxios.post('backup/restore', req);
+        const resBody: RestoreBackupResponse = response.data;
 
-            if (response.status !== 200 || !resBody.success) {
-                throw new Error(resBody.error);
-            }
-        });
+        if (response.status !== 200 || !resBody.success) {
+            throw new Error(resBody.error);
+        }
     }
 
     async deleteBackup(key: string): Promise<void> {
-        return await this.injectEventId(async eventId => {
-            const req: DeleteBackupRequest = { key, eventId };
-            const response = await this.apiAxios.post('backup/delete', req);
-            const resBody: DeleteBackupResponse = response.data;
+        const req: DeleteBackupRequest = { key, eventId: this.localEventId };
+        const response = await this.apiAxios.post('backup/delete', req);
+        const resBody: DeleteBackupResponse = response.data;
 
-            if (response.status !== 200 || !resBody.success) {
-                throw new Error(resBody.error);
-            }
-        });
+        if (response.status !== 200 || !resBody.success) {
+            throw new Error(resBody.error);
+        }
     }
 
     async createBackup(name: string): Promise<void> {
-        return await this.injectEventId(async eventId => {
-            const req: CreateBackupRequest = { name, eventId };
-            const response = await this.apiAxios.post('backup/create', req);
-            const resBody: CreateBackupResponse = response.data;
+        const req: CreateBackupRequest = { name, eventId: this.localEventId };
+        const response = await this.apiAxios.post('backup/create', req);
+        const resBody: CreateBackupResponse = response.data;
 
-            if (response.status !== 200 || !resBody.success) {
-                throw new Error(resBody.error);
-            }
-        });
+        if (response.status !== 200 || !resBody.success) {
+            throw new Error(resBody.error);
+        }
     }
 
     async getBackupIndices(): Promise<BackupIndex[]> {
@@ -165,15 +149,13 @@ export class ApiService {
     }
 
     async renameBackup(key: string, name: string): Promise<void> {
-        return await this.injectEventId(async eventId => {
-            const req: RenameBackupRequest = { key, name, eventId };
-            const response = await this.apiAxios.post('backup/rename', req);
-            const resBody: RenameBackupResponse = response.data;
+        const req: RenameBackupRequest = { key, name, eventId: this.localEventId };
+        const response = await this.apiAxios.post('backup/rename', req);
+        const resBody: RenameBackupResponse = response.data;
 
-            if (response.status !== 200 || !resBody.success) {
-                throw new Error(resBody.error);
-            }
-        });
+        if (response.status !== 200 || !resBody.success) {
+            throw new Error(resBody.error);
+        }
     }
 
     async verifyAuthenticated(): Promise<boolean> {

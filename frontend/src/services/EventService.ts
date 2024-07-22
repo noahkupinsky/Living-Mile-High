@@ -1,7 +1,7 @@
 'use client';
 
-import { EventIdInjector, SiteEventHandler } from '@/types';
-import { EventObject, generateEventId } from 'living-mile-high-lib';
+import { SiteEventHandler } from '@/types';
+import { EventObject } from 'living-mile-high-lib';
 import { env } from 'next-runtime-env';
 
 const backendUrl = () => env('NEXT_PUBLIC_BACKEND_URL')!;
@@ -9,7 +9,11 @@ const backendUrl = () => env('NEXT_PUBLIC_BACKEND_URL')!;
 export class EventService {
     private websocket: WebSocket | null = null;
     private eventHandlers: SiteEventHandler[] = [];
-    private expectedEventIds: string[] = [];
+    private localEventId: string;
+
+    constructor(localEventId: string) {
+        this.localEventId = localEventId;
+    }
 
     private getConnectUrl() {
         const url = backendUrl();
@@ -30,7 +34,7 @@ export class EventService {
 
             this.websocket.onmessage = async (event) => {
                 const eventObject: EventObject = JSON.parse(event.data);
-                const isLocal = this.checkLocalAndConsumeEvent(eventObject.eventId);
+                const isLocal = eventObject.eventId === this.localEventId;
 
                 this.eventHandlers.map(handler => handler(eventObject, isLocal));
             };
@@ -44,25 +48,6 @@ export class EventService {
             this.websocket.onclose = () => {
                 this.websocket = null; // Reset the websocket so it can be recreated
             };
-        }
-    }
-
-    private checkLocalAndConsumeEvent(eventId: string): boolean {
-        const isLocal = this.expectedEventIds.includes(eventId);
-        if (isLocal) {
-            this.expectedEventIds = this.expectedEventIds.filter(id => id !== eventId);
-        }
-        return isLocal;
-    }
-
-    injectEventId: EventIdInjector = async (fn) => {
-        const eventId = generateEventId();
-        this.expectedEventIds.push(eventId);
-        try {
-            return await fn(eventId);
-        } catch (error) {
-            this.expectedEventIds = this.expectedEventIds.filter(id => id !== eventId);
-            throw error;
         }
     }
 
