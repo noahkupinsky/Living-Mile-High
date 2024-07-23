@@ -28,3 +28,10 @@ export const LOGIN_SEQUENCE = [
     'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
     'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight'
 ];
+
+export const THEME_SEQUENCE = [
+    'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight',
+    'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown'
+];
+
+export const SPLIT_CHAR = '$';

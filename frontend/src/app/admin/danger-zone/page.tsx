@@ -22,7 +22,7 @@ const DangerButton = styled(Button, {
     paddingHorizontal: 20,
     borderRadius: 5,
     margin: 20,
-    textalign: 'center',
+    alignItems: 'center',
     cursor: 'pointer',
     hoverStyle: {
         backgroundColor: 'darkred',

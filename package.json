@@ -19,6 +19,9 @@
     "concurrently": "^8.2.2"
   },
   "dependencies": {
+    "@tamagui/animate-presence": "^1.104.0",
+    "@tamagui/animations-css": "^1.104.0",
+    "@tamagui/animations-moti": "^1.104.0",
     "@tamagui/next-plugin": "^1.102.3",
     "@tamagui/switch": "^1.102.3"
   }

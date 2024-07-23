@@ -35,7 +35,7 @@ const ForSaleComponent = () => {
         <>
             <ForSaleHouseColumn
                 houses={houses}
-                imageWidth={400}
+                imageWidth={800}
                 textWidth={300}
                 onClick={handleImageClick}
             />

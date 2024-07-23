@@ -34,7 +34,7 @@ const SelectedWorkComponent: React.FC = () => {
     return (
         <>
             <SelectedWorkDisplay
-                width={300}
+                width={500}
                 houses={houses}
                 onClick={handleImageClick}
             />

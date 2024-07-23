@@ -4,7 +4,7 @@ import '@tamagui/core/reset.css'
 import '@tamagui/font-inter/css/400.css'
 import '@tamagui/font-inter/css/700.css'
 import '@tamagui/polyfill-dev'
-import '../styles/globals.css'
+
 import { ReactNode } from 'react'
 import { StyleSheet } from 'react-native'
 import { useServerInsertedHTML } from 'next/navigation'
@@ -39,7 +39,6 @@ export const NextTamaguiProvider = ({ children }: { children: ReactNode }) => {
     return (
         <NextThemeProvider
             skipNextHead
-            // change default theme (system) here:
             defaultTheme="light"
             onChangeTheme={(next) => {
                 setTheme(next as any)

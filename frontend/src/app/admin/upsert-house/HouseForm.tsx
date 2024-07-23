@@ -55,6 +55,7 @@ const HouseForm: React.FC<{ house?: House }> = ({ house }) => {
             alert('House update detected. Repopulating house form...');
         }
         setFormData(newHouse);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [houses]);
 
     const handleFormSubmit = async () => {

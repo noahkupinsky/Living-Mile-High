@@ -2,12 +2,13 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { Button, View, Text, styled, YStack } from 'tamagui';
-import { useSiteData } from '@/contexts/SiteDataContext';
+import { Button, View, Text, styled, YStack, Label, Input, XStack, Select } from 'tamagui';
 import services from '@/di';
 import { House } from 'living-mile-high-lib';
+import { HouseQueryProvider, useHouseQuery } from '@/contexts/HouseQueryContext';
+import { HouseSort } from '@/types';
 
-const COLUMNS = 3; // Define the number of columns here
+const COLUMNS = 2; // Define the number of columns here
 
 const ListContainer = styled(View, {
     padding: 20,
@@ -22,13 +23,22 @@ const ColumnContainer = styled(View, {
     marginRight: 10,
 });
 
+const MainButtonsContainer = styled(XStack, {
+    justifyContent: 'center',
+    gap: 10,
+})
 
-export const ButtonArea = styled(YStack, {
+const QueryContainer = styled(XStack, {
+    justifyContent: 'space-between',
+    marginBottom: 20,
+})
+
+const HouseButtonArea = styled(YStack, {
     justifyContent: 'flex-end',
     gap: 5, // Adjusted for smaller padding between buttons
 });
 
-export const StyledButton = styled(Button, {
+const StyledButton = styled(Button, {
     borderRadius: 8,
     paddingHorizontal: 8,
     borderWidth: 1,
@@ -53,10 +63,32 @@ const HouseAddress = styled(Text, {
     marginRight: 50,
 });
 
+const FormLabelContainer = styled(View, {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+});
+
+const FormLabelText = styled(Label, {
+    marginBottom: 5,
+    fontWeight: 'bold',
+});
+
+const FormLabel = ({ children }: { children: React.ReactNode }) => (
+    <FormLabelContainer>
+        <FormLabelText>{children}</FormLabelText>
+    </FormLabelContainer>
+)
+
+const TextInput = styled(Input, {
+    flex: 1,
+});
+
 const AdminPanel = () => {
     const router = useRouter();
     const { apiService } = services();
-    const { houses } = useSiteData();
+    const { houses, setQuery, sort, setSort } = useHouseQuery();
 
     const handleEdit = (id: string) => {
         router.push(`admin/upsert-house?id=${id}`);
@@ -74,6 +106,10 @@ const AdminPanel = () => {
             alert(`An error occurred while deleting the house with ID: ${id}. Please try again.`);
         }
     };
+
+    const handleAddressQuery = (address: string) => {
+        setQuery(query => ({ ...query, addressContains: address }));
+    }
 
     const handleDangerZone = () => {
         router.push('/admin/danger-zone');
@@ -95,37 +131,76 @@ const AdminPanel = () => {
         return columns;
     };
 
+    const handleSortChange = (value: HouseSort) => {
+        setSort(value);
+    };
+
     const columns = getColumns(houses);
 
     return (
         <YStack justifyContent="center" alignItems="center">
-            <Button marginBottom={20} color="blue" onPress={handleGeneralData}>
-                Edit General Data
-            </Button>
-            <Button color="#0a8" onPress={handleCreateNew}>
-                Create New House
-            </Button>
+            <MainButtonsContainer>
+                <Button marginBottom={20} color="blue" onPress={handleGeneralData}>
+                    Edit General Data
+                </Button>
+                <Button color="#0a8" onPress={handleCreateNew}>
+                    Create New House
+                </Button>
+                <Button color="red" onPress={handleDangerZone}>
+                    Danger Zone
+                </Button>
+            </MainButtonsContainer>
+            <QueryContainer width={'70%'}>
+                <YStack>
+                    <FormLabel>Filter By Address</FormLabel>
+                    <TextInput
+                        placeholder="Enter address"
+                        onChangeText={handleAddressQuery}
+                    />
+                </YStack>
+                <YStack>
+                    <FormLabel>Sort by:</FormLabel>
+                    <Select value={sort} onValueChange={handleSortChange} disablePreventBodyScroll>
+                        <Select.Trigger>
+                            <Select.Value placeholder="Select an option" />
+                        </Select.Trigger>
+                        <Select.Content>
+                            <Select.Viewport>
+                                {Object.entries(HouseSort).map(([key, value], index) => (
+                                    <Select.Item key={key} index={index} value={value}>
+                                        <Select.ItemText>{value}</Select.ItemText>
+                                    </Select.Item>
+                                ))}
+                            </Select.Viewport>
+                        </Select.Content>
+                    </Select>
+                </YStack>
+            </QueryContainer>
             <ListContainer>
                 {columns.map((column, columnIndex) => (
                     <ColumnContainer key={columnIndex}>
                         {column.map(house => (
                             <HouseItem key={house.id!}>
                                 <HouseAddress>{house.address}</HouseAddress>
-                                <ButtonArea>
+                                <HouseButtonArea>
                                     <StyledButton onPress={() => handleEdit(house.id!)}>Edit</StyledButton>
                                     <StyledButton color="red" onPress={() => handleDelete(house.id!)}>Delete</StyledButton>
-                                </ButtonArea>
+                                </HouseButtonArea>
                             </HouseItem>
                         ))}
                     </ColumnContainer>
                 ))}
             </ListContainer>
-
-            <Button color="red" onPress={handleDangerZone}>
-                Danger Zone
-            </Button>
         </YStack>
     );
 };
 
-export default AdminPanel;
+const AdminPage = () => {
+    return (
+        <HouseQueryProvider>
+            <AdminPanel />
+        </HouseQueryProvider>
+    )
+}
+
+export default AdminPage;

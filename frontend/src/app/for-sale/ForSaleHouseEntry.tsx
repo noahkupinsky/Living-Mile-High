@@ -8,7 +8,7 @@ const EntryContainer = styled(View, {
     name: 'EntryContainer',
     flexDirection: 'row',
     alignItems: 'flex-start',
-    marginBottom: 20,
+    marginBottom: 200,
     borderWidth: 1,
     borderColor: '#ccc',
 });

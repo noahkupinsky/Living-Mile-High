@@ -1,7 +1,6 @@
 "use client"
 
 import { Text, View, styled } from 'tamagui';
-import NavTabsComponent from './NavTabsComponent';
 
 const FooterView = styled(View, {
     name: 'FooterView',
@@ -15,7 +14,7 @@ const FooterView = styled(View, {
 export default function Footer() {
     return (
         <FooterView>
-            <NavTabsComponent includeHome={true} />
+            <Text>Yo</Text>
         </FooterView>
     );
 }

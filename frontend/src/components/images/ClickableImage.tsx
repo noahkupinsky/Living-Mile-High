@@ -15,7 +15,7 @@ const ClickableImage: React.FC<ClickableImageProps> = ({ source, alt, onClick, .
         <StyledImage
             source={source}
             alt={alt}
-            onClick={onClick}
+            onPress={onClick}
             {...props}
         />
     );

@@ -4,6 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { styled, View } from 'tamagui';
 import SelectedWorkHouse from './SelectedWorkHouse';
 import Loader from '@/components/layout/Loader';
+import { HouseQueryProvider } from '@/contexts/HouseQueryContext';
+
+const COLUMNS = 1; // Define the number of columns here
 
 const DisplayContainer = styled(View, {
     name: 'DisplayContainer',
@@ -32,11 +35,11 @@ const SelectedWorkDisplay: React.FC<SelectedWorkDisplayProps> = ({ houses, width
         let isMounted = true;
 
         const loadMaxHeights = async () => {
-            const numRows = Math.ceil(houses.length / 2);
+            const numRows = Math.ceil(houses.length / COLUMNS);
             const rowHeights: number[] = [];
 
             for (let i = 0; i < numRows; i++) {
-                const rowHouses = houses.slice(i * 2, i * 2 + 2);
+                const rowHouses = houses.slice(i * COLUMNS, i * COLUMNS + COLUMNS);
                 const height = await calculateMaxHeight(rowHouses, width);
                 rowHeights.push(height);
             }
@@ -53,34 +56,34 @@ const SelectedWorkDisplay: React.FC<SelectedWorkDisplayProps> = ({ houses, width
         };
     }, [houses, width]);
 
-    const leftColumnHouses = houses.filter((_, index) => index % 2 === 0);
-    const rightColumnHouses = houses.filter((_, index) => index % 2 !== 0);
+    const getColumns = (houses: House[]) => {
+        const columns: House[][] = Array.from({ length: COLUMNS }, () => []);
+        houses.forEach((house, index) => {
+            columns[index % COLUMNS].push(house);
+        });
+        return columns;
+    };
+
+    const columns = getColumns(houses);
 
     return (
         <Loader isLoading={heights.length === 0}>
             <DisplayContainer>
-                <Column style={{ width: width }}>
-                    {leftColumnHouses.map((house, index) => (
-                        <SelectedWorkHouse
-                            key={house.id}
-                            house={house}
-                            height={heights[index]}
-                            width={width}
-                            onClick={onClick}
-                        />
-                    ))}
-                </Column>
-                <Column style={{ width: width }}>
-                    {rightColumnHouses.map((house, index) => (
-                        <SelectedWorkHouse
-                            key={house.id}
-                            house={house}
-                            height={heights[index]}
-                            width={width}
-                            onClick={onClick}
-                        />
-                    ))}
-                </Column>
+                {columns.map((column, columnIndex) => (
+                    <Column
+                        key={columnIndex}
+                        style={{ width: width }}>
+                        {column.map((house, index) => (
+                            <SelectedWorkHouse
+                                key={house.id}
+                                house={house}
+                                height={heights[index]}
+                                width={width}
+                                onClick={onClick}
+                            />
+                        ))}
+                    </Column>
+                ))}
             </DisplayContainer>
         </Loader>
     );

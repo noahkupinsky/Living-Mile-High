@@ -1,14 +1,11 @@
 'use client';
 
-import { Stack, Text, YStack } from 'tamagui';
+import { Image, Stack, Text, YStack } from 'tamagui';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 import NavTabsComponent from './NavTabsComponent';
 
 const Header = () => {
     const router = useRouter();
-
-
 
     return (
         <Stack
@@ -30,11 +27,10 @@ const Header = () => {
                     alt="Company Logo"
                     width={150}
                     height={150}
-                    priority
                 />
             </Text>
             <YStack flexDirection="row" gap="$3">
-                <NavTabsComponent includeHome={false} />
+                <NavTabsComponent />
                 <Text
                     onPress={() => window.open('https://instagram.com', '_blank')}
                     fontSize="$2"

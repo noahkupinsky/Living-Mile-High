@@ -50,14 +50,13 @@ const DropdownList = styled(View, {
     left: 0,
     right: 0,
     backgroundColor: 'white',
-    border: '1px solid #ccc',
     borderRadius: 5,
     zIndex: 1,
 });
 
 const DropdownItem = styled(Button, {
     padding: 10,
-    textalign: 'center',
+    alignItems: 'center',
 });
 
 type HouseFormTextProps = {
