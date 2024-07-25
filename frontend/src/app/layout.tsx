@@ -1,7 +1,7 @@
 import React from 'react';
 import Providers from '@/providers';
 import { PublicEnvScript } from 'next-runtime-env';
-import { Container, Main } from '@/components/layout/LayoutComponents';
+import { BorderWrapper, SiteContent, Body } from '@/components/layout/LayoutComponents';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import BonusFeatures from '@/components/bonus/BonusFeatures';
@@ -17,14 +17,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <Providers>
-          <Container>
-            <Header />
-            <Main>
-              {children}
-            </Main>
-            <Footer />
-            <BonusFeatures />
-          </Container>
+          <BorderWrapper>
+            <SiteContent>
+              <Header />
+              <Body>
+                {children}
+              </Body>
+              <Footer />
+              <BonusFeatures />
+            </SiteContent>
+          </BorderWrapper>
         </Providers>
       </body>
     </html>

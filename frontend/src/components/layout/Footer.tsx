@@ -6,7 +6,6 @@ const FooterView = styled(View, {
     name: 'FooterView',
     width: '100%',
     padding: '$sm',
-    backgroundColor: '$background',
     alignItems: 'center',
     justifyContent: 'center',
 });

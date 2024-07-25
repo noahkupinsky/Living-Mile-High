@@ -23,6 +23,9 @@
     "@tamagui/animations-css": "^1.104.0",
     "@tamagui/animations-moti": "^1.104.0",
     "@tamagui/next-plugin": "^1.102.3",
-    "@tamagui/switch": "^1.102.3"
+    "@tamagui/switch": "^1.102.3",
+    "@types/lodash.debounce": "^4.0.9",
+    "lodash": "^4.17.21",
+    "lodash.debounce": "^4.0.8"
   }
 }

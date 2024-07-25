@@ -3,7 +3,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { NavTab } from "@/types";
 import { useRouter, usePathname } from "next/navigation";
 import { useState } from "react";
-import { styled, Text, XStack, YStack } from "tamagui";
+import { styled, Image, Text, View, XStack } from "tamagui";
 
 const StyledTabContainer = styled(XStack, {
     cursor: 'pointer',
@@ -28,7 +28,7 @@ const NavTabsComponent: React.FC = () => {
         const onHome = pathname === '/';
         const isHovered = hoveredTab === tab.name;
         const isDark = isHovered || (!hoveredTab && (isActive || onHome));
-        const nonAdminColor = isDark ? '$text' : '$mildText';
+        const nonAdminColor = isDark ? '$darkGray' : '$lightGray';
         const adminColor = isDark ? '#e00' : '#ff6961';
         const color = tab.isAdmin ? adminColor : nonAdminColor;
 
@@ -47,13 +47,21 @@ const NavTabsComponent: React.FC = () => {
     };
 
     return (
-        <YStack
+        <View
             flexDirection="row"
             alignItems="center"
             justifyContent="center"
         >
             {filterNavTabs(isAuthenticated).map(renderTab)}
-        </YStack>
+            <Image
+                onPress={() => window.open('https://instagram.com')}
+                cursor="pointer"
+                src="/instagram-logo.png"
+                alt="Instagram"
+                width={24}
+                height={24}
+            />
+        </View>
     );
 };
 

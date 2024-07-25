@@ -10,10 +10,7 @@ type LoaderProps = {
 const Loader = ({ isLoading, children }: LoaderProps) => {
 
     if (isLoading) {
-        return (
-            <div>
-            </div>
-        );
+        return null;
     }
 
     return <>{children}</>;

@@ -44432,26 +44432,14 @@ var import_core60 = require("@tamagui/core");
 var tokens2 = (0, import_core60.createTokens)({
   ...config.tokens,
   color: {
-    lightGray: "#d3d3d3",
-    darkGray: "#a9a9a9"
+    lightGray: "#999999",
+    darkGray: "#333333",
+    whiteBg: "#eeeeee"
   }
 });
 var appConfig = createTamagui({
-  fonts: {
-    ...config.fonts
-  },
-  defaultTheme: "dark",
-  tokens: tokens2,
-  themes: {
-    light: {
-      text: tokens2.color.darkGray,
-      lightText: tokens2.color.lightGray
-    },
-    dark: {
-      background: tokens2.color.lightGray
-    }
-  },
-  media: config.media
+  ...config,
+  tokens: tokens2
 });
 var tamagui_config_default = appConfig;
 // Annotate the CommonJS export names for ESM import in node:
