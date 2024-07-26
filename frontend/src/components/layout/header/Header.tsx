@@ -1,16 +1,20 @@
 'use client';
 
-import { Image, Text, styled, View, XStack, YStack } from 'tamagui';
-import { useRouter } from 'next/navigation';
-import NavTabsComponent from './NavTabsComponent';
+import { Text, styled, View, XStack } from 'tamagui';
+import { usePathname, useRouter } from 'next/navigation';
 import { useResize } from '@/contexts/ResizeContext';
 import { useRef, useState, useEffect, useCallback } from 'react';
-import HamburgerMenuComponent from './HamburgerMenuComponent';
+import HamburgerMenu from './HamburgerMenu';
+import HorizontalLine from '../HorizontalLine';
+import AspectImage from '@/components/images/AspectImage';
+import { filterNavTabs } from '@/config/navTabs';
+import { useAuth } from '@/contexts/AuthContext';
+import NavTabComponent from './NavTabComponent';
+import Instagram from './Instagram';
 
 const HeaderContainer = styled(View, {
     width: '100%',
     paddingTop: '2%',
-    paddingBottom: '2%',
 });
 
 const WideHeaderContainer = styled(XStack, {
@@ -33,33 +37,40 @@ const HeaderRightContainer = styled(View, {
     paddingRight: '2%',
 })
 
-// Inline SVG for Hamburger Icon
-const HamburgerIconContainer = styled(View, {
-    cursor: 'pointer',
-    paddingHorizontal: '2%',
-});
+const HeaderText = styled(Text, {
+    fontFamily: '$caps',
+    fontSize: '$5',
+    color: '$darkGray'
+})
 
-const HamburgerIcon = ({ ...props }: any) => (
-    <HamburgerIconContainer {...props}>
-        <svg viewBox="0 0 100 80" width="24" height="24">
-            <rect width="100" height="10" rx="5" fill="#666" />
-            <rect y="30" width="100" height="10" rx="5" fill="#666" />
-            <rect y="60" width="100" height="10" rx="5" fill="#666" />
-        </svg>
-    </HamburgerIconContainer>
-);
+const SquareLogo = ({ size }: { size: number }) => {
+    const router = useRouter();
+
+    return (
+        <AspectImage
+            onClick={() => router.push('/')}
+            src="/company-logo.png"
+            alt="Company Logo"
+            cursor="pointer"
+            width={size}
+            height={size}
+        />
+    );
+
+}
 
 const Header = () => {
-    const router = useRouter();
-    const { width, addResizeListener, removeResizeListener } = useResize();
+    const { isAuthenticated } = useAuth();
+    const { addResizeListener, removeResizeListener } = useResize();
+    const pathname = usePathname();
     const [isResolved, setIsResolved] = useState(false);
+    const [isHamburger, setIsHamburger] = useState(false);
+    const [hoveredTab, setHoveredTab] = useState<string | null>(null);
+    const [rightWidth, setRightWidth] = useState<number | null>(null);
+    const [leftWidth, setLeftWidth] = useState<number | null>(null);
     const headerRef = useRef<HTMLDivElement>(null);
     const leftRef = useRef<HTMLDivElement>(null);
     const rightRef = useRef<HTMLDivElement>(null);
-    const [isHamburger, setIsHamburger] = useState(false);
-    const [rightWidth, setRightWidth] = useState<number | null>(null);
-    const [leftWidth, setLeftWidth] = useState<number | null>(null);
-    const [menuOpen, setMenuOpen] = useState(false);
 
     const checkDimensions = useCallback(() => {
         if (!headerRef.current) {
@@ -91,7 +102,10 @@ const Header = () => {
         return () => {
             removeResizeListener(checkDimensions);
         };
-    }, [width, addResizeListener, removeResizeListener, checkDimensions]);
+    }, [addResizeListener, removeResizeListener, checkDimensions]);
+
+    const tabs = filterNavTabs(isAuthenticated);
+    const headerName = tabs.find(tab => pathname.startsWith(tab.path))?.name.toLocaleUpperCase() || '';
 
     return (
         <HeaderContainer
@@ -103,38 +117,41 @@ const Header = () => {
         >
             {isHamburger ? (
                 <HamburgerHeaderContainer>
-                    {/* invisible to balance out spacing */}
-                    <HamburgerIcon style={{ visibility: "hidden" }} />
-                    <Image
-                        onPress={() => router.push('/')}
-                        src="/company-logo.png"
-                        alt="Company Logo"
-                        cursor="pointer"
-                        width={50}
-                        height={50}
-                    />
-                    <>
-                        <HamburgerIcon onPress={() => setMenuOpen(true)} />
-                        <HamburgerMenuComponent isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
-                    </>
+                    <HeaderLeftContainer >
+                        <SquareLogo size={75} />
+                    </HeaderLeftContainer>
+                    <HeaderText>{headerName}</HeaderText>
+                    <HeaderRightContainer>
+                        <HamburgerMenu
+                            setHoveredTab={setHoveredTab}
+                            hoveredTab={hoveredTab}
+                            tabs={tabs}
+                        />
+                    </HeaderRightContainer>
                 </HamburgerHeaderContainer>
             ) : (
                 <WideHeaderContainer>
                     <HeaderLeftContainer ref={leftRef}>
-                        <Image
-                            onPress={() => router.push('/')}
-                            src="/company-logo.png"
-                            alt="Company Logo"
-                            cursor="pointer"
-                            width={150}
-                            height={150}
-                        />
+                        <SquareLogo size={100} />
                     </HeaderLeftContainer>
                     <HeaderRightContainer ref={rightRef}>
-                        <NavTabsComponent />
+                        <View
+                            flexDirection="row"
+                            alignItems="center"
+                            justifyContent="center"
+                        >
+                            {tabs.map(tab => <NavTabComponent
+                                key={tab.name}
+                                tab={tab}
+                                setHoveredTab={setHoveredTab}
+                                hoveredTab={hoveredTab}
+                            />)}
+                            <Instagram paddingLeft={15} />
+                        </View>
                     </HeaderRightContainer>
                 </WideHeaderContainer>
             )}
+            <HorizontalLine width={'80%'} height={'5%'} color={'$lightGray'} />
         </HeaderContainer>
     );
 };

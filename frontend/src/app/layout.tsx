@@ -2,7 +2,7 @@ import React from 'react';
 import Providers from '@/providers';
 import { PublicEnvScript } from 'next-runtime-env';
 import { BorderWrapper, SiteContent, Body } from '@/components/layout/LayoutComponents';
-import Header from '@/components/layout/Header';
+import Header from '@/components/layout/header/Header';
 import Footer from '@/components/layout/Footer';
 import BonusFeatures from '@/components/bonus/BonusFeatures';
 

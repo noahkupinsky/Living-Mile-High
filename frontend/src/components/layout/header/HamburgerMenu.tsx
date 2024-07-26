@@ -1,0 +1,127 @@
+import React, { useState } from 'react';
+import { styled, XStack, YStack, Text, View } from 'tamagui';
+import { useAuth } from '@/contexts/AuthContext';
+import { filterNavTabs } from '@/config/navTabs';
+import { useRouter, usePathname } from 'next/navigation';
+import { NavTab } from '@/types';
+import { Image } from 'tamagui';
+import NavTabComponent from './NavTabComponent';
+import Instagram from './Instagram';
+import { tokens } from '@/config/tamagui.config';
+
+const ANIMATION_LENGTH = '0.3s';
+
+const Overlay = styled(View, {
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'stretch',
+    zIndex: 1000,
+});
+
+
+const MenuContainer = styled(YStack, {
+    backgroundColor: 'white',
+    padding: 20,
+    gap: 10,
+    zIndex: 1001,
+});
+
+const InstagramContainer = styled(XStack, {
+    cursor: 'pointer',
+    justifyContent: 'flex-start',
+    padding: 10,
+});
+
+type HamburgerMenuNavigationProps = {
+    tabs: NavTab[];
+    isOpen: boolean;
+    onClose: () => void;
+    setHoveredTab: React.Dispatch<React.SetStateAction<string | null>>;
+    hoveredTab: string | null;
+};
+
+const HamburgerMenuNavigation: React.FC<HamburgerMenuNavigationProps> = ({ tabs, isOpen, onClose, setHoveredTab, hoveredTab }) => {
+    return (
+        <Overlay style={
+            {
+                opacity: isOpen ? 1 : 0,
+                pointerEvents: isOpen ? 'all' : 'none',
+                position: 'fixed',
+                transition: `opacity ${ANIMATION_LENGTH} ease-in-out`,
+            }}
+            onPress={onClose}
+        >
+            <MenuContainer
+                style={{
+                    transform: [{ translateX: isOpen ? 0 : 100 }],
+                    transition: `transform ${ANIMATION_LENGTH} ease-in-out`
+                }}
+                onPress={(e: any) => e.stopPropagation()}
+            >
+                {tabs.map(tab =>
+                (<NavTabComponent
+                    key={tab.name}
+                    tab={tab}
+                    setHoveredTab={setHoveredTab}
+                    hoveredTab={hoveredTab}
+                />)
+                )}
+                <InstagramContainer>
+                    <Instagram />
+                </InstagramContainer>
+            </MenuContainer>
+        </Overlay>
+    );
+};
+
+// Inline SVG for Hamburger Icon
+const HamburgerIconContainer = styled(View, {
+    cursor: 'pointer',
+});
+
+type HamburgerMenuProps = {
+    inactive?: boolean;
+    setHoveredTab?: React.Dispatch<React.SetStateAction<string | null>>;
+    hoveredTab?: string | null;
+    tabs?: NavTab[];
+};
+
+
+const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ tabs, inactive, hoveredTab, setHoveredTab }) => {
+    const [menuOpen, setMenuOpen] = useState(false);
+    const color = tokens.color.lightGray.val;
+
+    return (
+        <>
+            <HamburgerIconContainer
+                onPress={() => !inactive && setMenuOpen!(true)}
+                style={{
+                    visibility: inactive ? 'hidden' : 'visible',
+                }}
+            >
+                <svg viewBox="0 0 100 80" width="24" height="24">
+                    <rect width="100" height="10" rx="5" fill={color} />
+                    <rect y="30" width="100" height="10" rx="5" fill={color} />
+                    <rect y="60" width="100" height="10" rx="5" fill={color} />
+                </svg>
+            </ HamburgerIconContainer>
+            {!inactive && (
+                <HamburgerMenuNavigation
+                    tabs={tabs!}
+                    isOpen={menuOpen}
+                    onClose={() => setMenuOpen!(false)}
+                    setHoveredTab={setHoveredTab!}
+                    hoveredTab={hoveredTab!}
+                />
+            )}
+        </>
+    );
+}
+
+export default HamburgerMenu;

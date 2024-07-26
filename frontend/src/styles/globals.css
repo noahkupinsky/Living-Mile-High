@@ -8,3 +8,28 @@ a {
     color: inherit;
     text-decoration: none;
 }
+
+@font-face {
+    font-family: 'Garet';
+    src: url('/fonts/Garet-Book.woff2') format('woff2'),
+        url('/fonts/Garet-Book.woff') format('woff'),
+        url('/fonts/Garet-Book.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Garet';
+    src: url('/fonts/Garet-Heavy.woff2') format('woff2'),
+        url('/fonts/Garet-Heavy.woff') format('woff'),
+        url('/fonts/Garet-Heavy.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Couture';
+    src: url('/fonts/couture-bld.otf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+}

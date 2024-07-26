@@ -3,7 +3,7 @@
 import '@tamagui/core/reset.css'
 import '@tamagui/font-inter/css/400.css'
 import '@tamagui/font-inter/css/700.css'
-import '@tamagui/polyfill-dev'
+import '../styles/globals.css'
 
 import { ReactNode } from 'react'
 import { StyleSheet } from 'react-native'

@@ -9,21 +9,24 @@ type AspectImageProps = {
     width?: number;
     height?: number;
     onClick?: () => void;
+    [key: string]: any;
 };
 
 const AspectImage: React.FC<AspectImageProps> = ({ src, width, height, alt, onClick, ...props }) => {
     const [dimensions, setDimensions] = useState<{ width: number; height: number } | null>(null);
 
     useEffect(() => {
-        if (width && height) {
-            throw new Error('AspectImage cannot have both width and height.');
-        }
-
         const img = new window.Image();
         img.src = src;
         img.onload = () => {
             const aspectRatio = img.width / img.height;
-            if (width) {
+            if (width && height) {
+                const heightDeterminedWidth = height * aspectRatio;
+                const widthDeterminedHeight = width / aspectRatio;
+                const minWidth = Math.min(width, heightDeterminedWidth);
+                const minHeight = Math.min(height, widthDeterminedHeight);
+                setDimensions({ width: minWidth, height: minHeight });
+            } else if (width) {
                 setDimensions({ width, height: width / aspectRatio });
             } else if (height) {
                 setDimensions({ width: height * aspectRatio, height });
