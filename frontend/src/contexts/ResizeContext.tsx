@@ -4,7 +4,6 @@ import debounce from 'lodash.debounce';
 interface ResizeContextProps {
     width: number;
     height: number;
-    hasDimensions: boolean;
     addResizeListener: (callback: () => void) => void;
     removeResizeListener: (callback: () => void) => void;
 }
@@ -13,7 +12,6 @@ const ResizeContext = createContext<ResizeContextProps | undefined>(undefined);
 
 export const ResizeProvider = ({ children }: { children: React.ReactNode }) => {
     const hasWindow = typeof window !== 'undefined';
-    const [hasDimensions, setHasDimensions] = useState(hasWindow);
     const [dimensions, setDimensions] = useState<{ width: number; height: number }>(
         hasWindow ? {
             width: window.innerWidth,
@@ -33,7 +31,6 @@ export const ResizeProvider = ({ children }: { children: React.ReactNode }) => {
                 width: window.innerWidth,
                 height: window.innerHeight,
             });
-            setHasDimensions(true);
             listeners.current.forEach((callback) => callback());
         }, 100),
         []
@@ -59,7 +56,6 @@ export const ResizeProvider = ({ children }: { children: React.ReactNode }) => {
         <ResizeContext.Provider
             value={{
                 ...dimensions,
-                hasDimensions,
                 addResizeListener,
                 removeResizeListener,
             }}

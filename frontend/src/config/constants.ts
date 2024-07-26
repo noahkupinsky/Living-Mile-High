@@ -1,6 +1,6 @@
 import { HouseStatKeys } from "@/types";
 
-export const HOME_PAGE_INTERVAL = 1000;
+export const HOME_PAGE_INTERVAL = 2000;
 
 export const NEIGHBORHOOD_GROUPS: string[][] = [
     ["Bonnie Brae", "Belcaro", "Hilltop"]
@@ -35,3 +35,7 @@ export const THEME_SEQUENCE = [
 ];
 
 export const SPLIT_CHAR = '$';
+
+export const PHONE_NUMBER = '303-819-5250';
+export const EMAIL_ADDRESS = 'tina@livingmilehigh.com';
+export const MAX_WIDTH = '150rem';

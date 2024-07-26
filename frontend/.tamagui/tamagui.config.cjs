@@ -27615,6 +27615,7 @@ var require_cjs21 = __commonJS({
 // src/config/tamagui.config.ts
 var tamagui_config_exports = {};
 __export(tamagui_config_exports, {
+  coutureFont: () => coutureFont,
   default: () => tamagui_config_default,
   garetFont: () => garetFont,
   tokens: () => tokens2
@@ -44463,17 +44464,44 @@ var garetFont = (0, import_core60.createFont)({
     3: 1
   }
 });
+var coutureFont = (0, import_core60.createFont)({
+  family: "Couture",
+  size: {
+    1: 12,
+    2: 14,
+    3: 16,
+    4: 18,
+    5: 20,
+    6: 24,
+    7: 28,
+    8: 32,
+    9: 36
+  },
+  lineHeight: {
+    1: 1.2,
+    2: 1.5,
+    3: 1.8
+  },
+  letterSpacing: {
+    1: 1,
+    2: 1.5,
+    3: 2.5,
+    4: 3.5,
+    5: 5
+  }
+});
 var appConfig = createTamagui({
   ...config,
   tokens: tokens2,
   fonts: {
     ...config.fonts,
-    caps: garetFont
+    caps: coutureFont
   }
 });
 var tamagui_config_default = appConfig;
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
+  coutureFont,
   garetFont,
   tokens
 });

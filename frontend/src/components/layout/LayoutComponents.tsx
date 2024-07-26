@@ -1,9 +1,10 @@
 "use client"
 
-import { View, styled } from "tamagui";
+import { MAX_WIDTH } from "@/config/constants";
+import { View, YStack, styled } from "tamagui";
 
 export const BorderWrapper = styled(View, {
-    padding: '2%',
+    padding: '2vh',
     name: 'Border',
     width: '100%',
     height: '100%',
@@ -11,17 +12,23 @@ export const BorderWrapper = styled(View, {
     backgroundColor: '$siteBorderColor',
 });
 
-export const SiteContent = styled(View, {
+export const Background = styled(View, {
     name: 'SiteContent',
     flex: 1,
     backgroundColor: '$whiteBg',
 })
 
+export const MaxWidthEnforcer = styled(YStack, {
+    name: 'MaxWidthEnforcer',
+    maxWidth: MAX_WIDTH,
+    width: '100%',
+    flex: 1,
+})
+
 export const Body = styled(View, {
     name: 'Main',
     flex: 1,
-    display: 'flex',
-    justifyContent: 'flex-start',
+    width: '100%',
     alignItems: 'center',
     backgroundColor: '$whiteBg'
 });

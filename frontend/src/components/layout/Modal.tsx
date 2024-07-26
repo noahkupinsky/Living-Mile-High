@@ -17,7 +17,7 @@ const ModalContent = styled(View, {
     backgroundColor: 'white',
     padding: 20,
     borderRadius: 10,
-    zIndex: 1001,
+    zIndex: 2000,
 });
 
 type ModalProps = {

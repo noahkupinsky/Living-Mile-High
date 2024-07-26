@@ -4,9 +4,7 @@ import HomePageImages from '@/components/HomePageImages';
 
 const Home: React.FC = () => {
     return (
-        <div>
-            <HomePageImages />
-        </div>
+        <HomePageImages />
     );
 };
 

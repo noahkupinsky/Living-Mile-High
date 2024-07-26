@@ -28,13 +28,12 @@ const Overlay = styled(View, {
 const MenuContainer = styled(YStack, {
     backgroundColor: 'white',
     padding: 20,
-    gap: 10,
-    zIndex: 1001,
+    zIndex: 2000,
 });
 
 const InstagramContainer = styled(XStack, {
     cursor: 'pointer',
-    justifyContent: 'flex-start',
+    justifyContent: 'flex-end',
     padding: 10,
 });
 
@@ -70,6 +69,8 @@ const HamburgerMenuNavigation: React.FC<HamburgerMenuNavigationProps> = ({ tabs,
                     tab={tab}
                     setHoveredTab={setHoveredTab}
                     hoveredTab={hoveredTab}
+                    paddingVertical={17}
+                    justifyContent={'flex-end'}
                 />)
                 )}
                 <InstagramContainer>
@@ -95,7 +96,7 @@ type HamburgerMenuProps = {
 
 const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ tabs, inactive, hoveredTab, setHoveredTab }) => {
     const [menuOpen, setMenuOpen] = useState(false);
-    const color = tokens.color.lightGray.val;
+    const color = tokens.color.darkGray.val;
 
     return (
         <>

@@ -8,6 +8,7 @@ type KeySequenceListenerProps = {
 
 const KeySequenceListener: React.FC<KeySequenceListenerProps> = ({ onSequence, sequence, timeout = 1000 }) => {
     const [inputSequence, setInputSequence] = useState<string[]>([]);
+    const [execute, setExecute] = useState(false);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
@@ -18,7 +19,7 @@ const KeySequenceListener: React.FC<KeySequenceListenerProps> = ({ onSequence, s
             setInputSequence((prevSequence) => {
                 const newSequence = [...prevSequence, event.key].slice(-sequence.length);
                 if (newSequence.join(' ') === sequence.join(' ')) {
-                    onSequence();
+                    setExecute(true);
                     return [];
                 }
                 return newSequence;
@@ -35,6 +36,13 @@ const KeySequenceListener: React.FC<KeySequenceListenerProps> = ({ onSequence, s
             }
         };
     }, [sequence, onSequence, timeout]);
+
+    useEffect(() => {
+        if (execute) {
+            onSequence();
+            setExecute(false);
+        }
+    }, [execute, onSequence]);
 
     return null;
 };

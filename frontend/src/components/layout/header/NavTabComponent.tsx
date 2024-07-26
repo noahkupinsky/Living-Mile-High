@@ -9,16 +9,18 @@ const StyledTabContainer = styled(XStack, {
 
 const StyledTabText = styled(Text, {
     fontFamily: '$caps',
-    fontSize: '$3',
+    fontSize: '$2',
+    letterSpacing: '$2',
 });
 
 type NavTabComponentProps = {
     tab: NavTab;
     setHoveredTab: React.Dispatch<React.SetStateAction<string | null>>;
     hoveredTab: string | null;
+    [key: string]: any;
 };
 
-const NavTabComponent: React.FC<NavTabComponentProps> = ({ tab, setHoveredTab, hoveredTab }) => {
+const NavTabComponent: React.FC<NavTabComponentProps> = ({ tab, setHoveredTab, hoveredTab, ...props }) => {
     const pathname = usePathname();
     const router = useRouter();
     const isActive = pathname.startsWith(tab.path);
@@ -35,6 +37,7 @@ const NavTabComponent: React.FC<NavTabComponentProps> = ({ tab, setHoveredTab, h
             onPress={() => router.push(tab.path)}
             onMouseEnter={() => setHoveredTab(tab.name)}
             onMouseLeave={() => setHoveredTab(null)}
+            {...props}
         >
             <StyledTabText color={color} style={{ transition: 'color 0.3s ease' }}>
                 {tab.name.toLocaleUpperCase()}

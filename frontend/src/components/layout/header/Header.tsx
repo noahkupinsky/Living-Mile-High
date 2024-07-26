@@ -1,20 +1,22 @@
 'use client';
 
-import { Text, styled, View, XStack } from 'tamagui';
+import { Text, styled, View, XStack, Image, YStack } from 'tamagui';
 import { usePathname, useRouter } from 'next/navigation';
 import { useResize } from '@/contexts/ResizeContext';
-import { useRef, useState, useEffect, useCallback } from 'react';
+import { useRef, useState, useEffect, useCallback, useMemo } from 'react';
 import HamburgerMenu from './HamburgerMenu';
 import HorizontalLine from '../HorizontalLine';
-import AspectImage from '@/components/images/AspectImage';
 import { filterNavTabs } from '@/config/navTabs';
 import { useAuth } from '@/contexts/AuthContext';
 import NavTabComponent from './NavTabComponent';
 import Instagram from './Instagram';
 
-const HeaderContainer = styled(View, {
+const LARGE_LOGO_SIZE = 125;
+const SMALL_LOGO_SIZE = 75;
+
+const HeaderContainer = styled(YStack, {
     width: '100%',
-    paddingTop: '2%',
+    paddingTop: '2vh',
 });
 
 const WideHeaderContainer = styled(XStack, {
@@ -25,36 +27,56 @@ const WideHeaderContainer = styled(XStack, {
 
 const HamburgerHeaderContainer = styled(XStack, {
     flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
-    justifyContent: 'space-between',
 });
 
-const HeaderLeftContainer = styled(View, {
-    paddingLeft: '4%',
+const HeaderLeftContainer = styled(XStack, {
+    paddingLeft: '5%',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    flex: 1,
 })
 
-const HeaderRightContainer = styled(View, {
-    paddingRight: '2%',
+const HeaderRightContainer = styled(XStack, {
+    paddingRight: '5%',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    flex: 1,
 })
 
 const HeaderText = styled(Text, {
     fontFamily: '$caps',
     fontSize: '$5',
-    color: '$darkGray'
+    letterSpacing: '$5',
+    color: '$darkGray',
+    position: 'absolute',
+    top: '50%',
+    left: 0,
+    width: '100%',
+    textAlign: 'center',
+    transform: 'translateY(-30%)',
+    pointerEvents: 'none',
 })
 
-const SquareLogo = ({ size }: { size: number }) => {
+const SquareLogo: React.FC<any> = ({ size, ...props }) => {
     const router = useRouter();
 
     return (
-        <AspectImage
-            onClick={() => router.push('/')}
-            src="/company-logo.png"
-            alt="Company Logo"
+        <View
             cursor="pointer"
-            width={size}
-            height={size}
-        />
+            onPress={() => router.push('/')}
+        >
+            <Image
+                source={{
+                    uri: "/company-logo.png",
+                    width: size,
+                    height: size
+                }}
+                alt="Company Logo"
+                {...props}
+            />
+        </View>
     );
 
 }
@@ -72,14 +94,16 @@ const Header = () => {
     const leftRef = useRef<HTMLDivElement>(null);
     const rightRef = useRef<HTMLDivElement>(null);
 
+    const tabs = useMemo(() => filterNavTabs(isAuthenticated), [isAuthenticated]);
+
     const checkDimensions = useCallback(() => {
         if (!headerRef.current) {
             return;
         }
 
         const headerWidth = headerRef.current.offsetWidth;
-        const currentLeftWidth = leftWidth !== null ? leftWidth : leftRef.current ? leftRef.current.scrollWidth : 0;
-        const currentRightWidth = rightWidth !== null ? rightWidth : rightRef.current ? rightRef.current.scrollWidth : 0;
+        const currentLeftWidth = leftRef.current ? leftRef.current.scrollWidth : leftWidth !== null ? leftWidth : 0;
+        const currentRightWidth = rightRef.current ? rightRef.current.scrollWidth : rightWidth !== null ? rightWidth : 0;
 
         if (currentLeftWidth + currentRightWidth > headerWidth) {
             if (!isHamburger) {
@@ -94,7 +118,7 @@ const Header = () => {
         }
         setIsResolved(true); // Set resolved to true after dimensions are checked
 
-    }, [isHamburger, leftWidth, rightWidth]);
+    }, [tabs, isHamburger, leftWidth, rightWidth]);
 
     useEffect(() => {
         checkDimensions();
@@ -104,42 +128,42 @@ const Header = () => {
         };
     }, [addResizeListener, removeResizeListener, checkDimensions]);
 
-    const tabs = filterNavTabs(isAuthenticated);
-    const headerName = tabs.find(tab => pathname.startsWith(tab.path))?.name.toLocaleUpperCase() || '';
+
+    const headerName = pathname === '/' ? 'HOME' : tabs.find(tab => pathname.startsWith(tab.path))?.name.toLocaleUpperCase() || '';
 
     return (
-        <HeaderContainer
-            opacity={isResolved ? 1 : 0}
-            ref={headerRef}
-            style={{
-                transition: 'opacity 0.1s ease-in-out',
-            }}
-        >
-            {isHamburger ? (
-                <HamburgerHeaderContainer>
-                    <HeaderLeftContainer >
-                        <SquareLogo size={75} />
-                    </HeaderLeftContainer>
-                    <HeaderText>{headerName}</HeaderText>
-                    <HeaderRightContainer>
-                        <HamburgerMenu
-                            setHoveredTab={setHoveredTab}
-                            hoveredTab={hoveredTab}
-                            tabs={tabs}
-                        />
-                    </HeaderRightContainer>
-                </HamburgerHeaderContainer>
-            ) : (
-                <WideHeaderContainer>
-                    <HeaderLeftContainer ref={leftRef}>
-                        <SquareLogo size={100} />
-                    </HeaderLeftContainer>
-                    <HeaderRightContainer ref={rightRef}>
-                        <View
-                            flexDirection="row"
-                            alignItems="center"
-                            justifyContent="center"
-                        >
+        <>
+            <HeaderContainer
+                opacity={isResolved ? 1 : 0}
+                ref={headerRef}
+                style={{
+                    transition: 'opacity 0.1s ease-in-out',
+                }}
+            >
+                {isHamburger ? (
+                    <HamburgerHeaderContainer
+                        height={SMALL_LOGO_SIZE}
+                    >
+                        <HeaderLeftContainer >
+                            <SquareLogo size={SMALL_LOGO_SIZE} />
+                        </HeaderLeftContainer>
+                        <HeaderText>{headerName}</HeaderText>
+                        <HeaderRightContainer>
+                            <HamburgerMenu
+                                setHoveredTab={setHoveredTab}
+                                hoveredTab={hoveredTab}
+                                tabs={tabs}
+                            />
+                        </HeaderRightContainer>
+                    </HamburgerHeaderContainer>
+                ) : (
+                    <WideHeaderContainer
+                        height={LARGE_LOGO_SIZE}>
+                        <HeaderLeftContainer ref={leftRef}>
+                            <SquareLogo
+                                size={LARGE_LOGO_SIZE} />
+                        </HeaderLeftContainer>
+                        <HeaderRightContainer ref={rightRef}>
                             {tabs.map(tab => <NavTabComponent
                                 key={tab.name}
                                 tab={tab}
@@ -147,12 +171,13 @@ const Header = () => {
                                 hoveredTab={hoveredTab}
                             />)}
                             <Instagram paddingLeft={15} />
-                        </View>
-                    </HeaderRightContainer>
-                </WideHeaderContainer>
-            )}
-            <HorizontalLine width={'80%'} height={'5%'} color={'$lightGray'} />
-        </HeaderContainer>
+                        </HeaderRightContainer>
+                    </WideHeaderContainer>
+
+                )}
+                <HorizontalLine width={'95%'} height={'5rem'} color={'$darkGray'} />
+            </HeaderContainer>
+        </>
     );
 };
 

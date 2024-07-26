@@ -1,12 +1,13 @@
 'use client'
 
 import { useState, useEffect } from "react";
-import ClickableImage from "./ClickableImage";
+import { Image, View } from "tamagui";
 
 type AutoImageProps = {
     src: string;
     alt: string;
     onClick?: () => void;
+    [key: string]: any;
 }
 
 export const AutoImage: React.FC<AutoImageProps> = ({ src, alt, onClick, ...props }) => {
@@ -23,10 +24,10 @@ export const AutoImage: React.FC<AutoImageProps> = ({ src, alt, onClick, ...prop
     }, [src]);
 
     return (
-        <ClickableImage
+        <Image
             source={{ uri: src, width: dimensions.width, height: dimensions.height }}
             alt={alt}
-            onClick={onClick}
+            onPress={onClick}
             {...props}
         />
     );

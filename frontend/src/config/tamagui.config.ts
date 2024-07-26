@@ -55,9 +55,11 @@ export const coutureFont = createFont({
         3: 1.8,
     },
     letterSpacing: {
-        1: 0,
-        2: 0.5,
-        3: 1,
+        1: 1,
+        2: 1.5,
+        3: 2.5,
+        4: 3.5,
+        5: 5,
     },
 })
 
