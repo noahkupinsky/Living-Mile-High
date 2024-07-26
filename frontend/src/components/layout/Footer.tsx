@@ -3,7 +3,6 @@
 import { Text, XStack, YStack, styled } from 'tamagui';
 import HorizontalLine from './HorizontalLine';
 import { EMAIL_ADDRESS, PHONE_NUMBER } from '@/config/constants';
-import { useResize } from '@/contexts/ResizeContext';
 import { useEffect, useState } from 'react';
 
 const FooterContainer = styled(YStack, {

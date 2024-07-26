@@ -1,16 +1,18 @@
 import AspectImage from "@/components/images/AspectImage";
-import { View } from "tamagui";
+import { View, Image } from "tamagui";
+
+const SIZE = 24;
 
 const Instagram = ({ ...props }: any) => {
     return (
         <View
             {...props}>
             <a href="https://instagram.com" style={{ cursor: "pointer" }}>
-                <AspectImage
+                <Image
                     src="/instagram-logo.png"
                     alt="Instagram"
-                    width={24}
-                    height={24}
+                    width={SIZE}
+                    height={SIZE}
                 />
             </a>
         </View>

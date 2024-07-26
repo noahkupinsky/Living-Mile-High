@@ -12,9 +12,10 @@ export const BorderWrapper = styled(View, {
     backgroundColor: '$siteBorderColor',
 });
 
-export const Background = styled(View, {
+export const Background = styled(YStack, {
     name: 'SiteContent',
     flex: 1,
+    alignItems: 'center',
     backgroundColor: '$whiteBg',
 })
 

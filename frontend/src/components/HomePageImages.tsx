@@ -3,7 +3,6 @@ import { useSiteData } from "@/contexts/SiteDataContext";
 import services from "@/di";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { styled, View, XStack } from "tamagui";
-import { useResize } from "@/contexts/ResizeContext";
 import AspectImage from "./images/AspectImage";
 
 const ImageContainer = styled(View, {
@@ -28,7 +27,6 @@ const HomePageImageContainer = styled(XStack, {
 
 
 const HomePageImages = () => {
-    const { addResizeListener, removeResizeListener } = useResize();
     const { generalData } = useSiteData();
     const { cdnService } = services();
     const container = useRef<HTMLDivElement>(null);
@@ -42,12 +40,12 @@ const HomePageImages = () => {
         setHomePageImages(generalData ? generalData.homePageImages : cdnService.defaultHomePageImages());
     }, [generalData, cdnService]);
 
-    const setDimensions = useCallback(() => {
+    const handleResize = useCallback(() => {
         if (container.current) {
             setContainerWidth(container.current.offsetWidth);
             setContainerHeight(container.current.offsetHeight);
         }
-    }, []);
+    }, [container]);
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -58,13 +56,20 @@ const HomePageImages = () => {
     }, [homePageImages]);
 
     useEffect(() => {
-        addResizeListener(setDimensions);
-        return () => removeResizeListener(setDimensions);
-    }, [setDimensions, addResizeListener, removeResizeListener]);
+        const resizeObserver = new ResizeObserver(() => {
+            handleResize();
+        });
 
-    useEffect(() => {
-        setDimensions();
-    }, [container, setDimensions]);
+        if (container.current) {
+            resizeObserver.observe(container.current);
+        }
+
+        return () => {
+            if (container.current) {
+                resizeObserver.unobserve(container.current);
+            }
+        };
+    }, []);
 
     return (
         <ImageContainer ref={container}>

@@ -2,12 +2,9 @@ import React from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { View, Button, styled } from 'tamagui';
 import AspectImage from './AspectImage';
-import { ImageFormat } from '@/types';
-import { imageFormatToUrl } from '@/utils/misc';
 
 const DraggableImageContainer = styled(View, {
     position: 'relative',
-    border: '1px solid #ccc',
 });
 
 const DeleteButton = styled(Button, {
@@ -22,7 +19,6 @@ const DeleteButton = styled(Button, {
     backgroundColor: 'rgba(255, 0, 0, 0.5)', // Translucent red
     color: '#fff',
     borderRadius: 10, // Make it round
-    border: 'none', // Remove default border
 });
 
 type DraggableImageProps = {
