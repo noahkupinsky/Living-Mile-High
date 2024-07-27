@@ -5,6 +5,7 @@ import { DndProvider } from 'react-dnd';
 import DraggableImage from './DraggableImage';
 
 const ImageList = styled(View, {
+    width: '100%',
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',

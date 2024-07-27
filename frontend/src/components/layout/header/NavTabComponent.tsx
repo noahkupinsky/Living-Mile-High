@@ -4,7 +4,8 @@ import { styled, XStack, Text } from "tamagui";
 
 const StyledTabContainer = styled(XStack, {
     cursor: 'pointer',
-    padding: 10
+    padding: 10,
+    alignItems: 'center',
 });
 
 const StyledTabText = styled(Text, {

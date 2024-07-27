@@ -12,7 +12,7 @@
   "dependencies": {
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "living-mile-high-lib": "^1.0.71",
+    "living-mile-high-lib": "^1.0.72",
     "mongoose": "^8.4.4"
   },
   "devDependencies": {

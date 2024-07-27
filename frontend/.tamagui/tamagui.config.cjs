@@ -44434,10 +44434,11 @@ var import_core60 = require("@tamagui/core");
 var tokens2 = (0, import_core60.createTokens)({
   ...config.tokens,
   color: {
-    lightGray: "#999999",
-    darkGray: "#333333",
-    whiteBg: "#fff",
-    siteBorderColor: "#eee"
+    lightGray: "#b5b5b5",
+    darkGray: "#6b6b6b",
+    whiteBg: "#f9f9f9",
+    lightBg: "#eeeeee",
+    black: "#000000"
   }
 });
 var garetFont = (0, import_core60.createFont)({

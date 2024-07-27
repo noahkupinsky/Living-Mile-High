@@ -44906,29 +44906,36 @@
           "isVar": true,
           "key": "$lightGray",
           "name": "color-1",
-          "val": "#999999",
+          "val": "#b5b5b5",
           "variable": "var(--color-1)"
         },
         "darkGray": {
           "isVar": true,
           "key": "$darkGray",
           "name": "color-2",
-          "val": "#333333",
+          "val": "#6b6b6b",
           "variable": "var(--color-2)"
         },
         "whiteBg": {
           "isVar": true,
           "key": "$whiteBg",
           "name": "color-3",
-          "val": "#fff",
+          "val": "#f9f9f9",
           "variable": "var(--color-3)"
         },
-        "siteBorderColor": {
+        "lightBg": {
           "isVar": true,
-          "key": "$siteBorderColor",
+          "key": "$lightBg",
           "name": "color-4",
-          "val": "#eee",
+          "val": "#eeeeee",
           "variable": "var(--color-4)"
+        },
+        "black": {
+          "isVar": true,
+          "key": "$black",
+          "name": "color-5",
+          "val": "#000000",
+          "variable": "var(--color-5)"
         }
       },
       "radius": {
@@ -45788,29 +45795,36 @@
         "isVar": true,
         "key": "$lightGray",
         "name": "color-1",
-        "val": "#999999",
+        "val": "#b5b5b5",
         "variable": "var(--color-1)"
       },
       "$color.darkGray": {
         "isVar": true,
         "key": "$darkGray",
         "name": "color-2",
-        "val": "#333333",
+        "val": "#6b6b6b",
         "variable": "var(--color-2)"
       },
       "$color.whiteBg": {
         "isVar": true,
         "key": "$whiteBg",
         "name": "color-3",
-        "val": "#fff",
+        "val": "#f9f9f9",
         "variable": "var(--color-3)"
       },
-      "$color.siteBorderColor": {
+      "$color.lightBg": {
         "isVar": true,
-        "key": "$siteBorderColor",
+        "key": "$lightBg",
         "name": "color-4",
-        "val": "#eee",
+        "val": "#eeeeee",
         "variable": "var(--color-4)"
+      },
+      "$color.black": {
+        "isVar": true,
+        "key": "$black",
+        "name": "color-5",
+        "val": "#000000",
+        "variable": "var(--color-5)"
       },
       "$radius.0": {
         "isVar": true,

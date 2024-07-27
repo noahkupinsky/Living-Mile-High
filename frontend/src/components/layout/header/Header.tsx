@@ -4,18 +4,22 @@ import { Text, styled, View, XStack, Image, YStack } from 'tamagui';
 import { usePathname, useRouter } from 'next/navigation';
 import { useRef, useState, useEffect, useCallback, useMemo } from 'react';
 import HamburgerMenu from './HamburgerMenu';
-import HorizontalLine from '../HorizontalLine';
 import { filterNavTabs } from '@/config/navTabs';
 import { useAuth } from '@/contexts/AuthContext';
 import NavTabComponent from './NavTabComponent';
 import Instagram from './Instagram';
+import { HeaderFooterHorizontalLine } from '../LayoutComponents';
+import { FADE_SHORT } from '@/config/constants';
+import { useSizing } from '@/contexts/SizingContext';
 
 const LARGE_LOGO_SIZE = 125;
 const SMALL_LOGO_SIZE = 75;
 
 const HeaderContainer = styled(YStack, {
     width: '100%',
-    paddingTop: '2vh',
+    style: {
+        transition: FADE_SHORT,
+    }
 });
 
 const NavContainer = styled(XStack, {
@@ -26,13 +30,13 @@ const NavContainer = styled(XStack, {
 })
 
 const HeaderLeftContainer = styled(XStack, {
-    paddingLeft: '5rem',
+    paddingLeft: '3rem',
     justifyContent: 'flex-start',
     alignItems: 'center',
 })
 
 const HeaderRightContainer = styled(XStack, {
-    paddingRight: '5rem',
+    paddingRight: '3rem',
     justifyContent: 'flex-end',
     alignItems: 'center',
 })
@@ -81,7 +85,7 @@ const Header = () => {
     const [hoveredTab, setHoveredTab] = useState<string | null>(null);
     const [rightWidth, setRightWidth] = useState<number | null>(null);
     const [leftWidth, setLeftWidth] = useState<number | null>(null);
-    const headerRef = useRef<HTMLDivElement>(null);
+    const { headerRef } = useSizing();
     const leftRef = useRef<HTMLDivElement>(null);
     const rightRef = useRef<HTMLDivElement>(null);
 
@@ -95,7 +99,6 @@ const Header = () => {
         const headerWidth = headerRef.current.offsetWidth;
         const currentLeftWidth = leftRef.current ? leftRef.current.scrollWidth : leftWidth !== null ? leftWidth : 0;
         const currentRightWidth = rightRef.current ? rightRef.current.scrollWidth : rightWidth !== null ? rightWidth : 0;
-        console.log(currentLeftWidth, currentRightWidth, headerWidth);
 
         if (currentLeftWidth + currentRightWidth > headerWidth) {
             if (!isHamburger) {
@@ -138,9 +141,6 @@ const Header = () => {
         <HeaderContainer
             opacity={isResolved ? 1 : 0}
             ref={headerRef}
-            style={{
-                transition: 'opacity 0.1s ease-in-out',
-            }}
         >
 
             {isHamburger ? (
@@ -169,17 +169,20 @@ const Header = () => {
                             size={LARGE_LOGO_SIZE} />
                     </HeaderLeftContainer>
                     <HeaderRightContainer ref={rightRef}>
-                        {tabs.map(tab => <NavTabComponent
-                            key={tab.name}
-                            tab={tab}
-                            setHoveredTab={setHoveredTab}
-                            hoveredTab={hoveredTab}
-                        />)}
+                        <XStack
+                            alignItems='center'>
+                            {tabs.map(tab => <NavTabComponent
+                                key={tab.name}
+                                tab={tab}
+                                setHoveredTab={setHoveredTab}
+                                hoveredTab={hoveredTab}
+                            />)}
+                        </XStack>
                         <Instagram transform={'translateY(-0.2rem)'} paddingLeft={15} />
                     </HeaderRightContainer>
                 </NavContainer>
             )}
-            <HorizontalLine width={'95%'} height={isHamburger ? '3rem' : '5rem'} color={'$darkGray'} />
+            <HeaderFooterHorizontalLine />
         </HeaderContainer>
     );
 };

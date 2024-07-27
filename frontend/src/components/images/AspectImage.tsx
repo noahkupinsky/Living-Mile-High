@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import ClickableImage from './ClickableImage';
-import { styled, View } from 'tamagui';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Image, styled, View } from 'tamagui';
+import { FADE_MEDIUM } from '@/config/constants';
+import { requestAnimationFrames } from '@/utils/misc';
 
 type AspectImageProps = {
     src: string;
@@ -10,16 +11,18 @@ type AspectImageProps = {
     width?: number;
     height?: number;
     onClick?: () => void;
+    onDimensions?: (dimensions: { width: number; height: number }) => void;
     noFade?: boolean;
     [key: string]: any;
 };
 
 const Container = styled(View, {
-    width: '100%',
-    height: '100%',
+    style: {
+        transition: FADE_MEDIUM,
+    }
 });
 
-const AspectImage: React.FC<AspectImageProps> = ({ noFade, src, width, height, alt, onClick, ...props }) => {
+const AspectImage: React.FC<AspectImageProps> = ({ noFade, src, width, height, alt, onClick, onDimensions, ...props }) => {
     const [dimensions, setDimensions] = useState<{ width: number; height: number } | null>(null);
     const [opacity, setOpacity] = useState(noFade ? 1 : 0);
 
@@ -45,12 +48,6 @@ const AspectImage: React.FC<AspectImageProps> = ({ noFade, src, width, height, a
             } else {
                 setDimensions({ width: img.width, height: img.height });
             }
-
-            if (opacity === 0) {
-                setTimeout(() => {
-                    setOpacity(1);
-                }, 50);
-            }
         };
     }, [src, width, height]);
 
@@ -58,22 +55,30 @@ const AspectImage: React.FC<AspectImageProps> = ({ noFade, src, width, height, a
         calculateDimensions();
     }, [src, width, height]);
 
+    useEffect(() => {
+        if (onDimensions && dimensions) {
+            onDimensions(dimensions);
+        }
+    }, [dimensions, onDimensions]);
+
+    useEffect(() => {
+        requestAnimationFrames(() => setOpacity(1));
+    }, []);
+
     if (!dimensions) {
-        return null; // or a loading spinner
+        return null;
     }
 
     return (
         <Container
             opacity={opacity}
-            style={{
-                transition: 'opacity 0.5s ease-in-out',
-            }}
+            onPress={onClick}
+            cursor={onClick ? 'pointer' : 'auto'}
         >
-            <ClickableImage
+            <Image
                 source={{ uri: src, width: dimensions.width, height: dimensions.height }}
                 alt={alt}
                 {...props}
-                onClick={onClick}
             />
         </Container>
     );

@@ -10,7 +10,7 @@ export type HouseRecord = {
     isSelectedWork: boolean;
     mainImage: string;
     images: string[];
-    neighborhood: string;
+    neighborhood?: string;
     stats: {
         houseSquareFeet?: number;
         lotSquareFeet?: number;

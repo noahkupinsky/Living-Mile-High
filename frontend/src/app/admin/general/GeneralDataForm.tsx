@@ -8,7 +8,7 @@ import services from "@/di";
 import { objectsEqual } from "@/utils/misc";
 import { GeneralData } from "living-mile-high-lib";
 import { useEffect, useState } from "react";
-import { Button, Label, TextArea, View, styled } from "tamagui";
+import { Button, Label, TextArea, View, YStack, styled } from "tamagui";
 
 const FormContainer = styled(View, {
     display: 'flex',
@@ -22,15 +22,17 @@ const ColumnsContainer = styled(View, {
     flexDirection: 'row',
 })
 
-const LeftColumn = styled(View, {
+const LeftColumn = styled(YStack, {
     flex: 1,
     width: 400,
     marginRight: 20,
+    alignItems: 'center',
 });
 
-const RightColumn = styled(View, {
+const RightColumn = styled(YStack, {
     width: 400,
     flex: 1,
+    alignItems: 'center',
 });
 
 const LabelButton = styled(Button, {
@@ -46,12 +48,9 @@ const LabelButtonRow = styled(View, {
     marginBottom: 15,
 });
 
-const SingleImageContainer = styled(View, {
-    width: '100%',
+const SingleImageContainer = styled(YStack, {
     height: 200,
     marginBottom: 10,
-    borderWidth: 1,
-    borderColor: '#ccc',
     alignItems: 'center',
     justifyContent: 'center',
 });
@@ -64,7 +63,6 @@ const StyledTextArea = styled(TextArea, {
     borderColor: '#ccc',
     borderRadius: 4,
     fontSize: 16,
-    resize: 'none', // This ensures the text area only expands downward
     marginBottom: 15,
 });
 

@@ -8,7 +8,7 @@ export type House = {
     address: string,
     mainImage: string,
     images: string[],
-    neighborhood: string,
+    neighborhood?: string,
     stats: HouseStats,
     createdAt?: string,
     updatedAt?: string,

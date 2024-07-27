@@ -2,14 +2,19 @@
 
 import { Text, XStack, YStack, styled } from 'tamagui';
 import HorizontalLine from './HorizontalLine';
-import { EMAIL_ADDRESS, PHONE_NUMBER } from '@/config/constants';
+import { EMAIL_ADDRESS, FADE_SHORT, PHONE_NUMBER } from '@/config/constants';
 import { useEffect, useState } from 'react';
+import { HeaderFooterHorizontalLine } from './LayoutComponents';
+import useFadeIn from '@/utils/fadeIn';
+import { useSizing } from '@/contexts/SizingContext';
 
 const FooterContainer = styled(YStack, {
     width: '100%',
-    paddingBottom: '2vh',
     alignItems: 'center',
     justifyContent: 'center',
+    style: {
+        transition: FADE_SHORT,
+    }
 });
 const FooterTextContainer = styled(XStack, {
     width: '100%',
@@ -25,20 +30,15 @@ const FooterText = styled(Text, {
 });
 
 export default function Footer() {
-    const [isMounted, setIsMounted] = useState(false);
-
-    useEffect(() => {
-        setIsMounted(true);
-    }, []);
+    const { footerRef } = useSizing();
+    const opacity = useFadeIn();
 
     return (
         <FooterContainer
-            opacity={isMounted ? 1 : 0}
-            style={{
-                transition: 'opacity 0.1s ease-in-out',
-            }}
+            ref={footerRef}
+            opacity={opacity}
         >
-            <HorizontalLine width={'95%'} height={'5rem'} color={'$darkGray'} />
+            <HeaderFooterHorizontalLine />
             <FooterTextContainer>
                 <FooterText>{`${PHONE_NUMBER} | ${EMAIL_ADDRESS}`}</FooterText>
             </FooterTextContainer>

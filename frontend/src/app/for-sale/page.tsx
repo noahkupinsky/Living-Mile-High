@@ -3,12 +3,26 @@
 import SiteDataLoader from "@/components/layout/SiteDataLoader";
 import { HouseQueryProvider, useHouseQuery } from "@/contexts/HouseQueryContext";
 import { useEffect, useState } from "react";
-import ForSaleHouseColumn from "./ForSaleHouseColumn";
+import ForSaleHouse from "./ForSaleHouse";
 import { House } from "living-mile-high-lib";
 import Modal from "@/components/layout/Modal";
 import ImageCarousel from "@/components/images/ImageCarousel";
+import { View } from "react-native";
+import { styled } from "tamagui";
+import { useSizing } from "@/contexts/SizingContext";
+
+const ColumnContainer = styled(View, {
+    name: 'ColumnContainer',
+    flexDirection: 'column',
+    alignItems: 'center',
+    width: '100%',
+});
+
+const WIDTH_PERCENTAGE = 0.9;
+const HEIGHT_PERCENTAGE = 0.9;
 
 const ForSaleComponent = () => {
+    const { bodyWidth, bodyHeight } = useSizing();
     const { houses, setQuery } = useHouseQuery();
     const [selectedHouse, setSelectedHouse] = useState<House | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -32,13 +46,16 @@ const ForSaleComponent = () => {
     const houseImages = selectedHouse ? [selectedHouse.mainImage].concat(selectedHouse.images) : [];
 
     return (
-        <>
-            <ForSaleHouseColumn
-                houses={houses}
-                imageWidth={800}
-                textWidth={300}
-                onClick={handleImageClick}
-            />
+        <ColumnContainer>
+            {houses.map(house => (
+                <ForSaleHouse
+                    key={house.address}
+                    house={house}
+                    maxWidth={bodyWidth * WIDTH_PERCENTAGE}
+                    maxHeight={bodyHeight * HEIGHT_PERCENTAGE}
+                    onClick={handleImageClick}
+                />
+            ))}
             <Modal
                 isOpen={isModalOpen}
                 onClose={handleCloseModal}
@@ -47,7 +64,7 @@ const ForSaleComponent = () => {
                     images={houseImages}
                 />
             </Modal>
-        </>
+        </ColumnContainer>
     );
 };
 

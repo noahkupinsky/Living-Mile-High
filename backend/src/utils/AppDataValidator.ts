@@ -67,7 +67,7 @@ export class SiteDataValidator {
 
         const requiredProperties = [
             'isDeveloped', 'isForSale', 'isSelectedWork',
-            'address', 'mainImage', 'images', 'neighborhood', 'stats'
+            'address', 'mainImage', 'images', 'stats'
         ];
 
         for (const prop of requiredProperties) {
@@ -88,7 +88,7 @@ export class SiteDataValidator {
             throw new Error('House images must be an array of strings');
         }
 
-        if (typeof house.neighborhood !== 'string') {
+        if (house.neighborhood !== undefined && typeof house.neighborhood !== 'string') {
             throw new Error('House neighborhood must be a string');
         }
 

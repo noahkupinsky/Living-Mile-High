@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, View, XStack, styled } from 'tamagui';
+import { Button, View, XStack, YStack, styled } from 'tamagui';
 import { useSiteData } from '@/contexts/SiteDataContext';
 import Modal from '@/components/layout/Modal';
 import UploadSingleImage from '@/components/images/UploadSingleImage';
@@ -17,7 +17,7 @@ const LabelButton = styled(Button, {
     fontWeight: 'bold',
 });
 
-const MainImageContainer = styled(View, {
+const MainImageContainer = styled(YStack, {
     width: '100%',
     height: 200,
     marginBottom: 10,
@@ -28,7 +28,6 @@ const MainImageContainer = styled(View, {
 });
 
 const DefaultImagesContainer = styled(XStack, {
-    width: '100%',
     marginBottom: 10,
 })
 

@@ -4,10 +4,11 @@ import { createFont, createTamagui, createTokens } from 'tamagui' // or '@tamagu
 export const tokens = createTokens({
     ...config.tokens,
     color: {
-        lightGray: '#999999',
-        darkGray: '#333333',
-        whiteBg: '#fff',
-        siteBorderColor: '#eee',
+        lightGray: '#b5b5b5',
+        darkGray: '#6b6b6b',
+        whiteBg: '#f9f9f9',
+        lightBg: '#eeeeee',
+        black: '#000000',
     },
 });
 

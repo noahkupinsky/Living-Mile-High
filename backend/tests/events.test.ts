@@ -82,13 +82,13 @@ describe('WebSocket /events/connect', () => {
             (data: any, close) => {
                 const { messages, eventId }: EventObject = JSON.parse(data);
                 if (!receivedInitialMessage) {
-                    expect(messages).toBe(EventMessage.CONNECTED);
+                    expect(messages).toEqual([EventMessage.CONNECTED]);
                     receivedInitialMessage = true;
 
                     // Send the custom event message after receiving the initial message
                     sendEvent([EventMessage.SITE_UPDATED, EventMessage.BACKUPS_UPDATED], testEventId);
                 } else {
-                    expect(messages).toBe([EventMessage.SITE_UPDATED, EventMessage.BACKUPS_UPDATED]);
+                    expect(messages).toEqual([EventMessage.SITE_UPDATED, EventMessage.BACKUPS_UPDATED]);
                     expect(eventId).toBe(testEventId);
                     close();
                 }

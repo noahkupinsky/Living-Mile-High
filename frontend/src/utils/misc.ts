@@ -36,3 +36,14 @@ export function objectsEqual(obj1: any, obj2: any) {
 
     return true;
 }
+
+export const requestAnimationFrames = (callback: () => void, number: number = 2) => {
+    if (number === 0) {
+        callback();
+        return;
+    }
+
+    requestAnimationFrame(() => {
+        requestAnimationFrames(callback, number - 1);
+    })
+}

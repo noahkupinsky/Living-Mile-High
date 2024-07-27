@@ -11,7 +11,7 @@ const HouseSchema = new Schema<HouseDocument>({
     isSelectedWork: { type: Boolean, required: true },
     mainImage: { type: String, required: true },
     images: { type: [String] },
-    neighborhood: { type: String, required: true },
+    neighborhood: { type: String, required: false },
     stats: {
         houseSquareFeet: { type: Number },
         lotSquareFeet: { type: Number },
