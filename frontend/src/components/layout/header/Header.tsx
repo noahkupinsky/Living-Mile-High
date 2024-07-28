@@ -2,7 +2,7 @@
 
 import { Text, styled, View, XStack, Image, YStack } from 'tamagui';
 import { usePathname, useRouter } from 'next/navigation';
-import { useRef, useState, useEffect, useCallback, useMemo, MutableRefObject, useLayoutEffect } from 'react';
+import { useRef, useState, useEffect, useCallback, useMemo } from 'react';
 import HamburgerMenu from './HamburgerMenu';
 import { filterNavTabs } from '@/config/navTabs';
 import { useAuth } from '@/contexts/AuthContext';
@@ -13,11 +13,14 @@ import { FADE_SHORT } from '@/config/constants';
 import { useSizing } from '@/contexts/SizingContext';
 import { minV } from '@/utils/misc';
 
-const LOGO_SIZE = 'min(12vw, 12vh)';
+const LOGO_SIZE = minV(12);
+const HORIZONTAL_PADDING = '3vw';
 const TITLE_PERCENTAGE = 0.03;
 const SPACING_PERCENTAGE = 0.3;
 const TITLE_MINIMUM_SIZE = 0.5;
-const TITLE_MAXIMUM_SIZE = 2;
+const TITLE_MAXIMUM_SIZE = 1.8;
+const HAMBURGER_SIZE = 30;
+const INSTAGRAM_SIZE = 30;
 
 const HeaderContainer = styled(YStack, {
     width: '100%',
@@ -34,13 +37,13 @@ const NavContainer = styled(XStack, {
 })
 
 const HeaderLeftContainer = styled(XStack, {
-    paddingLeft: minV(3),
+    paddingLeft: HORIZONTAL_PADDING,
     justifyContent: 'flex-start',
     alignItems: 'center',
 })
 
 const HeaderRightContainer = styled(XStack, {
-    paddingRight: minV(3),
+    paddingRight: HORIZONTAL_PADDING,
     justifyContent: 'flex-end',
     alignItems: 'center',
 })
@@ -166,13 +169,15 @@ const Header = () => {
             titleObserver.observe(currentTitle);
         }
 
+        handleTitleSize();
+
         return () => {
             if (currentTitle) {
                 titleObserver.unobserve(currentTitle);
             }
         };
 
-    }, [handleTitleSize, titleRef]);
+    }, [handleTitleSize]);
 
 
     const headerName = pathname === '/' ? 'HOME' : tabs.find(tab => pathname.startsWith(tab.path))?.name.toLocaleUpperCase() || '';
@@ -186,7 +191,7 @@ const Header = () => {
                 <View style={{ flex: 1 }} ref={titleRef} >
                     <NavContainer
                         key={"narrow"}
-                        height={LOGO_SIZE}
+                        height={`max(${LOGO_SIZE}, ${HAMBURGER_SIZE}px)`}
                     >
                         <HeaderLeftContainer>
                             <SquareLogo size={LOGO_SIZE} />
@@ -202,6 +207,7 @@ const Header = () => {
                                 setHoveredTab={setHoveredTab}
                                 hoveredTab={hoveredTab}
                                 tabs={tabs}
+                                size={HAMBURGER_SIZE}
                             />
                         </HeaderRightContainer>
                     </NavContainer>
@@ -209,7 +215,7 @@ const Header = () => {
             ) : (
                 <NavContainer
                     key={"wide"}
-                    height={LOGO_SIZE} >
+                    height={`max(${LOGO_SIZE}, ${INSTAGRAM_SIZE}px)`} >
                     <HeaderLeftContainer ref={leftRef}>
                         <SquareLogo
                             size={LOGO_SIZE} />
@@ -224,7 +230,11 @@ const Header = () => {
                                 hoveredTab={hoveredTab}
                             />)}
                         </XStack>
-                        <Instagram transform={'translateY(-0.2rem)'} paddingLeft={15} />
+                        <Instagram
+                            transform={'translateY(-0.2rem)'}
+                            paddingLeft={15}
+                            size={INSTAGRAM_SIZE}
+                        />
                     </HeaderRightContainer>
                 </NavContainer>
             )}

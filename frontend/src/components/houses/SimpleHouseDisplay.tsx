@@ -1,48 +1,60 @@
 import React from 'react';
-import { styled, Text, View } from 'tamagui';
+import { styled, Text, View, YStack } from 'tamagui';
 import AspectImage from '@/components/images/AspectImage';
 import { House } from 'living-mile-high-lib';
 
-const Container = styled(View, {
+
+const FONT_PERCENTAGE = 0.045;
+const SPACING_PERCENTAGE = 0.15;
+const GAP_MULTIPLIER = 7;
+
+const HouseContainer = styled(View, {
     name: 'Container',
     position: 'relative',
-    borderWidth: 1,
-    borderColor: '#ccc',
-    margin: 10,
+    marginHorizontal: '1vw',
 });
 
-const BodyContainer = styled(View, {
+const ImageContainer = styled(View, {
     name: 'BodyContainer',
 });
 
-const AddressContainer = styled(View, {
+const AddressContainer = styled(YStack, {
     name: 'AddressContainer',
-    padding: 10,
+    justifyContent: 'center',
 });
 
 const AddressText = styled(Text, {
     name: 'AddressText',
-    fontSize: 14,
-    textAlign: 'left',
+    textAlign: 'right',
+    color: '$darkGray',
+    fontFamily: '$caps',
+    paddingRight: '10%',
 });
 
 export interface SimpleHouseDisplayProps {
     house: House;
     width: number
     height?: number;
+    verticalGap: number;
 }
 
-const SimpleHouseDisplay: React.FC<SimpleHouseDisplayProps> = ({ house, width, height }) => {
+const SimpleHouseDisplay: React.FC<SimpleHouseDisplayProps> = ({ house, width, height, verticalGap }) => {
+    const smallDimension = Math.min(width, verticalGap * GAP_MULTIPLIER);
+
     return (
-        <Container>
-            <BodyContainer style={{ height }
+        <HouseContainer>
+            <ImageContainer style={{ height }
             }>
                 <AspectImage src={house.mainImage} width={width} alt={house.address} />
-            </BodyContainer>
-            < AddressContainer >
-                <AddressText>{house.address} </AddressText>
+            </ImageContainer>
+            < AddressContainer
+                height={verticalGap}>
+                <AddressText
+                    fontSize={smallDimension * FONT_PERCENTAGE}
+                    letterSpacing={smallDimension * FONT_PERCENTAGE * SPACING_PERCENTAGE}
+                >{house.address} </AddressText>
             </AddressContainer>
-        </Container>
+        </HouseContainer>
     );
 };
 

@@ -67,6 +67,7 @@ const HamburgerMenuNavigation: React.FC<HamburgerMenuNavigationProps> = ({ tabs,
                 (<NavTabComponent
                     key={tab.name}
                     tab={tab}
+                    onPress={onClose}
                     setHoveredTab={setHoveredTab}
                     hoveredTab={hoveredTab}
                     paddingVertical={17}
@@ -74,7 +75,7 @@ const HamburgerMenuNavigation: React.FC<HamburgerMenuNavigationProps> = ({ tabs,
                 />)
                 )}
                 <InstagramContainer>
-                    <Instagram />
+                    <Instagram size={30} />
                 </InstagramContainer>
             </MenuContainer>
         </Overlay>
@@ -88,13 +89,14 @@ const HamburgerIconContainer = styled(View, {
 
 type HamburgerMenuProps = {
     inactive?: boolean;
+    size: number;
     setHoveredTab?: React.Dispatch<React.SetStateAction<string | null>>;
     hoveredTab?: string | null;
     tabs?: NavTab[];
 };
 
 
-const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ tabs, inactive, hoveredTab, setHoveredTab }) => {
+const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ tabs, size, inactive, hoveredTab, setHoveredTab }) => {
     const [menuOpen, setMenuOpen] = useState(false);
     const color = tokens.color.darkGray.val;
 
@@ -106,7 +108,7 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ tabs, inactive, hoveredTa
                     visibility: inactive ? 'hidden' : 'visible',
                 }}
             >
-                <svg viewBox="0 0 100 80" width="24" height="24">
+                <svg viewBox="0 0 100 80" width={`${size}`} height={`${size}`}>
                     <rect width="100" height="10" rx="5" fill={color} />
                     <rect y="30" width="100" height="10" rx="5" fill={color} />
                     <rect y="60" width="100" height="10" rx="5" fill={color} />

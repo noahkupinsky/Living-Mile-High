@@ -5,10 +5,17 @@ import SelectedWorkDisplay from './SelectedWorkDisplay';
 import SiteDataLoader from '@/components/layout/SiteDataLoader';
 import { HouseQueryProvider, useHouseQuery } from '@/contexts/HouseQueryContext';
 import { House } from 'living-mile-high-lib';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import ImageCarousel from '@/components/images/ImageCarousel';
+import { useSizing } from '@/contexts/SizingContext';
+
+const BODY_WIDTH_PERCENTAGE = 0.55;
+const BODY_HEIGHT_PERCENTAGE = 0.85;
+const GAP_PERCENTAGE = 0.2;
+
 
 const SelectedWorkComponent: React.FC = () => {
+    const { bodyWidth, bodyHeight } = useSizing();
     const { houses, setQuery } = useHouseQuery();
     const [selectedHouse, setSelectedHouse] = useState<House | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -31,10 +38,21 @@ const SelectedWorkComponent: React.FC = () => {
 
     const houseImages = selectedHouse ? [selectedHouse.mainImage].concat(selectedHouse.images) : [];
 
+    const maxWidthIfSquare = useMemo(() =>
+        Math.min(
+            bodyHeight * BODY_HEIGHT_PERCENTAGE,
+            bodyWidth * BODY_WIDTH_PERCENTAGE
+        ),
+        [bodyHeight, bodyWidth]
+    );
+
+    const gap = useMemo(() => bodyHeight * GAP_PERCENTAGE, [bodyHeight]);
+
     return (
         <>
             <SelectedWorkDisplay
-                width={500}
+                width={maxWidthIfSquare}
+                verticalGap={gap}
                 houses={houses}
                 onClick={handleImageClick}
             />
@@ -49,6 +67,7 @@ const SelectedWorkComponent: React.FC = () => {
         </>
     );
 };
+
 
 const SelectedWorkPage: React.FC = () => (
     <SiteDataLoader>

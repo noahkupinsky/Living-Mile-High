@@ -1,26 +1,82 @@
-import React from 'react';
-import { View } from 'tamagui';
+import React, { useEffect, useMemo, useState } from 'react';
+import { styled, View, XStack, YStack } from 'tamagui';
 import { House } from 'living-mile-high-lib';
-import SimpleRowContainer from './SimpleRowContainer';
+import { useSizing } from '@/contexts/SizingContext';
+import { calculateMaxHeight } from '@/utils/houseRendering';
+import { makeRows } from '@/utils/misc';
+import SimpleHouseDisplay from './SimpleHouseDisplay';
+
+const WIDTH_PERCENTAGE = 0.7;
+const GAP_PERCENTAGE = 0.2;
+const IDEAL_COLUMN_WIDTH = 300;
+
+const ColumnContainer = styled(YStack, {
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+})
+
+const Row = styled(XStack, {
+    justifyContent: 'flex-start',
+});
 
 interface SimpleColumnDisplayProps {
     houses: House[];
-    columns: number;
-    width: number;
+    maxColumns: number;
 }
 
-const SimpleColumnDisplay: React.FC<SimpleColumnDisplayProps> = ({ houses, columns, width }) => {
-    const rows = [];
-    for (let i = 0; i < houses.length; i += columns) {
-        rows.push(houses.slice(i, i + columns));
-    }
+const SimpleColumnDisplay: React.FC<SimpleColumnDisplayProps> = ({ houses, maxColumns }) => {
+    const { bodyWidth, bodyHeight } = useSizing();
+    const [heights, setHeights] = useState<number[]>([]);
+
+    const columns = useMemo(() =>
+        Math.min(
+            Math.ceil(bodyWidth * WIDTH_PERCENTAGE / IDEAL_COLUMN_WIDTH),
+            maxColumns
+        ),
+        [bodyWidth, maxColumns]
+    );
+
+    const rows = useMemo(() => makeRows(houses, columns), [houses, columns]);
+
+    const width = useMemo(() => bodyWidth * WIDTH_PERCENTAGE / columns, [bodyWidth, columns]);
+
+    useEffect(() => {
+        let isMounted = true;
+
+        const loadMaxHeights = async () => {
+            const maxHeights = await Promise.all(rows.map(row => calculateMaxHeight(row, width)));
+
+            if (isMounted) {
+                setHeights(maxHeights);
+            }
+        };
+
+        loadMaxHeights();
+
+        return () => {
+            isMounted = false;
+        };
+    }, [rows, width]);
+
+
+
+    const verticalGap = useMemo(() => bodyHeight * GAP_PERCENTAGE / columns, [bodyHeight, columns]);
 
     return (
-        <View>
+        <ColumnContainer>
             {rows.map((row, rowIndex) => (
-                <SimpleRowContainer key={rowIndex} width={width} houses={row} />
+                <Row key={rowIndex} style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
+                    {row.map((house) => (
+                        <SimpleHouseDisplay
+                            key={house.id}
+                            house={house}
+                            width={width}
+                            verticalGap={verticalGap}
+                            height={heights[rowIndex]} />
+                    ))}
+                </Row>
             ))}
-        </View>
+        </ColumnContainer>
     );
 };
 

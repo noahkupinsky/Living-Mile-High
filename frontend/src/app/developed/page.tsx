@@ -17,7 +17,7 @@ const DevelopedComponent: React.FC = () => {
     }, [setQuery, query]);
 
     return (
-        <SimpleColumnDisplay houses={houses} width={200} columns={4} />
+        <SimpleColumnDisplay houses={houses} maxColumns={4} />
     );
 };
 

@@ -1,51 +1,71 @@
 import { calculateMaxHeight } from '@/utils/houseRendering';
 import { House } from 'living-mile-high-lib';
-import React, { useState, useEffect } from 'react';
-import { styled, View } from 'tamagui';
-import SelectedWorkHouse from './SelectedWorkHouse';
-import Loader from '@/components/layout/Loader';
-import { HouseQueryProvider } from '@/contexts/HouseQueryContext';
+import React, { useState, useEffect, useMemo } from 'react';
+import { styled, Text, XStack, YStack } from 'tamagui';
+import { makeRows } from '@/utils/misc';
+import AspectImage from '@/components/images/AspectImage';
 
 const COLUMNS = 1; // Define the number of columns here
+const FONT_PERCENTAGE = 0.16;
+const SPACING_PERCENTAGE = 0.2;
 
-const DisplayContainer = styled(View, {
+const DisplayContainer = styled(YStack, {
     name: 'DisplayContainer',
-    flexDirection: 'row',
-    justifyContent: 'center', // Ensure columns are spaced
-    width: '100%',
+    justifyContent: 'flex-start', // Ensure columns are spaced
+    alignItems: 'flex-start',
+    flex: 1,
 });
 
-const Column = styled(View, {
-    name: 'Column',
-    flexDirection: 'column',
+const Row = styled(XStack, {
+    name: 'Row',
     alignItems: 'center',
-    marginHorizontal: 100, // Add constant space between columns
+    justifyContent: 'flex-start',
 });
 
 interface SelectedWorkDisplayProps {
     houses: House[];
     width: number;
+    verticalGap: number;
+    horizontalGap?: number;
     onClick: (house: House) => void;
 }
 
-const SelectedWorkDisplay: React.FC<SelectedWorkDisplayProps> = ({ houses, width, onClick }) => {
+const Container = styled(YStack, {
+    name: 'Container',
+    justifyContent: 'flex-end',
+});
+
+const BodyContainer = styled(YStack, {
+    name: 'BodyContainer',
+    justifyContent: 'flex-start'
+});
+
+const TextContainer = styled(YStack, {
+    name: 'TextContainer',
+    justifyContent: 'center',
+})
+
+const AddressText = styled(Text, {
+    name: 'AddressText',
+    fontFamily: '$caps',
+    color: '$darkGray',
+    textAlign: 'right',
+    paddingRight: '10%',
+});
+
+const SelectedWorkDisplay: React.FC<SelectedWorkDisplayProps> = ({ houses, width, verticalGap, horizontalGap = 100, onClick }) => {
     const [heights, setHeights] = useState<number[]>([]);
+
+    const rows = useMemo(() => makeRows(houses, COLUMNS), [houses]);
 
     useEffect(() => {
         let isMounted = true;
 
         const loadMaxHeights = async () => {
-            const numRows = Math.ceil(houses.length / COLUMNS);
-            const rowHeights: number[] = [];
-
-            for (let i = 0; i < numRows; i++) {
-                const rowHouses = houses.slice(i * COLUMNS, i * COLUMNS + COLUMNS);
-                const height = await calculateMaxHeight(rowHouses, width);
-                rowHeights.push(height);
-            }
+            const maxHeights = await Promise.all(rows.map(row => calculateMaxHeight(row, width)));
 
             if (isMounted) {
-                setHeights(rowHeights);
+                setHeights(maxHeights);
             }
         };
 
@@ -54,38 +74,37 @@ const SelectedWorkDisplay: React.FC<SelectedWorkDisplayProps> = ({ houses, width
         return () => {
             isMounted = false;
         };
-    }, [houses, width]);
-
-    const getColumns = (houses: House[]) => {
-        const columns: House[][] = Array.from({ length: COLUMNS }, () => []);
-        houses.forEach((house, index) => {
-            columns[index % COLUMNS].push(house);
-        });
-        return columns;
-    };
-
-    const columns = getColumns(houses);
+    }, [rows, width]);
 
     return (
-        <Loader isLoading={heights.length === 0}>
-            <DisplayContainer>
-                {columns.map((column, columnIndex) => (
-                    <Column
-                        key={columnIndex}
-                        style={{ width: width }}>
-                        {column.map((house, index) => (
-                            <SelectedWorkHouse
-                                key={house.id}
-                                house={house}
-                                height={heights[index]}
-                                width={width}
-                                onClick={onClick}
-                            />
-                        ))}
-                    </Column>
-                ))}
-            </DisplayContainer>
-        </Loader>
+        <DisplayContainer>
+            {rows.map((row, rowIndex) => (
+                <Row
+                    key={rowIndex}
+                    gap={horizontalGap}
+                >
+
+                    {row.map((house, houseIndex) => (
+                        <Container key={houseIndex}>
+                            <BodyContainer height={heights[rowIndex]}>
+                                <AspectImage
+                                    src={house.mainImage}
+                                    width={width}
+                                    alt={house.address}
+                                    onClick={() => onClick(house)}
+                                />
+                            </BodyContainer>
+                            <TextContainer height={verticalGap}>
+                                <AddressText
+                                    fontSize={verticalGap * FONT_PERCENTAGE}
+                                    letterSpacing={verticalGap * FONT_PERCENTAGE * SPACING_PERCENTAGE}
+                                >{house.address}</AddressText>
+                            </TextContainer>
+                        </Container>
+                    ))}
+                </Row>
+            ))}
+        </DisplayContainer>
     );
 };
 

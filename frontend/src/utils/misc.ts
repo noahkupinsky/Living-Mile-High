@@ -51,3 +51,11 @@ export const requestAnimationFrames = (callback: () => void, number: number = 2)
 export function minV(x: number): string {
     return `min(${x}vw, ${x}vh)`;
 }
+
+export function makeRows<T>(array: T[], columns: number): T[][] {
+    const rows: T[][] = [];
+    for (let i = 0; i < array.length; i += columns) {
+        rows.push(array.slice(i, i + columns));
+    }
+    return rows;
+}

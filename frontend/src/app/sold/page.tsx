@@ -2,8 +2,8 @@
 
 import { useHouseQuery, HouseQueryProvider } from "@/contexts/HouseQueryContext";
 import React, { useState } from "react";
-import SimpleNeighborhoodGrouping from "@/components/houses/SimpleNeighborhoodGrouping";
 import SiteDataLoader from "@/components/layout/SiteDataLoader";
+import SimpleColumnDisplay from "@/components/houses/SimpleColumnDisplay";
 
 
 const SoldComponent: React.FC = () => {
@@ -17,7 +17,7 @@ const SoldComponent: React.FC = () => {
     }, [setQuery, query]);
 
     return (
-        <SimpleNeighborhoodGrouping houses={houses} width={200} columns={4} />
+        <SimpleColumnDisplay houses={houses} maxColumns={4} />
     );
 };
 

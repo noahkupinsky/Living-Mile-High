@@ -4,7 +4,7 @@ import { House } from 'living-mile-high-lib';
 import { FADE_MEDIUM, STAT_TEMPLATES } from '@/config/constants';
 import useFadeIn from '@/utils/fadeIn';
 import AspectImage from '@/components/images/AspectImage';
-import { requestAnimationFrames } from '@/utils/misc';
+import { minV, requestAnimationFrames } from '@/utils/misc';
 
 const EntryContainer = styled(XStack, {
     name: 'EntryContainer',
@@ -19,7 +19,7 @@ const EntryContainer = styled(XStack, {
 
 const TextContainer = styled(YStack, {
     name: 'Container',
-    padding: '1vh',
+    padding: minV(2),
     justifyContent: 'space-between',
 });
 
@@ -79,7 +79,7 @@ const ForSaleHouse: React.FC<ForSaleHouseProps> = ({ house, maxWidth, maxHeight,
         if (dimensions.width !== 0 && opacity === 0) {
             requestAnimationFrames(() => setOpacity(1));
         }
-    }, [dimensions]);
+    }, [dimensions, opacity]);
 
     const renderBold = (text: string) => {
         return (

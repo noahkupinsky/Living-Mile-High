@@ -18,10 +18,11 @@ type NavTabComponentProps = {
     tab: NavTab;
     setHoveredTab: React.Dispatch<React.SetStateAction<string | null>>;
     hoveredTab: string | null;
+    onPress?: () => void;
     [key: string]: any;
 };
 
-const NavTabComponent: React.FC<NavTabComponentProps> = ({ tab, setHoveredTab, hoveredTab, ...props }) => {
+const NavTabComponent: React.FC<NavTabComponentProps> = ({ tab, onPress, setHoveredTab, hoveredTab, ...props }) => {
     const pathname = usePathname();
     const router = useRouter();
     const isActive = pathname.startsWith(tab.path);
@@ -35,7 +36,10 @@ const NavTabComponent: React.FC<NavTabComponentProps> = ({ tab, setHoveredTab, h
     return (
         <StyledTabContainer
             key={tab.name}
-            onPress={() => router.push(tab.path)}
+            onPress={() => {
+                router.push(tab.path);
+                onPress?.();
+            }}
             onMouseEnter={() => setHoveredTab(tab.name)}
             onMouseLeave={() => setHoveredTab(null)}
             {...props}
