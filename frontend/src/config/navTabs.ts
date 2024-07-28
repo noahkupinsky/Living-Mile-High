@@ -24,7 +24,7 @@ export const navTabs: NavTab[] = [
     {
         name: 'About',
         path: '/about',
-        isAdmin: false
+        isAdmin: true
     },
     {
         name: 'Contact',

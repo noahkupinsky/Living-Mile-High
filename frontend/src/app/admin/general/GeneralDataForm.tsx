@@ -104,6 +104,7 @@ const GeneralDataForm: React.FC = () => {
             alert('General data update detected. Repopulating form...');
         }
         setFormData(newGeneralData);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [generalData]);
 
     const setDefaultImages = (images: React.SetStateAction<string[]>) => {

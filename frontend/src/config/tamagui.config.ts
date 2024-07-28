@@ -70,6 +70,7 @@ const appConfig: any = createTamagui({
     fonts: {
         ...config.fonts,
         caps: coutureFont,
+        form: garetFont,
     }
 });
 
