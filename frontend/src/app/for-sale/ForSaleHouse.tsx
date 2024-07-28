@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { styled, View, XStack, Text, YStack } from 'tamagui';
 import { House } from 'living-mile-high-lib';
 import { FADE_MEDIUM, STAT_TEMPLATES } from '@/config/constants';
-import useFadeIn from '@/utils/fadeIn';
 import AspectImage from '@/components/images/AspectImage';
 import { minV, requestAnimationFrames } from '@/utils/misc';
 
@@ -10,7 +9,7 @@ const EntryContainer = styled(XStack, {
     name: 'EntryContainer',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    marginBottom: '15vh',
+    marginBottom: minV(15),
     backgroundColor: '$lightBg',
     style: {
         transition: FADE_MEDIUM

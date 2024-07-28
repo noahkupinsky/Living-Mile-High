@@ -17,7 +17,7 @@ const SoldComponent: React.FC = () => {
     }, [setQuery, query]);
 
     return (
-        <SimpleColumnDisplay houses={houses} maxColumns={4} />
+        <SimpleColumnDisplay houses={houses} maxColumns={4} minColumns={2} />
     );
 };
 

@@ -22,18 +22,23 @@ const Row = styled(XStack, {
 interface SimpleColumnDisplayProps {
     houses: House[];
     maxColumns: number;
+    minColumns: number;
+    onClick?: (house: House) => void;
 }
 
-const SimpleColumnDisplay: React.FC<SimpleColumnDisplayProps> = ({ houses, maxColumns }) => {
+const SimpleColumnDisplay: React.FC<SimpleColumnDisplayProps> = ({ houses, onClick, maxColumns, minColumns }) => {
     const { bodyWidth, bodyHeight } = useSizing();
     const [heights, setHeights] = useState<number[]>([]);
 
     const columns = useMemo(() =>
-        Math.min(
-            Math.ceil(bodyWidth * WIDTH_PERCENTAGE / IDEAL_COLUMN_WIDTH),
-            maxColumns
+        Math.max(
+            Math.min(
+                Math.ceil(bodyWidth * WIDTH_PERCENTAGE / IDEAL_COLUMN_WIDTH),
+                maxColumns
+            ),
+            minColumns
         ),
-        [bodyWidth, maxColumns]
+        [bodyWidth, minColumns, maxColumns]
     );
 
     const rows = useMemo(() => makeRows(houses, columns), [houses, columns]);
@@ -71,6 +76,7 @@ const SimpleColumnDisplay: React.FC<SimpleColumnDisplayProps> = ({ houses, maxCo
                             key={house.id}
                             house={house}
                             width={width}
+                            onClick={onClick ? () => onClick(house) : undefined}
                             verticalGap={verticalGap}
                             height={heights[rowIndex]} />
                     ))}

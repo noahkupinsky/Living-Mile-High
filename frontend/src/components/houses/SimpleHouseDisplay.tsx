@@ -36,16 +36,21 @@ export interface SimpleHouseDisplayProps {
     width: number
     height?: number;
     verticalGap: number;
+    onClick?: () => void;
 }
 
-const SimpleHouseDisplay: React.FC<SimpleHouseDisplayProps> = ({ house, width, height, verticalGap }) => {
+const SimpleHouseDisplay: React.FC<SimpleHouseDisplayProps> = ({ house, width, height, onClick, verticalGap }) => {
     const smallDimension = Math.min(width, verticalGap * GAP_MULTIPLIER);
 
     return (
         <HouseContainer>
             <ImageContainer style={{ height }
             }>
-                <AspectImage src={house.mainImage} width={width} alt={house.address} />
+                <AspectImage
+                    src={house.mainImage}
+                    width={width}
+                    alt={house.address}
+                    onClick={onClick} />
             </ImageContainer>
             < AddressContainer
                 height={verticalGap}>

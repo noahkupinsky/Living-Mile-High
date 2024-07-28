@@ -44496,7 +44496,8 @@ var appConfig = createTamagui({
   tokens: tokens2,
   fonts: {
     ...config.fonts,
-    caps: coutureFont
+    caps: coutureFont,
+    form: garetFont
   }
 });
 var tamagui_config_default = appConfig;
