@@ -2,14 +2,12 @@
 
 import SiteDataLoader from "@/components/layout/SiteDataLoader";
 import { HouseQueryProvider, useHouseQuery } from "@/contexts/HouseQueryContext";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import ForSaleHouse from "./ForSaleHouse";
-import { House } from "living-mile-high-lib";
-import Modal from "@/components/layout/Modal";
-import ImageCarousel from "@/components/images/ImageCarousel";
 import { View } from "react-native";
 import { styled } from "tamagui";
 import { useSizing } from "@/contexts/SizingContext";
+import { useCarousel } from "@/contexts/CarouselContext";
 
 const ColumnContainer = styled(View, {
     name: 'ColumnContainer',
@@ -24,26 +22,13 @@ const HEIGHT_PERCENTAGE = 0.9;
 const ForSaleComponent = () => {
     const { bodyWidth, bodyHeight } = useSizing();
     const { houses, setQuery } = useHouseQuery();
-    const [selectedHouse, setSelectedHouse] = useState<House | null>(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const { handleImageClick } = useCarousel();
 
     useEffect(() => {
         setQuery({
             isForSale: true,
         });
     }, [setQuery]);
-
-
-    const handleImageClick = (house: House) => {
-        setSelectedHouse(house);
-        setIsModalOpen(true);
-    };
-
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
-    };
-
-    const houseImages = selectedHouse ? [selectedHouse.mainImage].concat(selectedHouse.images) : [];
 
     return (
         <ColumnContainer>
@@ -56,14 +41,6 @@ const ForSaleComponent = () => {
                     onClick={handleImageClick}
                 />
             ))}
-            <Modal
-                isOpen={isModalOpen}
-                onClose={handleCloseModal}
-            >
-                <ImageCarousel
-                    images={houseImages}
-                />
-            </Modal>
         </ColumnContainer>
     );
 };
