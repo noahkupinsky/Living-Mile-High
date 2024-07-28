@@ -2,7 +2,7 @@
 
 import { Text, styled, View, XStack, Image, YStack } from 'tamagui';
 import { usePathname, useRouter } from 'next/navigation';
-import { useRef, useState, useEffect, useCallback, useMemo } from 'react';
+import { useRef, useState, useEffect, useCallback, useMemo, MutableRefObject, useLayoutEffect } from 'react';
 import HamburgerMenu from './HamburgerMenu';
 import { filterNavTabs } from '@/config/navTabs';
 import { useAuth } from '@/contexts/AuthContext';
@@ -11,9 +11,13 @@ import Instagram from './Instagram';
 import { HeaderFooterHorizontalLine } from '../LayoutComponents';
 import { FADE_SHORT } from '@/config/constants';
 import { useSizing } from '@/contexts/SizingContext';
+import { minV } from '@/utils/misc';
 
-const LARGE_LOGO_SIZE = 125;
-const SMALL_LOGO_SIZE = 75;
+const LOGO_SIZE = 'min(12vw, 12vh)';
+const TITLE_PERCENTAGE = 0.03;
+const SPACING_PERCENTAGE = 0.3;
+const TITLE_MINIMUM_SIZE = 0.5;
+const TITLE_MAXIMUM_SIZE = 2;
 
 const HeaderContainer = styled(YStack, {
     width: '100%',
@@ -30,21 +34,19 @@ const NavContainer = styled(XStack, {
 })
 
 const HeaderLeftContainer = styled(XStack, {
-    paddingLeft: '3rem',
+    paddingLeft: minV(3),
     justifyContent: 'flex-start',
     alignItems: 'center',
 })
 
 const HeaderRightContainer = styled(XStack, {
-    paddingRight: '3rem',
+    paddingRight: minV(3),
     justifyContent: 'flex-end',
     alignItems: 'center',
 })
 
 const HeaderText = styled(Text, {
     fontFamily: '$caps',
-    fontSize: '$5',
-    letterSpacing: '$5',
     color: '$darkGray',
     position: 'absolute',
     top: '50%',
@@ -85,9 +87,15 @@ const Header = () => {
     const [hoveredTab, setHoveredTab] = useState<string | null>(null);
     const [rightWidth, setRightWidth] = useState<number | null>(null);
     const [leftWidth, setLeftWidth] = useState<number | null>(null);
+    const [titleFontSize, setTitleFontSize] = useState<any>(`${TITLE_MINIMUM_SIZE}rem`);
+    const [titleLetterSpacing, setTitleLetterSpacing] = useState<any>(`${TITLE_MINIMUM_SIZE * SPACING_PERCENTAGE}rem`);
+
     const { headerRef } = useSizing();
+    // for use in wide mode, for determining when to toggle narrow mode
     const leftRef = useRef<HTMLDivElement>(null);
     const rightRef = useRef<HTMLDivElement>(null);
+    //for use in narrow mode, for determining title font size
+    const titleRef = useRef<HTMLDivElement>(null);
 
     const tabs = useMemo(() => filterNavTabs(isAuthenticated), [isAuthenticated]);
 
@@ -113,26 +121,58 @@ const Header = () => {
         }
         setIsResolved(true); // Set resolved to true after dimensions are checked
 
-    }, [isHamburger, leftWidth, rightWidth]);
+    }, [headerRef, isHamburger, leftWidth, rightWidth]);
+
+    const handleTitleSize = useCallback(() => {
+        if (!isHamburger || !titleRef.current) {
+            return;
+        }
+        const titleWidth = titleRef.current.offsetWidth;
+
+        const titleSize = (titleWidth * TITLE_PERCENTAGE).toFixed(2);
+        const titleSizeString = `max(${TITLE_MINIMUM_SIZE}rem, min(${TITLE_MAXIMUM_SIZE}rem, ${titleSize}px))`;
+
+        const titleSpacing = (titleWidth * TITLE_PERCENTAGE * SPACING_PERCENTAGE).toFixed(2);
+        const minSpacing = TITLE_MINIMUM_SIZE * SPACING_PERCENTAGE;
+        const maxSpacing = TITLE_MAXIMUM_SIZE * SPACING_PERCENTAGE;
+        const titleSpacingString = `max(${minSpacing}rem, min(${maxSpacing}rem, ${titleSpacing}px))`;
+
+        setTitleFontSize(titleSizeString);
+        setTitleLetterSpacing(titleSpacingString);
+    }, [isHamburger]);
 
     useEffect(() => {
         const resizeObserver = new ResizeObserver(handleResize);
+        const currentHeader = headerRef.current;
 
-        if (headerRef.current) {
-            resizeObserver.observe(headerRef.current);
+        if (currentHeader) {
+            resizeObserver.observe(currentHeader);
+        }
+
+        handleResize();
+
+        return () => {
+            if (currentHeader) {
+                resizeObserver.unobserve(currentHeader);
+            }
+        };
+    }, [handleResize, headerRef]);
+
+    useEffect(() => {
+        const titleObserver = new ResizeObserver(handleTitleSize);
+        const currentTitle = titleRef.current;
+
+        if (currentTitle) {
+            titleObserver.observe(currentTitle);
         }
 
         return () => {
-            if (headerRef.current) {
-                resizeObserver.unobserve(headerRef.current);
+            if (currentTitle) {
+                titleObserver.unobserve(currentTitle);
             }
         };
-    }, [handleResize]);
 
-
-    useEffect(() => {
-        handleResize();
-    }, []);
+    }, [handleTitleSize, titleRef]);
 
 
     const headerName = pathname === '/' ? 'HOME' : tabs.find(tab => pathname.startsWith(tab.path))?.name.toLocaleUpperCase() || '';
@@ -142,31 +182,37 @@ const Header = () => {
             opacity={isResolved ? 1 : 0}
             ref={headerRef}
         >
-
             {isHamburger ? (
-                <NavContainer
-                    key={"hamburger"}
-                    height={SMALL_LOGO_SIZE}
-                >
-                    <HeaderLeftContainer>
-                        <SquareLogo size={SMALL_LOGO_SIZE} />
-                    </HeaderLeftContainer>
-                    <HeaderText>{headerName}</HeaderText>
-                    <HeaderRightContainer>
-                        <HamburgerMenu
-                            setHoveredTab={setHoveredTab}
-                            hoveredTab={hoveredTab}
-                            tabs={tabs}
-                        />
-                    </HeaderRightContainer>
-                </NavContainer>
+                <View style={{ flex: 1 }} ref={titleRef} >
+                    <NavContainer
+                        key={"narrow"}
+                        height={LOGO_SIZE}
+                    >
+                        <HeaderLeftContainer>
+                            <SquareLogo size={LOGO_SIZE} />
+                        </HeaderLeftContainer>
+                        <HeaderText
+                            fontSize={titleFontSize}
+                            letterSpacing={titleLetterSpacing}
+                        >
+                            {headerName}
+                        </HeaderText>
+                        <HeaderRightContainer>
+                            <HamburgerMenu
+                                setHoveredTab={setHoveredTab}
+                                hoveredTab={hoveredTab}
+                                tabs={tabs}
+                            />
+                        </HeaderRightContainer>
+                    </NavContainer>
+                </View>
             ) : (
                 <NavContainer
                     key={"wide"}
-                    height={LARGE_LOGO_SIZE} >
+                    height={LOGO_SIZE} >
                     <HeaderLeftContainer ref={leftRef}>
                         <SquareLogo
-                            size={LARGE_LOGO_SIZE} />
+                            size={LOGO_SIZE} />
                     </HeaderLeftContainer>
                     <HeaderRightContainer ref={rightRef}>
                         <XStack

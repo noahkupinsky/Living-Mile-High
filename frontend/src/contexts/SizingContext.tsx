@@ -1,13 +1,12 @@
 'use client';
 
 import { INNER_PADDING, OUTER_BORDER } from '@/config/constants';
-import { isWindowDefined } from '@tamagui/core';
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 
 type SizingContextType = {
-    bodyRef: React.MutableRefObject<HTMLDivElement | null>;
-    headerRef: React.MutableRefObject<HTMLDivElement | null>;
-    footerRef: React.MutableRefObject<HTMLDivElement | null>;
+    bodyRef: React.RefObject<HTMLDivElement>;
+    headerRef: React.RefObject<HTMLDivElement>;
+    footerRef: React.RefObject<HTMLDivElement>;
     bodyWidth: number;
     bodyHeight: number;
     sizingLoading: boolean;
@@ -16,9 +15,9 @@ type SizingContextType = {
 export const SizingContext = createContext<SizingContextType | undefined>(undefined);
 
 export const SizingProvider = ({ children }: { children: React.ReactNode }) => {
-    const bodyRef = useRef<HTMLDivElement | null>(null);
-    const headerRef = useRef<HTMLDivElement | null>(null);
-    const footerRef = useRef<HTMLDivElement | null>(null);
+    const bodyRef = useRef<HTMLDivElement>(null);
+    const headerRef = useRef<HTMLDivElement>(null);
+    const footerRef = useRef<HTMLDivElement>(null);
     const [sizingLoading, setSizingLoading] = useState(true);
     const [bodyWidth, setBodyWidth] = useState(0);
     const [bodyHeight, setBodyHeight] = useState(0);
@@ -34,7 +33,8 @@ export const SizingProvider = ({ children }: { children: React.ReactNode }) => {
         if (headerRef.current && footerRef.current && window) {
             const headerHeight = headerRef.current.offsetHeight;
             const footerHeight = footerRef.current.offsetHeight;
-            const windowHeight = Math.floor(window.innerHeight * (100 - 2 * (INNER_PADDING + OUTER_BORDER)) / 100);
+            const smallerDimension = Math.min(window.innerWidth, window.innerHeight);
+            const windowHeight = Math.floor(smallerDimension * (100 - 2 * (INNER_PADDING + OUTER_BORDER)) / 100);
             effectiveBodyHeight = windowHeight - headerHeight - footerHeight;
         }
 

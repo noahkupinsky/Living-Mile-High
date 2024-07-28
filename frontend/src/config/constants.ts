@@ -39,8 +39,8 @@ export const PHONE_NUMBER = '303-819-5250';
 export const EMAIL_ADDRESS = 'tina@livingmilehigh.com';
 
 export const MAX_WIDTH = 150; //rem
-export const OUTER_BORDER = 2; //vh
-export const INNER_PADDING = 2; //vh
+export const OUTER_BORDER = 2; //minV
+export const INNER_PADDING = 2; //minV
 export const FADE_SHORT = 'opacity 0.1s ease-in-out';
 export const FADE_MEDIUM = 'opacity 0.3s ease-in-out';
 export const FADE_LONG = 'opacity 0.5s ease-in-out';

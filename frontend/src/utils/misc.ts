@@ -47,3 +47,7 @@ export const requestAnimationFrames = (callback: () => void, number: number = 2)
         requestAnimationFrames(callback, number - 1);
     })
 }
+
+export function minV(x: number): string {
+    return `min(${x}vw, ${x}vh)`;
+}
