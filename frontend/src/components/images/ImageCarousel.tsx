@@ -3,10 +3,12 @@ import { View, Button, styled, YStack, XStack } from 'tamagui';
 import AspectImage from './AspectImage';
 import { minV } from '@/utils/misc';
 import { FADE_SHORT } from '@/config/constants';
+import { useSizing } from '@/contexts/SizingContext';
 
-const WIDTH_PERCENTAGE = 0.65;
-const HEIGHT_PERCENTAGE = 0.65;
+const WIDTH_PERCENTAGE = 0.60;
+const HEIGHT_PERCENTAGE = 0.8;
 const THUMBNAIL_PERCENTAGE = 0.05;
+const NUM_THUMBNAILS = 10;
 
 const CarouselContainer = styled(XStack, {
     alignItems: 'center',
@@ -52,11 +54,13 @@ const ThumbnailsContainer = styled(View, {
 
 const ThumbnailContainer = styled(View, {
     cursor: 'pointer',
-    marginRight: 5,
+    marginHorizontal: minV(0.5),
 });
 
 const ArrowButton = styled(Button, {
-    fontSize: '1rem',
+    height: '8vw',
+    paddingHorizontal: '2vw',
+    fontSize: '3vw',
 });
 
 type ImageCarouselProps = {
@@ -64,6 +68,7 @@ type ImageCarouselProps = {
 }
 
 const ImageCarousel: React.FC<ImageCarouselProps> = ({ images }) => {
+    const { bodyWidth, bodyHeight } = useSizing();
     const [currentIndex, setCurrentIndex] = useState(0);
 
     const handlePrevious = () => {
@@ -79,7 +84,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images }) => {
     };
 
     const getVisibleThumbnails = () => {
-        const visibleCount = 5; // Adjust based on how many thumbnails you want to show
+        const visibleCount = NUM_THUMBNAILS; // Adjust based on how many thumbnails you want to show
         const thumbnails = [];
         for (let i = -Math.floor(visibleCount / 2); i <= Math.floor(visibleCount / 2); i++) {
             const index = (currentIndex + i + images.length) % images.length;
@@ -88,9 +93,9 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images }) => {
         return thumbnails;
     };
 
-    const mainWidth = window.innerWidth * WIDTH_PERCENTAGE;
-    const mainHeight = window.innerHeight * HEIGHT_PERCENTAGE;
-    const thumbnailHeight = window.innerHeight * THUMBNAIL_PERCENTAGE;
+    const mainWidth = bodyWidth * WIDTH_PERCENTAGE;
+    const mainHeight = bodyHeight * HEIGHT_PERCENTAGE;
+    const thumbnailHeight = bodyHeight * THUMBNAIL_PERCENTAGE;
 
     return window && (
         <CarouselContainer>
