@@ -53,7 +53,7 @@ export class ApiService {
 
         const response = await this.apiAxios.post('asset/upload', formData, {
             headers: {
-                'Content-Type': 'multipart/form-data',
+                ...formData.getHeaders(),
             },
         });
         const resBody: UploadAssetResponse = response.data;

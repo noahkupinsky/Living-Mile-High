@@ -4,10 +4,14 @@ import { Compose, config } from "../config";
 import { dockerDown, dockerRemoveVolumes, dockerRun } from "./dockerUtils";
 import fs from "fs";
 import mongoose, { model } from 'mongoose';
-import { AdminSchema, hashPassword } from "living-mile-high-lib";
+import { AdminSchema, createUploadAssetRequest, DeepPartial, hashPassword, House, LoginRequest, UploadAssetResponse, UpsertHouseRequest } from "living-mile-high-lib";
 import { loadEnvFile } from "./envUtils";
+import axios, { AxiosInstance } from "axios";
+import { CookieJar } from 'tough-cookie';
+import { wrapper } from 'axios-cookiejar-support';
 
 const AdminModel = model('Admin', AdminSchema);
+type RequiredHouse = Omit<House, 'neighborhood' | 'createdAt' | 'updatedAt' | 'id' | 'stats'> & DeepPartial<House>;
 
 export async function setupLocalServices() {
     createDataDir();
@@ -110,5 +114,94 @@ async function createLocalAdmin(port: number) {
         console.log('Admin added to MongoDB.');
     } finally {
         await mongoose.disconnect();
+    }
+}
+
+export async function massUploadHouses(env: string, username: string, password: string, folder: string) {
+    console.log("hello");
+    const env_path = path.resolve(process.cwd(), `.env.${env}`);
+
+    if (!fs.existsSync(env_path)) {
+        throw new Error(`Environment file not found: ${env_path}`);
+    }
+
+    const { NEXT_PUBLIC_BACKEND_URL } = loadEnvFile(env_path);
+
+    const jar = new CookieJar();
+
+    // Wrap axios with the cookie jar support
+    const api = wrapper(axios.create({
+        baseURL: `${NEXT_PUBLIC_BACKEND_URL}/api`,
+        withCredentials: true,
+        jar
+    }));
+
+    try {
+        const req: LoginRequest = { username, password };
+        const res = await api.post('auth/login', req);
+
+        console.log(res.data.message);
+    } catch (err: any) {
+        throw new Error(`Failed to login: ${err.message}`);
+    }
+
+    // look for json file in data folder
+    const json_files = fs.readdirSync(folder).filter(file => path.extname(file) === '.json');
+    if (json_files.length !== 1) {
+        throw new Error(`Expected 1 json file in ${folder}, found ${json_files.length}`);
+    }
+    const json = fs.readFileSync(path.resolve(folder, json_files[0]), 'utf8');
+
+    const localHouses = JSON.parse(json).map((house: any) => house.images ? house : { ...house, images: [] });
+
+    const houses = await Promise.all(localHouses.map((house: House) => resolveLocalHouseImages(api, folder, house)));
+
+    await Promise.all(houses.map(house => insertHouse(api, house)));
+}
+
+function isLink(link: string): boolean {
+    return link.startsWith('http://') || link.startsWith('https://');
+}
+
+async function uploadAsset(api: AxiosInstance, folder: string, asset: string): Promise<string> {
+    if (isLink(asset)) {
+        return asset;
+    }
+
+    const file_path = path.resolve(folder, asset);
+    const formData = createUploadAssetRequest(fs.createReadStream(file_path));
+
+    try {
+        const response = await api.post('asset/upload', formData, {
+            headers: {
+                ...formData.getHeaders(),
+            }
+        });
+        const resBody: UploadAssetResponse = response.data;
+
+        if (response.status === 200) {
+            return resBody.url!;
+        } else {
+            throw new Error('Failed to upload asset');
+        }
+    } catch (err: any) {
+        throw new Error(`Failed to upload asset, error: ${err.message}`);
+    }
+}
+
+async function resolveLocalHouseImages(api: AxiosInstance, folder: string, house: RequiredHouse): Promise<RequiredHouse> {
+    const mainImage = await uploadAsset(api, folder, house.mainImage);
+    const images = await Promise.all(house.images.map(image => uploadAsset(api, folder, image)));
+
+    return { ...house, mainImage, images };
+}
+
+async function insertHouse(api: AxiosInstance, house: RequiredHouse): Promise<void> {
+    try {
+        const req: UpsertHouseRequest = { house };
+
+        await api.post('house/upsert', req);
+    } catch (err: any) {
+        throw new Error(`Failed to insert house`);
     }
 }

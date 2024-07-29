@@ -11,23 +11,10 @@
     "test": "yarn test:backend && yarn test:frontend",
     "dev:frontend": "yarn --cwd frontend dev",
     "dev:backend": "yarn --cwd backend dev",
-    "dev": "concurrently \"yarn dev:frontend\" \"yarn dev:backend\"",
-    "cli": "yarn --cwd cli build"
+    "dev": "concurrently \"yarn dev:frontend\" \"yarn dev:backend\""
   },
   "license": "MIT",
   "devDependencies": {
     "concurrently": "^8.2.2"
-  },
-  "dependencies": {
-    "@tamagui/animate-presence": "^1.104.0",
-    "@tamagui/animations-css": "^1.104.0",
-    "@tamagui/animations-moti": "^1.104.0",
-    "@tamagui/lucide-icons": "^1.105.3",
-    "@tamagui/next-plugin": "^1.102.3",
-    "@tamagui/switch": "^1.102.3",
-    "@types/lodash.debounce": "^4.0.9",
-    "lodash": "^4.17.21",
-    "lodash.debounce": "^4.0.8",
-    "react-native-svg": "^15.4.0"
   }
 }

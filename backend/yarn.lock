@@ -4367,14 +4367,15 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.2.4.tgz#eca284f75d2965079309dc0ad9255abb2ebc1632"
   integrity sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==
 
-living-mile-high-lib@^1.0.72:
-  version "1.0.72"
-  resolved "https://registry.yarnpkg.com/living-mile-high-lib/-/living-mile-high-lib-1.0.72.tgz#1d517494589293b3f9815f5938b075ebad1c9714"
-  integrity sha512-ksCK1bHvw1+VaZZ1YajVnM4XsWsYva5Hj8ZfEGFiLdsN3AzB/stU2tv8ZILqjN1FpRA1i0GS9IOgfiekWMNUgQ==
+living-mile-high-lib@^1.0.74:
+  version "1.0.74"
+  resolved "https://registry.yarnpkg.com/living-mile-high-lib/-/living-mile-high-lib-1.0.74.tgz#e9c043408e03d89df4da32e479f715d0972acf0e"
+  integrity sha512-Wc+cYtc+XiN8Xm/Yk7QmvAwc2A5CmlaN229HHikohPIvVp7nozosWBLM6NkrUV8sUKHN8j1y43ogbFrZ4EEfZg==
   dependencies:
     "@types/uuid" "^10.0.0"
     bcryptjs "^2.4.3"
     express "^4.19.2"
+    form-data "^4.0.0"
     mongoose "^8.4.4"
     multer "^1.4.5-lts.1"
     uuid "^10.0.0"

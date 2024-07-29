@@ -1,7 +1,7 @@
 import { Command } from 'commander';
 import { dockerRun, dockerDownAll, dockerDown } from '../utils/dockerUtils';
 import { config } from '../config';
-import { setupLocalServices } from '../utils/setupServices';
+import { massUploadHouses, setupLocalServices } from '../utils/setupServices';
 import shell from 'shelljs';
 import { loadEnvFile } from '../utils/envUtils';
 
@@ -59,7 +59,7 @@ function registerStagingCommands(program: Command) {
         .command('up')
         .description('Start staging containers')
         .action(() => {
-            dockerDownAll();
+            dockerDown(config.composes.staging);
             dockerRun(config.composes.staging);
         });
 
@@ -78,7 +78,7 @@ function registerDevCommands(program: Command) {
 
     dev
         .command('up')
-        .description('Start dev services')
+        .description('Start dev services and dev frontend + backend')
         .action(() => {
             const compose = config.composes.devServices;
             dockerRun(compose);
@@ -104,5 +104,16 @@ function registerSetupCommands(program: Command) {
         .description('Setup dev and staging services')
         .action(async () => {
             await setupLocalServices();
+        });
+
+    setup
+        .command('upload')
+        .description('mass upload house objects')
+        .argument('<env>', 'Environment to upload to')
+        .argument('<username>', 'Username')
+        .argument('<password>', 'Password')
+        .argument('<folder>', 'Folder to upload')
+        .action(async (env: string, username: string, password: string, folder: string) => {
+            await massUploadHouses(env, username, password, folder);
         });
 }
