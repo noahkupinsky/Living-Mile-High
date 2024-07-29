@@ -11,7 +11,7 @@ import { CookieJar } from 'tough-cookie';
 import { wrapper } from 'axios-cookiejar-support';
 
 const AdminModel = model('Admin', AdminSchema);
-type RequiredHouse = Omit<House, 'neighborhood' | 'createdAt' | 'updatedAt' | 'id' | 'stats'> & DeepPartial<House>;
+type RequiredHouse = Omit<House, 'neighborhood' | 'createdAt' | 'updatedAt' | 'id' | 'stats' | 'images'> & Partial<House>;
 
 export async function setupLocalServices() {
     createDataDir();
@@ -152,9 +152,9 @@ export async function massUploadHouses(env: string, username: string, password: 
     }
     const json = fs.readFileSync(path.resolve(folder, json_files[0]), 'utf8');
 
-    const localHouses = JSON.parse(json).map((house: any) => house.images ? house : { ...house, images: [] });
+    const localHouses: RequiredHouse[] = JSON.parse(json);
 
-    const houses = await Promise.all(localHouses.map((house: House) => resolveLocalHouseImages(api, folder, house)));
+    const houses = await Promise.all(localHouses.map((house: RequiredHouse) => resolveLocalHouseImages(api, folder, house)));
 
     await Promise.all(houses.map(house => insertHouse(api, house)));
 }
@@ -191,7 +191,7 @@ async function uploadAsset(api: AxiosInstance, folder: string, asset: string): P
 
 async function resolveLocalHouseImages(api: AxiosInstance, folder: string, house: RequiredHouse): Promise<RequiredHouse> {
     const mainImage = await uploadAsset(api, folder, house.mainImage);
-    const images = await Promise.all(house.images.map(image => uploadAsset(api, folder, image)));
+    const images = !house.images ? [] : await Promise.all(house.images.map((image: string) => uploadAsset(api, folder, image)));
 
     return { ...house, mainImage, images };
 }
