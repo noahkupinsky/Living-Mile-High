@@ -39,7 +39,9 @@ selected_work = {
     '890 S St Paul': '890-S-St-Paul.html',
 }
 
-starts_with_corrections = {}
+starts_with_corrections = {
+    '1026 S$. High Street': '1026 S High Street',
+}
 st_paul_regex = r'(\d+) S (Saint Paul Street|South Saint Paul|St Paul Street)'
 st_paul_replace = r'\1 S St Paul'
 image_id = 0
