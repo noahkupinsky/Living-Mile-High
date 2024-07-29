@@ -9,20 +9,24 @@ from io import BytesIO
 from PIL import Image
 from bs4 import BeautifulSoup
 
-output_folder = 'output'
+script_dir = os.path.dirname(os.path.abspath(__file__))
+
+output_folder = os.path.join(script_dir, 'output')
+data_folder = os.path.join(script_dir, 'data')
 
 sold_grid_start = "{.sqs-gallery-container .sqs-gallery-block-grid .sqs-gallery-aspect-ratio-square .sqs-gallery-thumbnails-per-row-4 .sqs-gallery-block-show-meta .block-animation-none .clear}"
 sold_grid_stop = "sqs-block-content"
 sold_image_regex = r'!\[.*?\]\((.*?)\)'            # regex to match Markdown image links
 cardinal_address_regex = r'^([0-9]+ [NESW])\. (.+)'
-sold_markdown = "sold.md"
+
+
 isDevelopedBySoldSection = [
     True, False, False, False, False
 ]
 
 sold_prefix = 'sold'
 
-html_folder = 'livingmilehigh.com'
+sold_markdown = os.path.join(data_folder, 'sold.md')
 selected_work = {
     '1101 S Gilpin': '1101-S-Gilpin.html',
     '1111 S Gilpin': '1111-S-Gilpin.html',
@@ -204,7 +208,7 @@ def create_sold_objects(processed_sections):
 # SELECTED WORK
 
 def get_html_content(html_file_name):
-    html_file = os.path.join(html_folder, html_file_name)
+    html_file = os.path.join(data_folder, html_file_name)
     with open(html_file, 'r') as file:
         html_content = file.read()
     return html_content
@@ -321,4 +325,5 @@ all_objects = merge_objects(sold_objects, selected_work_objects)
 json_path = os.path.join(output_folder, f"data.json")
 with open(json_path, 'w') as json_file:
     json.dump(all_objects, json_file, indent=4)
+
 

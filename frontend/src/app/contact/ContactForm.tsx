@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Check as CheckIcon } from '@tamagui/lucide-icons';
 import { styled, View, Text, Input, TextArea, Button, YStack, XStack, Checkbox } from 'tamagui';
 import { minV } from '@/utils/misc';
 
@@ -187,21 +186,6 @@ const ContactForm = () => {
                             <StyledInput
                                 onChange={(e: any) => setForm({ ...form, email: e.target.value })}
                                 textContentType="emailAddress" placeholder="Email" />
-                        </FormColumn>
-                    </FormRow>
-                    <FormRow>
-                        <FormColumn>
-                            <XStack width={'100%'} alignItems="center" gap={'0.5rem'}>
-                                <Checkbox checked={form.newsletter} onCheckedChange={(value: any) => setForm({ ...form, newsletter: value })}>
-                                    <Checkbox.Indicator>
-                                        <CheckIcon />
-                                    </Checkbox.Indicator>
-                                </Checkbox>
-
-                                <FormLabel transform={'translateY(20%)'}>
-                                    Sign up for news and updates
-                                </FormLabel>
-                            </XStack>
                         </FormColumn>
                     </FormRow>
 

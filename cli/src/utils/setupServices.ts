@@ -118,7 +118,6 @@ async function createLocalAdmin(port: number) {
 }
 
 export async function massUploadHouses(env: string, username: string, password: string, folder: string) {
-    console.log("hello");
     const env_path = path.resolve(process.cwd(), `.env.${env}`);
 
     if (!fs.existsSync(env_path)) {
@@ -138,9 +137,7 @@ export async function massUploadHouses(env: string, username: string, password: 
 
     try {
         const req: LoginRequest = { username, password };
-        const res = await api.post('auth/login', req);
-
-        console.log(res.data.message);
+        await api.post('auth/login', req);
     } catch (err: any) {
         throw new Error(`Failed to login: ${err.message}`);
     }
