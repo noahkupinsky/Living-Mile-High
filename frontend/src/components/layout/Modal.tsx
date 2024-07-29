@@ -14,7 +14,7 @@ const ModalOverlay = styled(View, {
 });
 
 const ModalContent = styled(View, {
-    backgroundColor: 'white',
+    backgroundColor: '$whiteBg',
     padding: 20,
     borderRadius: 10,
     zIndex: 2000,
