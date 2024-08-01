@@ -1,10 +1,10 @@
 import shell from 'shelljs';
 
-export function updateAndPublishPackage(packageDir: string, origDir: string, packageName: string) {
-    shell.cd(packageDir);
+export function updateAndPublishPackage(packageName: string) {
+    shell.cd('lib');
     shell.exec('npm version patch');
     shell.exec('npm publish');
-    shell.cd(origDir);
+    shell.cd('../');
     ['frontend', 'backend', 'cli', 'superadmin'].forEach(dir => {
         shell.cd(dir);
         shell.exec(`yarn remove "${packageName}"`);

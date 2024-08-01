@@ -4,12 +4,11 @@ import { Compose, config } from "../config";
 import { dockerDown, dockerRemoveVolumes, dockerRun } from "./dockerUtils";
 import fs from "fs";
 import mongoose, { model } from 'mongoose';
-import { AdminSchema, createUploadAssetRequest, DeepPartial, hashPassword, House, LoginRequest, UploadAssetResponse, UpsertHouseRequest } from "living-mile-high-lib";
-import { loadEnvFile } from "./envUtils";
+import { AdminSchema, createUploadAssetRequest, hashPassword, House, LoginRequest, UploadAssetResponse, UpsertHouseRequest } from "living-mile-high-lib";
+import { loadEnvFile, resolveRoot } from "./envUtils";
 import axios, { AxiosInstance } from "axios";
 import { CookieJar } from 'tough-cookie';
 import { HttpsCookieAgent } from 'http-cookie-agent/http';
-import https from "https";
 
 const AdminModel = model('Admin', AdminSchema);
 type RequiredHouse = Omit<House, 'neighborhood' | 'createdAt' | 'updatedAt' | 'id' | 'stats' | 'images'> & Partial<House>;
@@ -29,7 +28,7 @@ async function setupLocalServicesForCompose(compose: Compose) {
 }
 
 function createDataDir() {
-    if (fs.existsSync(path.resolve(process.cwd(), '.data'))) {
+    if (fs.existsSync(resolveRoot('.data'))) {
         throw new Error('Data directory already exists. Please remove it before running this command.');
     }
 
@@ -38,7 +37,7 @@ function createDataDir() {
 
     const data_dirs = data_services.map(s => data_categories.map(c => `.data/${s}/${c}`)).flat();
 
-    data_dirs.forEach(dir => fs.mkdirSync(path.resolve(process.cwd(), dir), { recursive: true }));
+    data_dirs.forEach(dir => fs.mkdirSync(resolveRoot(dir), { recursive: true }));
 }
 
 async function createLocalBucket(compose: Compose, port: number) {
@@ -119,7 +118,7 @@ async function createLocalAdmin(port: number) {
 }
 
 export async function massUploadHouses(env: string, username: string, password: string, folder: string) {
-    const env_path = path.resolve(process.cwd(), `.env.${env}`);
+    const env_path = resolveRoot(`.env.${env}`);
 
     if (!fs.existsSync(env_path)) {
         throw new Error(`Environment file not found: ${env_path}`);

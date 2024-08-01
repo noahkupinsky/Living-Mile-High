@@ -4,12 +4,18 @@ import path from 'path';
 import { Readable } from 'stream';
 import dotenv from 'dotenv';
 
+const ROOT_PATH = '..';
+
+export const resolveRoot = (rest: string) => {
+    return path.resolve(ROOT_PATH, rest);
+}
+
 export const loadEnvFile = (envFile: string) => {
     const envConfig = dotenv.parse(fs.readFileSync(envFile));
     return envConfig;
 };
 
-const prodEnvFile = path.resolve(process.cwd(), `.env.production`);
+const prodEnvFile = path.resolve(ROOT_PATH, `.env.production`);
 const { CDN_BUCKET, CDN_ENDPOINT, CDN_KEY, CDN_SECRET, CDN_REGION } = loadEnvFile(prodEnvFile);
 
 const cdnClient = new S3Client({
@@ -32,7 +38,7 @@ async function streamToFile(stream: Readable, filePath: string) {
 }
 
 export async function pullEnv(env: string, doForce: boolean) {
-    const targetPath = path.resolve(process.cwd(), env);
+    const targetPath = resolveRoot(env);
 
     if (fs.existsSync(targetPath) && !doForce) {
         console.log(`File ${env} already exists in the root directory. Use -f to overwrite.`);
@@ -58,7 +64,7 @@ export async function pullEnv(env: string, doForce: boolean) {
 }
 
 export async function pushEnv(env: string) {
-    const targetPath = path.resolve(process.cwd(), env);
+    const targetPath = resolveRoot(env);
 
     if (!fs.existsSync(targetPath)) {
         console.log(`File ${env} does not exist in the root directory.`);

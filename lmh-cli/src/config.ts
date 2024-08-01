@@ -1,7 +1,8 @@
 import dotenv from 'dotenv';
 import path from 'path';
+import { resolveRoot } from './utils/envUtils';
 
-dotenv.config({ path: path.resolve(process.cwd(), '.env') });
+dotenv.config({ path: resolveRoot('.env') });
 
 export class Compose {
     #composeFile: string;
@@ -13,11 +14,11 @@ export class Compose {
     }
 
     get composeFile() {
-        return path.resolve(process.cwd(), this.#composeFile);
+        return resolveRoot(this.#composeFile);
     }
 
     get envFile() {
-        return path.resolve(process.cwd(), `.env.${this.#envFile}`);
+        return resolveRoot(`.env.${this.#envFile}`);
     }
 }
 
