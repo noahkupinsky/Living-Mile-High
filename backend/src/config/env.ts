@@ -10,7 +10,8 @@ type Env = {
     CDN_SECRET: string,
     CDN_REGION: string,
     CDN_BUCKET: string,
-    CDN_ENDPOINT: string
+    CDN_ENDPOINT: string,
+    NEXT_PUBLIC_CDN_URL: string
 }
 
 const EnvDefaults: Env = {
@@ -23,6 +24,7 @@ const EnvDefaults: Env = {
     CDN_REGION: '',
     CDN_BUCKET: '',
     CDN_ENDPOINT: '',
+    NEXT_PUBLIC_CDN_URL: '',
 }
 
 const allowedEnvFiles = ['staging', 'development', 'production'];

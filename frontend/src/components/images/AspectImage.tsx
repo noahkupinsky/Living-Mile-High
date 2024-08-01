@@ -53,7 +53,7 @@ const AspectImage: React.FC<AspectImageProps> = ({ noFade, src, width, height, a
 
     useEffect(() => {
         calculateDimensions();
-    }, [src, width, height]);
+    }, [calculateDimensions]);
 
     useEffect(() => {
         if (onDimensions && dimensions) {

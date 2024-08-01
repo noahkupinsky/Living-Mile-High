@@ -11,8 +11,6 @@ RUN yarn install
 # Copy the rest of the application files for the backend
 COPY . .
 
-RUN yarn build
-
 RUN yarn global add pm2
 
 # Command to run the application

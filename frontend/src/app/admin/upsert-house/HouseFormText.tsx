@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { View, Input, Label, styled, Button } from 'tamagui';
 import { House } from 'living-mile-high-lib';
 
@@ -67,7 +67,11 @@ type HouseFormTextProps = {
 
 const HouseFormText: React.FC<HouseFormTextProps> = ({ formData, setFormData, houses }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const uniqueNeighborhoods = Array.from(new Set(houses.map(house => house.neighborhood)));
+
+    const uniqueNeighborhoods = useMemo(() => {
+        const definedNeighborhoods: string[] = houses.filter(house => house.neighborhood !== undefined).map(house => house.neighborhood) as string[];
+        return Array.from(new Set(definedNeighborhoods));
+    }, [houses]);
 
     const handleDropdownToggle = () => {
         setIsDropdownOpen(!isDropdownOpen);

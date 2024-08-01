@@ -1,6 +1,6 @@
-import { ImageFormat } from '@/types';
 import { processImage } from '@/utils/imageProcessing';
 import React, { useState } from 'react';
+import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
 import { View, Input, Button, styled } from 'tamagui';
 
 const ImageUploadContainer = styled(View, {
@@ -16,9 +16,9 @@ const UploadMultipleImages: React.FC<UploadMultipleImagesProps> = ({ onImagesUpl
     const [imageURLs, setImageURLs] = useState<string[]>([]);
     const [localFiles, setLocalFiles] = useState<File[]>([]);
 
-    const handleURLChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-        setImageURLs(value.split(',').map(url => url.trim()));
+    const handleURLChange = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
+        const urls = e.nativeEvent.text;
+        setImageURLs(urls.split(',').map(url => url.trim()));
     };
 
     const handleAddImages = async () => {
@@ -38,7 +38,6 @@ const UploadMultipleImages: React.FC<UploadMultipleImagesProps> = ({ onImagesUpl
     return (
         <ImageUploadContainer>
             <Input
-                type="text"
                 placeholder="Paste image URLs, separated by commas"
                 onChange={handleURLChange}
             />

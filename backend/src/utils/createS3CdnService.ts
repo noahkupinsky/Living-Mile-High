@@ -2,16 +2,6 @@ import { S3Client } from "@aws-sdk/client-s3";
 import { S3Config } from "~/@types";
 import { mockS3Cdn } from "./inMemoryCdn";
 
-function generateBaseUrl(endpoint: string, bucket: string, region: string): string {
-    if (endpoint.includes('digitaloceanspaces.com')) {
-        return `https://${bucket}.${region}.cdn.digitaloceanspaces.com`;
-    } else if (endpoint.includes('localhost') || endpoint.includes('minio')) {
-        return `${endpoint}/${bucket}`;
-    } else {
-        throw new Error("failed to construct base url");
-    }
-}
-
 export async function createInMemoryS3CdnConfig(): Promise<S3Config> {
     mockS3Cdn();
 
@@ -19,7 +9,7 @@ export async function createInMemoryS3CdnConfig(): Promise<S3Config> {
 
     const bucket = 'mock-bucket';
 
-    const baseUrl = generateBaseUrl('http://localhost', bucket, 'us-east-1');
+    const baseUrl = 'http://mock-bucket.s3.us-east-1.amazonaws.com';
 
     return { client, bucket, baseUrl };
 }
@@ -29,11 +19,12 @@ export type CreateCdnParams = {
     region: string,
     bucket: string,
     key: string,
-    secret: string
+    secret: string,
+    baseUrl: string,
 }
 
 export function createNetworkS3CdnConfig(params: CreateCdnParams): S3Config {
-    const { endpoint, region, bucket, key, secret } = params;
+    const { endpoint, region, bucket, key, secret, baseUrl } = params;
     const client = new S3Client({
         endpoint: endpoint,
         credentials: {
@@ -43,8 +34,6 @@ export function createNetworkS3CdnConfig(params: CreateCdnParams): S3Config {
         region: region,
         forcePathStyle: true, // needed for spaces endpoint compatibility
     });
-
-    const baseUrl = generateBaseUrl(endpoint, bucket, region);
 
     return { client, bucket, baseUrl };
 }

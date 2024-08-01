@@ -15,6 +15,7 @@ services:
       HOST: ${HOST}
       FPORT: ${FPORT}
       BPORT: ${BPORT}
+      HTTPS_CERT_EMAIL: ${HTTPS_CERT_EMAIL}
     depends_on:
       - frontend
       - backend

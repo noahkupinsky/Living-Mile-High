@@ -9,7 +9,7 @@ import { SiteEventHandler } from '@/types';
 
 import { Button, YStack, styled } from 'tamagui';
 
-export const PageContainer = styled(YStack, {
+const PageContainer = styled(YStack, {
     justifyContent: 'center',
     space: 'lg',
 });

@@ -8,7 +8,8 @@ import { AdminSchema, createUploadAssetRequest, DeepPartial, hashPassword, House
 import { loadEnvFile } from "./envUtils";
 import axios, { AxiosInstance } from "axios";
 import { CookieJar } from 'tough-cookie';
-import { wrapper } from 'axios-cookiejar-support';
+import { HttpsCookieAgent } from 'http-cookie-agent/http';
+import https from "https";
 
 const AdminModel = model('Admin', AdminSchema);
 type RequiredHouse = Omit<House, 'neighborhood' | 'createdAt' | 'updatedAt' | 'id' | 'stats' | 'images'> & Partial<House>;
@@ -128,12 +129,17 @@ export async function massUploadHouses(env: string, username: string, password: 
 
     const jar = new CookieJar();
 
-    // Wrap axios with the cookie jar support
-    const api = wrapper(axios.create({
+    const httpsAgent = new HttpsCookieAgent({
+        cookies: { jar },
+        rejectUnauthorized: false, // Ignore SSL certificate errors for development
+    });
+
+    // Configure Axios to use the custom HTTPS agent and the cookie jar
+    const api = axios.create({
         baseURL: `${NEXT_PUBLIC_BACKEND_URL}/api`,
         withCredentials: true,
-        jar
-    }));
+        httpsAgent: httpsAgent,
+    });
 
     try {
         const req: LoginRequest = { username, password };

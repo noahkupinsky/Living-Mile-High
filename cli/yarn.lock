@@ -1349,13 +1349,6 @@ asynckit@^0.4.0:
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
   integrity sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==
 
-axios-cookiejar-support@^5.0.2:
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/axios-cookiejar-support/-/axios-cookiejar-support-5.0.2.tgz#30bbe104a707d889f530e0cf2375398f5851dbaa"
-  integrity sha512-4KwFqiH62Ry/J+ue1NwqLvBSaK3Bp/Owc9jTe7BS9c22uN8/4MB5pY7HV9QwQjV3ZRonCoSj5V8Pjx911qQqAw==
-  dependencies:
-    http-cookie-agent "^6.0.5"
-
 axios@^1.7.2:
   version "1.7.2"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.7.2.tgz#b625db8a7051fbea61c35a3cbb3a1daa7b9c7621"
