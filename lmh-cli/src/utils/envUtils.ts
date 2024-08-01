@@ -16,6 +16,7 @@ export const loadEnvFile = (envFile: string) => {
 };
 
 const prodEnvFile = resolveRoot('.env.production');
+console.log(prodEnvFile);
 const { CDN_BUCKET, CDN_ENDPOINT, CDN_KEY, CDN_SECRET, CDN_REGION } = loadEnvFile(prodEnvFile);
 
 console.log(CDN_BUCKET, CDN_ENDPOINT, CDN_KEY, CDN_SECRET, CDN_REGION);
