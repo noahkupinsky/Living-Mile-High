@@ -1,8 +1,8 @@
 import dotenv from 'dotenv';
 import path from 'path';
-import { resolveRoot } from './utils/envUtils';
+import { joinRoot } from './utils/envUtils';
 
-dotenv.config({ path: resolveRoot('.env') });
+dotenv.config({ path: joinRoot('.env') });
 
 export class Compose {
     #composeFile: string;
@@ -14,11 +14,11 @@ export class Compose {
     }
 
     get composeFile() {
-        return resolveRoot(this.#composeFile);
+        return joinRoot(this.#composeFile);
     }
 
     get envFile() {
-        return resolveRoot(`.env.${this.#envFile}`);
+        return joinRoot(`.env.${this.#envFile}`);
     }
 }
 

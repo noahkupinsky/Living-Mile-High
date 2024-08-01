@@ -6,8 +6,8 @@ import dotenv from 'dotenv';
 
 const ROOT_PATH = '..';
 
-export const resolveRoot = (rest: string) => {
-    return path.resolve(ROOT_PATH, rest);
+export const joinRoot = (rest: string) => {
+    return path.join(ROOT_PATH, rest);
 }
 
 export const loadEnvFile = (envFile: string) => {
@@ -15,7 +15,7 @@ export const loadEnvFile = (envFile: string) => {
     return envConfig;
 };
 
-const prodEnvFile = resolveRoot('.env.production');
+const prodEnvFile = joinRoot('.env.production');
 console.log(prodEnvFile);
 const { CDN_BUCKET, CDN_ENDPOINT, CDN_KEY, CDN_SECRET, CDN_REGION } = loadEnvFile(prodEnvFile);
 
@@ -41,7 +41,7 @@ async function streamToFile(stream: Readable, filePath: string) {
 }
 
 export async function pullEnv(env: string, doForce: boolean) {
-    const targetPath = resolveRoot(env);
+    const targetPath = joinRoot(env);
 
     if (fs.existsSync(targetPath) && !doForce) {
         console.log(`File ${env} already exists in the root directory. Use -f to overwrite.`);
@@ -67,7 +67,7 @@ export async function pullEnv(env: string, doForce: boolean) {
 }
 
 export async function pushEnv(env: string) {
-    const targetPath = resolveRoot(env);
+    const targetPath = joinRoot(env);
 
     if (!fs.existsSync(targetPath)) {
         console.log(`File ${env} does not exist in the root directory.`);

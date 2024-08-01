@@ -5,7 +5,7 @@ import { dockerDown, dockerRemoveVolumes, dockerRun } from "./dockerUtils";
 import fs from "fs";
 import mongoose, { model } from 'mongoose';
 import { AdminSchema, createUploadAssetRequest, hashPassword, House, LoginRequest, UploadAssetResponse, UpsertHouseRequest } from "living-mile-high-lib";
-import { loadEnvFile, resolveRoot } from "./envUtils";
+import { loadEnvFile, joinRoot } from "./envUtils";
 import axios, { AxiosInstance } from "axios";
 import { CookieJar } from 'tough-cookie';
 import { HttpsCookieAgent } from 'http-cookie-agent/http';
@@ -28,7 +28,7 @@ async function setupLocalServicesForCompose(compose: Compose) {
 }
 
 function createDataDir() {
-    if (fs.existsSync(resolveRoot('.data'))) {
+    if (fs.existsSync(joinRoot('.data'))) {
         throw new Error('Data directory already exists. Please remove it before running this command.');
     }
 
@@ -37,7 +37,7 @@ function createDataDir() {
 
     const data_dirs = data_services.map(s => data_categories.map(c => `.data/${s}/${c}`)).flat();
 
-    data_dirs.forEach(dir => fs.mkdirSync(resolveRoot(dir), { recursive: true }));
+    data_dirs.forEach(dir => fs.mkdirSync(joinRoot(dir), { recursive: true }));
 }
 
 async function createLocalBucket(compose: Compose, port: number) {
@@ -118,7 +118,7 @@ async function createLocalAdmin(port: number) {
 }
 
 export async function massUploadHouses(env: string, username: string, password: string, folder: string) {
-    const env_path = resolveRoot(`.env.${env}`);
+    const env_path = joinRoot(`.env.${env}`);
 
     if (!fs.existsSync(env_path)) {
         throw new Error(`Environment file not found: ${env_path}`);
