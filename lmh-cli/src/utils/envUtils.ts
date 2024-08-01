@@ -4,7 +4,7 @@ import path from 'path';
 import { Readable } from 'stream';
 import dotenv from 'dotenv';
 
-const ROOT_PATH = '..';
+const ROOT_PATH = path.resolve(__dirname, '..');
 
 export const joinRoot = (rest: string) => {
     return path.join(ROOT_PATH, rest);
