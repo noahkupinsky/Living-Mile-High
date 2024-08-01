@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "dist/cli.js",
+  "bin": {
+    "lmh": "dist/lmh"
+  },
   "scripts": {
     "start": "tsx src/cli.ts"
   },
