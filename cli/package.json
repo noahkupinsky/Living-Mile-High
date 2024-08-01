@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/cli.js",
   "bin": {
-    "lmh": "dist/lmh"
+    "lmh": "bin/lmh"
   },
   "scripts": {
     "start": "tsx src/cli.ts"
