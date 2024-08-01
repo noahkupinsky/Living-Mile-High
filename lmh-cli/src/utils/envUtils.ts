@@ -15,8 +15,10 @@ export const loadEnvFile = (envFile: string) => {
     return envConfig;
 };
 
-const prodEnvFile = path.resolve(ROOT_PATH, `.env.production`);
+const prodEnvFile = resolveRoot('.env.production');
 const { CDN_BUCKET, CDN_ENDPOINT, CDN_KEY, CDN_SECRET, CDN_REGION } = loadEnvFile(prodEnvFile);
+
+console.log(CDN_BUCKET, CDN_ENDPOINT, CDN_KEY, CDN_SECRET, CDN_REGION);
 
 const cdnClient = new S3Client({
     endpoint: CDN_ENDPOINT,
