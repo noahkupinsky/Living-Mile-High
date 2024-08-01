@@ -4,10 +4,10 @@ import path from 'path';
 import { Readable } from 'stream';
 import dotenv from 'dotenv';
 
-const ROOT_PATH = path.resolve(__dirname, '..');
+const ROOT_PATH = '..'; // relative to package directory
 
 export const joinRoot = (rest: string) => {
-    return path.join(ROOT_PATH, rest);
+    return path.resolve(ROOT_PATH, rest);
 }
 
 export const loadEnvFile = (envFile: string) => {
@@ -16,10 +16,8 @@ export const loadEnvFile = (envFile: string) => {
 };
 
 const prodEnvFile = joinRoot('.env.production');
-console.log(prodEnvFile);
-const { CDN_BUCKET, CDN_ENDPOINT, CDN_KEY, CDN_SECRET, CDN_REGION } = loadEnvFile(prodEnvFile);
 
-console.log(CDN_BUCKET, CDN_ENDPOINT, CDN_KEY, CDN_SECRET, CDN_REGION);
+const { CDN_BUCKET, CDN_ENDPOINT, CDN_KEY, CDN_SECRET, CDN_REGION } = loadEnvFile(prodEnvFile);
 
 const cdnClient = new S3Client({
     endpoint: CDN_ENDPOINT,
