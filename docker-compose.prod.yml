@@ -56,10 +56,6 @@ services:
     networks:
       - internal
 
-volumes:
-  mongo_data_prod:
-    driver: local
-
 networks:
   internal:
     external: false
@@ -68,4 +64,6 @@ volumes:
   caddy_data_prod:
     driver: local
   caddy_config_prod:
+    driver: local
+  mongo_data_prod:
     driver: local
