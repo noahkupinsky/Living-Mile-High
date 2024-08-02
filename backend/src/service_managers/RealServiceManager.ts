@@ -14,6 +14,7 @@ export class RealServiceManager implements SiteServiceManager {
         }
 
         const { MONGODB_URI, CDN_KEY, CDN_SECRET, CDN_REGION, CDN_BUCKET, CDN_ENDPOINT, NEXT_PUBLIC_CDN_URL } = env();
+        console.log(MONGODB_URI, CDN_KEY, CDN_SECRET, CDN_REGION, CDN_BUCKET, CDN_ENDPOINT, NEXT_PUBLIC_CDN_URL);
         await mongoose.connect(MONGODB_URI, {});
         const s3CdnConfig = createNetworkS3CdnConfig(
             {
