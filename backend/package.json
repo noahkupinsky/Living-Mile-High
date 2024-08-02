@@ -1,14 +1,15 @@
 {
   "name": "backend",
   "version": "1.0.1",
-  "main": "app.js",
+  "main": "dist/server.js",
   "license": "MIT",
   "scripts": {
-    "build": "ENV_FILE=${ENV_FILE} tsc --project ./src/tsconfig.json",
+    "build": "npx tsc -p ./src/tsconfig.json",
     "test": "jest --detectOpenHandles",
     "dev": "ENV_FILE=${ENV_FILE:-development} nodemon --exec 'tsx --tsconfig ./src/tsconfig.json' src/server.ts",
     "start": "ENV_FILE=${ENV_FILE:-production} tsx --tsconfig ./src/tsconfig.json src/server.ts",
-    "start:pm2": "pm2 start yarn --name backend -- start"
+    "start:pm2": "pm2 start yarn --name backend -- start",
+    "start:built": "node ./dist/server.js"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.600.0",
