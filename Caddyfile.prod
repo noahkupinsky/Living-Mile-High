@@ -2,7 +2,7 @@
     email {env.HTTPS_CERT_EMAIL}
 }
 
-{env.HOST} {
+test.livingmilehigh.com {
     reverse_proxy /api/* backend:{env.BPORT}
     reverse_proxy /events backend:{env.BPORT}
     reverse_proxy /* frontend:{env.FPORT}

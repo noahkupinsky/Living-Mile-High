@@ -12,7 +12,6 @@ services:
       - caddy_data_prod:/data
       - caddy_config_prod:/config
     environment:
-      HOST: ${HOST}
       FPORT: ${FPORT}
       BPORT: ${BPORT}
       HTTPS_CERT_EMAIL: ${HTTPS_CERT_EMAIL}
