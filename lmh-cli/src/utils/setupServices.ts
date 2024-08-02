@@ -28,14 +28,14 @@ async function setupLocalServicesForCompose(compose: Compose) {
 }
 
 function createDataDir() {
-    if (fs.existsSync(joinRoot('.data'))) {
-        throw new Error('Data directory already exists. Please remove it before running this command.');
+    if (fs.existsSync(joinRoot('.local'))) {
+        throw new Error('Local data directory already exists. Please remove it before running this command.');
     }
 
     const data_services = ['mongo', 'minio'];
     const data_categories = ['development', 'production', 'staging'];
 
-    const data_dirs = data_services.map(s => data_categories.map(c => `.data/${s}/${c}`)).flat();
+    const data_dirs = data_services.map(s => data_categories.map(c => `.local/${s}/${c}`)).flat();
 
     data_dirs.forEach(dir => fs.mkdirSync(joinRoot(dir), { recursive: true }));
 }

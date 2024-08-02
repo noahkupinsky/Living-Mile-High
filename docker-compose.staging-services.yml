@@ -27,12 +27,12 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: ./.data/minio/staging
+      device: ./.local/minio/staging
       o: bind
 
   mongo_data_staging:
     driver: local
     driver_opts:
       type: none
-      device: ./.data/mongo/staging
+      device: ./.local/mongo/staging
       o: bind

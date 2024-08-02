@@ -133,6 +133,6 @@ mocks
 .pnp.*
 
 # Ignore all files
-.data/
+.local/
 *https-portal/
 data-transfer/output
