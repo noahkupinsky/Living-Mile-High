@@ -3,20 +3,7 @@
 }
 
 {env.HOST} {
-    @rateLimited {
-        path /api/*
-        path /events/*
-        rate_limit {
-            window 1m
-            bursts 600
-        }
-    }
-
-    handle @rateLimited {
-        reverse_proxy backend:{env.BPORT}
-    }
-
-    handle /* {
-        reverse_proxy frontend:{env.FPORT}
-    }
+    reverse_proxy /api/* backend:{env.BPORT}
+    reverse_proxy /events backend:{env.BPORT}
+    reverse_proxy /* frontend:{env.FPORT}
 }
