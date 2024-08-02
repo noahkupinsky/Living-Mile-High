@@ -59,10 +59,6 @@ services:
 volumes:
   mongo_data_prod:
     driver: local
-    driver_opts:
-      type: none
-      device: ./.db
-      o: bind
 
 networks:
   internal:
