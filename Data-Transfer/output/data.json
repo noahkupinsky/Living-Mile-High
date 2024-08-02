@@ -1,0 +1,1167 @@
+[
+    {
+        "mainImage": "sold_image_0.png",
+        "address": "1 Sterling Ave",
+        "isDeveloped": true,
+        "isSelectedWork": true,
+        "isForSale": false,
+        "images": [
+            "selected_work_image_167.png",
+            "selected_work_image_168.png",
+            "selected_work_image_169.png",
+            "selected_work_image_170.png",
+            "selected_work_image_171.png",
+            "selected_work_image_172.png",
+            "selected_work_image_173.png",
+            "selected_work_image_174.png",
+            "selected_work_image_175.png",
+            "selected_work_image_176.png",
+            "selected_work_image_177.png",
+            "selected_work_image_178.png",
+            "selected_work_image_179.png",
+            "selected_work_image_180.png",
+            "selected_work_image_181.png"
+        ]
+    },
+    {
+        "mainImage": "sold_image_1.png",
+        "address": "365 S Gaylord",
+        "isDeveloped": true,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_2.png",
+        "address": "435 S Gaylord",
+        "isDeveloped": true,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_3.png",
+        "address": "445 S Williams",
+        "isDeveloped": true,
+        "isSelectedWork": true,
+        "isForSale": false,
+        "images": [
+            "selected_work_image_198.png",
+            "selected_work_image_199.png",
+            "selected_work_image_200.png",
+            "selected_work_image_201.png",
+            "selected_work_image_202.png",
+            "selected_work_image_203.png",
+            "selected_work_image_204.png",
+            "selected_work_image_205.png",
+            "selected_work_image_206.png",
+            "selected_work_image_207.png",
+            "selected_work_image_208.png",
+            "selected_work_image_209.png",
+            "selected_work_image_210.png",
+            "selected_work_image_211.png",
+            "selected_work_image_212.png",
+            "selected_work_image_213.png",
+            "selected_work_image_214.png"
+        ]
+    },
+    {
+        "mainImage": "sold_image_4.png",
+        "address": "517 S Vine",
+        "isDeveloped": true,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_5.png",
+        "address": "525 S Vine",
+        "isDeveloped": true,
+        "isSelectedWork": true,
+        "isForSale": false,
+        "images": [
+            "selected_work_image_158.png",
+            "selected_work_image_159.png",
+            "selected_work_image_160.png",
+            "selected_work_image_161.png",
+            "selected_work_image_162.png",
+            "selected_work_image_163.png",
+            "selected_work_image_164.png",
+            "selected_work_image_165.png",
+            "selected_work_image_166.png"
+        ]
+    },
+    {
+        "mainImage": "sold_image_6.png",
+        "address": "652 S Race",
+        "isDeveloped": true,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_7.png",
+        "address": "664 S Race",
+        "isDeveloped": true,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_8.png",
+        "address": "834 S Columbine",
+        "isDeveloped": true,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_9.png",
+        "address": "870 S St Paul",
+        "isDeveloped": true,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_10.png",
+        "address": "888 S St Paul",
+        "isDeveloped": true,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_11.png",
+        "address": "890 S St Paul",
+        "isDeveloped": true,
+        "isSelectedWork": true,
+        "isForSale": false,
+        "images": [
+            "selected_work_image_215.png",
+            "selected_work_image_216.png",
+            "selected_work_image_217.png",
+            "selected_work_image_218.png",
+            "selected_work_image_219.png",
+            "selected_work_image_220.png",
+            "selected_work_image_221.png",
+            "selected_work_image_222.png",
+            "selected_work_image_223.png",
+            "selected_work_image_224.png"
+        ]
+    },
+    {
+        "mainImage": "sold_image_12.png",
+        "address": "891 S York",
+        "isDeveloped": true,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_13.png",
+        "address": "935 S High",
+        "isDeveloped": true,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_14.png",
+        "address": "984 S Race",
+        "isDeveloped": true,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_15.png",
+        "address": "1005 S Gilpin",
+        "isDeveloped": true,
+        "isSelectedWork": true,
+        "isForSale": false,
+        "images": [
+            "selected_work_image_149.png",
+            "selected_work_image_150.png",
+            "selected_work_image_151.png",
+            "selected_work_image_152.png",
+            "selected_work_image_153.png",
+            "selected_work_image_154.png",
+            "selected_work_image_155.png",
+            "selected_work_image_156.png",
+            "selected_work_image_157.png"
+        ]
+    },
+    {
+        "mainImage": "sold_image_16.png",
+        "address": "1101 S Gilpin",
+        "isDeveloped": true,
+        "isSelectedWork": true,
+        "isForSale": false,
+        "images": [
+            "selected_work_image_133.png",
+            "selected_work_image_134.png",
+            "selected_work_image_135.png",
+            "selected_work_image_136.png"
+        ]
+    },
+    {
+        "mainImage": "sold_image_17.png",
+        "address": "1026 S High",
+        "isDeveloped": true,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_18.png",
+        "address": "1111 S Gilpin",
+        "isDeveloped": true,
+        "isSelectedWork": true,
+        "isForSale": false,
+        "images": [
+            "selected_work_image_137.png",
+            "selected_work_image_138.png",
+            "selected_work_image_139.png",
+            "selected_work_image_140.png",
+            "selected_work_image_141.png",
+            "selected_work_image_142.png",
+            "selected_work_image_143.png",
+            "selected_work_image_144.png",
+            "selected_work_image_145.png",
+            "selected_work_image_146.png",
+            "selected_work_image_147.png",
+            "selected_work_image_148.png"
+        ]
+    },
+    {
+        "mainImage": "sold_image_19.png",
+        "address": "1165 S Vine",
+        "isDeveloped": true,
+        "isSelectedWork": true,
+        "isForSale": false,
+        "images": [
+            "selected_work_image_191.png",
+            "selected_work_image_192.png",
+            "selected_work_image_193.png",
+            "selected_work_image_194.png",
+            "selected_work_image_195.png",
+            "selected_work_image_196.png",
+            "selected_work_image_197.png"
+        ]
+    },
+    {
+        "mainImage": "sold_image_20.png",
+        "address": "2660 E Tennessee",
+        "isDeveloped": true,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_21.png",
+        "address": "354 S Humboldt Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_22.png",
+        "address": "365 S Gaylord Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_23.png",
+        "address": "393 S High",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_24.png",
+        "address": "435 S Gaylord Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_25.png",
+        "address": "441 S Franklin Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_26.png",
+        "address": "461 S High Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_27.png",
+        "address": "463 S Williams",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_28.png",
+        "address": "468 S Race Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_29.png",
+        "address": "490 S Gaylord Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_30.png",
+        "address": "517 S Vine Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_31.png",
+        "address": "525 S Vine Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_32.png",
+        "address": "545 S Race Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_33.png",
+        "address": "556 S Vine Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_34.png",
+        "address": "558 S Gaylord Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_35.png",
+        "address": "560 S Race Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_36.png",
+        "address": "562 S Vine Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_37.png",
+        "address": "569 S Race Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_38.png",
+        "address": "572 S Gaylord Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_39.png",
+        "address": "587 S Vine Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_40.png",
+        "address": "590 S Gaylord Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_41.png",
+        "address": "615 S Williams Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_42.png",
+        "address": "625 S Race Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_43.png",
+        "address": "626 S Race Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_44.png",
+        "address": "627 S Williams Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_45.png",
+        "address": "639 S Williams Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_46.png",
+        "address": "640 S Race Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_47.png",
+        "address": "646 S Race Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_48.png",
+        "address": "656 S Race Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_49.png",
+        "address": "659 S Corona Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_50.png",
+        "address": "663 S Race Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_51.png",
+        "address": "677 S Williams Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_52.png",
+        "address": "750 S Race Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_53.png",
+        "address": "751 S Race Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_54.png",
+        "address": "776 S Gaylord Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_55.png",
+        "address": "810 S Milwaukee",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_56.png",
+        "address": "834 S Race Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_57.png",
+        "address": "854 S Gaylord Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_58.png",
+        "address": "871 S Gaylord Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_59.png",
+        "address": "882 S York Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_60.png",
+        "address": "924 S Race Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_61.png",
+        "address": "935 S High Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_62.png",
+        "address": "980 S Franklin Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_63.png",
+        "address": "992 S Franklin Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_64.png",
+        "address": "1005 S Gilpin Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_65.png",
+        "address": "1101 S Gilpin Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_66.png",
+        "address": "1026 S High Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_67.png",
+        "address": "1055 S Clayton Way",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_68.png",
+        "address": "1058 S High Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_69.png",
+        "address": "1129 S Williams Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_70.png",
+        "address": "1138 S Race Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_71.png",
+        "address": "1155 S High Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_72.png",
+        "address": "1165 S Vine Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_73.png",
+        "address": "1166 S Vine",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_74.png",
+        "address": "1195 S Vine Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_75.png",
+        "address": "1175 S High Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_76.png",
+        "address": "1246 S Race Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_77.png",
+        "address": "315 Fairfax",
+        "isDeveloped": false,
+        "isSelectedWork": true,
+        "isForSale": false,
+        "images": [
+            "selected_work_image_182.png",
+            "selected_work_image_183.png",
+            "selected_work_image_184.png",
+            "selected_work_image_185.png",
+            "selected_work_image_186.png",
+            "selected_work_image_187.png",
+            "selected_work_image_188.png",
+            "selected_work_image_189.png",
+            "selected_work_image_190.png"
+        ]
+    },
+    {
+        "mainImage": "sold_image_78.png",
+        "address": "471 S Garfield Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_79.png",
+        "address": "575 S Harrison Lane",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_80.png",
+        "address": "790 Bonnie Brae Boulevard",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_81.png",
+        "address": "810 S Milwaukee",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_82.png",
+        "address": "834 S Columbine Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_83.png",
+        "address": "847 S Columbine Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_84.png",
+        "address": "870 S St Paul",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_85.png",
+        "address": "888 S St Paul",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_86.png",
+        "address": "890 S St Paul",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_87.png",
+        "address": "1055 S Clayton Way",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_88.png",
+        "address": "1065 S Elizabeth",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_89.png",
+        "address": "3765 Gill Drive",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_90.png",
+        "address": "131 Fairfax Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_91.png",
+        "address": "323 Acoma Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_92.png",
+        "address": "909 Logan Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_93.png",
+        "address": "1100 Grant Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_94.png",
+        "address": "1229 Birch Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_95.png",
+        "address": "1300 Pennsylvania",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_96.png",
+        "address": "1736 E 17Th Ave. #101",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_97.png",
+        "address": "1736 E 17Th Ave. #103",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_98.png",
+        "address": "2159 Gaylord Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_99.png",
+        "address": "2695 Quitman Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_100.png",
+        "address": "2730 Xavier Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_101.png",
+        "address": "4385 Wolff Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_102.png",
+        "address": "4949 S Franklin",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_103.png",
+        "address": "1 Sterling Avenue",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_104.png",
+        "address": "23 South Lane",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_105.png",
+        "address": "270 Yosemite Way",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_106.png",
+        "address": "1628 S Grant Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_107.png",
+        "address": "1658 S Madison Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_108.png",
+        "address": "2034 S Sherman Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_109.png",
+        "address": "2199 E Cornell Avenue",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_110.png",
+        "address": "2200 S University",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_111.png",
+        "address": "24003 E Winter Springs Place",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_112.png",
+        "address": "2549 S Lincoln Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_113.png",
+        "address": "2709 S Jackson Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_114.png",
+        "address": "2717 S Madison Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_115.png",
+        "address": "2740 S Humboldt Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_116.png",
+        "address": "2748 S Harrison Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_117.png",
+        "address": "2800 S Jackson Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_118.png",
+        "address": "2872 S Harrison",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_119.png",
+        "address": "2901 E Arizona Avenue",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_120.png",
+        "address": "2985 S Vine Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_121.png",
+        "address": "3337 S Emporia Court",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_122.png",
+        "address": "3342 S Magnolia Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_123.png",
+        "address": "3725 E Nielsen Lane",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_124.png",
+        "address": "3765 S Harrison Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_125.png",
+        "address": "3815 S Logan Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_126.png",
+        "address": "3865 S Logan Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_127.png",
+        "address": "4425 S Pennsylvania Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_128.png",
+        "address": "4949 S Franklin Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_129.png",
+        "address": "6141 S Elati",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_130.png",
+        "address": "6443 E Floyd Street",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_131.png",
+        "address": "6762 S Spotswood",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    },
+    {
+        "mainImage": "sold_image_132.png",
+        "address": "17202 E Dorado Place",
+        "isDeveloped": false,
+        "isSelectedWork": false,
+        "isForSale": false,
+        "images": []
+    }
+]
