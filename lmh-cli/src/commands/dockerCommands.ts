@@ -1,5 +1,5 @@
 import { Command } from 'commander';
-import { dockerRun, dockerDownAll, dockerDown } from '../utils/dockerUtils';
+import { dockerRun, dockerDownAll, dockerDown, dockerPush } from '../utils/dockerUtils';
 import { config } from '../config';
 import { massUploadHouses, setupLocalServices } from '../utils/setupServices';
 import shell from 'shelljs';
@@ -42,10 +42,19 @@ function registerProdCommands(program: Command) {
         });
 
     prod
+        .command('build')
+        .description('Build prod containers')
+        .action(() => {
+            dockerRun(config.composes.prodBuild);
+            dockerPush(config.composes.prodBuild);
+        });
+
+    prod
         .command('down')
         .description('Stop prod containers')
         .action(() => {
             dockerDown(config.composes.prod);
+            dockerDown(config.composes.prodBuild);
             dockerDown(config.composes.superadmin);
         });
 }

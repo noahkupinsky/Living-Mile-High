@@ -23,8 +23,7 @@ services:
       - internal
 
   frontend:
-    build:
-      context: ./frontend
+    image: ${DOCKERHUB_USERNAME}/frontend:latest
     container_name: frontend
     depends_on:
       - backend
@@ -36,8 +35,7 @@ services:
       - internal
 
   backend:
-    build:
-      context: ./backend
+    image: ${DOCKERHUB_USERNAME}/backend:latest
     container_name: backend
     expose:
       - ${BPORT}

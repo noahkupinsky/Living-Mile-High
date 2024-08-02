@@ -47,6 +47,11 @@ export function dockerRemoveVolumes() {
             //ignore
         }
     }
+}
 
-
+export function dockerPush(compose: Compose) {
+    const composeFile = compose.composeFile;
+    const envFile = compose.envFile;
+    console.log(`Pushing Docker images using compose file ${composeFile} and env file ${envFile}...`);
+    execSync(`docker compose -f ${composeFile} --env-file ${envFile} push`, { stdio: 'inherit' });
 }
