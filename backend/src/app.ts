@@ -12,15 +12,15 @@ const app = express();
 const server = http.createServer(app);
 
 export async function setupApp(mock = false): Promise<void> {
-    app.use(express.json());
-    app.use(cookieParser());
-    app.use(passport.initialize());
     app.use(cors(
         {
-            origin: true,
+            origin: '*',
             credentials: true
         }
     ));
+    app.use(express.json());
+    app.use(cookieParser());
+    app.use(passport.initialize());
     app.use(router);
 
     await connectServices(mock);
