@@ -135,3 +135,4 @@ mocks
 # Ignore all files
 .local/
 *https-portal/
+data-transfer/output
