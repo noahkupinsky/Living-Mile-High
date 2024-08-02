@@ -13,6 +13,8 @@ import { HttpsCookieAgent } from 'http-cookie-agent/http';
 const AdminModel = model('Admin', AdminSchema);
 type RequiredHouse = Omit<House, 'neighborhood' | 'createdAt' | 'updatedAt' | 'id' | 'stats' | 'images'> & Partial<House>;
 
+const UPLOAD_BATCH_SIZE = 5;
+
 export async function setupLocalServices() {
     createDataDir();
     dockerRemoveVolumes();
@@ -154,11 +156,17 @@ export async function massUploadHouses(env: string, username: string, password: 
     }
     const json = fs.readFileSync(path.resolve(folder, json_files[0]), 'utf8');
 
-    const localHouses: RequiredHouse[] = JSON.parse(json);
+    const houses: RequiredHouse[] = JSON.parse(json);
 
-    const houses = await Promise.all(localHouses.map((house: RequiredHouse) => resolveLocalHouseImages(api, folder, house)));
+    const numBatches = Math.ceil(houses.length / UPLOAD_BATCH_SIZE);
 
-    await Promise.all(houses.map(house => insertHouse(api, house)));
+    for (let i = 0; i < 1; i++) {
+        const start = i * UPLOAD_BATCH_SIZE;
+        const end = Math.min(start + UPLOAD_BATCH_SIZE, houses.length);
+        const batch = houses.slice(start, end);
+        await Promise.all(batch.map(house => insertHouse(api, folder, house)));
+        console.log(`Uploaded batch ${i + 1} of ${numBatches}`);
+    }
 }
 
 function isLink(link: string): boolean {
@@ -198,8 +206,10 @@ async function resolveLocalHouseImages(api: AxiosInstance, folder: string, house
     return { ...house, mainImage, images };
 }
 
-async function insertHouse(api: AxiosInstance, house: RequiredHouse): Promise<void> {
+async function insertHouse(api: AxiosInstance, folder: string, unresolvedHouse: RequiredHouse): Promise<void> {
     try {
+        const house = await resolveLocalHouseImages(api, folder, unresolvedHouse);
+
         const req: UpsertHouseRequest = { house };
 
         await api.post('house/upsert', req);
