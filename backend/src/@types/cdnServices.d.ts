@@ -63,6 +63,8 @@ export type CdnContent = CdnHead & {
     body: StreamingBlobPayloadOutputTypes,
 }
 
+export type RefreshCdnCache = (key: string) => Promise<void>;
+
 export interface CdnAdapter {
     public getObjectUrl(key: string): string;
     public generateUniqueKey(): string;
@@ -81,6 +83,7 @@ export interface CdnAdapter {
 export type S3Config = {
     client: S3Client,
     bucket: string,
-    baseUrl: string
+    baseUrl: string,
+    refreshCache?: (key: string) => Promise<void>,
 }
 

@@ -1,8 +1,8 @@
-import { ImageService, CdnAdapter, AssetMetadata, CdnHead } from '~/@types';
+import { AssetService, CdnAdapter, AssetMetadata, CdnHead } from '~/@types';
 import { AssetConfig, ContentCategory, ContentType } from '~/@types/constants';
 import { createExpirationDate } from '~/utils/misc';
 
-export class CdnAssetService implements ImageService {
+export class CdnAssetService implements AssetService {
     private cdn: CdnAdapter;
 
     constructor(cdn: CdnAdapter) {

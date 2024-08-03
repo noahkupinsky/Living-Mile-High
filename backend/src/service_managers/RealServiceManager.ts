@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 import { ServiceDict, SiteServiceManager } from "~/@types";
 import env from "~/config/env";
-import { createNetworkS3CdnConfig } from "~/utils/createS3CdnService";
+import { createDORefreshCacheFn, createDOS3CdnConfig } from "~/utils/createS3CdnService";
 import * as Services from "~/services";
 
 export class RealServiceManager implements SiteServiceManager {
@@ -13,16 +13,31 @@ export class RealServiceManager implements SiteServiceManager {
             return this.services;
         }
 
-        const { MONGODB_URI, CDN_KEY, CDN_SECRET, CDN_REGION, CDN_BUCKET, CDN_ENDPOINT, NEXT_PUBLIC_CDN_URL } = env();
+        const {
+            MONGODB_URI,
+            CDN_KEY,
+            CDN_SECRET,
+            CDN_REGION,
+            CDN_BUCKET,
+            CDN_ENDPOINT,
+            NEXT_PUBLIC_CDN_URL,
+            DO_API_TOKEN,
+            DO_ENDPOINT_ID
+        } = env();
+
         await mongoose.connect(MONGODB_URI, {});
-        const s3CdnConfig = createNetworkS3CdnConfig(
+
+        const hasDOData = DO_API_TOKEN && DO_ENDPOINT_ID;
+        const refreshCache = hasDOData ? createDORefreshCacheFn(DO_API_TOKEN, DO_ENDPOINT_ID) : undefined;
+        const s3CdnConfig = createDOS3CdnConfig(
             {
                 endpoint: CDN_ENDPOINT,
                 region: CDN_REGION,
                 bucket: CDN_BUCKET,
                 key: CDN_KEY,
                 secret: CDN_SECRET,
-                baseUrl: NEXT_PUBLIC_CDN_URL
+                baseUrl: NEXT_PUBLIC_CDN_URL,
+                refreshCache: refreshCache
             }
         );
         const cdn = new Services.S3CdnAdapter(s3CdnConfig);

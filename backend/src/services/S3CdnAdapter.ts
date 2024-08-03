@@ -9,8 +9,12 @@ import {
     GetObjectCommandOutput,
     MetadataDirective,
     HeadObjectCommand,
-    HeadObjectCommandOutput
+    HeadObjectCommandOutput,
+    ServiceInputTypes,
+    $Command as S3Command,
+    ClientInputEndpointParameters,
 } from "@aws-sdk/client-s3";
+import { CommandBehavior } from "aws-sdk-client-mock";
 import { CdnFixedKey } from "living-mile-high-lib";
 import { CdnAdapter, CdnMetadata, CdnContent, PutCommand, S3Config, CdnHead } from '~/@types';
 import { ContentCategory, ContentPermission, ContentType } from "~/@types/constants";
@@ -31,11 +35,13 @@ export class S3CdnAdapter implements CdnAdapter {
     private client: S3Client;
     private bucket: string;
     private baseUrl: string;
+    private refreshCache?: (key: string) => Promise<void>;
 
     constructor(config: S3Config) {
         this.client = config.client;
         this.bucket = config.bucket;
-        this.baseUrl = config.baseUrl
+        this.baseUrl = config.baseUrl;
+        this.refreshCache = config.refreshCache;
     }
 
     public getObjectUrl(key: string): string {
@@ -229,6 +235,11 @@ export class S3CdnAdapter implements CdnAdapter {
 
     private async send(command: any): Promise<any> {
         const response = await this.client.send(command);
+        const key = command.input.Key;
+
+        if (this.refreshCache && key) {
+            await this.refreshCache(key);
+        }
         return response;
     }
 }

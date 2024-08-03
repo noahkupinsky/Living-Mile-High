@@ -27,7 +27,8 @@ export {
     PutCommand,
     CdnAdapter,
     S3Config,
-    AssetService as ImageService,
+    AssetService,
+    RefreshCdnCache
 } from './cdnServices'
 
 export type ExpressMiddleware<
