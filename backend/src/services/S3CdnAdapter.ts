@@ -65,7 +65,7 @@ export class S3CdnAdapter implements CdnAdapter {
         });
 
         await withLock(prefixedKey, async () => {
-            await this.client.send(putObjectCommand);
+            await this.send(putObjectCommand);
         });
 
         return prefixedKey;
@@ -86,7 +86,7 @@ export class S3CdnAdapter implements CdnAdapter {
         });
 
         await withLock(key, async () => {
-            await this.client.send(command);
+            await this.send(command);
         })
     }
 
@@ -133,7 +133,7 @@ export class S3CdnAdapter implements CdnAdapter {
                     ContinuationToken: continuationToken,
                     Prefix: prefix,
                 });
-                const response: ListObjectsV2CommandOutput = await this.client.send(command);
+                const response: ListObjectsV2CommandOutput = await this.send(command);
 
                 const newKeys = response.Contents?.map((item) => item.Key!) || [];
 
@@ -155,7 +155,7 @@ export class S3CdnAdapter implements CdnAdapter {
                 Bucket: this.bucket,
                 Key: key,
             });
-            const response: HeadObjectCommandOutput = await this.client.send(command);
+            const response: HeadObjectCommandOutput = await this.send(command);
 
             const s3Metadata = response.Metadata || {};
             const metadata = convertFromS3Metadata(s3Metadata);
@@ -182,7 +182,7 @@ export class S3CdnAdapter implements CdnAdapter {
                 Bucket: this.bucket,
                 Key: key
             });
-            const response: GetObjectCommandOutput = await this.client.send(command);
+            const response: GetObjectCommandOutput = await this.send(command);
 
             const body = response.Body!;
             const s3Metadata = response.Metadata!;
@@ -223,7 +223,12 @@ export class S3CdnAdapter implements CdnAdapter {
         });
 
         await withLock(key, async () => {
-            await this.client.send(command);
+            await this.send(command);
         });
+    }
+
+    private async send(command: any): Promise<any> {
+        const response = await this.client.send(command);
+        return response;
     }
 }

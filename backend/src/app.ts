@@ -14,8 +14,8 @@ const server = http.createServer(app);
 export async function setupApp(mock = false): Promise<void> {
     app.use(cors(
         {
-            origin: '*',
-            credentials: true
+            origin: true,
+            credentials: true,
         }
     ));
     app.use(express.json());

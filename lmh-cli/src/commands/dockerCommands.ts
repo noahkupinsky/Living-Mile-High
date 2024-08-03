@@ -3,7 +3,7 @@ import { dockerRun, dockerDownAll, dockerDown, dockerPush } from '../utils/docke
 import { config } from '../config';
 import { massUploadHouses, setupLocalServices } from '../utils/setupServices';
 import shell from 'shelljs';
-import { loadEnvFile } from '../utils/envUtils';
+import { loadEnvFile, ROOT_PATH } from '../utils/envUtils';
 
 export function dockerCommands(program: Command) {
     registerDownCommand(program);
@@ -92,7 +92,7 @@ function registerDevCommands(program: Command) {
             const compose = config.composes.devServices;
             dockerRun(compose);
             const { FPORT, BPORT } = loadEnvFile(compose.envFile);
-            shell.exec(`FPORT=${FPORT} BPORT=${BPORT} yarn dev`);
+            shell.exec(`cd ${ROOT_PATH} && FPORT=${FPORT} BPORT=${BPORT} yarn dev`);
         });
 
     dev

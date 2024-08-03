@@ -20,6 +20,7 @@ export const login: ExpressMiddleware = (req, res, next) => {
 
         res.cookie('token', token, {
             httpOnly: true,
+            sameSite: 'strict',
         });
 
         const successResponse: LoginResponse = { message: 'Logged in successfully' };

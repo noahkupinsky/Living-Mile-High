@@ -38,7 +38,7 @@ export class ApiService {
     constructor(localEventId: string) {
         this.apiAxios = axios.create({
             baseURL: `${backendUrl()}/api`,
-            withCredentials: true
+            withCredentials: true,
         });
 
         this.localEventId = localEventId;

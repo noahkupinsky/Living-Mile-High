@@ -29,7 +29,7 @@ module.exports = function () {
                 'react-native$': 'react-native-web',
             };
             return config;
-        },
+        }
     }
 
     for (const plugin of plugins) {

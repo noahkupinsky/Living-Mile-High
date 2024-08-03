@@ -14,6 +14,7 @@ export const getBackupIndices: ExpressEndpoint = async (req, res) => {
         res.json(successResponse);
     } catch (error: any) {
         const errorResponse: GetBackupIndicesResponse = { success: false, error: error.message };
+        console.log(errorResponse);
         res.status(500).json(errorResponse);
     }
 }
@@ -30,6 +31,7 @@ export const createManualBackup: ExpressEndpoint = async (req, res) => {
         res.json(successResponse);
     } catch (error: any) {
         const errorResponse: CreateBackupResponse = { success: false, error: error.message };
+        console.log(errorResponse);
         res.status(500).json(errorResponse);
     }
 }
@@ -46,6 +48,7 @@ export const deleteManualBackup: ExpressEndpoint = async (req, res) => {
         res.json(successResponse);
     } catch (error: any) {
         const errorResponse: DeleteBackupResponse = { success: false, error: error.message };
+        console.log(errorResponse);
         res.status(500).json(errorResponse);
     }
 }
@@ -62,6 +65,7 @@ export const renameManualBackup: ExpressEndpoint = async (req, res) => {
         res.json(successResponse);
     } catch (error: any) {
         const errorResponse: RenameBackupResponse = { success: false, error: error.message };
+        console.log(errorResponse);
         res.status(500).json(errorResponse);
     }
 }
@@ -78,6 +82,7 @@ export const restoreBackup: ExpressEndpoint = async (req, res) => {
         res.json(successResponse);
     } catch (error: any) {
         const errorResponse: RestoreBackupResponse = { success: false, error: error.message };
+        console.log(errorResponse);
         res.status(500).json(errorResponse);
     }
 }

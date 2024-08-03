@@ -4,11 +4,10 @@ import { Compose, config } from "../config";
 import { dockerDown, dockerRemoveVolumes, dockerRun } from "./dockerUtils";
 import fs from "fs";
 import mongoose, { model } from 'mongoose';
-import { AdminSchema, createUploadAssetRequest, hashPassword, House, LoginRequest, UploadAssetResponse, UpsertHouseRequest } from "living-mile-high-lib";
+import { AdminSchema, createUploadAssetRequest, hashPassword, House, LoginRequest, LoginResponse, UploadAssetResponse, UpsertHouseRequest } from "living-mile-high-lib";
 import { loadEnvFile, joinRoot } from "./envUtils";
-import axios, { AxiosInstance } from "axios";
-import { CookieJar } from 'tough-cookie';
-import { HttpsCookieAgent } from 'http-cookie-agent/http';
+import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
+import { Agent } from "https";
 
 const AdminModel = model('Admin', AdminSchema);
 type RequiredHouse = Omit<House, 'neighborhood' | 'createdAt' | 'updatedAt' | 'id' | 'stats' | 'images'> & Partial<House>;
@@ -119,6 +118,8 @@ async function createLocalAdmin(port: number) {
     }
 }
 
+type PostFn = (url: string, data: any, config?: AxiosRequestConfig) => Promise<any>;
+
 export async function massUploadHouses(env: string, username: string, password: string, folder: string) {
     const env_path = joinRoot(`.env.${env}`);
 
@@ -128,26 +129,51 @@ export async function massUploadHouses(env: string, username: string, password: 
 
     const { NEXT_PUBLIC_BACKEND_URL } = loadEnvFile(env_path);
 
-    const jar = new CookieJar();
-
-    const httpsAgent = new HttpsCookieAgent({
-        cookies: { jar },
-        rejectUnauthorized: false, // Ignore SSL certificate errors for development
-    });
-
     // Configure Axios to use the custom HTTPS agent and the cookie jar
     const api = axios.create({
         baseURL: `${NEXT_PUBLIC_BACKEND_URL}/api`,
         withCredentials: true,
-        httpsAgent: httpsAgent,
+        httpsAgent: new Agent({
+            rejectUnauthorized: false,
+        }),
     });
+
+    let token: string;
 
     try {
         const req: LoginRequest = { username, password };
-        await api.post('auth/login', req);
+        const loginResponse = await api.post('auth/login', req);
+        console.log('Login successful:', loginResponse.status);
+        console.log('Login response headers:', loginResponse.headers);
+
+        // Extract token from the response headers
+        const setCookieHeader = loginResponse.headers['set-cookie'];
+        if (setCookieHeader && setCookieHeader.length > 0) {
+            const cookie = setCookieHeader[0];
+            const tokenMatch = cookie.match(/token=([^;]+)/);
+            if (tokenMatch) {
+                token = tokenMatch[1];
+                console.log('Token extracted:', token);
+            } else {
+                throw new Error('Token not found in Set-Cookie header');
+            }
+        } else {
+            throw new Error('Set-Cookie header not found in login response');
+        }
     } catch (err: any) {
         throw new Error(`Failed to login: ${err.message}`);
     }
+
+    // Custom post method with token attached as a Cookie header
+    const postFn: PostFn = (url: string, data?: any, config?: AxiosRequestConfig) => {
+        return api.post(url, data, {
+            ...config,
+            headers: {
+                ...config?.headers,
+                'Cookie': `token=${token}`,
+            },
+        });
+    };
 
     // look for json file in data folder
     const json_files = fs.readdirSync(folder).filter(file => path.extname(file) === '.json');
@@ -164,7 +190,7 @@ export async function massUploadHouses(env: string, username: string, password: 
         const start = i * UPLOAD_BATCH_SIZE;
         const end = Math.min(start + UPLOAD_BATCH_SIZE, houses.length);
         const batch = houses.slice(start, end);
-        await Promise.all(batch.map(house => insertHouse(api, folder, house)));
+        await Promise.all(batch.map(house => insertHouse(postFn, folder, house)));
         console.log(`Uploaded batch ${i + 1} of ${numBatches}`);
     }
 }
@@ -173,7 +199,7 @@ function isLink(link: string): boolean {
     return link.startsWith('http://') || link.startsWith('https://');
 }
 
-async function uploadAsset(api: AxiosInstance, folder: string, asset: string): Promise<string> {
+async function uploadAsset(postFn: PostFn, folder: string, asset: string): Promise<string> {
     if (isLink(asset)) {
         return asset;
     }
@@ -182,7 +208,7 @@ async function uploadAsset(api: AxiosInstance, folder: string, asset: string): P
     const formData = createUploadAssetRequest(fs.createReadStream(file_path));
 
     try {
-        const response = await api.post('asset/upload', formData, {
+        const response = await postFn('asset/upload', formData, {
             headers: {
                 ...formData.getHeaders(),
             }
@@ -199,21 +225,21 @@ async function uploadAsset(api: AxiosInstance, folder: string, asset: string): P
     }
 }
 
-async function resolveLocalHouseImages(api: AxiosInstance, folder: string, house: RequiredHouse): Promise<RequiredHouse> {
-    const mainImage = await uploadAsset(api, folder, house.mainImage);
-    const images = !house.images ? [] : await Promise.all(house.images.map((image: string) => uploadAsset(api, folder, image)));
+async function resolveLocalHouseImages(postFn: PostFn, folder: string, house: RequiredHouse): Promise<RequiredHouse> {
+    const mainImage = await uploadAsset(postFn, folder, house.mainImage);
+    const images = !house.images ? [] : await Promise.all(house.images.map((image: string) => uploadAsset(postFn, folder, image)));
 
     return { ...house, mainImage, images };
 }
 
-async function insertHouse(api: AxiosInstance, folder: string, unresolvedHouse: RequiredHouse): Promise<void> {
+async function insertHouse(postFn: PostFn, folder: string, unresolvedHouse: RequiredHouse): Promise<void> {
     try {
-        const house = await resolveLocalHouseImages(api, folder, unresolvedHouse);
+        const house = await resolveLocalHouseImages(postFn, folder, unresolvedHouse);
 
         const req: UpsertHouseRequest = { house };
 
-        await api.post('house/upsert', req);
+        await postFn('house/upsert', req);
     } catch (err: any) {
-        throw new Error(`Failed to insert house`);
+        console.error(`Failed to insert house: ${err.message}`);
     }
 }

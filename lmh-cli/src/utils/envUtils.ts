@@ -4,7 +4,7 @@ import path from 'path';
 import { Readable } from 'stream';
 import dotenv from 'dotenv';
 
-const ROOT_PATH = '..'; // relative to package directory
+export const ROOT_PATH = '..'; // relative to package directory
 
 export const joinRoot = (rest: string) => {
     return path.resolve(ROOT_PATH, rest);
