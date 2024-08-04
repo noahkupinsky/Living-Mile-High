@@ -41,7 +41,6 @@ export const SiteDataProvider = ({ children }: SiteDataProviderProps) => {
     useEffect(() => {
         const siteUpdater: SiteEventHandler = async (event, isLocal) => {
             if (event.messages.includes(EventMessage.SITE_UPDATED)) {
-                console.log("refetching site data");
                 await fetchSiteData();
             }
         };

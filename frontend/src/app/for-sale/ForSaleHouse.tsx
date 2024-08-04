@@ -80,10 +80,6 @@ const ForSaleHouse: React.FC<ForSaleHouseProps> = ({ house, maxWidth, maxHeight,
         }
     }, [dimensions, opacity]);
 
-    useEffect(() => {
-        console.log('rendering house', house);
-    }, [house]);
-
     const renderBold = (text: string) => {
         return (
             <BoldText
