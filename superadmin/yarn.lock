@@ -457,10 +457,10 @@ kareem@2.6.3:
   resolved "https://registry.yarnpkg.com/kareem/-/kareem-2.6.3.tgz#23168ec8ffb6c1abfd31b7169a6fb1dd285992ac"
   integrity sha512-C3iHfuGUXK2u8/ipq9LfjFfXFxAZMQJJq7vLS45r3D9Y2xQ/m4S8zaR4zMLFWh9AsNPXmcFfUDhTEO8UIC/V6Q==
 
-living-mile-high-lib@^1.0.74:
-  version "1.0.74"
-  resolved "https://registry.yarnpkg.com/living-mile-high-lib/-/living-mile-high-lib-1.0.74.tgz#e9c043408e03d89df4da32e479f715d0972acf0e"
-  integrity sha512-Wc+cYtc+XiN8Xm/Yk7QmvAwc2A5CmlaN229HHikohPIvVp7nozosWBLM6NkrUV8sUKHN8j1y43ogbFrZ4EEfZg==
+living-mile-high-lib@^1.0.77:
+  version "1.0.77"
+  resolved "https://registry.yarnpkg.com/living-mile-high-lib/-/living-mile-high-lib-1.0.77.tgz#a0c5990601fda30fab584148bdb449053cb7812b"
+  integrity sha512-qopa4nN/dxf4tv2thuN7KWXl6kJ4TB00hcW6/+VZWQbuChp2P4MLIv5F0cSb0YAkW9hKY/4Gkw9WTX/m85XrQg==
   dependencies:
     "@types/uuid" "^10.0.0"
     bcryptjs "^2.4.3"

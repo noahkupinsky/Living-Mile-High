@@ -202,12 +202,12 @@ async function uploadAsset(postFn: PostFn, folder: string, asset: string): Promi
     }
 
     const file_path = path.resolve(folder, asset);
-    const formData = createUploadAssetRequest(fs.createReadStream(file_path));
+    const { formData, headers } = createUploadAssetRequest(fs.createReadStream(file_path));
 
     try {
         const response = await postFn('asset/upload', formData, {
             headers: {
-                ...formData.getHeaders(),
+                ...headers
             }
         });
         const resBody: UploadAssetResponse = response.data;

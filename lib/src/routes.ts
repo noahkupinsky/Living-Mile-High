@@ -1,7 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import { BackupIndex, DeepPartial, GeneralData, House } from "./types";
 import { EventMessage } from "./defaults";
-import FormData from "form-data";
 
 export type SuccessResponse = {
     success: boolean;
@@ -98,10 +97,14 @@ export type UpdateGeneralDataResponse = SuccessResponse;
 
 // IMAGE
 
-export function createUploadAssetRequest(file: any): FormData {
+export function createUploadAssetRequest(file: any): { formData: FormData, headers: any } {
     const formData = new FormData();
     formData.append('file', file);
-    return formData;
+
+    const headers = {
+        'Content-Type': 'multipart/form-data',
+    };
+    return { formData, headers };
 }
 
 export type UploadAssetResponse = SuccessResponse & {

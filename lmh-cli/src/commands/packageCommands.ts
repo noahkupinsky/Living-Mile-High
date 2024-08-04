@@ -1,12 +1,12 @@
 import { Command } from 'commander';
-import { updateAndPublishPackage } from '../utils/packageUtils';
+import { updatePackage } from '../utils/packageUtils';
 
 export function packageCommands(program: Command) {
     program
-        .command('publib')
-        .description('Publish types')
+        .command('loadlib')
+        .description('reload the library')
         .action(() => {
             const packageName = 'living-mile-high-lib';
-            updateAndPublishPackage(packageName);
+            updatePackage(packageName);
         });
 }

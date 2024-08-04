@@ -1,6 +1,6 @@
 {
   "name": "lmh-cli",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "description": "",
   "main": "dist/cli.js",
   "scripts": {
@@ -15,7 +15,7 @@
     "commander": "^8.0.0",
     "dotenv": "^16.4.5",
     "http-cookie-agent": "^6.0.5",
-    "living-mile-high-lib": "^1.0.74",
+    "living-mile-high-lib": "^1.0.77",
     "mongoose": "^8.4.4",
     "path": "^0.12.7",
     "shelljs": "^0.8.5",

@@ -49,11 +49,11 @@ export class ApiService {
     }
 
     async uploadAsset(file: File): Promise<string> {
-        const formData = createUploadAssetRequest(file);
+        const { formData, headers } = createUploadAssetRequest(file);
 
         const response = await this.apiAxios.post('asset/upload', formData, {
             headers: {
-                ...formData.getHeaders(),
+                ...headers,
             },
         });
         const resBody: UploadAssetResponse = response.data;

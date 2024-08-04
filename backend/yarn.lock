@@ -1277,10 +1277,17 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@mongodb-js/saslprep@^1.1.0", "@mongodb-js/saslprep@^1.1.5":
+"@mongodb-js/saslprep@^1.1.0":
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/@mongodb-js/saslprep/-/saslprep-1.1.7.tgz#d1700facfd6916c50c2c88fd6d48d363a56c702f"
   integrity sha512-dCHW/oEX0KJ4NjDULBo3JiOaK5+6axtpBbS+ao2ZInoAL9/YRQLhXzSNAFz7hP4nzLkIqsfYAK/PDE3+XHny0Q==
+  dependencies:
+    sparse-bitfield "^3.0.3"
+
+"@mongodb-js/saslprep@^1.1.5":
+  version "1.1.8"
+  resolved "https://registry.yarnpkg.com/@mongodb-js/saslprep/-/saslprep-1.1.8.tgz#d39744540be8800d17749990b0da95b4271840d1"
+  integrity sha512-qKwC/M/nNNaKUBMQ0nuzm47b7ZYWQHN3pcXq4IIcoSBc2hOIrflAxJduIvvqmhoz3gR2TacTAs8vlsCVPkiEdQ==
   dependencies:
     sparse-bitfield "^3.0.3"
 
@@ -2764,9 +2771,9 @@ bson@^5.5.0:
   integrity sha512-ix0EwukN2EpC0SRWIj/7B5+A6uQMQy6KMREI9qQqvgpkV2frH63T0UDVd1SYedL6dNCmDBYB3QtXi4ISk9YT+g==
 
 bson@^6.7.0:
-  version "6.7.0"
-  resolved "https://registry.yarnpkg.com/bson/-/bson-6.7.0.tgz#51973b132cdc424c8372fda3cb43e3e3e2ae2227"
-  integrity sha512-w2IquM5mYzYZv6rs3uN2DZTOBe2a0zXLj53TGDqwF4l6Sz/XsISrisXOJihArF9+BZ6Cq/GjVht7Sjfmri7ytQ==
+  version "6.8.0"
+  resolved "https://registry.yarnpkg.com/bson/-/bson-6.8.0.tgz#5063c41ba2437c2b8ff851b50d9e36cb7aaa7525"
+  integrity sha512-iOJg8pr7wq2tg/zSlCCHMi3hMm5JTOxLTagf3zxhcenHsFp+c6uOs6K7W5UE7A4QIJGtqh/ZovFNMP4mOPJynQ==
 
 buffer-crc32@^1.0.0:
   version "1.0.0"
@@ -3117,10 +3124,17 @@ debug@2.6.9:
   dependencies:
     ms "2.0.0"
 
-debug@4, debug@4.x, debug@^4, debug@^4.1.0, debug@^4.1.1, debug@^4.3.1, debug@^4.3.4, debug@~4.3.1:
+debug@4, debug@^4, debug@^4.1.0, debug@^4.1.1, debug@^4.3.1, debug@^4.3.4, debug@~4.3.1:
   version "4.3.5"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.5.tgz#e83444eceb9fedd4a1da56d671ae2446a01a6e1e"
   integrity sha512-pt0bNEmneDIvdL1Xsd9oDQ/wrQRkXDT4AUWlNZNPKvW5x/jyO9VFXkJUP07vQ2upmw5PlaITaPKc31jK13V+jg==
+  dependencies:
+    ms "2.1.2"
+
+debug@4.x:
+  version "4.3.6"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.6.tgz#2ab2c38fbaffebf8aa95fdfe6d88438c7a13c52b"
+  integrity sha512-O/09Bd4Z1fBrU4VzkhFqVgpPzaGbw6Sm9FEkBT1A/YBXQFGuuSxa1dN2nxgxS34JmKXqYx8CZAwEVoJFImUXIg==
   dependencies:
     ms "2.1.2"
 
@@ -4553,10 +4567,10 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.2.4.tgz#eca284f75d2965079309dc0ad9255abb2ebc1632"
   integrity sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==
 
-living-mile-high-lib@^1.0.74:
-  version "1.0.74"
-  resolved "https://registry.yarnpkg.com/living-mile-high-lib/-/living-mile-high-lib-1.0.74.tgz#e9c043408e03d89df4da32e479f715d0972acf0e"
-  integrity sha512-Wc+cYtc+XiN8Xm/Yk7QmvAwc2A5CmlaN229HHikohPIvVp7nozosWBLM6NkrUV8sUKHN8j1y43ogbFrZ4EEfZg==
+living-mile-high-lib@^1.0.77:
+  version "1.0.77"
+  resolved "https://registry.yarnpkg.com/living-mile-high-lib/-/living-mile-high-lib-1.0.77.tgz#a0c5990601fda30fab584148bdb449053cb7812b"
+  integrity sha512-qopa4nN/dxf4tv2thuN7KWXl6kJ4TB00hcW6/+VZWQbuChp2P4MLIv5F0cSb0YAkW9hKY/4Gkw9WTX/m85XrQg==
   dependencies:
     "@types/uuid" "^10.0.0"
     bcryptjs "^2.4.3"
@@ -4869,9 +4883,9 @@ mongoose@^8.4.1:
     sift "17.1.3"
 
 mongoose@^8.4.4:
-  version "8.5.1"
-  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-8.5.1.tgz#011192edf77af54dd0826a836459212da317c503"
-  integrity sha512-OhVcwVl91A1G6+XpjDcpkGP7l7ikZkxa0DylX7NT/lcEqAjggzSdqDxb48A+xsDxqNAr0ntSJ1yiE3+KJTOd5Q==
+  version "8.5.2"
+  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-8.5.2.tgz#73b40ce778f3fc66407aba3c3157795cdd278543"
+  integrity sha512-GZB4rHMdYfGatV+23IpCrqFbyCOjCNOHXgWbirr92KRwTEncBrtW3kgU9vmpKjsGf7nMmnAy06SwWUv1vhDkSg==
   dependencies:
     bson "^6.7.0"
     kareem "2.6.3"
