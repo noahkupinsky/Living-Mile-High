@@ -1,8 +1,7 @@
 import { ExpressEndpoint } from "~/@types";
 import { services } from "~/di";
-import { updateSite } from "./updateController";
-import { CreateBackupRequest, CreateBackupResponse, DeleteBackupRequest, DeleteBackupResponse, EventMessage, generateEventId, GetBackupIndicesResponse, RenameBackupRequest, RenameBackupResponse, RestoreBackupRequest, RestoreBackupResponse } from "living-mile-high-lib";
-import { sendBackupsUpdatedEvent } from "./eventController";
+import { updateBackups, updateSite } from "./updateController";
+import { CreateBackupRequest, CreateBackupResponse, DeleteBackupRequest, DeleteBackupResponse, GetBackupIndicesResponse, RenameBackupRequest, RenameBackupResponse, RestoreBackupRequest, RestoreBackupResponse } from "living-mile-high-lib";
 
 const backupService = () => services().backupService;
 
@@ -25,7 +24,7 @@ export const createManualBackup: ExpressEndpoint = async (req, res) => {
 
     try {
         await backupService().createManualBackup(name);
-        sendBackupsUpdatedEvent(eventId);
+        updateBackups(eventId);
 
         const successResponse: CreateBackupResponse = { success: true };
         res.json(successResponse);
@@ -42,7 +41,7 @@ export const deleteManualBackup: ExpressEndpoint = async (req, res) => {
 
     try {
         await backupService().deleteManualBackup(key);
-        sendBackupsUpdatedEvent(eventId);
+        updateBackups(eventId);
 
         const successResponse: DeleteBackupResponse = { success: true };
         res.json(successResponse);
@@ -59,7 +58,7 @@ export const renameManualBackup: ExpressEndpoint = async (req, res) => {
 
     try {
         await backupService().renameManualBackup(key, name);
-        sendBackupsUpdatedEvent(eventId);
+        updateBackups(eventId);
 
         const successResponse: RenameBackupResponse = { success: true };
         res.json(successResponse);

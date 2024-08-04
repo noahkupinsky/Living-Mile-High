@@ -143,8 +143,6 @@ export async function massUploadHouses(env: string, username: string, password: 
     try {
         const req: LoginRequest = { username, password };
         const loginResponse = await api.post('auth/login', req);
-        console.log('Login successful:', loginResponse.status);
-        console.log('Login response headers:', loginResponse.headers);
 
         // Extract token from the response headers
         const setCookieHeader = loginResponse.headers['set-cookie'];
@@ -153,7 +151,6 @@ export async function massUploadHouses(env: string, username: string, password: 
             const tokenMatch = cookie.match(/token=([^;]+)/);
             if (tokenMatch) {
                 token = tokenMatch[1];
-                console.log('Token extracted:', token);
             } else {
                 throw new Error('Token not found in Set-Cookie header');
             }
@@ -186,7 +183,7 @@ export async function massUploadHouses(env: string, username: string, password: 
 
     const numBatches = Math.ceil(houses.length / UPLOAD_BATCH_SIZE);
 
-    for (let i = 0; i < 1; i++) {
+    for (let i = 0; i < 2; i++) {
         const start = i * UPLOAD_BATCH_SIZE;
         const end = Math.min(start + UPLOAD_BATCH_SIZE, houses.length);
         const batch = houses.slice(start, end);

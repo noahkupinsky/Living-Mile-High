@@ -5,13 +5,20 @@ import { services } from "~/di";
 import { ExpressEndpoint } from "~/@types";
 
 const backupService = () => services().backupService;
+const cdnAdapter = () => services().cdnAdapter;
 
 // INTERMEDIATE, NOT A ROUTE
 
 export async function updateSite(eventId?: string) {
     await updateFixedKeys();
     await backupService().createAutoBackup();
+    await cdnAdapter().refreshCache();
     sendSiteAndBackupsUpdatedEvent(eventId);
+}
+
+export async function updateBackups(eventId?: string) {
+    await cdnAdapter().refreshCache();
+    sendBackupsUpdatedEvent(eventId);
 }
 
 export const pruneSite: ExpressEndpoint = async (req, res) => {
@@ -22,12 +29,13 @@ export const pruneSite: ExpressEndpoint = async (req, res) => {
         await backupService().pruneAutoBackups();
         await backupService().consolidateAutoBackups();
         await pruneAssets();
-        sendBackupsUpdatedEvent(eventId);
+        updateBackups(eventId);
 
         const successResponse: PruneSiteResponse = { success: true };
         res.json(successResponse);
     } catch (error: any) {
         const errorResponse: PruneSiteResponse = { success: false, error: error.message };
+        console.log(error);
         res.status(500).json(errorResponse);
     }
 }

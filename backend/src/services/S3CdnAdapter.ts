@@ -4,19 +4,15 @@ import {
     DeleteObjectCommand,
     ListObjectsV2Command,
     ListObjectsV2CommandOutput,
-    CopyObjectCommand,
     GetObjectCommand,
     GetObjectCommandOutput,
-    MetadataDirective,
     HeadObjectCommand,
     HeadObjectCommandOutput,
-    ServiceInputTypes,
-    $Command as S3Command,
-    ClientInputEndpointParameters,
 } from "@aws-sdk/client-s3";
-import { CommandBehavior } from "aws-sdk-client-mock";
+import { Upload } from "@aws-sdk/lib-storage";
 import { CdnFixedKey } from "living-mile-high-lib";
-import { CdnAdapter, CdnMetadata, CdnContent, PutCommand, S3Config, CdnHead } from '~/@types';
+import { Readable } from "stream";
+import { CdnAdapter, CdnMetadata, CdnContent, PutCommand, S3Config, CdnHead, RefreshCdnCache } from '~/@types';
 import { ContentCategory, ContentPermission, ContentType } from "~/@types/constants";
 import withLock from "~/utils/locks";
 import { prefixKey, convertToS3Metadata, convertFromS3Metadata } from "~/utils/misc";
@@ -35,13 +31,13 @@ export class S3CdnAdapter implements CdnAdapter {
     private client: S3Client;
     private bucket: string;
     private baseUrl: string;
-    private refreshCache?: (key: string) => Promise<void>;
+    private customRefreshCache?: RefreshCdnCache;
 
     constructor(config: S3Config) {
         this.client = config.client;
         this.bucket = config.bucket;
         this.baseUrl = config.baseUrl;
-        this.refreshCache = config.refreshCache;
+        this.customRefreshCache = config.refreshCache;
     }
 
     public getObjectUrl(key: string): string {
@@ -215,31 +211,39 @@ export class S3CdnAdapter implements CdnAdapter {
     }
 
     public async updateObjectMetadata(key: string, updates: Partial<CdnMetadata>): Promise<void> {
-        const existingObject = await this.getHead(key);
+        const existingObject = await this.getObject(key);
+        const bodyStream = existingObject.body as Readable;
         const metadata = { ...existingObject.metadata, ...updates };
 
         const s3Metadata = convertToS3Metadata(metadata);
 
-        const command = new CopyObjectCommand({
-            Bucket: this.bucket,
-            CopySource: this.getObjectUrl(key),
-            Key: key,
-            Metadata: s3Metadata,
-            MetadataDirective: MetadataDirective.REPLACE
+        const upload = new Upload({
+            client: this.client,
+            params: {
+                Bucket: this.bucket,
+                Key: key,
+                Body: bodyStream,
+                Metadata: s3Metadata
+            }
         });
 
         await withLock(key, async () => {
-            await this.send(command);
+            try {
+                await upload.done();
+            } catch (error: any) {
+                throw new Error(`Failed to update object ${key}: ${error.message}`);
+            }
         });
     }
 
     private async send(command: any): Promise<any> {
         const response = await this.client.send(command);
-        const key = command.input.Key;
-
-        if (this.refreshCache && key) {
-            await this.refreshCache(key);
-        }
         return response;
+    }
+
+    public async refreshCache(): Promise<void> {
+        if (this.customRefreshCache) {
+            await this.customRefreshCache();
+        }
     }
 }

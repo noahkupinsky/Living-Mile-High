@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 import { ServiceDict, SiteServiceManager } from "~/@types";
 import env from "~/config/env";
-import { createDORefreshCacheFn, createDOS3CdnConfig } from "~/utils/createS3CdnService";
+import { createDORefreshCdnCache, createS3Config } from "~/utils/createS3CdnService";
 import * as Services from "~/services";
 
 export class RealServiceManager implements SiteServiceManager {
@@ -27,9 +27,9 @@ export class RealServiceManager implements SiteServiceManager {
 
         await mongoose.connect(MONGODB_URI, {});
 
-        const hasDOData = DO_API_TOKEN && DO_ENDPOINT_ID;
-        const refreshCache = hasDOData ? createDORefreshCacheFn(DO_API_TOKEN, DO_ENDPOINT_ID) : undefined;
-        const s3CdnConfig = createDOS3CdnConfig(
+        const refreshCdnCache = DO_API_TOKEN && DO_ENDPOINT_ID ? createDORefreshCdnCache(DO_API_TOKEN, DO_ENDPOINT_ID) : undefined;
+
+        const s3CdnConfig = createS3Config(
             {
                 endpoint: CDN_ENDPOINT,
                 region: CDN_REGION,
@@ -37,7 +37,7 @@ export class RealServiceManager implements SiteServiceManager {
                 key: CDN_KEY,
                 secret: CDN_SECRET,
                 baseUrl: NEXT_PUBLIC_CDN_URL,
-                refreshCache: refreshCache
+                refreshCache: refreshCdnCache
             }
         );
         const cdn = new Services.S3CdnAdapter(s3CdnConfig);

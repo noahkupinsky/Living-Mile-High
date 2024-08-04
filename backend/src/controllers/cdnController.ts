@@ -68,6 +68,5 @@ export async function pruneAssets(): Promise<void> {
     const allAssets = await cdn().getKeys(ContentCategory.ASSET);
     const unreferencedAssets = allAssets.filter(asset => !referencedAssets.has(asset));
     const expiredUnreferencedAssets = await assetService().getExpiredAssets(unreferencedAssets);
-
     cdn().deleteObjects(expiredUnreferencedAssets);
 }

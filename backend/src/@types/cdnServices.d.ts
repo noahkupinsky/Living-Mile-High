@@ -63,7 +63,7 @@ export type CdnContent = CdnHead & {
     body: StreamingBlobPayloadOutputTypes,
 }
 
-export type RefreshCdnCache = (key: string) => Promise<void>;
+export type RefreshCdnCache = (keys?: string[]) => Promise<void>;
 
 export interface CdnAdapter {
     public getObjectUrl(key: string): string;
@@ -78,12 +78,13 @@ export interface CdnAdapter {
     public deleteObjects(keys: string[]): Promise<void>;
     public getKeys(prefix?: ContentCategory): Promise<string[]>
     public updateObjectMetadata(key: string, updates: Partial<CdnMetadata>): Promise<void>;
+    public refreshCache(): Promise<void>;
 }
 
 export type S3Config = {
     client: S3Client,
     bucket: string,
     baseUrl: string,
-    refreshCache?: (key: string) => Promise<void>,
+    refreshCache?: RefreshCdnCache,
 }
 

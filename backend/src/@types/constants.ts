@@ -23,7 +23,7 @@ export enum ContentPermission {
 export enum BackupConfig {
     RETENTION_DAYS = 365,
     LOGARITHMIC_BASE = 5, // >= 2
-    MAXIMUM_POWER = 1 // >= 1
+    MAXIMUM_POWER = 3 // >= 1
 }
 
 export enum AssetConfig {

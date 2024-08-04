@@ -63,7 +63,7 @@ export async function downloadImage(url: string): Promise<{ buffer: Buffer, cont
 }
 
 const toSnakeCase = (str: string): string => {
-    return str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+    return str.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`);
 };
 
 export const convertToS3Metadata = (metadata: CdnMetadata): { [key: string]: string } => {
@@ -75,7 +75,7 @@ export const convertToS3Metadata = (metadata: CdnMetadata): { [key: string]: str
 };
 
 const toCamelCase = (str: string): string => {
-    return str.replace(/_([a-z])/g, group => group[1].toUpperCase());
+    return str.replace(/[_-]([a-z])/g, group => group[1].toUpperCase());
 };
 
 export const convertFromS3Metadata = (metadata: { [key: string]: string }): CdnMetadata => {
@@ -84,6 +84,8 @@ export const convertFromS3Metadata = (metadata: { [key: string]: string }): CdnM
         if (key.startsWith('x-amz-meta-')) {
             const unprefixedKey = toCamelCase(key.slice(11));
             convertedMetadata[unprefixedKey] = value;
+        } else {
+            convertedMetadata[key] = value;
         }
     }
     return convertedMetadata;
