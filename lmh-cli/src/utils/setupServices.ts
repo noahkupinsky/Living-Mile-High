@@ -8,6 +8,7 @@ import { AdminSchema, createUploadAssetRequest, hashPassword, House, LoginReques
 import { loadEnvFile, joinRoot } from "./envUtils";
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import { Agent } from "https";
+import FormData from "form-data";
 
 const AdminModel = model('Admin', AdminSchema);
 type RequiredHouse = Omit<House, 'neighborhood' | 'createdAt' | 'updatedAt' | 'id' | 'stats' | 'images'> & Partial<House>;
@@ -201,14 +202,19 @@ async function uploadAsset(postFn: PostFn, folder: string, asset: string): Promi
         return asset;
     }
 
+
     const file_path = path.resolve(folder, asset);
-    const { formData, headers } = createUploadAssetRequest(fs.createReadStream(file_path));
+    const formData = new FormData();
+    formData.append('file', fs.createReadStream(file_path));
+    const headers = {
+        'Content-Type': 'multipart/form-data',
+    };
 
     try {
         const response = await postFn('asset/upload', formData, {
             headers: {
-                ...headers
-            }
+                ...headers,
+            },
         });
         const resBody: UploadAssetResponse = response.data;
 

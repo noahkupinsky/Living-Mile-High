@@ -1779,6 +1779,11 @@ form-data@^4.0.0:
     combined-stream "^1.0.8"
     mime-types "^2.1.12"
 
+formdata-node@^6.0.3:
+  version "6.0.3"
+  resolved "https://registry.yarnpkg.com/formdata-node/-/formdata-node-6.0.3.tgz#48f8e2206ae2befded82af621ef015f08168dc6d"
+  integrity sha512-8e1++BCiTzUno9v5IZ2J6bv4RU+3UKDmqWUQD0MIMVCd9AdhWkO1gw57oo1mNEX1dMq2EGI+FbWz4B92pscSQg==
+
 forwarded@0.2.0:
   version "0.2.0"
   resolved "https://registry.npmjs.org/forwarded/-/forwarded-0.2.0.tgz"
@@ -1985,15 +1990,16 @@ kareem@2.6.3:
   resolved "https://registry.npmjs.org/kareem/-/kareem-2.6.3.tgz"
   integrity sha512-C3iHfuGUXK2u8/ipq9LfjFfXFxAZMQJJq7vLS45r3D9Y2xQ/m4S8zaR4zMLFWh9AsNPXmcFfUDhTEO8UIC/V6Q==
 
-living-mile-high-lib@^1.0.77:
-  version "1.0.77"
-  resolved "https://registry.yarnpkg.com/living-mile-high-lib/-/living-mile-high-lib-1.0.77.tgz#a0c5990601fda30fab584148bdb449053cb7812b"
-  integrity sha512-qopa4nN/dxf4tv2thuN7KWXl6kJ4TB00hcW6/+VZWQbuChp2P4MLIv5F0cSb0YAkW9hKY/4Gkw9WTX/m85XrQg==
+living-mile-high-lib@^1.0.79:
+  version "1.0.79"
+  resolved "https://registry.yarnpkg.com/living-mile-high-lib/-/living-mile-high-lib-1.0.79.tgz#4cd136bb06d4d1132365691cdc563bb0404dd401"
+  integrity sha512-CwyFDabZvNLuiR86BCV6kkIGbkerRL/FjqzI8yEGzdYaq6MQOq6vCmUwcD1fOKdtTcUvvuYoeTAk4WsjVAyAug==
   dependencies:
     "@types/uuid" "^10.0.0"
     bcryptjs "^2.4.3"
     express "^4.19.2"
     form-data "^4.0.0"
+    formdata-node "^6.0.3"
     mongoose "^8.4.4"
     multer "^1.4.5-lts.1"
     uuid "^10.0.0"

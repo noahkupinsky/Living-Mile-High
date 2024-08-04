@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button, View, Text, styled, YStack, Label, Input, XStack, Select } from 'tamagui';
 import services from '@/di';
@@ -89,6 +89,10 @@ const AdminPanel = () => {
     const router = useRouter();
     const { apiService } = services();
     const { houses, setQuery, sort, setSort } = useHouseQuery();
+
+    useEffect(() => {
+        setQuery({});
+    }, [setQuery]);
 
     const handleEdit = (id: string) => {
         router.push(`admin/upsert-house?id=${id}`);

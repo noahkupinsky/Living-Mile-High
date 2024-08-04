@@ -7,9 +7,9 @@ import { useSiteData } from './SiteDataContext';
 
 type HouseQueryContextType = {
     houses: House[];
-    query: HouseQuery;
+    query: HouseQuery | undefined;
     sort: HouseSort;
-    setQuery: React.Dispatch<React.SetStateAction<HouseQuery>>;
+    setQuery: React.Dispatch<React.SetStateAction<HouseQuery | undefined>>;
     setSort: React.Dispatch<React.SetStateAction<HouseSort>>;
 };
 
@@ -33,7 +33,7 @@ const sorters = {
 
 export const HouseQueryProvider = ({ children }: { children: React.ReactNode }) => {
     const { houses: allHouses } = useSiteData();
-    const [query, setQuery] = useState<HouseQuery>({});
+    const [query, setQuery] = useState<HouseQuery | undefined>(undefined);
     const [sort, setSort] = useState<HouseSort>(HouseSort.LEXICOGRAPHIC);
     const [houses, setHouses] = useState<House[]>([]);
 
@@ -49,9 +49,11 @@ export const HouseQueryProvider = ({ children }: { children: React.ReactNode }) 
     }, []);
 
     useEffect(() => {
-        const result = queryHouses(query, allHouses);
-        const sortedResults = result.sort(sorters[sort]);
-        setHouses(sortedResults);
+        if (query) {
+            const result = queryHouses(query, allHouses);
+            const sortedResults = result.sort(sorters[sort]);
+            setHouses(sortedResults);
+        }
     }, [query, allHouses, queryHouses, sort]);
 
     return (

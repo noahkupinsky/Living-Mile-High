@@ -19,7 +19,7 @@
     "eventsource": "^2.0.2",
     "form-data": "^4.0.0",
     "isomorphic-ws": "^5.0.0",
-    "living-mile-high-lib": "^1.0.77",
+    "living-mile-high-lib": "^1.0.79",
     "next": "^14.2.4",
     "next-runtime-env": "^3.2.2",
     "nextjs-cors": "^2.2.0",

@@ -38,7 +38,7 @@ const ForSaleComponent = () => {
         <ColumnContainer>
             {houses.map(house => (
                 <ForSaleHouse
-                    key={house.address}
+                    key={house.id!}
                     house={house}
                     maxWidth={bodyWidth * WIDTH_PERCENTAGE}
                     maxHeight={bodyHeight * HEIGHT_PERCENTAGE}

@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import { BackupIndex, DeepPartial, GeneralData, House } from "./types";
 import { EventMessage } from "./defaults";
+import FormData from "form-data";
 
 export type SuccessResponse = {
     success: boolean;

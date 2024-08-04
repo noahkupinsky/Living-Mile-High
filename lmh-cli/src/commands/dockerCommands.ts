@@ -1,5 +1,5 @@
 import { Command } from 'commander';
-import { dockerRun, dockerDownAll, dockerDown, dockerPush, dockerPull } from '../utils/dockerUtils';
+import { dockerRun, dockerDownAll, dockerDown, dockerPush, dockerPull, dockerBuild } from '../utils/dockerUtils';
 import { config } from '../config';
 import { massUploadHouses, setupLocalServices } from '../utils/setupServices';
 import shell from 'shelljs';
@@ -81,6 +81,13 @@ function registerStagingCommands(program: Command) {
         .description('Stop staging containers')
         .action(() => {
             dockerDown(config.composes.staging);
+        });
+
+    staging
+        .command('build')
+        .description('Build staging images')
+        .action(() => {
+            dockerBuild(config.composes.staging);
         });
 }
 

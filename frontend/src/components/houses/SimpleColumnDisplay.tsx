@@ -73,7 +73,7 @@ const SimpleColumnDisplay: React.FC<SimpleColumnDisplayProps> = ({ houses, onCli
                 <Row key={rowIndex} style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
                     {row.map((house) => (
                         <SimpleHouseDisplay
-                            key={house.id}
+                            key={house.id!}
                             house={house}
                             width={width}
                             onClick={onClick ? () => onClick(house) : undefined}
