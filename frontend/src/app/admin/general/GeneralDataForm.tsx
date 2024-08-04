@@ -5,7 +5,7 @@ import UploadSingleImage from "@/components/images/UploadSingleImage";
 import Modal from "@/components/layout/Modal";
 import { useSiteData } from "@/contexts/SiteDataContext";
 import services from "@/di";
-import { objectsEqual } from "@/utils/misc";
+import { objectsEqual, sanitizeObject } from "@/utils/misc";
 import { GeneralData } from "living-mile-high-lib";
 import { useEffect, useState } from "react";
 import { Button, Label, TextArea, View, YStack, styled } from "tamagui";

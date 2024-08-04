@@ -32,6 +32,14 @@ const DangerButton = styled(Button, {
     },
 });
 
+function validateBackupName(name: string) {
+    const allowedChars = /^[a-zA-Z0-9_ -]+$/;
+
+    if (!allowedChars.test(name)) {
+        throw new Error('Backup names may only contain letters, numbers, spaces, hyphens, and underscores');
+    }
+}
+
 const DangerZonePage = () => {
     const { apiService, eventService } = services();
     const [backups, setBackups] = useState<BackupIndex[]>([]);
@@ -73,12 +81,13 @@ const DangerZonePage = () => {
 
     useEffect(() => {
         fetchBackups();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [fetchBackups]);
 
 
     const handleCreateBackup = async () => {
         try {
+            validateBackupName(newBackupName);
+
             await apiService.createBackup(newBackupName);
             alert('Backup created successfully');
 
@@ -91,6 +100,8 @@ const DangerZonePage = () => {
     const handleRenameBackup = async () => {
         if (editingBackupKey && renameBackupName) {
             try {
+                validateBackupName(newBackupName);
+
                 await apiService.renameBackup(editingBackupKey, renameBackupName);
                 alert('Backup renamed successfully');
 
