@@ -30,7 +30,8 @@
     "react-native": "^0.74.2",
     "react-query": "^3.39.3",
     "redis": "^4.6.14",
-    "tamagui": "^1.102.3"
+    "tamagui": "^1.102.3",
+    "validator": "^13.12.0"
   },
   "devDependencies": {
     "@types/eventsource": "^1.1.15",
@@ -38,6 +39,7 @@
     "@types/react": "^18.3.3",
     "@types/react-native": "^0.73.0",
     "@types/redis": "^4.0.11",
+    "@types/validator": "^13.12.0",
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.2.4",
     "typescript": "^5"

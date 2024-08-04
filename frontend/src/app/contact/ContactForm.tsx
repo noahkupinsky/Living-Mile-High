@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { styled, View, Text, Input, TextArea, Button, YStack, XStack, Checkbox } from 'tamagui';
-import { minV } from '@/utils/misc';
+import { minV, sanitizeObject } from '@/utils/misc';
+import validator from 'validator';
 
 const Container = styled(YStack, {
     width: '100%',
@@ -108,7 +109,6 @@ type ContactForm = {
     firstName: string;
     lastName: string;
     email: string;
-    newsletter: boolean;
     subject: string;
     message: string;
 }
@@ -125,10 +125,14 @@ const validateForm = (form: ContactForm): string[] => {
     const errors: string[] = [];
 
     (Object.entries(form) as [keyof (typeof FORM_INPUTS), string][]).forEach(([key, value]) => {
-        if (value === '') {
+        if (validator.isEmpty(value)) {
             errors.push(`${FORM_INPUTS[key]} cannot be empty.`);
         }
     });
+
+    if (!validator.isEmail(form.email)) {
+        errors.push('Email is not valid.');
+    }
 
     return errors;
 }
@@ -137,7 +141,6 @@ const ContactForm = () => {
     const [form, setForm] = useState<ContactForm>({
         firstName: '',
         lastName: '',
-        newsletter: false,
         email: '',
         subject: '',
         message: '',
@@ -150,6 +153,8 @@ const ContactForm = () => {
         const errors = validateForm(form);
 
         if (errors.length === 0) {
+            const sanitizedForm = sanitizeObject(form);
+            console.log(sanitizedForm);
             setSuccessfullySubmitted(true);
         } else {
             alert(errors.join('\n'));

@@ -30,8 +30,11 @@ function registerProdCommands(program: Command) {
     prod
         .command('up')
         .description('Start prod containers')
-        .action(() => {
-            dockerPull(config.composes.prod);
+        .option('-p, --pull', 'Pull latest images from dockerhub')
+        .action(async (options) => {
+            if (options.pull) {
+                dockerPull(config.composes.prod);
+            }
             dockerRun(config.composes.prod);
         });
 
