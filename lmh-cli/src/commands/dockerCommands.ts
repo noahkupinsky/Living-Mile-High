@@ -46,8 +46,8 @@ function registerProdCommands(program: Command) {
         });
 
     prod
-        .command('build')
-        .description('Build prod containers')
+        .command('push')
+        .description('Build and push prod images')
         .action(() => {
             dockerRun(config.composes.prodBuild);
             dockerPush(config.composes.prodBuild);
