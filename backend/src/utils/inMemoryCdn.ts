@@ -122,38 +122,7 @@ export function mockS3Cdn() {
         return Promise.resolve(result);
     });
 
-    s3Mock.on(CopyObjectCommand).callsFake((input) => {
-        const sourceKey = input.CopySource!.split('/').pop();
-        const destinationKey = input.Key;
 
-        if (!sourceKey || !inMemoryCdn[sourceKey]) {
-            throw new Error(`Source object ${sourceKey} does not exist`);
-        }
-
-        const sourceObject = inMemoryCdn[sourceKey];
-
-        const newS3Metadata = input.Metadata || {};
-        // and now we process the "s3 returned" metadata to get it back to where it was for easy property comparisons
-        const newMetadata = {
-            ...sourceObject.metadata, ...convertFromS3Metadata(newS3Metadata)
-        };
-
-        const updatedMetadata = input.MetadataDirective === MetadataDirective.REPLACE ? newMetadata : sourceObject.metadata;
-
-        inMemoryCdn[destinationKey!] = {
-            ...sourceObject,
-            metadata: updatedMetadata
-        };
-
-        const result: CopyObjectCommandOutput = {
-            $metadata: {}
-        };
-
-        return Promise.resolve(result);
-    });
-
-
-    // Mock HeadObjectCommand
     s3Mock.on(HeadObjectCommand).callsFake((input) => {
         const object = inMemoryCdn[input.Key];
 

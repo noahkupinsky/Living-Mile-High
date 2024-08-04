@@ -183,7 +183,7 @@ export async function massUploadHouses(env: string, username: string, password: 
 
     const numBatches = Math.ceil(houses.length / UPLOAD_BATCH_SIZE);
 
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < numBatches; i++) {
         const start = i * UPLOAD_BATCH_SIZE;
         const end = Math.min(start + UPLOAD_BATCH_SIZE, houses.length);
         const batch = houses.slice(start, end);

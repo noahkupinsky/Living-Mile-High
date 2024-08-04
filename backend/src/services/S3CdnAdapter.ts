@@ -241,9 +241,9 @@ export class S3CdnAdapter implements CdnAdapter {
         return response;
     }
 
-    public async refreshCache(): Promise<void> {
+    public async refreshCache(keys?: string[]): Promise<void> {
         if (this.customRefreshCache) {
-            await this.customRefreshCache();
+            await this.customRefreshCache(keys);
         }
     }
 }

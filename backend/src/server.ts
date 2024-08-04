@@ -1,6 +1,7 @@
 import env from '~/config/env';
 import { getServer, setupApp } from '~/app';
 import { updateFixedKeys } from './controllers/cdnController';
+import { services } from './di';
 
 const server = getServer();
 
@@ -27,6 +28,7 @@ const startServer = async () => {
 **/
 const ensureFixedKeysExist = async () => {
     await updateFixedKeys();
+    await services().cdnAdapter.refreshCache();
 }
 
 startServer();

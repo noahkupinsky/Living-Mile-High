@@ -29,3 +29,5 @@ export enum BackupConfig {
 export enum AssetConfig {
     RETENTION_DAYS = 1
 }
+
+export const REFRESH_CDN_CACHE_MAX_FREQUENCY = 1000;

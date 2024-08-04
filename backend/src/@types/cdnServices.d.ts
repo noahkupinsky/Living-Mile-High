@@ -78,7 +78,7 @@ export interface CdnAdapter {
     public deleteObjects(keys: string[]): Promise<void>;
     public getKeys(prefix?: ContentCategory): Promise<string[]>
     public updateObjectMetadata(key: string, updates: Partial<CdnMetadata>): Promise<void>;
-    public refreshCache(): Promise<void>;
+    public refreshCache(keys?: string[]): Promise<void>;
 }
 
 export type S3Config = {
