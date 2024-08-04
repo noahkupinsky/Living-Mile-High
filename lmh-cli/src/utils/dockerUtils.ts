@@ -5,7 +5,7 @@ export function dockerBuild(compose: Compose) {
     const composeFile = compose.composeFile;
     const envFile = compose.envFile;
     console.log('Building Docker images...');
-    execSync(`docker compose -f-f ${composeFile} --env-file ${envFile} build`, { stdio: 'inherit' });
+    execSync(`docker compose -f ${composeFile} --env-file ${envFile} build`, { stdio: 'inherit' });
 }
 
 export function dockerRun(compose: Compose) {

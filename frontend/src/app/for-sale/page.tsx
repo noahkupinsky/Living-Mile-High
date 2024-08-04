@@ -30,6 +30,10 @@ const ForSaleComponent = () => {
         });
     }, [setQuery]);
 
+    useEffect(() => {
+        console.log('houses', houses);
+    }, [houses]);
+
     return (
         <ColumnContainer>
             {houses.map(house => (
