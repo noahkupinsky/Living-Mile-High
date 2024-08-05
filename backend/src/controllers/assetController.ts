@@ -1,5 +1,5 @@
 import { createSignature } from "@uploadcare/rest-client";
-import { generateEventId, UploadAssetResponse } from "living-mile-high-lib";
+import { UploadAssetResponse } from "living-mile-high-lib";
 import { ExpressEndpoint } from "~/@types";
 import env from "~/config/env";
 import { services } from "~/di";

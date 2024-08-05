@@ -47,7 +47,6 @@ const ImageUploader: React.FC<UploadcareFileUploaderProps> = ({ onDone, multiple
                 onDoneClick={handleUploadComplete} />
         </View>
     )
-
 };
 
 export default ImageUploader;

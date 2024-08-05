@@ -1,3 +1,5 @@
+import path from 'path';
+import fs from 'fs';
 import { AssetService, CdnAdapter, AssetMetadata, CdnHead } from '~/@types';
 import { AssetConfig, ContentCategory, ContentType } from '~/@types/constants';
 import { createExpirationDate } from '~/utils/misc';
@@ -17,6 +19,8 @@ export class CdnAssetService implements AssetService {
         if (!Object.values(ContentType).includes(contentType)) {
             throw new Error(`Invalid content type: ${contentType}`);
         }
+
+        console.log(file);
 
         const metadata: AssetMetadata = {
             expiration: createExpirationDate(AssetConfig.RETENTION_DAYS)

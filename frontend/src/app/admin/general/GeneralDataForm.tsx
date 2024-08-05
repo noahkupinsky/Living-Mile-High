@@ -1,4 +1,5 @@
 import AspectImage from "@/components/images/AspectImage";
+import FilePicker from "@/components/images/FilePicker";
 import ImageUploader from "@/components/images/ImageUploader";
 import ReorderableImageRow from "@/components/images/ReorderableImageRow";
 import Modal from "@/components/layout/Modal";
@@ -268,7 +269,7 @@ const GeneralDataForm: React.FC = () => {
             </ColumnsContainer>
 
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-                <ImageUploader onDone={handleUpload} multiple={isMultipleUpload} />
+                <FilePicker onUpload={handleUpload} multiple={isMultipleUpload} />
             </Modal>
             <Button onPress={handleFormSubmit}>Submit</Button>
         </FormContainer>

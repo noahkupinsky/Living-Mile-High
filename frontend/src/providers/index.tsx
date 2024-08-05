@@ -6,6 +6,7 @@ import { AuthProvider } from '@/contexts/AuthContext';
 import { SiteDataProvider } from '@/contexts/SiteDataContext';
 import { SizingProvider } from '@/contexts/SizingContext';
 import { CarouselProvider } from '@/contexts/CarouselContext';
+import { GoogleProvider } from '@/contexts/GoogleContext';
 
 type ProviderProps = {
     children: React.ReactNode
@@ -15,13 +16,15 @@ const Providers = ({ children }: ProviderProps) => {
     return (
         <NextTamaguiProvider>
             <AuthProvider>
-                <SiteDataProvider>
-                    <SizingProvider>
-                        <CarouselProvider>
-                            {children}
-                        </CarouselProvider>
-                    </SizingProvider>
-                </SiteDataProvider>
+                <GoogleProvider>
+                    <SiteDataProvider>
+                        <SizingProvider>
+                            <CarouselProvider>
+                                {children}
+                            </CarouselProvider>
+                        </SizingProvider>
+                    </SiteDataProvider>
+                </GoogleProvider>
             </AuthProvider>
         </NextTamaguiProvider >
     );

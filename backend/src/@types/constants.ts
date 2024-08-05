@@ -12,7 +12,9 @@ export enum ContentType {
     BMP = 'image/bmp',
     WEBP = 'image/webp',
     TIFF = 'image/tiff',
-    SVG = 'image/svg+xml'
+    SVG = 'image/svg+xml',
+    HEIF = 'image/heif',
+    HEIC = 'image/heic',
 }
 
 export enum ContentPermission {
