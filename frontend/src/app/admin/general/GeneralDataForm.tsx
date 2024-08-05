@@ -1,13 +1,12 @@
 import AspectImage from "@/components/images/AspectImage";
+import ImageUploader from "@/components/images/ImageUploader";
 import ReorderableImageRow from "@/components/images/ReorderableImageRow";
-import UploadMultipleImages from "@/components/images/UploadMultipleImages";
-import UploadSingleImage from "@/components/images/UploadSingleImage";
 import Modal from "@/components/layout/Modal";
 import { useSiteData } from "@/contexts/SiteDataContext";
 import services from "@/di";
 import { objectsEqual, sanitizeObject } from "@/utils/misc";
 import { GeneralData } from "living-mile-high-lib";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button, Label, TextArea, View, YStack, styled } from "tamagui";
 
 const FormContainer = styled(View, {
@@ -91,6 +90,24 @@ enum UploadType {
     ABOUT_IMAGE = 'aboutImage',
 }
 
+const validateForm = (formData: GeneralData): string[] => {
+    const errors: string[] = [];
+
+    if (formData.homePageImages.length === 0) {
+        errors.push('At least one default image is required.');
+    }
+
+    ['contact', 'about'].forEach(key => {
+        ['image', 'text'].forEach(subKey => {
+            if (!(formData as any)[key][subKey]) {
+                errors.push(`${key} ${subKey} is required.`);
+            }
+        })
+    })
+
+    return errors;
+}
+
 const GeneralDataForm: React.FC = () => {
     const { generalData } = useSiteData();
     const { apiService } = services();
@@ -107,52 +124,73 @@ const GeneralDataForm: React.FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [generalData]);
 
-    const setDefaultImages = (images: React.SetStateAction<string[]>) => {
-        setFormData(prev => {
-            const newImages = typeof images === 'function' ? images(prev.defaultImages) : images;
-            return { ...prev, defaultImages: newImages };
-        });
-    };
+    const setDefaultImages = useCallback((images: React.SetStateAction<string[]>) => {
+        setFormData((prev) => ({
+            ...prev,
+            defaultImages: typeof images === 'function' ? images(prev.defaultImages) : images,
+        }));
+    }, []);
 
-    const setHomePageImages = (images: React.SetStateAction<string[]>) => {
-        setFormData(prev => {
-            const newImages = typeof images === 'function' ? images(prev.homePageImages) : images;
-            return { ...prev, homePageImages: newImages };
-        });
-    };
+    const setHomePageImages = useCallback((images: React.SetStateAction<string[]>) => {
+        setFormData((prev) => ({
+            ...prev,
+            homePageImages: typeof images === 'function' ? images(prev.homePageImages) : images,
+        }));
+    }, []);
 
-    const handleDefaultImagesUpload = async (urls: string[]) => {
-        setDefaultImages(prev => [...prev, ...urls]);
+    const handleDefaultImagesUpload = useCallback(async (urls: string[]) => {
+        setDefaultImages((prev) => [...prev, ...urls]);
         setIsModalOpen(false);
-    };
+    }, [setDefaultImages]);
 
-    const handleHomePageImagesUpload = async (urls: string[]) => {
-        setHomePageImages(prev => [...prev, ...urls]);
+    const handleHomePageImagesUpload = useCallback(async (urls: string[]) => {
+        setHomePageImages((prev) => [...prev, ...urls]);
         setIsModalOpen(false);
-    };
+    }, [setHomePageImages]);
 
-    const handleAboutImageUpload = async (url?: string) => {
+    const handleAboutImageUpload = useCallback(async (url?: string) => {
         if (url) {
-            setFormData(prev => ({ ...prev, about: { ...prev.about, image: url } }));
+            setFormData((prev) => ({ ...prev, about: { ...prev.about, image: url } }));
         }
         setIsModalOpen(false);
-    };
+    }, [setFormData]);
 
-    const handleContactImageUpload = async (url?: string) => {
+    const handleContactImageUpload = useCallback(async (url?: string) => {
         if (url) {
-            setFormData(prev => ({ ...prev, contact: { ...prev.contact, image: url } }));
+            setFormData((prev) => ({ ...prev, contact: { ...prev.contact, image: url } }));
         }
         setIsModalOpen(false);
-    };
+    }, [setFormData]);
 
-    const handleFormSubmit = async () => {
-        try {
-            await apiService.updateGeneralData(formData);
-            alert('General Data updated successfully!');
-        } catch (error) {
-            alert('An error occurred while submitting the form. Please try again.');
+    const handleFormSubmit = useCallback(async () => {
+        const errors = validateForm(formData);
+
+        if (errors.length === 0) {
+            try {
+                await apiService.updateGeneralData(formData);
+                alert('General Data updated successfully!');
+            } catch (error) {
+                alert('An error occurred while submitting the form. Please try again.');
+            }
+        } else {
+            alert(errors.join('\n'));
         }
-    };
+    }, [apiService, formData]);
+
+    const isMultipleUpload = useMemo(() => (uploadType === UploadType.DEFAULT_IMAGES || uploadType === UploadType.HOME_PAGE_IMAGES), [uploadType]);
+
+    const handleUpload = useMemo(() => {
+        switch (uploadType) {
+            case UploadType.DEFAULT_IMAGES:
+                return handleDefaultImagesUpload;
+            case UploadType.HOME_PAGE_IMAGES:
+                return handleHomePageImagesUpload;
+            case UploadType.CONTACT_IMAGE:
+                return handleContactImageUpload;
+            case UploadType.ABOUT_IMAGE:
+                return handleAboutImageUpload;
+        }
+    }, [uploadType, handleDefaultImagesUpload, handleHomePageImagesUpload, handleContactImageUpload, handleAboutImageUpload]);
 
     return (
         <FormContainer>
@@ -230,15 +268,7 @@ const GeneralDataForm: React.FC = () => {
             </ColumnsContainer>
 
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-                {uploadType === UploadType.ABOUT_IMAGE || uploadType === UploadType.CONTACT_IMAGE ? (
-                    <UploadSingleImage onImageUpload={
-                        uploadType === UploadType.ABOUT_IMAGE ? handleAboutImageUpload : handleContactImageUpload
-                    } />
-                ) : (
-                    <UploadMultipleImages onImagesUpload={
-                        uploadType === UploadType.DEFAULT_IMAGES ? handleDefaultImagesUpload : handleHomePageImagesUpload
-                    } />
-                )}
+                <ImageUploader onDone={handleUpload} multiple={isMultipleUpload} />
             </Modal>
             <Button onPress={handleFormSubmit}>Submit</Button>
         </FormContainer>

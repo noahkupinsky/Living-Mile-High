@@ -48,7 +48,7 @@ export class ApiService {
         return `${backendUrl()}/${route}`;
     }
 
-    async uploadAsset(file: File): Promise<string> {
+    async uploadAsset(file: File | Blob): Promise<string> {
         const { formData, headers } = createUploadAssetRequest(file);
 
         const response = await this.apiAxios.post('asset/upload', formData, {
@@ -178,5 +178,12 @@ export class ApiService {
         } catch (error) {
             return false;
         }
+    }
+
+    async signUploadcareRequest(signString: string): Promise<string> {
+        const queryParam = `signString=${encodeURIComponent(signString)}`;
+        const response = await this.apiAxios.get(`/sign-uploadcare-request?${queryParam}`);
+        const signature = response.data;
+        return signature;
     }
 }

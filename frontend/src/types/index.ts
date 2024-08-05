@@ -36,4 +36,4 @@ export enum HouseSort {
 
 export type HouseStatKeys = keyof HouseStats
 
-export type ImageFormat = string | File
+export type ImageFormat = string | File | Blob

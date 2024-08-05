@@ -65,12 +65,14 @@ type HouseFormTextProps = {
     houses: House[];
 };
 
+const isNeighborhoodValid = (neighborhood: string | undefined) => neighborhood !== undefined && neighborhood !== '';
+
 const HouseFormText: React.FC<HouseFormTextProps> = ({ formData, setFormData, houses }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     const uniqueNeighborhoods = useMemo(() => {
-        const definedNeighborhoods: string[] = houses.filter(house => house.neighborhood !== undefined).map(house => house.neighborhood) as string[];
-        return Array.from(new Set(definedNeighborhoods));
+        const validNeighborhoods: string[] = houses.map(house => house.neighborhood).filter(isNeighborhoodValid) as string[];
+        return Array.from(new Set(validNeighborhoods));
     }, [houses]);
 
     const handleDropdownToggle = () => {

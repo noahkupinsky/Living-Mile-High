@@ -13,7 +13,8 @@ type Env = {
     CDN_ENDPOINT: string,
     DO_ENDPOINT_ID?: string,
     DO_API_TOKEN?: string,
-    NEXT_PUBLIC_CDN_URL: string
+    NEXT_PUBLIC_CDN_URL: string,
+    UPLOADCARE_SECRET_KEY?: string
 }
 
 const EnvDefaults: Env = {
