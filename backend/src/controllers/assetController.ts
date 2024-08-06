@@ -15,8 +15,8 @@ export const uploadAsset: ExpressEndpoint = async (req, res) => {
         const successResponse: UploadAssetResponse = { success: true, url: url };
         res.json(successResponse);
     } catch (error: any) {
-        console.log(error.message);
         const errorResponse: UploadAssetResponse = { success: false, error: error.message };
+        console.log(errorResponse);
         res.status(500).json(errorResponse);
     }
 }

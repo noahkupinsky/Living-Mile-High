@@ -19,6 +19,8 @@ type ImagePickerProps = {
     onUpload: SingleUpload | MultipleUpload;
 };
 
+const IMAGE_MIMETYPES = ['image/jpeg', 'image/png'];
+
 const ImagePicker: React.FC<ImagePickerProps> = ({ multiple, onUpload }) => {
     const [isPickerVisible, setIsPickerVisible] = useState(false);
     const { isLoaded, accessToken, login } = useGoogle();
@@ -71,22 +73,26 @@ const ImagePicker: React.FC<ImagePickerProps> = ({ multiple, onUpload }) => {
             const newFiles = await Promise.all(filePromises);
             const validFiles = newFiles.filter(file => file) as ImageFormat[];
             setFiles((prevFiles) => (multiple ? [...prevFiles, ...validFiles] : validFiles));
-            // setIsPickerVisible(false);
+            setIsPickerVisible(false);
         }
     }, [multiple]);
 
     useEffect(() => {
         if (!isLoaded || !accessToken) return () => { };
 
-        const picker = new google.picker.PickerBuilder()
+        const pickerBuilder = new google.picker.PickerBuilder()
             .addView(google.picker.ViewId.DOCS)
             .setOAuthToken(accessToken)
             .setDeveloperKey(apiKey)
             .setCallback(handlePickerCallback)
-            .setSelectableMimeTypes("image/png,image/jpeg,image/jpg")
-            .enableFeature(google.picker.Feature.MULTISELECT_ENABLED) // Enable multiple selection
-            .setMaxItems(multiple ? 1000 : 1)
-            .build();
+            .setSelectableMimeTypes(IMAGE_MIMETYPES.join(','))
+            .setMaxItems(multiple ? 1000 : 1);
+
+        if (multiple) {
+            pickerBuilder.enableFeature(google.picker.Feature.MULTISELECT_ENABLED);
+        }
+
+        const picker = pickerBuilder.build();
 
         if (isPickerVisible) {
             picker.setVisible(true);

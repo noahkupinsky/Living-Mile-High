@@ -46,7 +46,7 @@ export function createDORefreshCdnCache(apiToken: string, endpointId: string): R
     const refreshCacheImmediately = async (keys?: string[]) => {
         const apiUrl = `https://api.digitalocean.com/v2/cdn/endpoints/${endpointId}/cache`;
         try {
-            const response = await axios.delete(apiUrl, {
+            await axios.delete(apiUrl, {
                 headers: {
                     'Authorization': `Bearer ${apiToken}`,
                     'Content-Type': 'application/json'
@@ -55,7 +55,6 @@ export function createDORefreshCdnCache(apiToken: string, endpointId: string): R
                     files: (keys || ['*'])
                 }
             });
-            console.log("refreshed cache");
         } catch (error: any) {
             console.error(`Failed to refresh cache`, error);
         }

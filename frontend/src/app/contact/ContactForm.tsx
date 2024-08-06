@@ -154,7 +154,6 @@ const ContactForm = () => {
 
         if (errors.length === 0) {
             const sanitizedForm = sanitizeObject(form);
-            console.log(sanitizedForm);
             setSuccessfullySubmitted(true);
         } else {
             alert(errors.join('\n'));
