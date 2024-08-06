@@ -151,8 +151,14 @@ const ContactFormComponent = () => {
                 return new Alert(AlertTitle.ERROR, errorString);
             }
 
-            setSuccessfullySubmitted(true);
-            return new Alert(AlertTitle.SUCCESS, 'Form submitted successfully.');
+            try {
+                await apiService.sendContactEmail(form);
+
+                setSuccessfullySubmitted(true);
+                return new Alert(AlertTitle.SUCCESS, 'Form submitted successfully.');
+            } catch (e) {
+                return new Alert(AlertTitle.ERROR, `${e}`);
+            }
         });
     };
 

@@ -14,8 +14,8 @@ type Env = {
     DO_ENDPOINT_ID?: string,
     DO_API_TOKEN?: string,
     NEXT_PUBLIC_CDN_URL: string,
-    CONTACT_FROM_EMAIL_ADDRESS?: string,
-    CONTACT_FROM_EMAIL_PASSWORD?: string,
+    SENDGRID_API_KEY?: string,
+    SENDGRID_SENDER?: string,
     CONTACT_TO_EMAIL_ADDRESS?: string
 }
 
