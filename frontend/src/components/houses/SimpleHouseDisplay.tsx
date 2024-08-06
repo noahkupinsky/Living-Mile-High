@@ -4,8 +4,8 @@ import AspectImage from '@/components/images/AspectImage';
 import { House } from 'living-mile-high-lib';
 
 
-const FONT_PERCENTAGE = 0.045;
-const SPACING_PERCENTAGE = 0.15;
+const FONT_PERCENTAGE = 0.05;
+const SPACING_PERCENTAGE = 0.1;
 const GAP_MULTIPLIER = 7;
 
 const HouseContainer = styled(View, {
@@ -27,8 +27,9 @@ const AddressText = styled(Text, {
     name: 'AddressText',
     textAlign: 'right',
     color: '$darkGray',
-    fontFamily: '$caps',
-    paddingRight: '10%',
+    fontFamily: '$sc',
+    fontWeight: 700,
+    paddingRight: '5%',
 });
 
 export interface SimpleHouseDisplayProps {

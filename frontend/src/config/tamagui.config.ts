@@ -2,7 +2,7 @@ import { config } from '@tamagui/config/v3'
 import { createFont, createTamagui, createTokens } from 'tamagui' // or '@tamagui/core'
 
 export const tokens = createTokens({
-    ...config.tokens,
+    ...config.tokens as any,
     color: {
         lightGray: '#b5b5b5',
         darkGray: '#6b6b6b',
@@ -64,6 +64,31 @@ export const coutureFont = createFont({
     },
 })
 
+export const ysabeauSCFont = createFont({
+    family: 'YsabeauSC',
+    size: {
+        1: 12,
+        2: 14,
+        3: 16,
+        4: 18,
+        5: 20,
+        6: 24,
+        7: 28,
+        8: 32,
+        9: 36,
+    },
+    lineHeight: {
+        1: 1.2,
+        2: 1.5,
+        3: 1.8,
+    },
+    letterSpacing: {
+        1: 0,
+        2: 0.5,
+        3: 1,
+    },
+})
+
 const appConfig: any = createTamagui({
     ...config as any,
     tokens,
@@ -71,6 +96,7 @@ const appConfig: any = createTamagui({
         ...config.fonts,
         caps: coutureFont,
         form: garetFont,
+        sc: ysabeauSCFont
     }
 });
 

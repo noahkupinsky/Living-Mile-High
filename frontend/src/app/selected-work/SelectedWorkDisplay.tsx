@@ -47,10 +47,11 @@ const TextContainer = styled(YStack, {
 
 const AddressText = styled(Text, {
     name: 'AddressText',
-    fontFamily: '$caps',
+    fontFamily: '$sc',
+    fontWeight: 700,
     color: '$darkGray',
     textAlign: 'right',
-    paddingRight: '10%',
+    paddingRight: '5%',
 });
 
 const SelectedWorkDisplay: React.FC<SelectedWorkDisplayProps> = ({ houses, width, verticalGap, horizontalGap = 100, onClick }) => {

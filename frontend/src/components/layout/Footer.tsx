@@ -1,12 +1,14 @@
 "use client"
 
 import { Text, XStack, YStack, styled } from 'tamagui';
-import HorizontalLine from './HorizontalLine';
 import { EMAIL_ADDRESS, FADE_SHORT, PHONE_NUMBER } from '@/config/constants';
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import { HeaderFooterHorizontalLine } from './LayoutComponents';
 import useFadeIn from '@/utils/fadeIn';
 import { useSizing } from '@/contexts/SizingContext';
+
+const MAX_FONT_SIZE = 15;
+const FONT_PERCENTAGE = 0.03;
 
 const FooterContainer = styled(YStack, {
     width: '100%',
@@ -24,14 +26,15 @@ const FooterTextContainer = styled(XStack, {
 })
 const FooterText = styled(Text, {
     fontFamily: '$caps',
-    fontSize: '$2',
     letterSpacing: '$2',
     color: '$darkGray',
 });
 
 export default function Footer() {
-    const { footerRef } = useSizing();
+    const { bodyWidth, footerRef } = useSizing();
     const opacity = useFadeIn();
+
+    const fontSize = useMemo(() => Math.min(bodyWidth * FONT_PERCENTAGE, MAX_FONT_SIZE), [bodyWidth]);
 
     return (
         <FooterContainer
@@ -40,7 +43,10 @@ export default function Footer() {
         >
             <HeaderFooterHorizontalLine />
             <FooterTextContainer>
-                <FooterText>{`${PHONE_NUMBER} | ${EMAIL_ADDRESS}`}</FooterText>
+                <FooterText
+                    fontSize={`${fontSize}px`}>
+                    {`${PHONE_NUMBER} | ${EMAIL_ADDRESS}`}
+                </FooterText>
             </FooterTextContainer>
         </FooterContainer>
     );

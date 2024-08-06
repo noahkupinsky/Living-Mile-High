@@ -36,8 +36,9 @@ const LineContainer = styled(View, {
 
 const Line = styled(Text, {
     width: '100%',
-    fontSize: minV(1.5),
-    fontFamily: '$caps',
+    fontSize: minV(1.8),
+    fontFamily: '$sc',
+    fontWeight: 500,
     color: '$darkGray',
     textAlign: 'center',
 });

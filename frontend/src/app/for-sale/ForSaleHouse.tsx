@@ -24,14 +24,16 @@ const TextContainer = styled(YStack, {
 
 const BoldText = styled(Text, {
     name: 'AddressText',
-    fontFamily: '$caps',
+    fontFamily: '$sc',
+    fontWeight: 800,
     color: '$black',
     textAlign: 'center',
 });
 
 const StatText = styled(Text, {
     name: 'StatText',
-    fontFamily: '$caps',
+    fontFamily: '$sc',
+    fontWeight: 600,
     color: '$darkGray',
     textAlign: 'left',
     flex: 1
@@ -50,8 +52,8 @@ interface ForSaleHouseProps {
 }
 
 const IMAGE_PERCENTAGE = 0.7;
-const BOLD_PERCENTAGE = (1 - IMAGE_PERCENTAGE) * 0.07;
-const STAT_PERCENTAGE = (1 - IMAGE_PERCENTAGE) * 0.06;
+const BOLD_PERCENTAGE = (1 - IMAGE_PERCENTAGE) * 0.075;
+const STAT_PERCENTAGE = (1 - IMAGE_PERCENTAGE) * 0.065;
 
 const ForSaleHouse: React.FC<ForSaleHouseProps> = ({ house, maxWidth, maxHeight, onClick }) => {
     const [opacity, setOpacity] = useState(0);
