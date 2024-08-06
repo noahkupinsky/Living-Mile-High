@@ -8,7 +8,7 @@ import { useSizing } from '@/contexts/SizingContext';
 const WIDTH_PERCENTAGE = 0.60;
 const HEIGHT_PERCENTAGE = 0.8;
 const THUMBNAIL_PERCENTAGE = 0.05;
-const NUM_THUMBNAILS = 10;
+const MAX_THUMBNAILS = 10;
 
 const CarouselContainer = styled(XStack, {
     alignItems: 'center',
@@ -98,7 +98,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images }) => {
     };
 
     const getVisibleThumbnails = () => {
-        const visibleCount = NUM_THUMBNAILS; // Adjust based on how many thumbnails you want to show
+        const visibleCount = Math.min(MAX_THUMBNAILS, images.length); // Adjust based on how many thumbnails you want to show
         const thumbnails = [];
         for (let i = -Math.floor(visibleCount / 2); i <= Math.floor(visibleCount / 2); i++) {
             const index = (currentIndex + i + images.length) % images.length;
