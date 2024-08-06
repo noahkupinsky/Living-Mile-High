@@ -1,11 +1,10 @@
 import AspectImage from "@/components/images/AspectImage";
-import FilePicker from "@/components/images/FilePicker";
-import ImageUploader from "@/components/images/ImageUploader";
+import ImagePicker from "@/components/images/ImagePicker";
 import ReorderableImageRow from "@/components/images/ReorderableImageRow";
 import Modal from "@/components/layout/Modal";
 import { useSiteData } from "@/contexts/SiteDataContext";
 import services from "@/di";
-import { objectsEqual, sanitizeObject } from "@/utils/misc";
+import { objectsEqual } from "@/utils/misc";
 import { GeneralData } from "living-mile-high-lib";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button, Label, TextArea, View, YStack, styled } from "tamagui";
@@ -269,7 +268,7 @@ const GeneralDataForm: React.FC = () => {
             </ColumnsContainer>
 
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-                <FilePicker onUpload={handleUpload} multiple={isMultipleUpload} />
+                <ImagePicker onUpload={handleUpload} multiple={isMultipleUpload} />
             </Modal>
             <Button onPress={handleFormSubmit}>Submit</Button>
         </FormContainer>

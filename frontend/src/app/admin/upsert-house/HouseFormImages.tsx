@@ -6,7 +6,7 @@ import AspectImage from '@/components/images/AspectImage';
 import ReorderableImageRow from '@/components/images/ReorderableImageRow';
 import { imageFormatToUrl } from '@/utils/misc';
 import { House } from 'living-mile-high-lib';
-import ImageUploader from '@/components/images/ImageUploader';
+import ImagePicker from '@/components/images/ImagePicker';
 
 const ImageContainer = styled(View, {
     marginBottom: 15,
@@ -126,7 +126,7 @@ const HouseFormImages: React.FC<HouseFormImagesProps> = ({
             />
 
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-                <ImageUploader onDone={handleUpload} multiple={multipleUpload} />
+                <ImagePicker onUpload={handleUpload} multiple={multipleUpload} />
             </Modal>
         </ImageContainer>
     );

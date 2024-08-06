@@ -25,6 +25,14 @@ export const processImage = async (image: ImageFormat): Promise<string | undefin
     }
 }
 
+export const binaryStringToBytes = (binaryString: string): Uint8Array => {
+    const bytes = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+    }
+    return bytes;
+}
+
 export const downloadImage = async (url: string): Promise<File> => {
     // Download the image from Uploadcare
     const response = await axios.get(url, { responseType: 'blob' });
