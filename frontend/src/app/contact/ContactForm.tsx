@@ -5,7 +5,6 @@ import validator from 'validator';
 import { useAlert } from '@/contexts/AlertContext';
 import { Alert, AlertTitle } from '@/types';
 import { ContactForm } from 'living-mile-high-lib';
-import services from '@/di';
 import { useServices } from '@/contexts/ServiceContext';
 
 const Container = styled(YStack, {

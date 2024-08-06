@@ -1,7 +1,7 @@
 import { ContactLogRecord } from "~/@types/database";
 import { Schema, model, Document } from 'mongoose';
 
-const EXPIRES_IN_SECONDS = 60 * 60 * 24;
+const EXPIRES_IN_SECONDS = 60 * 60 * 24; // one day :)
 
 export interface ContactLogDocument extends Document, ContactLogRecord { }
 

@@ -6,8 +6,9 @@ import { Button, View, Text, styled, YStack, Label, Input, XStack, Select } from
 import services from '@/di';
 import { House } from 'living-mile-high-lib';
 import { HouseQueryProvider, useHouseQuery } from '@/contexts/HouseQueryContext';
-import { HouseSort } from '@/types';
+import { Alert, AlertTitle, HouseSort } from '@/types';
 import { useServices } from '@/contexts/ServiceContext';
+import { useAlert } from '@/contexts/AlertContext';
 
 const COLUMNS = 2; // Define the number of columns here
 
@@ -88,12 +89,14 @@ const TextInput = styled(Input, {
 
 const AdminPanel = () => {
     const router = useRouter();
+    const { withAlertAsync } = useAlert();
     const { apiService } = useServices();
     const { houses, setQuery, sort, setSort } = useHouseQuery();
 
     useEffect(() => {
         setQuery({});
-    }, [setQuery]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const handleEdit = (id: string) => {
         router.push(`admin/upsert-house?id=${id}`);
@@ -103,13 +106,14 @@ const AdminPanel = () => {
         const confirmed = window.confirm("Are you sure you want to delete this house?");
         if (!confirmed) return;
 
-        try {
-            await apiService.deleteHouse(id);
-            alert(`House deleted successfully.`);
-            // Optionally, you can refresh the house list after deletion
-        } catch (error) {
-            alert(`An error occurred while deleting the house with ID: ${id}. Please try again.`);
-        }
+        await withAlertAsync(async () => {
+            try {
+                await apiService.deleteHouse(id);
+                return new Alert(AlertTitle.SUCCESS, "House deleted successfully.");
+            } catch (error) {
+                return new Alert(AlertTitle.ERROR, `Failed to delete house: ${error}`);
+            }
+        })
     };
 
     const handleAddressQuery = (address: string) => {

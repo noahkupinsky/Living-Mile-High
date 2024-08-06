@@ -111,7 +111,7 @@ const validateForm = (formData: GeneralData): string[] => {
 }
 
 const GeneralDataForm: React.FC = () => {
-    const { withAlertAsync } = useAlert();
+    const { withAlertAsync, withAlertSync } = useAlert();
     const { generalData } = useSiteData();
     const { apiService } = useServices();
     const [formData, setFormData] = useState<GeneralData>(generalData!);
@@ -119,11 +119,15 @@ const GeneralDataForm: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
-        const newGeneralData = generalData!;
-        if (!objectsEqual(newGeneralData, formData)) {
-            alert('General data update detected. Repopulating form...');
-        }
-        setFormData(newGeneralData);
+        withAlertSync(() => {
+            const newGeneralData = generalData!;
+
+            const noUpdate = objectsEqual(newGeneralData, formData);
+
+            setFormData(newGeneralData);
+
+            return noUpdate ? null : new Alert(AlertTitle.WARNING, 'General data update detected. Refreshing form data...');
+        })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [generalData]);
 

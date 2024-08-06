@@ -37,7 +37,7 @@ export const sendContactEmail: ExpressEndpoint = async (req, res) => {
         const canSendEmail = await contactLogService().canSendEmail(log);
 
         if (!canSendEmail) {
-            throw new Error('Email already sent within the last day');
+            throw new Error('You sent an email too recently. Try again tomorrow.');
         }
 
         const msg = {
