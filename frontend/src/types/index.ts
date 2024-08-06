@@ -10,6 +10,28 @@ export type Services = {
     apiService: ApiService;
 }
 
+export enum AlertTitle {
+    SUCCESS = 'Success',
+    ERROR = 'Error',
+    LOADING = 'Loading',
+    WARNING = 'Warning',
+}
+
+
+export type AlertType = {
+    title: AlertTitle,
+    message: string,
+    duration?: number
+}
+
+export type AlertOptions = {
+    noLoad?: boolean
+}
+
+export class Alert implements AlertType {
+    constructor(public title: AlertTitle, public message: string, public duration?: number) { }
+}
+
 export type SiteEventHandler = (event: EventObject, isLocal: boolean) => Promise<void>;
 
 export type NavTab = {

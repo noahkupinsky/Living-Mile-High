@@ -1,7 +1,7 @@
 import { CdnFixedKey } from "living-mile-high-lib";
 import { ContentCategory, ContentType } from "~/@types/constants";
 import { services } from "~/di";
-import { SiteDataValidator } from "~/utils/AppDataValidator";
+import { SiteDataValidator } from "~/utils/SiteDataValidator";
 import { downloadImage, streamToParsedJson } from "~/utils/misc";
 
 const cdn = () => services().cdnAdapter;

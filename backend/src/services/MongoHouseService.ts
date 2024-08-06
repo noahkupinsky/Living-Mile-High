@@ -2,7 +2,8 @@ import { DeepPartial, House } from 'living-mile-high-lib';
 import { HouseService } from '~/@types';
 import HouseModel, { HouseDocument, houseDocumentToObject, houseObjectToNewDocument } from '~/models/HouseModel';
 import withLock from '~/utils/locks';
-import { constructUpdateObject } from '~/utils/misc';
+import { constructUpdateObject, mergeDeepPartial } from '~/utils/misc';
+import { SiteDataValidator } from '~/utils/SiteDataValidator';
 
 export class MongoHouseService implements HouseService {
     async getHouseObjects(): Promise<House[]> {
@@ -20,15 +21,21 @@ export class MongoHouseService implements HouseService {
         }
     }
 
-    private async updateHouse(id: any, house: DeepPartial<House>): Promise<string> {
+    private async updateHouse(id: any, updates: DeepPartial<House>): Promise<string> {
         await withLock(id, async () => {
-            const updateFields = constructUpdateObject(house);
+            const foundHouseDocument = await HouseModel.findById(id);
 
-            const foundHouse = await HouseModel.findByIdAndUpdate(id, { $set: updateFields }, { new: true });
-
-            if (!foundHouse) {
+            if (!foundHouseDocument) {
                 throw new Error('House not found');
             }
+
+            const foundHouseObject = houseDocumentToObject(foundHouseDocument);
+            const updatedHouseObject = mergeDeepPartial(foundHouseObject, updates);
+
+            SiteDataValidator.validateHouse(updatedHouseObject);
+            const updatedHouseDocument = houseObjectToNewDocument(updatedHouseObject);
+
+            await HouseModel.findByIdAndUpdate(id, updatedHouseDocument);
         });
 
         return id;
@@ -42,6 +49,7 @@ export class MongoHouseService implements HouseService {
     }
 
     private async insertHouse(house: House): Promise<string> {
+        SiteDataValidator.validateHouse(house);
         const doc = houseObjectToNewDocument(house);
         const houseModel = new HouseModel(doc);
         const savedHouse = await houseModel.save();

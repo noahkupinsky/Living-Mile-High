@@ -1,17 +1,23 @@
 import { DeepPartial, DefaultGeneralData } from "living-mile-high-lib";
 import { GeneralData, GeneralDataService } from "~/@types";
-import GeneralDataModel, { GeneralDataDocument, generalDocumentToObject, generalObjectToNewDocument } from "~/models/GeneralDataModel";
+import GeneralDataModel, { GeneralDataDocument, generalDocumentToObject, generalObjectToDocument } from "~/models/GeneralDataModel";
 import withLock from "~/utils/locks";
-import { constructUpdateObject } from "~/utils/misc";
+import { constructUpdateObject, mergeDeepPartial } from "~/utils/misc";
+import { SiteDataValidator } from "~/utils/SiteDataValidator";
 
 export class MongoGeneralDataService implements GeneralDataService {
     async update(updates: DeepPartial<GeneralData>): Promise<void> {
         await withLock("general", async () => {
-            const existing: GeneralDataDocument = await this.getSingletonDocument();
+            const singletonDocument: GeneralDataDocument = await this.getSingletonDocument();
+            const singletonId = singletonDocument._id;
 
-            const updateFields: DeepPartial<GeneralDataDocument> = constructUpdateObject(updates);
+            const singletonObject = generalDocumentToObject(singletonDocument);
+            const updatedObject = mergeDeepPartial(singletonObject, updates);
 
-            await GeneralDataModel.findByIdAndUpdate(existing._id, { $set: updateFields }, { new: true });
+            SiteDataValidator.validateGeneralData(updatedObject);
+            const updateDocument = generalObjectToDocument(updatedObject);
+
+            await GeneralDataModel.findByIdAndUpdate(singletonId, updateDocument);
         });
     }
 
@@ -24,7 +30,7 @@ export class MongoGeneralDataService implements GeneralDataService {
     private async getSingletonDocument(): Promise<GeneralDataDocument> {
         let data = await GeneralDataModel.findOne();
         if (!data) {
-            const doc = generalObjectToNewDocument(DefaultGeneralData);
+            const doc = generalObjectToDocument(DefaultGeneralData);
             data = new GeneralDataModel(doc);
             await data.save();
         }

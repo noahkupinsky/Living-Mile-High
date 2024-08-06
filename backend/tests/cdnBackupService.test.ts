@@ -122,6 +122,7 @@ describe("backup service", () => {
             isDeveloped: false,
             isForSale: false,
             isSelectedWork: false,
+            stats: {}
         });
 
         // apply changes and auto backup again

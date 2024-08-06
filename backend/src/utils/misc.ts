@@ -1,5 +1,5 @@
 import axios from "axios";
-import { GeneralData, House, SiteData } from "living-mile-high-lib";
+import { DeepPartial, GeneralData, House, SiteData } from "living-mile-high-lib";
 import { Readable } from "stream";
 import { CdnMetadata } from "~/@types";
 import { ContentCategory, ContentType } from "~/@types/constants";
@@ -16,6 +16,18 @@ export function constructUpdateObject(obj: any, prefix = ''): Record<string, any
     }, ({} as any));
 }
 
+export function mergeDeepPartial<T>(target: T, update: DeepPartial<T>): T {
+    if (typeof target !== 'object' || Array.isArray(target) || target === null) {
+        return update as unknown as T;
+    } else {
+        return (Object.keys(target) as (keyof T)[]).reduce((acc, key) => {
+            if (key in update) {
+                acc[key] = mergeDeepPartial(target[key], update[key] as any);
+            }
+            return acc;
+        }, { ...target });
+    }
+}
 
 export function prefixKey(key: string, prefix?: ContentCategory): string {
     return prefix ? `${prefix}-${key}` : key;

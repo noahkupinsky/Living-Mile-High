@@ -8,6 +8,8 @@ import HouseFormImages from './HouseFormImages';
 import HouseFormText from './HouseFormText';
 import services from '@/di';
 import { objectsEqualTimestampless } from '@/utils/misc';
+import { useAlert } from '@/contexts/AlertContext';
+import { Alert, AlertTitle } from '@/types';
 
 const FormContainer = styled(View, {
     display: 'flex',
@@ -32,6 +34,7 @@ const RightColumn = styled(View, {
 });
 
 const HouseForm: React.FC<{ house?: House }> = ({ house }) => {
+    const { withAlertAsync, withAlertSync } = useAlert();
     const { apiService } = services();
     const { houses } = useSiteData();
     const [formData, setFormData] = useState<House>(house ? house : {
@@ -46,14 +49,17 @@ const HouseForm: React.FC<{ house?: House }> = ({ house }) => {
     });
 
     useEffect(() => {
-        const newHouse = houses.find(house => house.id === formData.id);
-        if (!newHouse) {
-            return;
-        }
-        if (!objectsEqualTimestampless(newHouse, formData)) {
-            alert('House update detected. Repopulating house form...');
-        }
-        setFormData(newHouse);
+        withAlertSync(() => {
+            const newHouse = houses.find(house => house.id === formData.id);
+
+            if (!newHouse) return null;
+
+            const noUpdate = objectsEqualTimestampless(newHouse, formData);
+
+            setFormData(newHouse);
+
+            return noUpdate ? null : new Alert(AlertTitle.WARNING, 'House update detected. Refreshing form data...');
+        });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [houses]);
 
@@ -62,15 +68,17 @@ const HouseForm: React.FC<{ house?: House }> = ({ house }) => {
         const finalData = {
             ...formData
         };
-        try {
-            const id = await apiService.upsertHouse(finalData);
-            setFormData(prev => ({ ...prev, id }));
-            alert(
-                isUpdate ? `House updated successfully` : `House created successfully`
-            );
-        } catch (error) {
-            alert('An error occurred while submitting the form. Please try again.');
-        }
+
+        await withAlertAsync(async () => {
+            try {
+                const id = await apiService.upsertHouse(finalData);
+                setFormData(prev => ({ ...prev, id }));
+                const alertMessage = isUpdate ? `House updated successfully` : `House created successfully`
+                return new Alert(AlertTitle.SUCCESS, alertMessage);
+            } catch (error) {
+                return new Alert(AlertTitle.ERROR, 'An error occurred while submitting the form. Please try again.');
+            }
+        })
     };
 
     return (

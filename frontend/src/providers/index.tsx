@@ -7,6 +7,7 @@ import { SiteDataProvider } from '@/contexts/SiteDataContext';
 import { SizingProvider } from '@/contexts/SizingContext';
 import { CarouselProvider } from '@/contexts/CarouselContext';
 import { GoogleProvider } from '@/contexts/GoogleContext';
+import { AlertProvider } from '@/contexts/AlertContext';
 
 type ProviderProps = {
     children: React.ReactNode
@@ -19,9 +20,11 @@ const Providers = ({ children }: ProviderProps) => {
                 <GoogleProvider>
                     <SiteDataProvider>
                         <SizingProvider>
-                            <CarouselProvider>
-                                {children}
-                            </CarouselProvider>
+                            <AlertProvider>
+                                <CarouselProvider>
+                                    {children}
+                                </CarouselProvider>
+                            </AlertProvider>
                         </SizingProvider>
                     </SiteDataProvider>
                 </GoogleProvider>

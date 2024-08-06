@@ -32,7 +32,7 @@ export function generalDocumentToObject(doc: GeneralDataDocument): GeneralData {
     return data;
 }
 
-export function generalObjectToNewDocument(data: GeneralData): GeneralDataRecord {
+export function generalObjectToDocument(data: GeneralData): GeneralDataRecord {
     const { about, contact, homePageImages, defaultImages } = data;
 
     const doc = {

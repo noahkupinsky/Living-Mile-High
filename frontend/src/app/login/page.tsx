@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { styled, Button, View, Input, Text } from 'tamagui';
+import { useAlert } from '@/contexts/AlertContext';
+import { Alert, AlertTitle } from '@/types';
 
 const Container = styled(View, {
   width: '100%',
@@ -60,6 +62,7 @@ const StyledButton = styled(Button, {
 });
 
 const LoginPage = () => {
+  const { withAlertAsync } = useAlert();
   const { isAuthenticated, login } = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -67,21 +70,24 @@ const LoginPage = () => {
 
   const handleLogin = async (e: any) => {
     e.preventDefault();
-    try {
-      const success = await login(username, password);
-      if (success) {
-        const redirectUrl = new URLSearchParams(window.location.search).get('redirect');
-        if (redirectUrl) {
-          router.replace(decodeURIComponent(redirectUrl));
+    await withAlertAsync(async () => {
+      try {
+        const success = await login(username, password);
+        if (success) {
+          const redirectUrl = new URLSearchParams(window.location.search).get('redirect');
+          if (redirectUrl) {
+            router.replace(decodeURIComponent(redirectUrl));
+          } else {
+            router.replace('/');
+          }
+          return null;
         } else {
-          router.replace('/');
+          return new Alert(AlertTitle.ERROR, 'Login failed. Please check your username and password and try again.');
         }
-      } else {
-        alert('Login failed, please try again.');
+      } catch (error) {
+        return new Alert(AlertTitle.ERROR, `Login failed. ${error}`);
       }
-    } catch (error) {
-      console.error('Login failed', error);
-    }
+    })
   };
 
   useEffect(() => {

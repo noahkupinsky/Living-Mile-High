@@ -2,8 +2,10 @@ import AspectImage from "@/components/images/AspectImage";
 import ImagePicker from "@/components/images/ImagePicker";
 import ReorderableImageRow from "@/components/images/ReorderableImageRow";
 import Modal from "@/components/layout/Modal";
+import { useAlert } from "@/contexts/AlertContext";
 import { useSiteData } from "@/contexts/SiteDataContext";
 import services from "@/di";
+import { Alert, AlertTitle } from "@/types";
 import { objectsEqual } from "@/utils/misc";
 import { GeneralData } from "living-mile-high-lib";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -108,6 +110,7 @@ const validateForm = (formData: GeneralData): string[] => {
 }
 
 const GeneralDataForm: React.FC = () => {
+    const { withAlertAsync } = useAlert();
     const { generalData } = useSiteData();
     const { apiService } = services();
     const [formData, setFormData] = useState<GeneralData>(generalData!);
@@ -162,19 +165,23 @@ const GeneralDataForm: React.FC = () => {
     }, [setFormData]);
 
     const handleFormSubmit = useCallback(async () => {
-        const errors = validateForm(formData);
+        await withAlertAsync(async () => {
+            const errors = validateForm(formData);
 
-        if (errors.length === 0) {
-            try {
-                await apiService.updateGeneralData(formData);
-                alert('General Data updated successfully!');
-            } catch (error) {
-                alert('An error occurred while submitting the form. Please try again.');
+            if (errors.length === 0) {
+                try {
+                    await apiService.updateGeneralData(formData);
+                    return new Alert(AlertTitle.SUCCESS, 'General data updated successfully.');
+                } catch (error) {
+                    return new Alert(AlertTitle.ERROR, 'An error occurred while submitting the form. Please try again.');
+                }
+            } else {
+                const errorString = errors.join('\n');
+                return new Alert(AlertTitle.ERROR, errorString);
             }
-        } else {
-            alert(errors.join('\n'));
-        }
-    }, [apiService, formData]);
+        })
+
+    }, [apiService, formData, withAlertAsync]);
 
     const isMultipleUpload = useMemo(() => (uploadType === UploadType.DEFAULT_IMAGES || uploadType === UploadType.HOME_PAGE_IMAGES), [uploadType]);
 

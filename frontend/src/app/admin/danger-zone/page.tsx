@@ -5,9 +5,10 @@ import services from '@/di';
 import { BackupIndex, EventMessage } from 'living-mile-high-lib';
 import BackupItem from './BackupItem';
 import CreateBackupSection from './CreateBackupSection';
-import { SiteEventHandler } from '@/types';
+import { Alert, AlertTitle, SiteEventHandler } from '@/types';
 
 import { Button, YStack, styled } from 'tamagui';
+import { useAlert } from '@/contexts/AlertContext';
 
 const PageContainer = styled(YStack, {
     justifyContent: 'center',
@@ -35,12 +36,15 @@ const DangerButton = styled(Button, {
 function validateBackupName(name: string) {
     const allowedChars = /^[a-zA-Z0-9_ -]+$/;
 
+    console.log(name);
+
     if (!allowedChars.test(name)) {
         throw new Error('Backup names may only contain letters, numbers, spaces, hyphens, and underscores');
     }
 }
 
 const DangerZonePage = () => {
+    const { withAlertAsync } = useAlert();
     const { apiService, eventService } = services();
     const [backups, setBackups] = useState<BackupIndex[]>([]);
     const [newBackupName, setNewBackupName] = useState('');
@@ -48,13 +52,16 @@ const DangerZonePage = () => {
     const [renameBackupName, setRenameBackupName] = useState('');
 
     const fetchBackups = useCallback(async () => {
-        try {
-            const backupIndices = await apiService.getBackupIndices();
-            setBackups(backupIndices);
-        } catch (e) {
-            alert(`Failed to fetch backups. ${e}`);
-        }
-    }, [apiService]);
+        await withAlertAsync(async () => {
+            try {
+                const backupIndices = await apiService.getBackupIndices();
+                setBackups(backupIndices);
+                return null;
+            } catch (e) {
+                return new Alert(AlertTitle.WARNING, `Failed to fetch backups. ${e}`);
+            }
+        }, { noLoad: true });
+    }, [apiService, withAlertAsync]);
 
     useEffect(() => {
         const handler: SiteEventHandler = async (event, isLocal) => {
@@ -85,55 +92,67 @@ const DangerZonePage = () => {
 
 
     const handleCreateBackup = async () => {
-        try {
-            validateBackupName(newBackupName);
+        await withAlertAsync(async () => {
+            try {
+                validateBackupName(newBackupName);
 
-            await apiService.createBackup(newBackupName);
-            alert('Backup created successfully');
+                await apiService.createBackup(newBackupName);
 
-            setNewBackupName('');
-        } catch (e) {
-            alert(`Failed to create backup. ${e}`);
-        }
+                setNewBackupName('');
+
+                return new Alert(AlertTitle.SUCCESS, 'Backup created successfully');
+            } catch (e) {
+                return new Alert(AlertTitle.ERROR, `Failed to create backup. ${e}`);
+            }
+        })
     };
 
     const handleRenameBackup = async () => {
         if (editingBackupKey && renameBackupName) {
-            try {
-                validateBackupName(newBackupName);
+            await withAlertAsync(async () => {
+                try {
+                    validateBackupName(renameBackupName);
 
-                await apiService.renameBackup(editingBackupKey, renameBackupName);
-                alert('Backup renamed successfully');
+                    await apiService.renameBackup(editingBackupKey, renameBackupName);
 
-                setEditingBackupKey('');
-                setRenameBackupName('');
-            } catch (e) {
-                alert(`Failed to rename backup. ${e}`);
-            }
+                    setEditingBackupKey('');
+                    setRenameBackupName('');
+
+                    return new Alert(AlertTitle.SUCCESS, 'Backup renamed successfully');
+                } catch (e) {
+                    return new Alert(AlertTitle.ERROR, `Failed to rename backup. ${e}`);
+                }
+            });
         }
     };
 
     const handleDeleteBackup = async (key: string) => {
         const confirm = window.confirm('Are you sure you want to delete this backup?');
         if (confirm) {
-            try {
-                await apiService.deleteBackup(key);
-                alert('Backup deleted successfully');
-            } catch (e) {
-                alert(`Failed to delete backup. ${e}`);
-            }
+            await withAlertAsync(async () => {
+                try {
+                    await apiService.deleteBackup(key);
+
+                    return new Alert(AlertTitle.SUCCESS, 'Backup deleted successfully');
+                } catch (e) {
+                    return new Alert(AlertTitle.ERROR, `Failed to delete backup. ${e}`);
+                }
+            });
         }
     };
 
     const handleRestoreBackup = async (key: string) => {
         const confirm = window.confirm('Are you sure you want to restore this backup?');
         if (confirm) {
-            try {
-                await apiService.restoreBackup(key);
-                alert('Backup restored successfully');
-            } catch (e) {
-                alert(`Failed to restore backup. ${e}`);
-            }
+            await withAlertAsync(async () => {
+                try {
+                    await apiService.restoreBackup(key);
+
+                    return new Alert(AlertTitle.SUCCESS, 'Backup restored successfully');
+                } catch (e) {
+                    return new Alert(AlertTitle.ERROR, `Failed to restore backup. ${e}`);
+                }
+            });
         }
     };
 
@@ -147,12 +166,14 @@ const DangerZonePage = () => {
             'It will leave manual backups and currently used assets completely untouched. ' +
             'Are you sure that you want to proceed ? ');
         if (confirm) {
-            try {
-                await apiService.pruneSiteData();
-                alert('Site data pruned successfully');
-            } catch (e) {
-                alert(`Failed to prune site data. ${e}`);
-            }
+            await withAlertAsync(async () => {
+                try {
+                    await apiService.pruneSiteData();
+                    return new Alert(AlertTitle.SUCCESS, 'Site data pruned successfully');
+                } catch (e) {
+                    return new Alert(AlertTitle.ERROR, `Failed to prune site data. ${e}`);
+                }
+            });
         }
     };
 

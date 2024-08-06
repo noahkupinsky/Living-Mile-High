@@ -3,7 +3,7 @@ import { SiteData } from "living-mile-high-lib";
 export class SiteDataValidator {
     public static validate(data: any): data is SiteData {
         if (typeof data !== 'object' || data === null) {
-            throw new Error('AppData must be an object');
+            throw new Error('SiteData must be an object');
         }
 
         const requiredProperties = ['about', 'contact', 'houses', 'defaultImages', 'homePageImages'];
@@ -14,12 +14,17 @@ export class SiteDataValidator {
             }
         }
 
+        const { houses, ...generalData } = data;
+        this.validateGeneralData(generalData);
+        this.validateHouses(houses);
+        return true;
+    }
+
+    public static validateGeneralData(data: any): void {
         this.validateAboutData(data.about);
         this.validateContactData(data.contact);
-        this.validateHouses(data.houses);
         this.validatePlaceholders(data.defaultImages);
         this.validateHomePageImages(data.homePageImages);
-        return true;
     }
 
     private static validateAboutData(about: any): void {
@@ -60,7 +65,7 @@ export class SiteDataValidator {
         }
     }
 
-    private static validateHouse(house: any): void {
+    public static validateHouse(house: any): void {
         if (typeof house !== 'object' || house === null) {
             throw new Error('House must be an object');
         }
