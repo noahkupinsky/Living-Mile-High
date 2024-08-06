@@ -47,9 +47,9 @@ export function houseDocumentToObject(doc: HouseDocument): House {
     return house;
 }
 
-type NewHouseDocument = Omit<HouseRecord, 'id' | 'createdAt' | 'updatedAt'>;
+type HouseDocumentUpsert = Omit<HouseRecord, 'id' | 'createdAt' | 'updatedAt'>;
 
-export function houseObjectToNewDocument(house: House): NewHouseDocument {
+export function houseObjectToDocument(house: House): HouseDocumentUpsert {
     const { isDeveloped, isForSale, isSelectedWork, address, mainImage, images, neighborhood, stats } = house;
 
     const doc = {
@@ -60,7 +60,7 @@ export function houseObjectToNewDocument(house: House): NewHouseDocument {
         mainImage,
         images,
         neighborhood,
-        stats,
+        stats: stats || {},
     };
 
     return doc

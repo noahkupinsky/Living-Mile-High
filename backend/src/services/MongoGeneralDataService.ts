@@ -2,8 +2,8 @@ import { DeepPartial, DefaultGeneralData } from "living-mile-high-lib";
 import { GeneralData, GeneralDataService } from "~/@types";
 import GeneralDataModel, { GeneralDataDocument, generalDocumentToObject, generalObjectToDocument } from "~/models/GeneralDataModel";
 import withLock from "~/utils/locks";
-import { constructUpdateObject, mergeDeepPartial } from "~/utils/misc";
-import { SiteDataValidator } from "~/utils/SiteDataValidator";
+import { mergeDeepPartial } from "~/utils/misc";
+import * as SiteDataValidator from "~/utils/SiteDataValidator";
 
 export class MongoGeneralDataService implements GeneralDataService {
     async update(updates: DeepPartial<GeneralData>): Promise<void> {

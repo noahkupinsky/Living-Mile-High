@@ -1,7 +1,7 @@
 import { CdnFixedKey } from "living-mile-high-lib";
 import { ContentCategory, ContentType } from "~/@types/constants";
 import { services } from "~/di";
-import { SiteDataValidator } from "~/utils/SiteDataValidator";
+import * as SiteDataValidator from "~/utils/SiteDataValidator";
 import { downloadImage, streamToParsedJson } from "~/utils/misc";
 
 const cdn = () => services().cdnAdapter;
@@ -19,7 +19,7 @@ export async function updateFixedKeys() {
 export async function updateSiteData(): Promise<void> {
     const siteData = await getState();
 
-    SiteDataValidator.validate(siteData);
+    SiteDataValidator.validateSiteData(siteData);
 
     const stringifiedSiteData = JSON.stringify(siteData);
 
@@ -33,7 +33,7 @@ export async function updateSiteData(): Promise<void> {
 export async function updateHomePageFirst(): Promise<void> {
     const siteData = await getState();
 
-    SiteDataValidator.validate(siteData);
+    SiteDataValidator.validateSiteData(siteData);
 
     const homePageFirst = siteData.homePageImages[0];
 

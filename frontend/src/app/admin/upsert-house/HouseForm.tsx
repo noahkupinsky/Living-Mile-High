@@ -76,7 +76,7 @@ const HouseForm: React.FC<{ house?: House }> = ({ house }) => {
                 const alertMessage = isUpdate ? `House updated successfully` : `House created successfully`
                 return new Alert(AlertTitle.SUCCESS, alertMessage);
             } catch (error) {
-                return new Alert(AlertTitle.ERROR, 'An error occurred while submitting the form. Please try again.');
+                return new Alert(AlertTitle.ERROR, `An error occurred: ${error}`);
             }
         })
     };

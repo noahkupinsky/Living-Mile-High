@@ -1,144 +1,129 @@
 import { SiteData } from "living-mile-high-lib";
 
-export class SiteDataValidator {
-    public static validate(data: any): data is SiteData {
-        if (typeof data !== 'object' || data === null) {
-            throw new Error('SiteData must be an object');
-        }
+function validateSiteData(data: any): data is SiteData {
+    const requiredProperties = ['about', 'contact', 'houses', 'defaultImages', 'homePageImages'];
 
-        const requiredProperties = ['about', 'contact', 'houses', 'defaultImages', 'homePageImages'];
+    validateObjectProperties(data, "SiteData", requiredProperties);
 
-        for (const prop of requiredProperties) {
-            if (!(prop in data)) {
-                throw new Error(`Missing required property: ${prop}`);
-            }
-        }
+    const { houses, ...generalData } = data;
 
-        const { houses, ...generalData } = data;
-        this.validateGeneralData(generalData);
-        this.validateHouses(houses);
-        return true;
+    validateGeneralData(generalData);
+
+    validateArrayItems(houses, "Houses", validateHouse);
+
+    return true;
+}
+
+function validateGeneralData(data: any): void {
+    validateAboutData(data.about);
+
+    validateContactData(data.contact);
+
+    validatePlaceholders(data.defaultImages);
+
+    validateHomePageImages(data.homePageImages);
+}
+
+function validateAboutData(about: any): void {
+    validateObject(about, "AboutData");
+
+    validateNonEmptyString(about.text, "AboutData text")
+
+    validateNonEmptyString(about.image, "AboutData image url")
+}
+
+function validateContactData(contact: any): void {
+    validateObject(contact, "ContactData");
+
+    validateNonEmptyString(contact.text, "ContactData text")
+
+    validateNonEmptyString(contact.image, "ContactData image url")
+}
+
+function validateHouse(house: any): void {
+    const requiredProperties = [
+        'isDeveloped', 'isForSale', 'isSelectedWork',
+        'address', 'mainImage', 'images'
+    ];
+
+    validateObjectProperties(house, "House", requiredProperties);
+
+    validateNonEmptyString(house.address, "House address");
+
+    validateNonEmptyString(house.mainImage, "House mainImage url");
+
+    validateArrayItems(house.images, "House images", validateNonEmptyString);
+
+    if (house.neighborhood !== undefined && typeof house.neighborhood !== 'string') {
+        throw new Error('House neighborhood must be undefined or a string');
     }
 
-    public static validateGeneralData(data: any): void {
-        this.validateAboutData(data.about);
-        this.validateContactData(data.contact);
-        this.validatePlaceholders(data.defaultImages);
-        this.validateHomePageImages(data.homePageImages);
-    }
+    validateHouseStats(house.stats);
+}
 
-    private static validateAboutData(about: any): void {
-        if (typeof about !== 'object' || about === null) {
-            throw new Error('AboutData must be an object');
-        }
+function validateHouseStats(stats: any): void {
+    if (stats === undefined) return;
 
-        if (typeof about.text !== 'string') {
-            throw new Error('AboutData text must be a string');
-        }
+    validateObject(stats, "HouseStats");
 
-        if (typeof about.image !== 'string') {
-            throw new Error('AboutData image must be a string');
-        }
-    }
+    const optionalProperties = [
+        'houseSquareFeet', 'lotSquareFeet', 'bedrooms',
+        'bathrooms', 'garageSpaces'
+    ];
 
-    private static validateContactData(contact: any): void {
-        if (typeof contact !== 'object' || contact === null) {
-            throw new Error('ContactData must be an object');
-        }
-
-        if (typeof contact.text !== 'string') {
-            throw new Error('ContactData text must be a string');
-        }
-
-        if (typeof contact.image !== 'string') {
-            throw new Error('ContactData image must be a string');
-        }
-    }
-
-    private static validateHouses(houses: any): void {
-        if (!Array.isArray(houses)) {
-            throw new Error('Houses must be an array');
-        }
-
-        for (const house of houses) {
-            this.validateHouse(house);
-        }
-    }
-
-    public static validateHouse(house: any): void {
-        if (typeof house !== 'object' || house === null) {
-            throw new Error('House must be an object');
-        }
-
-        const requiredProperties = [
-            'isDeveloped', 'isForSale', 'isSelectedWork',
-            'address', 'mainImage', 'images', 'stats'
-        ];
-
-        for (const prop of requiredProperties) {
-            if (!(prop in house)) {
-                throw new Error(`House is missing required property: ${prop}`);
-            }
-        }
-
-        if (typeof house.address !== 'string') {
-            throw new Error('House address must be a string');
-        }
-
-        if (typeof house.mainImage !== 'string') {
-            throw new Error('House mainImage must be a string');
-        }
-
-        if (!Array.isArray(house.images) || house.images.some((image: any) => typeof image !== 'string')) {
-            throw new Error('House images must be an array of strings');
-        }
-
-        if (house.neighborhood !== undefined && typeof house.neighborhood !== 'string') {
-            throw new Error('House neighborhood must be a string');
-        }
-
-        this.validateHouseStats(house.stats);
-    }
-
-    private static validateHouseStats(stats: any): void {
-        if (typeof stats !== 'object' || stats === null) {
-            throw new Error('HouseStats must be an object');
-        }
-
-        const optionalProperties = [
-            'houseSquareFeet', 'lotSquareFeet', 'bedrooms',
-            'bathrooms', 'garageSpaces'
-        ];
-
-        for (const prop of optionalProperties) {
-            if (prop in stats && stats[prop] !== undefined && typeof stats[prop] !== 'number') {
-                throw new Error(`HouseStats property ${prop} must be a number`);
-            }
-        }
-    }
-
-    private static validatePlaceholders(defaults: any): void {
-        if (!Array.isArray(defaults)) {
-            throw new Error('Placeholders must be an array');
-        }
-
-        if (defaults.some(d => typeof d !== 'string')) {
-            throw new Error('Placeholders must be an array of strings');
-        }
-
-        // make sure defaults has at least one element
-        if (defaults.length === 0) {
-            throw new Error('Placeholders must have at least one element');
-        }
-    }
-
-    private static validateHomePageImages(homePageImages: any): void {
-        if (!Array.isArray(homePageImages)) {
-            throw new Error('HomePageImages must be an array');
-        }
-
-        if (homePageImages.some(homeImage => typeof homeImage !== 'string')) {
-            throw new Error('HomePageImages must be an array of strings');
+    for (const prop of optionalProperties) {
+        if (prop in stats && stats[prop] !== undefined && typeof stats[prop] !== 'number') {
+            throw new Error(`HouseStats property ${prop} must be a number`);
         }
     }
 }
+
+function validatePlaceholders(defaults: any): void {
+    validateArrayItems(defaults, "DefaultImages", validateNonEmptyString);
+}
+
+function validateHomePageImages(homePageImages: any): void {
+    validateArrayItems(homePageImages, "HomePageImages", validateNonEmptyString);
+
+    if (homePageImages.length === 0) {
+        throw new Error('HomePageImages must have at least one image');
+    }
+}
+
+function validateNonEmptyString(value: any, name: string): void {
+    if (typeof value !== 'string' || value === '') {
+        throw new Error(`"${name}" must be a nonempty string`);
+    }
+}
+
+function validateObject(value: any, name: string): void {
+    if (typeof value !== 'object' || value === null) {
+        throw new Error(`"${name}" must be an object`);
+    }
+}
+
+function validateObjectProperties(value: any, name: string, requiredProperties: string[]): void {
+    validateObject(value, name);
+
+    for (const prop of requiredProperties) {
+        if (!(prop in value)) {
+            throw new Error(`${name} is missing required property: ${prop}`);
+        }
+    }
+}
+
+function validateArrayItems(value: any, name: string, validator: (value: any, name: string) => void): void {
+    if (!Array.isArray(value)) {
+        throw new Error(`${name} must be an array`);
+    }
+
+    for (const item of value) {
+        validator(item, `element of ${name}`);
+    }
+}
+
+export {
+    validateSiteData,
+    validateGeneralData,
+    validateHouse,
+};
