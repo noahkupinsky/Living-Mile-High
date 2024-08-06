@@ -13,7 +13,6 @@ const FormContainer = styled(View, {
     display: 'flex',
     flexDirection: 'column',
     padding: 20,
-    backgroundColor: 'white',
 });
 
 const ColumnsContainer = styled(View, {
