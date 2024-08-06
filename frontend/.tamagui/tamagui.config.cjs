@@ -27730,7 +27730,8 @@ __export(tamagui_config_exports, {
   coutureFont: () => coutureFont,
   default: () => tamagui_config_default,
   garetFont: () => garetFont,
-  tokens: () => tokens2
+  tokens: () => tokens2,
+  ysabeauSCFont: () => ysabeauSCFont
 });
 module.exports = __toCommonJS(tamagui_config_exports);
 
@@ -44657,13 +44658,38 @@ var coutureFont = (0, import_core60.createFont)({
     5: 5
   }
 });
+var ysabeauSCFont = (0, import_core60.createFont)({
+  family: "YsabeauSC",
+  size: {
+    1: 12,
+    2: 14,
+    3: 16,
+    4: 18,
+    5: 20,
+    6: 24,
+    7: 28,
+    8: 32,
+    9: 36
+  },
+  lineHeight: {
+    1: 1.2,
+    2: 1.5,
+    3: 1.8
+  },
+  letterSpacing: {
+    1: 0,
+    2: 0.5,
+    3: 1
+  }
+});
 var appConfig = createTamagui({
   ...config,
   tokens: tokens2,
   fonts: {
     ...config.fonts,
     caps: coutureFont,
-    form: garetFont
+    form: garetFont,
+    sc: ysabeauSCFont
   }
 });
 var tamagui_config_default = appConfig;
@@ -44671,7 +44697,8 @@ var tamagui_config_default = appConfig;
 0 && (module.exports = {
   coutureFont,
   garetFont,
-  tokens
+  tokens,
+  ysabeauSCFont
 });
 /*! Bundled license information:
 

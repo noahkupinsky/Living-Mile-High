@@ -67,6 +67,20 @@ type ImageCarouselProps = {
     images: string[];
 }
 
+const ARROW_PERCENTAGE = '70%';
+
+const LeftArrowSVG = () => (
+    <svg width={ARROW_PERCENTAGE} height={ARROW_PERCENTAGE} viewBox="0 0 100 100" preserveAspectRatio="none">
+        <polygon points="0,50 100,10 100,90" fill="white" />
+    </svg>
+);
+
+const RightArrowSVG = () => (
+    <svg width={ARROW_PERCENTAGE} height={ARROW_PERCENTAGE} viewBox="0 0 100 100" preserveAspectRatio="none">
+        <polygon points="0,10 100,50 0,90" fill="white" />
+    </svg>
+);
+
 const ImageCarousel: React.FC<ImageCarouselProps> = ({ images }) => {
     const { bodyWidth, bodyHeight } = useSizing();
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -100,7 +114,9 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images }) => {
     return window && (
         <CarouselContainer>
             <ButtonColumn>
-                <ArrowButton onPress={handlePrevious}>◀</ArrowButton>
+                <ArrowButton onPress={handlePrevious}>
+                    <LeftArrowSVG />
+                </ArrowButton>
             </ButtonColumn>
             <ImageColumn>
 
@@ -135,7 +151,9 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images }) => {
                 </ThumbnailsContainer>
             </ImageColumn>
             <ButtonColumn>
-                <ArrowButton onPress={handleNext}>▶</ArrowButton>
+                <ArrowButton onPress={handleNext}>
+                    <RightArrowSVG />
+                </ArrowButton>
             </ButtonColumn>
 
         </CarouselContainer>
