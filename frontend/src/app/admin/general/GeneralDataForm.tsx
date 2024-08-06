@@ -3,6 +3,7 @@ import ImagePicker from "@/components/images/ImagePicker";
 import ReorderableImageRow from "@/components/images/ReorderableImageRow";
 import Modal from "@/components/layout/Modal";
 import { useAlert } from "@/contexts/AlertContext";
+import { useServices } from "@/contexts/ServiceContext";
 import { useSiteData } from "@/contexts/SiteDataContext";
 import services from "@/di";
 import { Alert, AlertTitle } from "@/types";
@@ -112,7 +113,7 @@ const validateForm = (formData: GeneralData): string[] => {
 const GeneralDataForm: React.FC = () => {
     const { withAlertAsync } = useAlert();
     const { generalData } = useSiteData();
-    const { apiService } = services();
+    const { apiService } = useServices();
     const [formData, setFormData] = useState<GeneralData>(generalData!);
     const [uploadType, setUploadType] = useState<UploadType>(UploadType.DEFAULT_IMAGES);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -168,16 +169,16 @@ const GeneralDataForm: React.FC = () => {
         await withAlertAsync(async () => {
             const errors = validateForm(formData);
 
-            if (errors.length === 0) {
-                try {
-                    await apiService.updateGeneralData(formData);
-                    return new Alert(AlertTitle.SUCCESS, 'General data updated successfully.');
-                } catch (error) {
-                    return new Alert(AlertTitle.ERROR, 'An error occurred while submitting the form. Please try again.');
-                }
-            } else {
+            if (errors.length > 0) {
                 const errorString = errors.join('\n');
                 return new Alert(AlertTitle.ERROR, errorString);
+            }
+
+            try {
+                await apiService.updateGeneralData(formData);
+                return new Alert(AlertTitle.SUCCESS, 'General data updated successfully.');
+            } catch (error) {
+                return new Alert(AlertTitle.ERROR, 'An error occurred while submitting the form. Please try again.');
             }
         })
 

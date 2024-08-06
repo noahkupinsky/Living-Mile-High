@@ -35,3 +35,9 @@ export type GeneralDataRecord = {
     homePageImages: string[]
 }
 
+export type ContactLogRecord = {
+    ip: string;
+    email: string;
+    createdAt: Date;
+}
+

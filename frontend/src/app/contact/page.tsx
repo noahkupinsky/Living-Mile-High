@@ -5,7 +5,7 @@ import { useSiteData } from '@/contexts/SiteDataContext';
 import SiteDataLoader from '@/components/layout/SiteDataLoader';
 import { SPLIT_CHAR } from '@/config/constants';
 import { styled, View, Text, YStack } from 'tamagui';
-import ContactForm from './ContactForm';
+import ContactFormComponent from './ContactForm';
 import { useSizing } from '@/contexts/SizingContext';
 import AspectImage from '@/components/images/AspectImage';
 import { minV } from '@/utils/misc';
@@ -71,7 +71,7 @@ const ContactPageComponent = () => {
             <FormContainer
                 width={`min(${formWidth}px, ${FORM_MAX_WIDTH})`}
             >
-                <ContactForm />
+                <ContactFormComponent />
             </FormContainer>
         </ContactContainer>
 

@@ -7,6 +7,7 @@ import services from '@/di';
 import { House } from 'living-mile-high-lib';
 import { HouseQueryProvider, useHouseQuery } from '@/contexts/HouseQueryContext';
 import { HouseSort } from '@/types';
+import { useServices } from '@/contexts/ServiceContext';
 
 const COLUMNS = 2; // Define the number of columns here
 
@@ -87,7 +88,7 @@ const TextInput = styled(Input, {
 
 const AdminPanel = () => {
     const router = useRouter();
-    const { apiService } = services();
+    const { apiService } = useServices();
     const { houses, setQuery, sort, setSort } = useHouseQuery();
 
     useEffect(() => {

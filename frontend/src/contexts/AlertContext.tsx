@@ -1,18 +1,16 @@
 'use client';
 
-import { AlertOptions, AlertTitle, AlertType } from '@/types';
+import { WithAlertOptions, AlertTitle, AlertType } from '@/types';
 import { Toast, ToastProvider, ToastViewport, useToastController, useToastState } from '@tamagui/toast';
 import { createContext, useCallback, useContext } from 'react';
 import { YStack, Spinner } from 'tamagui';
-
-const ALERT_DEFAULT_LENGTH = 1500;
 
 type AlertFunctionAsync = () => Promise<AlertType | null>;
 type AlertFunctionSync = () => AlertType | null;
 
 type AlertContextType = {
-    withAlertAsync: (fn: AlertFunctionAsync, options?: AlertOptions) => Promise<void>;
-    withAlertSync: (fn: AlertFunctionSync, options?: AlertOptions) => void;
+    withAlertAsync: (fn: AlertFunctionAsync, options?: WithAlertOptions) => Promise<void>;
+    withAlertSync: (fn: AlertFunctionSync, options?: WithAlertOptions) => void;
 }
 
 export const AlertContext = createContext<AlertContextType | undefined>(undefined)
@@ -29,6 +27,13 @@ const AlertWidth: Record<AlertTitle, number> = {
     [AlertTitle.SUCCESS]: 20,
     [AlertTitle.ERROR]: 25,
     [AlertTitle.WARNING]: 30,
+}
+
+const AlertDefaultDuration: Record<AlertTitle, number> = {
+    [AlertTitle.LOADING]: 0, // never used
+    [AlertTitle.SUCCESS]: 1500,
+    [AlertTitle.ERROR]: 2500,
+    [AlertTitle.WARNING]: 2500,
 }
 
 export const AlertProviderInterior = ({ children }: { children: React.ReactNode }) => {
@@ -69,8 +74,14 @@ export const AlertProviderInterior = ({ children }: { children: React.ReactNode 
         )
     }
 
-    const withAlertAsync = useCallback(async (alertFunction: AlertFunctionAsync, options?: AlertOptions) => {
-        const { noLoad } = options || {};
+    const hideOnTimeout = useCallback((alert: AlertType) => {
+        setTimeout(() => {
+            toast.hide();
+        }, alert.duration || AlertDefaultDuration[alert.title as AlertTitle]);
+    }, [toast]);
+
+    const withAlertAsync = useCallback(async (alertFunction: AlertFunctionAsync, options?: WithAlertOptions) => {
+        const { noLoading: noLoad } = options || {};
         if (!noLoad) toast.show(AlertTitle.LOADING, {});
 
         const alert = await alertFunction();
@@ -81,24 +92,22 @@ export const AlertProviderInterior = ({ children }: { children: React.ReactNode 
             toast.show(alert.title, {
                 message: alert.message,
             });
-            setTimeout(() => {
-                toast.hide();
-            }, alert.duration || ALERT_DEFAULT_LENGTH);
-        }
-    }, [toast]);
 
-    const withAlertSync = useCallback((alertFunction: AlertFunctionSync, options?: AlertOptions) => {
+            hideOnTimeout(alert);
+        }
+    }, [toast, hideOnTimeout]);
+
+    const withAlertSync = useCallback((alertFunction: AlertFunctionSync, options?: WithAlertOptions) => {
         const alert = alertFunction();
 
         if (alert !== null) {
             toast.show(alert.title, {
                 message: alert.message,
             });
-            setTimeout(() => {
-                toast.hide();
-            }, alert.duration || ALERT_DEFAULT_LENGTH);
+
+            hideOnTimeout(alert);
         }
-    }, [toast]);
+    }, [toast, hideOnTimeout]);
 
     return (
         <AlertContext.Provider value={{ withAlertAsync, withAlertSync }}>

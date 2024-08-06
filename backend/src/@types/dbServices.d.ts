@@ -1,4 +1,5 @@
-import { DeepPartial, House, GeneralData, SiteData } from "living-mile-high-lib";
+import { DeepPartial, House, GeneralData, SiteData, ContactForm } from "living-mile-high-lib";
+import { ContactLogRecord } from "./database";
 
 export interface HouseService {
     getHouseObjects(): Promise<House[]>;
@@ -21,4 +22,9 @@ export interface StateService {
     getState(): Promise<SiteData>;
     serializeState(): Promise<string>;
     deserializeState(state: string): Promise<void>;
+}
+
+export interface ContactLogService {
+    logEmail(log: ContactLogRecord): Promise<void>;
+    canSendEmail(log: ContactLogRecord): Promise<boolean>;
 }

@@ -9,6 +9,7 @@ import { Alert, AlertTitle, SiteEventHandler } from '@/types';
 
 import { Button, YStack, styled } from 'tamagui';
 import { useAlert } from '@/contexts/AlertContext';
+import { useServices } from '@/contexts/ServiceContext';
 
 const PageContainer = styled(YStack, {
     justifyContent: 'center',
@@ -45,7 +46,7 @@ function validateBackupName(name: string) {
 
 const DangerZonePage = () => {
     const { withAlertAsync } = useAlert();
-    const { apiService, eventService } = services();
+    const { apiService, eventService } = useServices();
     const [backups, setBackups] = useState<BackupIndex[]>([]);
     const [newBackupName, setNewBackupName] = useState('');
     const [editingBackupKey, setEditingBackupKey] = useState('');
@@ -60,7 +61,7 @@ const DangerZonePage = () => {
             } catch (e) {
                 return new Alert(AlertTitle.WARNING, `Failed to fetch backups. ${e}`);
             }
-        }, { noLoad: true });
+        }, { noLoading: true });
     }, [apiService, withAlertAsync]);
 
     useEffect(() => {

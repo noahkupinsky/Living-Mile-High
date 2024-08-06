@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { styled, View, XStack } from "tamagui";
 import AspectImage from "./images/AspectImage";
 import { useSizing } from "@/contexts/SizingContext";
+import { useServices } from "@/contexts/ServiceContext";
 
 const WIDTH_PERCENTAGE = 0.95;
 const HEIGHT_PERCENTAGE = 0.95;
@@ -32,7 +33,7 @@ const HomePageImageContainer = styled(XStack, {
 
 const HomePageImages = () => {
     const { generalData } = useSiteData();
-    const { cdnService } = services();
+    const { cdnService } = useServices();
     const { bodyWidth, bodyHeight } = useSizing();
     const [currentIndex, setCurrentIndex] = useState<number>(0);
     const [homePageImages, setHomePageImages] = useState<string[]>(cdnService.defaultHomePageImages());

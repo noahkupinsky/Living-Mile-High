@@ -9,6 +9,7 @@ import { connectServices, getServiceManager } from '~/di';
 import { setupWebSocketServer } from './controllers/eventController';
 
 const app = express();
+app.set('trust proxy', true);
 const server = http.createServer(app);
 
 export async function setupApp(mock = false): Promise<void> {

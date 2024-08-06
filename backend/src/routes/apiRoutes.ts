@@ -6,7 +6,7 @@ import backupRouter from './backupRoutes';
 import generalDataRouter from './generalDataRoutes';
 import verifyToken from '~/middleware/authMiddleware';
 import { pruneSite } from "~/controllers/updateController";
-import { signUploadcareRequest } from "~/controllers/assetController";
+import { sendContactEmail } from "~/controllers/emailController";
 
 const router = Router();
 
@@ -21,6 +21,6 @@ router.use('/general', verifyToken, generalDataRouter);
 router.use('/backup', verifyToken, backupRouter);
 router.use('/asset', verifyToken, assetRouter);
 router.post('/prune', verifyToken, pruneSite);
-router.get('/sign-uploadcare-request', verifyToken, signUploadcareRequest);
+router.post('/send-contact-email', sendContactEmail);
 
 export default router;

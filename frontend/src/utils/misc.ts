@@ -60,19 +60,3 @@ export function makeRows<T>(array: T[], columns: number): T[][] {
     }
     return rows;
 }
-
-export function sanitizeInput(input: string): string {
-    return validator.escape(input);
-}
-
-export function sanitizeObject(obj: any): any {
-    if (typeof obj === 'string') {
-        return sanitizeInput(obj);
-    } else if (typeof obj === 'object' && obj !== null) {
-        return Object.fromEntries(Object.entries(obj).map(([key, value]) => [key, sanitizeObject(value)]));
-    } else if (Array.isArray(obj)) {
-        return obj.map(sanitizeObject);
-    } else {
-        return obj;
-    }
-}

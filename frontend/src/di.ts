@@ -1,11 +1,13 @@
 import { generateEventId } from 'living-mile-high-lib';
 import * as Services from './services';
 
-let serviceDict: {
+export type ServiceDict = {
     apiService: Services.ApiService,
     eventService: Services.EventService,
     cdnService: Services.CdnService
 }
+
+let serviceDict: ServiceDict
 
 const services = () => {
     if (!serviceDict) {

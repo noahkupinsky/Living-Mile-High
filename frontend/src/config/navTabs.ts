@@ -7,12 +7,12 @@ export const navTabs: NavTab[] = [
         isAdmin: false
     },
     {
-        name: 'Selected Work',
+        name: 'Featured',
         path: '/selected-work',
         isAdmin: false
     },
     {
-        name: 'Developed',
+        name: 'Our Work',
         path: '/developed',
         isAdmin: false
     },

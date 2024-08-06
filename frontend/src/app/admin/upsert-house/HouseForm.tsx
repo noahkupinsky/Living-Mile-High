@@ -10,6 +10,7 @@ import services from '@/di';
 import { objectsEqualTimestampless } from '@/utils/misc';
 import { useAlert } from '@/contexts/AlertContext';
 import { Alert, AlertTitle } from '@/types';
+import { useServices } from '@/contexts/ServiceContext';
 
 const FormContainer = styled(View, {
     display: 'flex',
@@ -33,9 +34,23 @@ const RightColumn = styled(View, {
     flex: 1,
 });
 
+function validateForm(formData: House): string[] {
+    const errors = [];
+
+    if (!formData.address) {
+        errors.push('Address is required');
+    }
+
+    if (!formData.mainImage) {
+        errors.push('Main image is required');
+    }
+
+    return errors;
+}
+
 const HouseForm: React.FC<{ house?: House }> = ({ house }) => {
     const { withAlertAsync, withAlertSync } = useAlert();
-    const { apiService } = services();
+    const { apiService } = useServices();
     const { houses } = useSiteData();
     const [formData, setFormData] = useState<House>(house ? house : {
         isDeveloped: false,
@@ -65,13 +80,17 @@ const HouseForm: React.FC<{ house?: House }> = ({ house }) => {
 
     const handleFormSubmit = async () => {
         const isUpdate = formData.id !== undefined;
-        const finalData = {
-            ...formData
-        };
 
         await withAlertAsync(async () => {
+            const errors = validateForm(formData);
+
+            if (errors.length > 0) {
+                const errorString = errors.join('\n');
+                return new Alert(AlertTitle.ERROR, errorString);
+            }
+
             try {
-                const id = await apiService.upsertHouse(finalData);
+                const id = await apiService.upsertHouse(formData);
                 setFormData(prev => ({ ...prev, id }));
                 const alertMessage = isUpdate ? `House updated successfully` : `House created successfully`
                 return new Alert(AlertTitle.SUCCESS, alertMessage);

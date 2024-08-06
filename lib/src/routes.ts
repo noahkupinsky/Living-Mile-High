@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import { BackupIndex, DeepPartial, GeneralData, House } from "./types";
+import { BackupIndex, ContactForm, DeepPartial, GeneralData, House } from "./types";
 import { EventMessage } from "./defaults";
 import FormData from "form-data";
 
@@ -117,3 +117,9 @@ export type UploadAssetResponse = SuccessResponse & {
 export type PruneSiteRequest = EventRequest;
 
 export type PruneSiteResponse = SuccessResponse;
+
+// CONTACT EMAIL
+
+export type SendContactEmailRequest = ContactForm;
+
+export type SendContactEmailResponse = SuccessResponse;

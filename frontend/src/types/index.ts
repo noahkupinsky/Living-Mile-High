@@ -1,15 +1,5 @@
 import { EventObject, HouseStats } from 'living-mile-high-lib';
 
-export interface ApiService {
-    fetch(route: string, params: Record<string, any>): Promise<any>;
-    verifyAuthenticated(): Promise<boolean>;
-    login(username: string, password: string): Promise<boolean>;
-}
-
-export type Services = {
-    apiService: ApiService;
-}
-
 export enum AlertTitle {
     SUCCESS = 'Success',
     ERROR = 'Error',
@@ -24,8 +14,8 @@ export type AlertType = {
     duration?: number
 }
 
-export type AlertOptions = {
-    noLoad?: boolean
+export type WithAlertOptions = {
+    noLoading?: boolean
 }
 
 export class Alert implements AlertType {

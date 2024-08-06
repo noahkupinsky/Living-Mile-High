@@ -12,7 +12,8 @@ import {
     HouseService,
     AdminService,
     GeneralDataService,
-    StateService
+    StateService,
+    ContactLogService
 } from "./dbServices";
 
 export interface ServiceManager<T> {
@@ -28,6 +29,7 @@ export type ServiceDict = {
     generalDataService: GeneralDataService;
     stateService: StateService;
     backupService: BackupService;
+    contactLogService: ContactLogService;
 };
 
 export type SiteServiceManager = ServiceManager<ServiceDict>;

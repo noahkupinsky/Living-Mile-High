@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { styled, View, Text, Input, TextArea, Button, YStack, XStack, Checkbox } from 'tamagui';
-import { minV, sanitizeObject } from '@/utils/misc';
+import { minV } from '@/utils/misc';
 import validator from 'validator';
+import { useAlert } from '@/contexts/AlertContext';
+import { Alert, AlertTitle } from '@/types';
+import { ContactForm } from 'living-mile-high-lib';
+import services from '@/di';
+import { useServices } from '@/contexts/ServiceContext';
 
 const Container = styled(YStack, {
     width: '100%',
@@ -99,20 +104,6 @@ const SubmitText = styled(Text, {
     fontFamily: '$form',
 });
 
-// post submit Thank you for contacting us!  We will be in touch very soon.
-
-// form should email tina@livingmilehigh.com
-
-// need to sanitize input
-
-type ContactForm = {
-    firstName: string;
-    lastName: string;
-    email: string;
-    subject: string;
-    message: string;
-}
-
 const FORM_INPUTS = {
     firstName: 'First Name',
     lastName: 'Last Name',
@@ -137,7 +128,9 @@ const validateForm = (form: ContactForm): string[] => {
     return errors;
 }
 
-const ContactForm = () => {
+const ContactFormComponent = () => {
+    const { apiService } = useServices();
+    const { withAlertAsync } = useAlert();
     const [form, setForm] = useState<ContactForm>({
         firstName: '',
         lastName: '',
@@ -147,17 +140,20 @@ const ContactForm = () => {
     });
     const [successfullySubmitted, setSuccessfullySubmitted] = useState(false);
 
-    const handleSubmit = (event: any) => {
+    const handleSubmit = async (event: any) => {
         event.preventDefault();
 
-        const errors = validateForm(form);
+        await withAlertAsync(async () => {
+            const errors = validateForm(form);
 
-        if (errors.length === 0) {
-            const sanitizedForm = sanitizeObject(form);
+            if (errors.length > 0) {
+                const errorString = errors.join('\n');
+                return new Alert(AlertTitle.ERROR, errorString);
+            }
+
             setSuccessfullySubmitted(true);
-        } else {
-            alert(errors.join('\n'));
-        }
+            return new Alert(AlertTitle.SUCCESS, 'Form submitted successfully.');
+        });
     };
 
     return (
@@ -236,4 +232,4 @@ const ContactForm = () => {
     );
 };
 
-export default ContactForm;
+export default ContactFormComponent;

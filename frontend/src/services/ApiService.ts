@@ -25,7 +25,10 @@ import {
     VerifyResponse,
     createUploadAssetRequest,
     PruneSiteResponse,
-    PruneSiteRequest
+    PruneSiteRequest,
+    ContactForm,
+    SendContactEmailRequest,
+    SendContactEmailResponse
 } from 'living-mile-high-lib';
 import { env } from 'next-runtime-env';
 
@@ -180,10 +183,13 @@ export class ApiService {
         }
     }
 
-    async signUploadcareRequest(signString: string): Promise<string> {
-        const queryParam = `signString=${encodeURIComponent(signString)}`;
-        const response = await this.apiAxios.get(`/sign-uploadcare-request?${queryParam}`);
-        const signature = response.data;
-        return signature;
+    async sendContactEmail(contactForm: ContactForm): Promise<void> {
+        const req: SendContactEmailRequest = contactForm;
+        const response = await this.apiAxios.post('send-contact-email', req);
+        const resBody: SendContactEmailResponse = response.data;
+
+        if (response.status !== 200 || !resBody.success) {
+            throw new Error(resBody.error);
+        }
     }
 }

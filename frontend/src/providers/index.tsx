@@ -8,6 +8,7 @@ import { SizingProvider } from '@/contexts/SizingContext';
 import { CarouselProvider } from '@/contexts/CarouselContext';
 import { GoogleProvider } from '@/contexts/GoogleContext';
 import { AlertProvider } from '@/contexts/AlertContext';
+import { ServiceProvider } from '@/contexts/ServiceContext';
 
 type ProviderProps = {
     children: React.ReactNode
@@ -16,19 +17,21 @@ type ProviderProps = {
 const Providers = ({ children }: ProviderProps) => {
     return (
         <NextTamaguiProvider>
-            <AuthProvider>
-                <GoogleProvider>
-                    <SiteDataProvider>
-                        <SizingProvider>
-                            <AlertProvider>
-                                <CarouselProvider>
-                                    {children}
-                                </CarouselProvider>
-                            </AlertProvider>
-                        </SizingProvider>
-                    </SiteDataProvider>
-                </GoogleProvider>
-            </AuthProvider>
+            <ServiceProvider>
+                <AuthProvider>
+                    <GoogleProvider>
+                        <SiteDataProvider>
+                            <SizingProvider>
+                                <AlertProvider>
+                                    <CarouselProvider>
+                                        {children}
+                                    </CarouselProvider>
+                                </AlertProvider>
+                            </SizingProvider>
+                        </SiteDataProvider>
+                    </GoogleProvider>
+                </AuthProvider>
+            </ServiceProvider>
         </NextTamaguiProvider >
     );
 };

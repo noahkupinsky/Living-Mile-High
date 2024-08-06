@@ -1,7 +1,7 @@
 'use client'
 
-import services from '@/di';
 import React, { createContext, useState, useEffect, useContext, useCallback } from 'react';
+import { useServices } from './ServiceContext';
 
 type AuthContextType = {
     isAuthenticated: boolean;
@@ -17,7 +17,7 @@ type AuthProviderProps = {
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const { apiService } = services();
+    const { apiService } = useServices();
 
     const checkAuthentication = useCallback(async () => {
         const authenticated = await apiService.verifyAuthenticated();

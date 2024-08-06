@@ -4,6 +4,7 @@ import React, { createContext, useState, useEffect, useContext, useCallback } fr
 import { EventMessage, GeneralData, House, SiteData } from 'living-mile-high-lib';
 import services from '@/di';
 import { SiteEventHandler } from '@/types';
+import { useServices } from './ServiceContext';
 
 type SiteDataContextType = {
     isLoading: boolean;
@@ -21,7 +22,7 @@ export const SiteDataProvider = ({ children }: SiteDataProviderProps) => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [generalData, setGeneralData] = useState<GeneralData | undefined>(undefined);
     const [houses, setHouses] = useState<House[]>([]);
-    const { eventService, cdnService } = services();
+    const { eventService, cdnService } = useServices();
 
     const fetchSiteData = useCallback(async () => {
         try {

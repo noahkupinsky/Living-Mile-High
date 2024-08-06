@@ -14,7 +14,9 @@ type Env = {
     DO_ENDPOINT_ID?: string,
     DO_API_TOKEN?: string,
     NEXT_PUBLIC_CDN_URL: string,
-    UPLOADCARE_SECRET_KEY?: string
+    CONTACT_FROM_EMAIL_ADDRESS?: string,
+    CONTACT_FROM_EMAIL_PASSWORD?: string,
+    CONTACT_TO_EMAIL_ADDRESS?: string
 }
 
 const EnvDefaults: Env = {
