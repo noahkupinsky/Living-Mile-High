@@ -2,19 +2,21 @@ version: "3.9"
 
 services:
   caddy:
-    image: caddy:latest
+    build:
+      context: ./caddy
+      dockerfile: Dockerfile
     container_name: caddy
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - ./Caddyfile.prod:/etc/caddy/Caddyfile:ro
+      - ./caddy/Caddyfile.prod:/etc/caddy/Caddyfile
       - caddy_data_prod:/data
       - caddy_config_prod:/config
     environment:
-      FPORT: ${FPORT}
-      BPORT: ${BPORT}
-      HTTPS_CERT_EMAIL: ${HTTPS_CERT_EMAIL}
+      - BPORT=${BPORT}
+      - FPORT=${FPORT}
+      - HTTPS_CERT_EMAIL=${HTTPS_CERT_EMAIL}
     depends_on:
       - frontend
       - backend

@@ -1,8 +1,17 @@
 {
     email {env.HTTPS_CERT_EMAIL}
+    order rate_limit before reverse_proxy
 }
 
 test.livingmilehigh.com {
+    rate_limit {
+        zone dynamic {
+            key      {remote_host}
+            events   1000
+            window   1m
+        }
+    }
+
     reverse_proxy /api/* backend:{env.BPORT}
     reverse_proxy /events backend:{env.BPORT}
     reverse_proxy /* frontend:{env.FPORT}

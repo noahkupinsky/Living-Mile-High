@@ -81,12 +81,12 @@ export const AlertProviderInterior = ({ children }: { children: React.ReactNode 
     }, [toast]);
 
     const withAlertAsync = useCallback(async (alertFunction: AlertFunctionAsync, options?: WithAlertOptions) => {
-        const { noLoading: noLoad } = options || {};
-        if (!noLoad) toast.show(AlertTitle.LOADING, {});
+        const { noLoading } = options || {};
+        if (!noLoading) toast.show(AlertTitle.LOADING, {});
 
         const alert = await alertFunction();
 
-        if (!noLoad) toast.hide();
+        if (!noLoading) toast.hide();
 
         if (alert !== null) {
             toast.show(alert.title, {

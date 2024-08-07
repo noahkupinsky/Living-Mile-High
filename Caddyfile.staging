@@ -1,9 +1,0 @@
-{
-    local_certs
-}
-
-localhost {
-    reverse_proxy /api/* backend:{env.BPORT}
-    reverse_proxy /events backend:{env.BPORT}
-    reverse_proxy /* frontend:{env.FPORT}
-}

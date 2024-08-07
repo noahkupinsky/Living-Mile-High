@@ -98,6 +98,7 @@ type HamburgerMenuProps = {
 
 const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ tabs, size, inactive, hoveredTab, setHoveredTab }) => {
     const [menuOpen, setMenuOpen] = useState(false);
+    // @ts-ignore
     const color = tokens.color.darkGray.val;
 
     return (

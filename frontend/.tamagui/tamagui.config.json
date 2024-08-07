@@ -34794,9 +34794,6 @@
         "minWidth": 1651
       }
     },
-    "defaultFont": "$body",
-    "shouldAddPrefersColorThemes": true,
-    "themeClassNameOnRoot": true,
     "themes": {
       "light": {
         "accentBackground": "hsl(210, 98.8%, 94.0%)",
@@ -45969,20 +45966,24 @@
         }
       }
     },
-    "mediaQueryDefaultActive": {
-      "xl": true,
-      "lg": true,
-      "md": true,
-      "sm": true,
-      "xs": true,
-      "xxs": false
-    },
     "selectionStyles": "Function",
+    "settings": {
+      "webContainerType": "inline-size",
+      "mediaQueryDefaultActive": {
+        "xl": true,
+        "lg": true,
+        "md": true,
+        "sm": true,
+        "xs": true,
+        "xxs": false
+      },
+      "defaultFont": "body",
+      "fastSchemeChange": true,
+      "shouldAddPrefersColorThemes": true,
+      "themeClassNameOnRoot": true
+    },
     "unset": {
       "fontFamily": "$body"
-    },
-    "settings": {
-      "webContainerType": "inline-size"
     },
     "inverseShorthands": {
       "userSelect": "ussel",
@@ -46069,6 +46070,7 @@
     },
     "parsed": true,
     "getNewCSS": "Function",
+    "defaultFont": "$body",
     "fontSizeTokens": {},
     "specificTokens": {
       "$color.lightGray": {
