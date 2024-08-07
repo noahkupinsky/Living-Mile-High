@@ -44,6 +44,7 @@ export enum HouseSort {
     UPDATED_AT_NEWEST = 'Updated At (newest first)',
     UPDATED_AT_OLDEST = 'Updated At (oldest first)',
     LEXICOGRAPHIC = 'Alphabetical',
+    NON_DEFAULT_LEXICOGRAPHIC = 'Alphabetical (default last)',
 }
 
 export type HouseStatKeys = keyof HouseStats

@@ -10,6 +10,7 @@ const SoldComponent: React.FC = () => {
     const { houses, setQuery } = useHouseQuery();
     const [query] = useState({
         isDeveloped: false,
+        isForSale: false,
     });
 
     React.useEffect(() => {

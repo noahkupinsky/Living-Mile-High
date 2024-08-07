@@ -2,11 +2,11 @@
 
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button, View, Text, styled, YStack, Label, Input, XStack, Select } from 'tamagui';
+import { Button, View, Text, styled, YStack, Label, Input, XStack, Select, ToggleGroup } from 'tamagui';
 import services from '@/di';
 import { House } from 'living-mile-high-lib';
 import { HouseQueryProvider, useHouseQuery } from '@/contexts/HouseQueryContext';
-import { Alert, AlertTitle, HouseSort } from '@/types';
+import { Alert, AlertTitle, HouseQuery, HouseSort } from '@/types';
 import { useServices } from '@/contexts/ServiceContext';
 import { useAlert } from '@/contexts/AlertContext';
 
@@ -31,8 +31,9 @@ const MainButtonsContainer = styled(XStack, {
 })
 
 const QueryContainer = styled(XStack, {
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     marginBottom: 20,
+    gap: 40,
 })
 
 const HouseButtonArea = styled(YStack, {
@@ -84,19 +85,48 @@ const FormLabel = ({ children }: { children: React.ReactNode }) => (
 )
 
 const TextInput = styled(Input, {
-    flex: 1,
 });
+
+const ToggleGroupItem = styled(ToggleGroup.Item, {
+    variants: {
+        active: {
+            true: {
+                backgroundColor: '$lightBg'
+            },
+            false: {
+                backgroundColor: '$whiteBg'
+            },
+        },
+    },
+})
+
+enum ToggleValue {
+    FOR_SALE = 'For Sale',
+    SELECTED_WORK = 'Selected Work',
+    DEVELOPED = 'Developed',
+    SOLD = 'Sold',
+}
+
+const ToggleQueries: Record<ToggleValue, HouseQuery> = {
+    [ToggleValue.FOR_SALE]: { isForSale: true },
+    [ToggleValue.SELECTED_WORK]: { isSelectedWork: true },
+    [ToggleValue.DEVELOPED]: { isDeveloped: true },
+    [ToggleValue.SOLD]: { isDeveloped: false, isForSale: false },
+}
 
 const AdminPanel = () => {
     const router = useRouter();
     const { withAlertAsync } = useAlert();
     const { apiService } = useServices();
     const { houses, setQuery, sort, setSort } = useHouseQuery();
+    const [addressContains, setAddressContains] = React.useState('');
+    const [toggleValues, setToggleValues] = React.useState<ToggleValue[]>([]);
 
     useEffect(() => {
-        setQuery({});
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+        const toggleQueries = toggleValues.length === 0 ? [{}] : toggleValues.map(v => ToggleQueries[v]);
+        const finalQueries = toggleQueries.map(q => ({ ...q, addressContains }));
+        setQuery(finalQueries);
+    }, [setQuery, addressContains, toggleValues]);
 
     const handleEdit = (id: string) => {
         router.push(`admin/upsert-house?id=${id}`);
@@ -117,7 +147,11 @@ const AdminPanel = () => {
     };
 
     const handleAddressQuery = (address: string) => {
-        setQuery(query => ({ ...query, addressContains: address }));
+        setAddressContains(address);
+    }
+
+    const handleToggleValues = (values: string[]) => {
+        setToggleValues(values as ToggleValue[]);
     }
 
     const handleDangerZone = () => {
@@ -166,6 +200,24 @@ const AdminPanel = () => {
                         placeholder="Enter address"
                         onChangeText={handleAddressQuery}
                     />
+                </YStack>
+                <YStack alignItems='center'>
+                    <FormLabel>Filter By Boolean</FormLabel>
+                    <ToggleGroup
+                        orientation='horizontal'
+                        type='multiple'
+                        onValueChange={handleToggleValues}
+                    >
+                        {Object.values(ToggleValue).map(value => (
+                            <ToggleGroupItem
+                                key={value}
+                                value={value}
+                                active={toggleValues.includes(value)}
+                            >
+                                {value}
+                            </ToggleGroupItem>
+                        ))}
+                    </ToggleGroup>
                 </YStack>
                 <YStack>
                     <FormLabel>Sort by:</FormLabel>
