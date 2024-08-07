@@ -18,7 +18,6 @@ const GAP_PERCENTAGE = 0.2;
 const SelectedWorkComponent: React.FC = () => {
     const { bodyWidth, bodyHeight } = useSizing();
     const { houses, setQuery } = useHouseQuery();
-    const { handleImageClick } = useCarousel();
 
     useEffect(() => {
         setQuery({
@@ -41,7 +40,6 @@ const SelectedWorkComponent: React.FC = () => {
             width={maxWidthIfSquare}
             verticalGap={gap}
             houses={houses}
-            onClick={handleImageClick}
         />
     );
 };

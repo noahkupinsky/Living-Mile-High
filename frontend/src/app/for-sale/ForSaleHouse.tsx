@@ -4,6 +4,7 @@ import { House } from 'living-mile-high-lib';
 import { FADE_MEDIUM, STAT_TEMPLATES } from '@/config/constants';
 import AspectImage from '@/components/images/AspectImage';
 import { minV, requestAnimationFrames } from '@/utils/misc';
+import { useCarousel } from '@/contexts/CarouselContext';
 
 const EntryContainer = styled(XStack, {
     name: 'EntryContainer',
@@ -48,14 +49,14 @@ interface ForSaleHouseProps {
     house: House;
     maxWidth: number;
     maxHeight: number;
-    onClick: (house: House) => void;
 }
 
 const IMAGE_PERCENTAGE = 0.7;
 const BOLD_PERCENTAGE = (1 - IMAGE_PERCENTAGE) * 0.075;
 const STAT_PERCENTAGE = (1 - IMAGE_PERCENTAGE) * 0.065;
 
-const ForSaleHouse: React.FC<ForSaleHouseProps> = ({ house, maxWidth, maxHeight, onClick }) => {
+const ForSaleHouse: React.FC<ForSaleHouseProps> = ({ house, maxWidth, maxHeight }) => {
+    const { createOnClick } = useCarousel();
     const [opacity, setOpacity] = useState(0);
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
     const { address, neighborhood, mainImage, stats } = house;
@@ -109,7 +110,7 @@ const ForSaleHouse: React.FC<ForSaleHouseProps> = ({ house, maxWidth, maxHeight,
                 alt={address}
                 noFade
                 onDimensions={onDimensions}
-                onClick={() => onClick(house)}
+                onClick={createOnClick(house)}
             />
             <TextContainer
                 width={dimensions.width * (1 - IMAGE_PERCENTAGE)}

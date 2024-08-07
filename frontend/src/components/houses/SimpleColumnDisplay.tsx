@@ -5,6 +5,7 @@ import { useSizing } from '@/contexts/SizingContext';
 import { calculateMaxHeight } from '@/utils/houseRendering';
 import { makeRows } from '@/utils/misc';
 import SimpleHouseDisplay from './SimpleHouseDisplay';
+import { HouseOnClickCreator } from '@/types';
 
 const WIDTH_PERCENTAGE = 0.7;
 const GAP_PERCENTAGE = 0.2;
@@ -23,10 +24,10 @@ interface SimpleColumnDisplayProps {
     houses: House[];
     maxColumns: number;
     minColumns: number;
-    onClick?: (house: House) => void;
+    createOnClick?: HouseOnClickCreator;
 }
 
-const SimpleColumnDisplay: React.FC<SimpleColumnDisplayProps> = ({ houses, onClick, maxColumns, minColumns }) => {
+const SimpleColumnDisplay: React.FC<SimpleColumnDisplayProps> = ({ houses, createOnClick, maxColumns, minColumns }) => {
     const { bodyWidth, bodyHeight } = useSizing();
     const [heights, setHeights] = useState<number[]>([]);
 
@@ -76,7 +77,7 @@ const SimpleColumnDisplay: React.FC<SimpleColumnDisplayProps> = ({ houses, onCli
                             key={house.id!}
                             house={house}
                             width={width}
-                            onClick={onClick ? () => onClick(house) : undefined}
+                            onClick={createOnClick ? createOnClick(house) : undefined}
                             verticalGap={verticalGap}
                             height={heights[rowIndex]} />
                     ))}

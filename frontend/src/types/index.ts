@@ -1,4 +1,4 @@
-import { EventObject, HouseStats } from 'living-mile-high-lib';
+import { EventObject, House, HouseStats } from 'living-mile-high-lib';
 
 export enum AlertTitle {
     SUCCESS = 'Success',
@@ -50,3 +50,5 @@ export enum HouseSort {
 export type HouseStatKeys = keyof HouseStats
 
 export type ImageFormat = string | File | Blob
+
+export type HouseOnClickCreator = (house: House) => (() => void) | undefined

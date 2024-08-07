@@ -4,6 +4,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { styled, Text, XStack, YStack } from 'tamagui';
 import { makeRows } from '@/utils/misc';
 import AspectImage from '@/components/images/AspectImage';
+import { useCarousel } from '@/contexts/CarouselContext';
 
 const COLUMNS = 1; // Define the number of columns here
 const FONT_PERCENTAGE = 0.16;
@@ -27,7 +28,6 @@ interface SelectedWorkDisplayProps {
     width: number;
     verticalGap: number;
     horizontalGap?: number;
-    onClick: (house: House) => void;
 }
 
 const Container = styled(YStack, {
@@ -54,7 +54,8 @@ const AddressText = styled(Text, {
     paddingRight: '5%',
 });
 
-const SelectedWorkDisplay: React.FC<SelectedWorkDisplayProps> = ({ houses, width, verticalGap, horizontalGap = 100, onClick }) => {
+const SelectedWorkDisplay: React.FC<SelectedWorkDisplayProps> = ({ houses, width, verticalGap, horizontalGap = 100 }) => {
+    const { createOnClick } = useCarousel();
     const [heights, setHeights] = useState<number[]>([]);
 
     const rows = useMemo(() => makeRows(houses, COLUMNS), [houses]);
@@ -92,7 +93,7 @@ const SelectedWorkDisplay: React.FC<SelectedWorkDisplayProps> = ({ houses, width
                                     src={house.mainImage}
                                     width={width}
                                     alt={house.address}
-                                    onClick={() => onClick(house)}
+                                    onClick={createOnClick(house)}
                                 />
                             </BodyContainer>
                             <TextContainer height={verticalGap}>

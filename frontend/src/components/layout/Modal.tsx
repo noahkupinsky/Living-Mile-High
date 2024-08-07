@@ -1,4 +1,5 @@
-import React from 'react';
+import { FADE_MEDIUM } from '@/config/constants';
+import React, { useEffect, useState } from 'react';
 import { View, styled } from 'tamagui';
 
 const ModalOverlay = styled(View, {
@@ -27,10 +28,20 @@ type ModalProps = {
 };
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+    const [opacity, setOpacity] = useState(0);
+
+    useEffect(() => {
+        if (isOpen) {
+            setOpacity(1);
+        } else {
+            setOpacity(0);
+        }
+    }, [isOpen]);
+
     if (!isOpen) return null;
 
     return (
-        <ModalOverlay style={{ position: 'fixed' }} onPress={onClose}>
+        <ModalOverlay opacity={opacity} style={{ position: 'fixed', transition: FADE_MEDIUM }} onPress={onClose}>
             <ModalContent onPress={(e: any) => e.stopPropagation()}>
                 {children}
             </ModalContent>

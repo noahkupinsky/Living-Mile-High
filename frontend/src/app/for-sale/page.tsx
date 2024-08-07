@@ -22,7 +22,6 @@ const HEIGHT_PERCENTAGE = 0.9;
 const ForSaleComponent = () => {
     const { bodyWidth, bodyHeight } = useSizing();
     const { houses, setQuery } = useHouseQuery();
-    const { handleImageClick } = useCarousel();
 
     useEffect(() => {
         setQuery({
@@ -38,7 +37,6 @@ const ForSaleComponent = () => {
                     house={house}
                     maxWidth={bodyWidth * WIDTH_PERCENTAGE}
                     maxHeight={bodyHeight * HEIGHT_PERCENTAGE}
-                    onClick={handleImageClick}
                 />
             ))}
         </ColumnContainer>

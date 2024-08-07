@@ -9,7 +9,7 @@ import { useCarousel } from "@/contexts/CarouselContext";
 
 const DevelopedComponent: React.FC = () => {
     const { houses, setQuery } = useHouseQuery();
-    const { handleImageClick } = useCarousel();
+    const { createOnClick } = useCarousel();
 
     React.useEffect(() => {
         setQuery({
@@ -18,7 +18,7 @@ const DevelopedComponent: React.FC = () => {
     }, [setQuery]);
 
     return (
-        <SimpleColumnDisplay houses={houses} maxColumns={4} minColumns={2} onClick={handleImageClick} />
+        <SimpleColumnDisplay houses={houses} maxColumns={4} minColumns={2} createOnClick={createOnClick} />
     );
 };
 

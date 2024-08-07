@@ -3,7 +3,6 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button, View, Text, styled, YStack, Label, Input, XStack, Select, ToggleGroup } from 'tamagui';
-import services from '@/di';
 import { House } from 'living-mile-high-lib';
 import { HouseQueryProvider, useHouseQuery } from '@/contexts/HouseQueryContext';
 import { Alert, AlertTitle, HouseQuery, HouseSort } from '@/types';
