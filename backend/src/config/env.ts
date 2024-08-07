@@ -16,7 +16,8 @@ type Env = {
     NEXT_PUBLIC_CDN_URL: string,
     SENDGRID_API_KEY?: string,
     SENDGRID_SENDER?: string,
-    CONTACT_TO_EMAIL_ADDRESS?: string
+    CONTACT_TO_EMAIL_ADDRESS?: string,
+    PROD: string
 }
 
 const EnvDefaults: Env = {
@@ -30,6 +31,7 @@ const EnvDefaults: Env = {
     CDN_BUCKET: '',
     CDN_ENDPOINT: '',
     NEXT_PUBLIC_CDN_URL: '',
+    PROD: 'false',
 }
 
 const allowedEnvFiles = ['staging', 'development', 'production'];

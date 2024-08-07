@@ -7,7 +7,7 @@ import passport from '~/config/passport';
 type PassportCallback = (err: any, user: any, info: any) => void;
 
 export const login: ExpressMiddleware = (req, res, next) => {
-    const { JWT_SECRET } = env();
+    const { JWT_SECRET, PROD } = env();
 
     const localJwtLogin: PassportCallback = async (err, user, info) => {
         if (err || !user) {
@@ -21,6 +21,7 @@ export const login: ExpressMiddleware = (req, res, next) => {
         res.cookie('token', token, {
             httpOnly: true,
             sameSite: 'strict',
+            secure: (PROD === 'true'),
         });
 
         const successResponse: LoginResponse = { message: 'Logged in successfully' };
