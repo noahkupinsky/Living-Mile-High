@@ -51,6 +51,7 @@ function registerProdCommands(program: Command) {
         .action(() => {
             dockerRun(config.composes.prodBuild);
             dockerPush(config.composes.prodBuild);
+            dockerDown(config.composes.prodBuild);
         });
 
     prod
