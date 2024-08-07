@@ -58,8 +58,9 @@ const ThumbnailContainer = styled(View, {
 });
 
 const ArrowButton = styled(Button, {
-    height: '7vw',
-    paddingHorizontal: '1vw',
+    height: 'min(7vw, 10rem)',
+    width: 'min(7vw, 10rem)',
+    paddingHorizontal: 'min(1vw, 1rem)',
     fontSize: '3vw',
 });
 
