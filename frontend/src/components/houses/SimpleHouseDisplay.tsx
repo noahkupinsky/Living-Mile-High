@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { styled, Text, View, YStack } from 'tamagui';
 import AspectImage from '@/components/images/AspectImage';
 import { House } from 'living-mile-high-lib';
+import { FADE_SHORT } from '@/config/constants';
 
 
 const FONT_PERCENTAGE = 0.05;
@@ -12,6 +13,9 @@ const HouseContainer = styled(View, {
     name: 'Container',
     position: 'relative',
     marginHorizontal: '1vw',
+    style: {
+        transition: FADE_SHORT
+    }
 });
 
 const ImageContainer = styled(View, {
@@ -41,17 +45,21 @@ export interface SimpleHouseDisplayProps {
 }
 
 const SimpleHouseDisplay: React.FC<SimpleHouseDisplayProps> = ({ house, width, height, onClick, verticalGap }) => {
+    const [opacity, setOpacity] = useState(0);
     const smallDimension = Math.min(width, verticalGap * GAP_MULTIPLIER);
 
     return (
-        <HouseContainer>
+        <HouseContainer
+            opacity={opacity}>
             <ImageContainer style={{ height }
             }>
                 <AspectImage
                     src={house.mainImage}
                     width={width}
                     alt={house.address}
-                    onClick={onClick} />
+                    onClick={onClick}
+                    onDimensions={() => setOpacity(1)}
+                />
             </ImageContainer>
             < AddressContainer
                 height={verticalGap}>

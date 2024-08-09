@@ -17,7 +17,7 @@ export const navTabs: NavTab[] = [
         isAdmin: false
     },
     {
-        name: 'Sold',
+        name: 'Real Estate Sales',
         path: '/sold',
         isAdmin: false
     },

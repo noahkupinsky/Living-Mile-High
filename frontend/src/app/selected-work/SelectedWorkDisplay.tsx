@@ -5,6 +5,7 @@ import { styled, Text, XStack, YStack } from 'tamagui';
 import { makeRows } from '@/utils/misc';
 import AspectImage from '@/components/images/AspectImage';
 import { useCarousel } from '@/contexts/CarouselContext';
+import { FADE_SHORT } from '@/config/constants';
 
 const COLUMNS = 1; // Define the number of columns here
 const FONT_PERCENTAGE = 0.16;
@@ -33,6 +34,9 @@ interface SelectedWorkDisplayProps {
 const Container = styled(YStack, {
     name: 'Container',
     justifyContent: 'flex-end',
+    style: {
+        transition: FADE_SHORT
+    }
 });
 
 const BodyContainer = styled(YStack, {
@@ -53,6 +57,43 @@ const AddressText = styled(Text, {
     textAlign: 'right',
     paddingRight: '5%',
 });
+
+type SelectedWorkHouseProps = {
+    house: House;
+    width: number;
+    bodyHeight: number;
+    textHeight: number;
+    onClick?: () => void;
+}
+
+const SelectedWorkHouse: React.FC<SelectedWorkHouseProps> = ({ house, width, bodyHeight, textHeight, onClick }) => {
+    const [opacity, setOpacity] = useState(0);
+
+    const handleOnDimensions = () => {
+        setOpacity(1);
+    }
+
+    return (
+        <Container
+            opacity={opacity}>
+            <BodyContainer height={bodyHeight}>
+                <AspectImage
+                    src={house.mainImage}
+                    width={width}
+                    alt={house.address}
+                    onClick={onClick}
+                    onDimensions={() => setOpacity(1)}
+                />
+            </BodyContainer>
+            <TextContainer height={textHeight}>
+                <AddressText
+                    fontSize={textHeight * FONT_PERCENTAGE}
+                    letterSpacing={textHeight * FONT_PERCENTAGE * SPACING_PERCENTAGE}
+                >{house.address}</AddressText>
+            </TextContainer>
+        </Container>
+    );
+};
 
 const SelectedWorkDisplay: React.FC<SelectedWorkDisplayProps> = ({ houses, width, verticalGap, horizontalGap = 100 }) => {
     const { createOnClick } = useCarousel();
@@ -87,22 +128,13 @@ const SelectedWorkDisplay: React.FC<SelectedWorkDisplayProps> = ({ houses, width
                 >
 
                     {row.map((house, houseIndex) => (
-                        <Container key={houseIndex}>
-                            <BodyContainer height={heights[rowIndex]}>
-                                <AspectImage
-                                    src={house.mainImage}
-                                    width={width}
-                                    alt={house.address}
-                                    onClick={createOnClick(house)}
-                                />
-                            </BodyContainer>
-                            <TextContainer height={verticalGap}>
-                                <AddressText
-                                    fontSize={verticalGap * FONT_PERCENTAGE}
-                                    letterSpacing={verticalGap * FONT_PERCENTAGE * SPACING_PERCENTAGE}
-                                >{house.address}</AddressText>
-                            </TextContainer>
-                        </Container>
+                        <SelectedWorkHouse key={houseIndex}
+                            house={house}
+                            width={width}
+                            bodyHeight={heights[rowIndex]}
+                            textHeight={verticalGap}
+                            onClick={createOnClick(house)}
+                        />
                     ))}
                 </Row>
             ))}

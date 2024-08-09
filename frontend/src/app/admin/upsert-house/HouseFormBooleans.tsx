@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Label, Switch, styled } from 'tamagui';
+import { View, Text, Label, Switch, styled } from 'tamagui';
 import { House, HouseBoolean } from 'living-mile-high-lib';
 
 const BooleanContainer = styled(View, {
@@ -31,15 +31,21 @@ const BooleanRow = styled(View, {
     marginBottom: 10,
 });
 
+const BooleanText = styled(Text, {
+    textAlign: 'center',
+    fontSize: 10,
+    color: '$darkGray',
+})
+
 type HouseFormBooleansProps = {
     formData: House;
     setFormData: React.Dispatch<React.SetStateAction<House>>;
 };
 
 const HOUSE_BOOLEAN_LABELS: Record<HouseBoolean, string> = {
-    isDeveloped: 'Is Developed?',
-    isForSale: 'Is For Sale?',
-    isSelectedWork: 'Is Selected Work?',
+    isForSale: 'Projects For Sale?',
+    isSelectedWork: 'Featured?',
+    isDeveloped: 'Our Work?',
 }
 
 const HouseFormBooleans: React.FC<HouseFormBooleansProps> = ({ formData, setFormData }) => {
@@ -53,11 +59,13 @@ const HouseFormBooleans: React.FC<HouseFormBooleansProps> = ({ formData, setForm
             <BooleansLabelContainer>
                 <BooleansLabel>Booleans</BooleansLabel>
             </BooleansLabelContainer>
+            <BooleanText>{'(All houses NOT For Sale will be shown on Real Estate Sales)'}</BooleanText>
             {(Object.entries(HOUSE_BOOLEAN_LABELS) as [HouseBoolean, string][]).map(([key, label]) => (
                 <BooleanRow key={key}>
                     <FormLabel>{label}</FormLabel>
                     <Switch
                         checked={formData[key]}
+                        backgroundColor={formData[key] ? 'lightgreen' : 'tomato'}
                         onCheckedChange={() => toggleBoolean(key as keyof House)}>
                         <Switch.Thumb />
                     </Switch>

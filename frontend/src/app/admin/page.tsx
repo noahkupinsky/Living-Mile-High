@@ -100,17 +100,17 @@ const ToggleGroupItem = styled(ToggleGroup.Item, {
 })
 
 enum ToggleValue {
-    FOR_SALE = 'For Sale',
-    SELECTED_WORK = 'Selected Work',
-    DEVELOPED = 'Developed',
-    SOLD = 'Sold',
+    FOR_SALE = 'Projects For Sale',
+    SELECTED_WORK = 'Featured',
+    DEVELOPED = 'Our Work',
+    SOLD = 'Real Estate Sales',
 }
 
 const ToggleQueries: Record<ToggleValue, HouseQuery> = {
     [ToggleValue.FOR_SALE]: { isForSale: true },
     [ToggleValue.SELECTED_WORK]: { isSelectedWork: true },
     [ToggleValue.DEVELOPED]: { isDeveloped: true },
-    [ToggleValue.SOLD]: { isDeveloped: false, isForSale: false },
+    [ToggleValue.SOLD]: { isForSale: false },
 }
 
 const AdminPanel = () => {
