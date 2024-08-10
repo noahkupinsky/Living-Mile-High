@@ -1,16 +1,19 @@
 'use client'
 
-import { HouseCompare, HouseQuery, HouseSortName } from '@/types';
+import { HouseCompare, HouseQuery, HouseSortBy } from '@/types';
 import { House } from 'living-mile-high-lib';
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { useSiteData } from './SiteDataContext';
-import { createHouseSorts, createMultiCompare, dateNumber } from '@/utils/sorting';
+import { createHouseSorts, createMultiCompare } from '@/utils/sorting';
+
+type ConfigureOptions = {
+    query?: HouseQuery[] | HouseQuery;
+    sort?: HouseSortBy[] | HouseSortBy;
+}
 
 type HouseQueryContextType = {
     houses: House[];
-    query: HouseQuery[] | HouseQuery | undefined;
-    setQuery: React.Dispatch<React.SetStateAction<HouseQuery[] | HouseQuery | undefined>>;
-    setSort: (sort: HouseSortName | HouseSortName[]) => void;
+    configure: (options: ConfigureOptions) => void;
 };
 
 const HouseQueryContext = createContext<HouseQueryContextType | undefined>(undefined);
@@ -22,16 +25,16 @@ const caseInsensitiveContains = (string: string, substring: string) => {
 export const HouseQueryProvider = ({ children }: { children: React.ReactNode }) => {
     const { houses: allHouses, generalData } = useSiteData();
     const defaultMainImages = useMemo(() => generalData!.defaultImages, [generalData]);
-    const [query, setQuery] = useState<HouseQuery[] | HouseQuery | undefined>(undefined);
+    const [queries, setQueries] = useState<HouseQuery[] | undefined>(undefined);
     const [sorts, setSorts] = useState<HouseCompare[]>([]);
     const [houses, setHouses] = useState<House[]>([]);
     const houseSorts = useMemo(() => createHouseSorts(defaultMainImages), [defaultMainImages]);
 
     const queryList = useMemo(() => {
-        if (query === undefined) return [];
-        if (Array.isArray(query)) return query;
-        return [query];
-    }, [query]);
+        if (queries === undefined) return [];
+        if (Array.isArray(queries)) return queries;
+        return [queries];
+    }, [queries]);
 
     const queryHouses = useCallback((query: HouseQuery, houses: House[]): House[] => {
         return houses.filter(house => {
@@ -44,14 +47,22 @@ export const HouseQueryProvider = ({ children }: { children: React.ReactNode }) 
         });
     }, []);
 
-    const setSort = useCallback((sort: HouseSortName | HouseSortName[]) => {
-        const sortNameList = Array.isArray(sort) ? sort : [sort];
-        const sortList = sortNameList.map(sortName => houseSorts[sortName]);
-        setSorts(sortList);
+    const configure = useCallback((options: ConfigureOptions) => {
+        const { query, sort } = options;
+        if (query) {
+            const queryList = Array.isArray(query) ? query : [query];
+            setQueries(queryList);
+        }
+
+        if (sort) {
+            const sortNameList = Array.isArray(sort) ? sort : [sort];
+            const sortList = sortNameList.map(sortName => houseSorts[sortName]);
+            setSorts(sortList);
+        }
     }, [houseSorts]);
 
     useEffect(() => {
-        if (query) {
+        if (queries) {
             const results = queryList.reduce((acc, query) => acc.concat(queryHouses(query, allHouses)), [] as House[]);
             const uniqueResults = Array.from(new Set(results));
 
@@ -60,10 +71,10 @@ export const HouseQueryProvider = ({ children }: { children: React.ReactNode }) 
             const sortedResults = uniqueResults.sort(multiSort);
             setHouses(sortedResults);
         }
-    }, [query, allHouses, queryHouses, queryList, sorts, houseSorts]);
+    }, [queries, allHouses, queryHouses, queryList, sorts, houseSorts]);
 
     return (
-        <HouseQueryContext.Provider value={{ houses, query, setQuery, setSort }}>
+        <HouseQueryContext.Provider value={{ houses, configure }}>
             {children}
         </HouseQueryContext.Provider>
     );

@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button, View, Text, styled, YStack, Label, Input, XStack, Select, ToggleGroup } from 'tamagui';
 import { House } from 'living-mile-high-lib';
 import { HouseQueryProvider, useHouseQuery } from '@/contexts/HouseQueryContext';
-import { Alert, AlertTitle, HouseQuery, HouseSortName } from '@/types';
+import { Alert, AlertTitle, HouseQuery, HouseSortBy } from '@/types';
 import { useServices } from '@/contexts/ServiceContext';
 import { useAlert } from '@/contexts/AlertContext';
 
@@ -117,16 +117,18 @@ const AdminPanel = () => {
     const router = useRouter();
     const { withAlertAsync } = useAlert();
     const { apiService } = useServices();
-    const { houses, setQuery, setSort } = useHouseQuery();
-    const [sortName, setSortName] = React.useState<HouseSortName>(HouseSortName.LEXICOGRAPHIC);
+    const { houses, configure } = useHouseQuery();
+    const [sortName, setSortName] = useState<HouseSortBy>(HouseSortBy.LEXICOGRAPHIC);
     const [addressContains, setAddressContains] = React.useState('');
     const [toggleValues, setToggleValues] = React.useState<ToggleValue[]>([]);
 
     useEffect(() => {
         const toggleQueries = toggleValues.length === 0 ? [{}] : toggleValues.map(v => ToggleQueries[v]);
         const finalQueries = toggleQueries.map(q => ({ ...q, addressContains }));
-        setQuery(finalQueries);
-    }, [setQuery, addressContains, toggleValues]);
+        configure({
+            query: finalQueries,
+        });
+    }, [configure, addressContains, toggleValues]);
 
     const handleEdit = (id: string) => {
         router.push(`admin/upsert-house?id=${id}`);
@@ -174,9 +176,11 @@ const AdminPanel = () => {
         return columns;
     };
 
-    const handleSortChange = (value: HouseSortName) => {
+    const handleSortChange = (value: HouseSortBy) => {
         setSortName(value);
-        setSort(value);
+        configure({
+            sort: value
+        });
     };
 
     const columns = getColumns(houses);
@@ -228,7 +232,7 @@ const AdminPanel = () => {
                         </Select.Trigger>
                         <Select.Content>
                             <Select.Viewport>
-                                {Object.entries(HouseSortName).map(([key, value], index) => (
+                                {Object.entries(HouseSortBy).map(([key, value], index) => (
                                     <Select.Item key={key} index={index} value={value}>
                                         <Select.ItemText>{value}</Select.ItemText>
                                     </Select.Item>

@@ -38,7 +38,7 @@ export type HouseQuery = {
     neighborhoodContains?: string;
 };
 
-export enum HouseSortName {
+export enum HouseSortBy {
     CREATED_AT = 'createdAt',
     UPDATED_AT = 'updatedAt',
     LEXICOGRAPHIC = 'lex',

@@ -9,6 +9,7 @@ import { useEffect, useMemo, useState } from 'react';
 import ImageCarousel from '@/components/images/ImageCarousel';
 import { useSizing } from '@/contexts/SizingContext';
 import { useCarousel } from '@/contexts/CarouselContext';
+import { HouseSortBy } from '@/types';
 
 const BODY_WIDTH_PERCENTAGE = 0.55;
 const BODY_HEIGHT_PERCENTAGE = 0.85;
@@ -17,13 +18,16 @@ const GAP_PERCENTAGE = 0.2;
 
 const SelectedWorkComponent: React.FC = () => {
     const { bodyWidth, bodyHeight } = useSizing();
-    const { houses, setQuery } = useHouseQuery();
+    const { houses, configure } = useHouseQuery();
 
     useEffect(() => {
-        setQuery({
-            isSelectedWork: true,
+        configure({
+            query: {
+                isSelectedWork: true,
+            },
+            sort: HouseSortBy.LEXICOGRAPHIC
         });
-    }, [setQuery]);
+    }, [configure]);
 
     const maxWidthIfSquare = useMemo(() =>
         Math.min(

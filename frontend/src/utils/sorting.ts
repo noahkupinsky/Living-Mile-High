@@ -1,4 +1,4 @@
-import { Compare, HouseCompare, HouseSortName } from "@/types";
+import { Compare, HouseCompare, HouseSortBy } from "@/types";
 import { House } from "living-mile-high-lib";
 
 export const createMultiCompare = <T extends any>(compareList: Compare<T>[]): Compare<T> => {
@@ -28,26 +28,26 @@ export const dateNumber = (dateString: string) => {
     return new Date(dateString).getTime();
 }
 
-export const createHouseSorts = (defaultMainImages: string[]): { [key in HouseSortName]: HouseCompare } => {
+export const createHouseSorts = (defaultMainImages: string[]): { [key in HouseSortBy]: HouseCompare } => {
     const hasDefaultMainImage = (house: House) => {
         return defaultMainImages.includes(house.mainImage);
     };
 
     return {
-        [HouseSortName.NON_DEFAULT]: (a: House, b: House) => {
+        [HouseSortBy.NON_DEFAULT]: (a: House, b: House) => {
             const [aHasDefault, bHasDefault] = [hasDefaultMainImage(a), hasDefaultMainImage(b)];
             if (aHasDefault && !bHasDefault) return 1;
             if (!aHasDefault && bHasDefault) return -1;
             return 0;
         },
-        [HouseSortName.PRIORITY]: (a: House, b: House) => {
+        [HouseSortBy.PRIORITY]: (a: House, b: House) => {
             const [aPrio, bPrio] = [a.priority ?? Infinity, b.priority ?? Infinity];
             if (aPrio < bPrio) return 1;
             if (aPrio > bPrio) return -1;
             return 0;
         },
-        [HouseSortName.LEXICOGRAPHIC]: (a: House, b: House) => a.address.localeCompare(b.address),
-        [HouseSortName.CREATED_AT]: (a: House, b: House) => dateNumber(b.createdAt!) - dateNumber(a.createdAt!),
-        [HouseSortName.UPDATED_AT]: (a: House, b: House) => dateNumber(b.updatedAt!) - dateNumber(a.updatedAt!),
+        [HouseSortBy.LEXICOGRAPHIC]: (a: House, b: House) => a.address.localeCompare(b.address),
+        [HouseSortBy.CREATED_AT]: (a: House, b: House) => dateNumber(b.createdAt!) - dateNumber(a.createdAt!),
+        [HouseSortBy.UPDATED_AT]: (a: House, b: House) => dateNumber(b.updatedAt!) - dateNumber(a.updatedAt!),
     }
 }
