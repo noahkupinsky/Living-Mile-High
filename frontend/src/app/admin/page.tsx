@@ -117,7 +117,8 @@ const AdminPanel = () => {
     const router = useRouter();
     const { withAlertAsync } = useAlert();
     const { apiService } = useServices();
-    const { houses, setQuery, sort, setSort } = useHouseQuery();
+    const { houses, setQuery, setSort } = useHouseQuery();
+    const [sortName, setSortName] = React.useState<HouseSortName>(HouseSortName.LEXICOGRAPHIC);
     const [addressContains, setAddressContains] = React.useState('');
     const [toggleValues, setToggleValues] = React.useState<ToggleValue[]>([]);
 
@@ -174,6 +175,7 @@ const AdminPanel = () => {
     };
 
     const handleSortChange = (value: HouseSortName) => {
+        setSortName(value);
         setSort(value);
     };
 
@@ -220,7 +222,7 @@ const AdminPanel = () => {
                 </YStack>
                 <YStack>
                     <FormLabel>Sort by:</FormLabel>
-                    <Select value={sort as HouseSortName} onValueChange={handleSortChange} disablePreventBodyScroll>
+                    <Select value={sortName} onValueChange={handleSortChange} disablePreventBodyScroll>
                         <Select.Trigger>
                             <Select.Value placeholder="Select an option" />
                         </Select.Trigger>
