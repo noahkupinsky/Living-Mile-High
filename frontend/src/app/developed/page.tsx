@@ -5,7 +5,6 @@ import React, { useEffect } from "react";
 import SimpleColumnDisplay from "@/components/houses/SimpleColumnDisplay";
 import SiteDataLoader from "@/components/layout/SiteDataLoader";
 import { useCarousel } from "@/contexts/CarouselContext";
-import { HouseSortBy } from "@/types";
 
 
 const DevelopedComponent: React.FC = () => {
@@ -16,8 +15,7 @@ const DevelopedComponent: React.FC = () => {
         configure({
             query: {
                 isDeveloped: true,
-            },
-            sort: HouseSortBy.LEXICOGRAPHIC
+            }
         });
     }, [configure]);
 

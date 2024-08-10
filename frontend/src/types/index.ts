@@ -41,7 +41,7 @@ export type HouseQuery = {
 export enum HouseSortBy {
     CREATED_AT = 'createdAt',
     UPDATED_AT = 'updatedAt',
-    LEXICOGRAPHIC = 'lex',
+    ADDRESS = 'address',
     NON_DEFAULT = 'nonDefault',
     PRIORITY = 'priority',
 }

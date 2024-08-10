@@ -7,8 +7,6 @@ import ForSaleHouse from "./ForSaleHouse";
 import { View } from "react-native";
 import { styled } from "tamagui";
 import { useSizing } from "@/contexts/SizingContext";
-import { useCarousel } from "@/contexts/CarouselContext";
-import { HouseSortBy } from "@/types";
 
 const ColumnContainer = styled(View, {
     name: 'ColumnContainer',
@@ -28,8 +26,7 @@ const ForSaleComponent = () => {
         configure({
             query: {
                 isForSale: true,
-            },
-            sort: HouseSortBy.LEXICOGRAPHIC
+            }
         });
     }, [configure]);
 

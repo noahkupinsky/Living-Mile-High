@@ -1,10 +1,9 @@
 'use client'
 
 import { useHouseQuery, HouseQueryProvider } from "@/contexts/HouseQueryContext";
-import React, { useState } from "react";
+import React from "react";
 import SiteDataLoader from "@/components/layout/SiteDataLoader";
 import SimpleColumnDisplay from "@/components/houses/SimpleColumnDisplay";
-import { HouseSortName } from "@/types";
 
 
 const SoldComponent: React.FC = () => {
@@ -14,7 +13,6 @@ const SoldComponent: React.FC = () => {
             query: {
                 isForSale: false,
             },
-            sort: HouseSortName.LEXICOGRAPHIC
         });
     }, [configure]);
 

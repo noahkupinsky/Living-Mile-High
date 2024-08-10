@@ -46,7 +46,7 @@ export const createHouseSorts = (defaultMainImages: string[]): { [key in HouseSo
             if (aPrio > bPrio) return -1;
             return 0;
         },
-        [HouseSortBy.LEXICOGRAPHIC]: (a: House, b: House) => a.address.localeCompare(b.address),
+        [HouseSortBy.ADDRESS]: (a: House, b: House) => a.address.localeCompare(b.address),
         [HouseSortBy.CREATED_AT]: (a: House, b: House) => dateNumber(b.createdAt!) - dateNumber(a.createdAt!),
         [HouseSortBy.UPDATED_AT]: (a: House, b: House) => dateNumber(b.updatedAt!) - dateNumber(a.updatedAt!),
     }

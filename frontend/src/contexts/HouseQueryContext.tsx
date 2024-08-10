@@ -8,11 +8,12 @@ import { createHouseSorts, createMultiCompare } from '@/utils/sorting';
 
 type ConfigureOptions = {
     query?: HouseQuery[] | HouseQuery;
-    sort?: HouseSortBy[] | HouseSortBy;
+    sort?: HouseCompare[] | HouseCompare;
 }
 
 type HouseQueryContextType = {
     houses: House[];
+    houseSorts: { [key in HouseSortBy]: HouseCompare };
     configure: (options: ConfigureOptions) => void;
 };
 
@@ -25,10 +26,12 @@ const caseInsensitiveContains = (string: string, substring: string) => {
 export const HouseQueryProvider = ({ children }: { children: React.ReactNode }) => {
     const { houses: allHouses, generalData } = useSiteData();
     const defaultMainImages = useMemo(() => generalData!.defaultImages, [generalData]);
-    const [queries, setQueries] = useState<HouseQuery[] | undefined>(undefined);
-    const [sorts, setSorts] = useState<HouseCompare[]>([]);
-    const [houses, setHouses] = useState<House[]>([]);
     const houseSorts = useMemo(() => createHouseSorts(defaultMainImages), [defaultMainImages]);
+    const [queries, setQueries] = useState<HouseQuery[] | undefined>(undefined);
+    const [sorts, setSorts] = useState<HouseCompare[]>(
+        [houseSorts[HouseSortBy.ADDRESS]]
+    );
+    const [houses, setHouses] = useState<House[]>([]);
 
     const queryList = useMemo(() => {
         if (queries === undefined) return [];
@@ -55,11 +58,10 @@ export const HouseQueryProvider = ({ children }: { children: React.ReactNode }) 
         }
 
         if (sort) {
-            const sortNameList = Array.isArray(sort) ? sort : [sort];
-            const sortList = sortNameList.map(sortName => houseSorts[sortName]);
+            const sortList = Array.isArray(sort) ? sort : [sort];
             setSorts(sortList);
         }
-    }, [houseSorts]);
+    }, []);
 
     useEffect(() => {
         if (queries) {
@@ -74,7 +76,7 @@ export const HouseQueryProvider = ({ children }: { children: React.ReactNode }) 
     }, [queries, allHouses, queryHouses, queryList, sorts, houseSorts]);
 
     return (
-        <HouseQueryContext.Provider value={{ houses, configure }}>
+        <HouseQueryContext.Provider value={{ houses, configure, houseSorts }}>
             {children}
         </HouseQueryContext.Provider>
     );

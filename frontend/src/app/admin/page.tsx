@@ -1,13 +1,14 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button, View, Text, styled, YStack, Label, Input, XStack, Select, ToggleGroup } from 'tamagui';
 import { House } from 'living-mile-high-lib';
 import { HouseQueryProvider, useHouseQuery } from '@/contexts/HouseQueryContext';
-import { Alert, AlertTitle, HouseQuery, HouseSortBy } from '@/types';
+import { Alert, AlertTitle, HouseCompare, HouseQuery, HouseSortBy } from '@/types';
 import { useServices } from '@/contexts/ServiceContext';
 import { useAlert } from '@/contexts/AlertContext';
+import { reverseCompare } from '@/utils/sorting';
 
 const COLUMNS = 2; // Define the number of columns here
 
@@ -113,14 +114,30 @@ const ToggleQueries: Record<ToggleValue, HouseQuery> = {
     [ToggleValue.SOLD]: { isForSale: false },
 }
 
+const createAdminSorts = (houseSorts: { [key in HouseSortBy]: HouseCompare }) => {
+    return {
+        "By Address": [houseSorts[HouseSortBy.ADDRESS]],
+        "By Priority": [houseSorts[HouseSortBy.PRIORITY]],
+        "Default Main Images (last)": [houseSorts[HouseSortBy.NON_DEFAULT]],
+        "Default Main Images (first)": [reverseCompare(houseSorts[HouseSortBy.NON_DEFAULT])],
+        "Created At (newest)": [houseSorts[HouseSortBy.CREATED_AT]],
+        "Created At (oldest)": [reverseCompare(houseSorts[HouseSortBy.CREATED_AT])],
+        "Updated At (newest)": [houseSorts[HouseSortBy.UPDATED_AT]],
+        "Updated At (oldest)": [reverseCompare(houseSorts[HouseSortBy.UPDATED_AT])],
+    }
+}
+
 const AdminPanel = () => {
     const router = useRouter();
     const { withAlertAsync } = useAlert();
     const { apiService } = useServices();
-    const { houses, configure } = useHouseQuery();
-    const [sortName, setSortName] = useState<HouseSortBy>(HouseSortBy.LEXICOGRAPHIC);
+    const { houses, configure, houseSorts } = useHouseQuery();
+    const adminSorts = useMemo(() => createAdminSorts(houseSorts), [houseSorts]);
+
+    const [sortName, setSortName] = useState<any>(undefined);
     const [addressContains, setAddressContains] = React.useState('');
     const [toggleValues, setToggleValues] = React.useState<ToggleValue[]>([]);
+
 
     useEffect(() => {
         const toggleQueries = toggleValues.length === 0 ? [{}] : toggleValues.map(v => ToggleQueries[v]);
@@ -176,10 +193,10 @@ const AdminPanel = () => {
         return columns;
     };
 
-    const handleSortChange = (value: HouseSortBy) => {
+    const handleSortChange = (value: any) => {
         setSortName(value);
         configure({
-            sort: value
+            sort: adminSorts[value as unknown as keyof typeof adminSorts],
         });
     };
 
@@ -232,9 +249,9 @@ const AdminPanel = () => {
                         </Select.Trigger>
                         <Select.Content>
                             <Select.Viewport>
-                                {Object.entries(HouseSortBy).map(([key, value], index) => (
-                                    <Select.Item key={key} index={index} value={value}>
-                                        <Select.ItemText>{value}</Select.ItemText>
+                                {Object.entries(adminSorts).map(([key, value], index) => (
+                                    <Select.Item key={key} index={index} value={key}>
+                                        <Select.ItemText>{key}</Select.ItemText>
                                     </Select.Item>
                                 ))}
                             </Select.Viewport>
