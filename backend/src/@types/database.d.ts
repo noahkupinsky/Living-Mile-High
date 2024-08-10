@@ -11,6 +11,7 @@ export type HouseRecord = {
     mainImage: string;
     images: string[];
     neighborhood?: string;
+    priority?: number;
     stats: {
         houseSquareFeet?: number;
         lotSquareFeet?: number;

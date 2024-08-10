@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Button, View, Text, styled, YStack, Label, Input, XStack, Select, ToggleGroup } from 'tamagui';
 import { House } from 'living-mile-high-lib';
 import { HouseQueryProvider, useHouseQuery } from '@/contexts/HouseQueryContext';
-import { Alert, AlertTitle, HouseQuery, HouseSort } from '@/types';
+import { Alert, AlertTitle, HouseQuery, HouseSortName } from '@/types';
 import { useServices } from '@/contexts/ServiceContext';
 import { useAlert } from '@/contexts/AlertContext';
 
@@ -173,7 +173,7 @@ const AdminPanel = () => {
         return columns;
     };
 
-    const handleSortChange = (value: HouseSort) => {
+    const handleSortChange = (value: HouseSortName) => {
         setSort(value);
     };
 
@@ -220,13 +220,13 @@ const AdminPanel = () => {
                 </YStack>
                 <YStack>
                     <FormLabel>Sort by:</FormLabel>
-                    <Select value={sort} onValueChange={handleSortChange} disablePreventBodyScroll>
+                    <Select value={sort as HouseSortName} onValueChange={handleSortChange} disablePreventBodyScroll>
                         <Select.Trigger>
                             <Select.Value placeholder="Select an option" />
                         </Select.Trigger>
                         <Select.Content>
                             <Select.Viewport>
-                                {Object.entries(HouseSort).map(([key, value], index) => (
+                                {Object.entries(HouseSortName).map(([key, value], index) => (
                                     <Select.Item key={key} index={index} value={value}>
                                         <Select.ItemText>{value}</Select.ItemText>
                                     </Select.Item>

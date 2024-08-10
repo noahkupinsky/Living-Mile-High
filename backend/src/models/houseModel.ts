@@ -12,6 +12,7 @@ const HouseSchema = new Schema<HouseDocument>({
     mainImage: { type: String, required: true },
     images: { type: [String] },
     neighborhood: { type: String, required: false },
+    priority: { type: Number, required: false },
     stats: {
         houseSquareFeet: { type: Number },
         lotSquareFeet: { type: Number },
@@ -26,7 +27,20 @@ const HouseSchema = new Schema<HouseDocument>({
 const HouseModel = model<HouseDocument>('House', HouseSchema);
 
 export function houseDocumentToObject(doc: HouseDocument): House {
-    const { id, isDeveloped, isForSale, isSelectedWork, address, mainImage, images, neighborhood, stats, createdAt, updatedAt } = doc;
+    const {
+        id,
+        isDeveloped,
+        isForSale,
+        isSelectedWork,
+        address,
+        mainImage,
+        images,
+        neighborhood,
+        priority,
+        stats,
+        createdAt,
+        updatedAt,
+    } = doc;
     const createdAtString = createdAt?.toISOString();
     const updatedAtString = updatedAt?.toISOString();
 
@@ -39,6 +53,7 @@ export function houseDocumentToObject(doc: HouseDocument): House {
         mainImage,
         images,
         neighborhood,
+        priority,
         stats,
         createdAt: createdAtString,
         updatedAt: updatedAtString,
@@ -50,7 +65,17 @@ export function houseDocumentToObject(doc: HouseDocument): House {
 type HouseDocumentUpsert = Omit<HouseRecord, 'id' | 'createdAt' | 'updatedAt'>;
 
 export function houseObjectToDocument(house: House): HouseDocumentUpsert {
-    const { isDeveloped, isForSale, isSelectedWork, address, mainImage, images, neighborhood, stats } = house;
+    const {
+        isDeveloped,
+        isForSale,
+        isSelectedWork,
+        address,
+        mainImage,
+        images,
+        neighborhood,
+        priority,
+        stats
+    } = house;
 
     const doc = {
         isDeveloped,
@@ -60,6 +85,7 @@ export function houseObjectToDocument(house: House): HouseDocumentUpsert {
         mainImage,
         images,
         neighborhood,
+        priority,
         stats: stats || {},
     };
 

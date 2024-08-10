@@ -38,13 +38,12 @@ export type HouseQuery = {
     neighborhoodContains?: string;
 };
 
-export enum HouseSort {
-    CREATED_AT_NEWEST = 'Created At (newest first)',
-    CREATED_AT_OLDEST = 'Created At (oldest first)',
-    UPDATED_AT_NEWEST = 'Updated At (newest first)',
-    UPDATED_AT_OLDEST = 'Updated At (oldest first)',
-    LEXICOGRAPHIC = 'Alphabetical',
-    NON_DEFAULT_LEXICOGRAPHIC = 'Alphabetical (default last)',
+export enum HouseSortName {
+    CREATED_AT = 'createdAt',
+    UPDATED_AT = 'updatedAt',
+    LEXICOGRAPHIC = 'lex',
+    NON_DEFAULT = 'nonDefault',
+    PRIORITY = 'priority',
 }
 
 export type HouseStatKeys = keyof HouseStats
@@ -52,3 +51,7 @@ export type HouseStatKeys = keyof HouseStats
 export type ImageFormat = string | File | Blob
 
 export type HouseOnClickCreator = (house: House) => (() => void) | undefined
+
+export type Compare<T> = (a: T, b: T) => number;
+
+export type HouseCompare = Compare<House>;

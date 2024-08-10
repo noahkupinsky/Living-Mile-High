@@ -1,4 +1,5 @@
-import { HouseStatKeys } from "@/types";
+import { Compare, HouseStatKeys } from "@/types";
+import { House } from "living-mile-high-lib";
 
 export const HOME_PAGE_INTERVAL = 2000;
 
