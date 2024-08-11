@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Button, styled } from 'tamagui';
 import { useSiteData } from '@/contexts/SiteDataContext';
 import { House } from 'living-mile-high-lib';
-import HouseFormBooleans from './HouseFormBooleans';
+import HouseFormClassification from './HouseFormClassification';
 import HouseFormStats from './HouseFormStats';
 import HouseFormImages from './HouseFormImages';
 import HouseFormText from './HouseFormText';
@@ -112,7 +112,7 @@ const HouseForm: React.FC<{ house?: House }> = ({ house }) => {
                 </LeftColumn>
                 <RightColumn>
                     <HouseFormStats formData={formData} setFormData={setFormData} />
-                    <HouseFormBooleans formData={formData} setFormData={setFormData} />
+                    <HouseFormClassification formData={formData} setFormData={setFormData} />
                 </RightColumn>
             </ColumnsContainer>
             <Button onPress={handleFormSubmit}>Submit</Button>

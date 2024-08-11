@@ -33,8 +33,8 @@ export const HouseSortProvider = ({ children }: { children: React.ReactNode }) =
             },
             [HouseSortBy.PRIORITY]: (a, b) => {
                 const [aPrio, bPrio] = [a.priority ?? Infinity, b.priority ?? Infinity];
-                if (aPrio < bPrio) return 1;
-                if (aPrio > bPrio) return -1;
+                if (aPrio < bPrio) return -1;
+                if (aPrio > bPrio) return 1;
                 return 0;
             },
             [HouseSortBy.ADDRESS]: (a, b) => a.address.localeCompare(b.address),

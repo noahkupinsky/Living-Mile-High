@@ -1,21 +1,21 @@
 import React from 'react';
-import { View, Text, Label, Switch, styled } from 'tamagui';
+import { View, Text, Label, Switch, styled, XStack, Input } from 'tamagui';
 import { House, HouseBoolean } from 'living-mile-high-lib';
 import Pages from '@/config/pageConfig';
 
-const BooleanContainer = styled(View, {
+const ClassificationContainer = styled(View, {
     display: 'flex',
     flexDirection: 'column',
 });
 
-const BooleansLabelContainer = styled(View, {
+const ClassificationLabelContainer = styled(View, {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
 });
 
-const BooleansLabel = styled(Label, {
+const ClassificationLabel = styled(Label, {
     marginBottom: 5,
     fontWeight: 'bold',
 });
@@ -38,7 +38,7 @@ const BooleanText = styled(Text, {
     color: '$darkGray',
 })
 
-type HouseFormBooleansProps = {
+type HouseFormClassificationProps = {
     formData: House;
     setFormData: React.Dispatch<React.SetStateAction<House>>;
 };
@@ -49,17 +49,23 @@ const HOUSE_BOOLEAN_LABELS: { [key in HouseBoolean]: string } = {
     isDeveloped: Pages.DEVELOPED.name,
 }
 
-const HouseFormBooleans: React.FC<HouseFormBooleansProps> = ({ formData, setFormData }) => {
+const HouseFormClassification: React.FC<HouseFormClassificationProps> = ({ formData, setFormData }) => {
 
     const toggleBoolean = (key: keyof House) => {
         setFormData(prev => ({ ...prev, [key]: !prev[key] }));
     };
 
+    const handlePriorityChange = (value: string) => {
+        const parsedValue = parseInt(value);
+        const newPriority = !isNaN(parsedValue) && parsedValue > 0 ? parsedValue : undefined;
+        setFormData(prev => ({ ...prev, priority: newPriority }));
+    }
+
     return (
-        <BooleanContainer>
-            <BooleansLabelContainer>
-                <BooleansLabel>Booleans</BooleansLabel>
-            </BooleansLabelContainer>
+        <ClassificationContainer>
+            <ClassificationLabelContainer>
+                <ClassificationLabel>Booleans</ClassificationLabel>
+            </ClassificationLabelContainer>
             <BooleanText>{`(All houses NOT For Sale will be shown on ${Pages.SOLD.name})`}</BooleanText>
             {(Object.entries(HOUSE_BOOLEAN_LABELS) as [HouseBoolean, string][]).map(([key, label]) => (
                 <BooleanRow key={key}>
@@ -72,8 +78,20 @@ const HouseFormBooleans: React.FC<HouseFormBooleansProps> = ({ formData, setForm
                     </Switch>
                 </BooleanRow>
             ))}
-        </BooleanContainer>
+            <ClassificationLabelContainer>
+                <ClassificationLabel>Priority</ClassificationLabel>
+            </ClassificationLabelContainer>
+            <XStack
+                justifyContent='space-between'
+                marginBottom={5}>
+                <Label>Priority:</Label>
+                <Input
+                    value={formData.priority?.toString() ?? ''}
+                    onChangeText={handlePriorityChange}
+                    width={100} />
+            </XStack>
+        </ClassificationContainer>
     );
 };
 
-export default HouseFormBooleans;
+export default HouseFormClassification;
