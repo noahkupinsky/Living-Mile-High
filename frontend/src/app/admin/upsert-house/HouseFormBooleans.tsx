@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Label, Switch, styled } from 'tamagui';
 import { House, HouseBoolean } from 'living-mile-high-lib';
+import Pages from '@/config/pageConfig';
 
 const BooleanContainer = styled(View, {
     display: 'flex',
@@ -42,10 +43,10 @@ type HouseFormBooleansProps = {
     setFormData: React.Dispatch<React.SetStateAction<House>>;
 };
 
-const HOUSE_BOOLEAN_LABELS: Record<HouseBoolean, string> = {
-    isForSale: 'Projects For Sale?',
-    isSelectedWork: 'Featured?',
-    isDeveloped: 'Our Work?',
+const HOUSE_BOOLEAN_LABELS: { [key in HouseBoolean]: string } = {
+    isForSale: Pages.FOR_SALE.name,
+    isSelectedWork: Pages.SELECTED_WORK.name,
+    isDeveloped: Pages.DEVELOPED.name,
 }
 
 const HouseFormBooleans: React.FC<HouseFormBooleansProps> = ({ formData, setFormData }) => {
@@ -59,10 +60,10 @@ const HouseFormBooleans: React.FC<HouseFormBooleansProps> = ({ formData, setForm
             <BooleansLabelContainer>
                 <BooleansLabel>Booleans</BooleansLabel>
             </BooleansLabelContainer>
-            <BooleanText>{'(All houses NOT For Sale will be shown on Real Estate Sales)'}</BooleanText>
+            <BooleanText>{`(All houses NOT For Sale will be shown on ${Pages.SOLD.name})`}</BooleanText>
             {(Object.entries(HOUSE_BOOLEAN_LABELS) as [HouseBoolean, string][]).map(([key, label]) => (
                 <BooleanRow key={key}>
-                    <FormLabel>{label}</FormLabel>
+                    <FormLabel>{`${label}?`}</FormLabel>
                     <Switch
                         checked={formData[key]}
                         backgroundColor={formData[key] ? 'lightgreen' : 'tomato'}

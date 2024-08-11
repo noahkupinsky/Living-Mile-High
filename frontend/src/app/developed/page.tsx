@@ -5,19 +5,13 @@ import React, { useEffect } from "react";
 import SimpleColumnDisplay from "@/components/houses/SimpleColumnDisplay";
 import SiteDataLoader from "@/components/layout/SiteDataLoader";
 import { useCarousel } from "@/contexts/CarouselContext";
+import { HouseQuerySortProvider, useHouseQuerySort } from "@/providers/houseQuerySortProvider";
+import Pages from '@/config/pageConfig';
 
 
 const DevelopedComponent: React.FC = () => {
-    const { houses, configure } = useHouseQuery();
+    const houses = useHouseQuerySort(Pages.DEVELOPED);
     const { createOnClick } = useCarousel();
-
-    useEffect(() => {
-        configure({
-            query: {
-                isDeveloped: true,
-            }
-        });
-    }, [configure]);
 
     return (
         <SimpleColumnDisplay houses={houses} maxColumns={4} minColumns={2} createOnClick={createOnClick} />
@@ -26,9 +20,9 @@ const DevelopedComponent: React.FC = () => {
 
 const DevelopedPage: React.FC = () => (
     <SiteDataLoader>
-        <HouseQueryProvider>
+        <HouseQuerySortProvider>
             <DevelopedComponent />
-        </HouseQueryProvider>
+        </HouseQuerySortProvider>
     </SiteDataLoader>
 );
 

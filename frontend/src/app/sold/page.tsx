@@ -4,17 +4,12 @@ import { useHouseQuery, HouseQueryProvider } from "@/contexts/HouseQueryContext"
 import React from "react";
 import SiteDataLoader from "@/components/layout/SiteDataLoader";
 import SimpleColumnDisplay from "@/components/houses/SimpleColumnDisplay";
+import { HouseQuerySortProvider, useHouseQuerySort } from "@/providers/houseQuerySortProvider";
+import Pages from "@/config/pageConfig";
 
 
 const SoldComponent: React.FC = () => {
-    const { houses, configure } = useHouseQuery();
-    React.useEffect(() => {
-        configure({
-            query: {
-                isForSale: false,
-            },
-        });
-    }, [configure]);
+    const houses = useHouseQuerySort(Pages.SOLD);
 
     return (
         <SimpleColumnDisplay houses={houses} maxColumns={4} minColumns={2} />
@@ -23,9 +18,9 @@ const SoldComponent: React.FC = () => {
 
 const SoldPage: React.FC = () => (
     <SiteDataLoader>
-        <HouseQueryProvider>
+        <HouseQuerySortProvider>
             <SoldComponent />
-        </HouseQueryProvider>
+        </HouseQuerySortProvider>
     </SiteDataLoader>
 );
 

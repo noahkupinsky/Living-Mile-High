@@ -7,6 +7,8 @@ import ForSaleHouse from "./ForSaleHouse";
 import { View } from "react-native";
 import { styled } from "tamagui";
 import { useSizing } from "@/contexts/SizingContext";
+import { HouseQuerySortProvider, useHouseQuerySort } from "@/providers/houseQuerySortProvider";
+import Pages from "@/config/pageConfig";
 
 const ColumnContainer = styled(View, {
     name: 'ColumnContainer',
@@ -19,16 +21,8 @@ const WIDTH_PERCENTAGE = 0.9;
 const HEIGHT_PERCENTAGE = 0.9;
 
 const ForSaleComponent = () => {
+    const houses = useHouseQuerySort(Pages.FOR_SALE);
     const { bodyWidth, bodyHeight } = useSizing();
-    const { houses, configure } = useHouseQuery();
-
-    useEffect(() => {
-        configure({
-            query: {
-                isForSale: true,
-            }
-        });
-    }, [configure]);
 
     return (
         <ColumnContainer>
@@ -47,9 +41,9 @@ const ForSaleComponent = () => {
 const ForSalePage = () => {
     return (
         <SiteDataLoader>
-            <HouseQueryProvider>
+            <HouseQuerySortProvider>
                 <ForSaleComponent />
-            </HouseQueryProvider>
+            </HouseQuerySortProvider>
         </SiteDataLoader>
     )
 }

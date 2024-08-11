@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
-import { styled, XStack, YStack, Text, View } from 'tamagui';
-import { useAuth } from '@/contexts/AuthContext';
-import { filterNavTabs } from '@/config/navTabs';
-import { useRouter, usePathname } from 'next/navigation';
-import { NavTab } from '@/types';
-import { Image } from 'tamagui';
+import { styled, XStack, YStack, View } from 'tamagui';
+import { NavTabConfig } from '@/types';
 import NavTabComponent from './NavTabComponent';
 import Instagram from './Instagram';
 import { tokens } from '@/config/tamagui.config';
@@ -38,7 +34,7 @@ const InstagramContainer = styled(XStack, {
 });
 
 type HamburgerMenuNavigationProps = {
-    tabs: NavTab[];
+    tabs: NavTabConfig[];
     isOpen: boolean;
     onClose: () => void;
     setHoveredTab: React.Dispatch<React.SetStateAction<string | null>>;
@@ -92,7 +88,7 @@ type HamburgerMenuProps = {
     size: number;
     setHoveredTab?: React.Dispatch<React.SetStateAction<string | null>>;
     hoveredTab?: string | null;
-    tabs?: NavTab[];
+    tabs?: NavTabConfig[];
 };
 
 

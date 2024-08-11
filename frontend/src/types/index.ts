@@ -7,7 +7,6 @@ export enum AlertTitle {
     WARNING = 'Warning',
 }
 
-
 export type AlertType = {
     title: AlertTitle,
     message: string,
@@ -23,12 +22,6 @@ export class Alert implements AlertType {
 }
 
 export type SiteEventHandler = (event: EventObject, isLocal: boolean) => Promise<void>;
-
-export type NavTab = {
-    name: string;
-    path: string;
-    isAdmin: boolean;
-}
 
 export type HouseQuery = {
     isSelectedWork?: boolean;
@@ -54,4 +47,24 @@ export type HouseOnClickCreator = (house: House) => (() => void) | undefined
 
 export type Compare<T> = (a: T, b: T) => number;
 
+export type SortCriteria<T> = {
+    sortBy: T,
+    reverse?: boolean
+}
+
 export type HouseCompare = Compare<House>;
+
+export type HouseSortCriteria = SortCriteria<HouseSortBy>;
+
+export type HouseQuerySortConfig = {
+    queries: HouseQuery[],
+    sorts: HouseSortCriteria[]
+}
+
+export type NavTabConfig = {
+    name: string;
+    path: string;
+    isAdmin: boolean;
+}
+
+export type PageConfig = NavTabConfig & Partial<HouseQuerySortConfig>

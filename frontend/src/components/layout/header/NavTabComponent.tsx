@@ -1,4 +1,4 @@
-import { NavTab } from "@/types";
+import { NavTabConfig } from "@/types";
 import { usePathname, useRouter } from "next/navigation";
 import { styled, XStack, Text } from "tamagui";
 
@@ -15,7 +15,7 @@ const StyledTabText = styled(Text, {
 });
 
 type NavTabComponentProps = {
-    tab: NavTab;
+    tab: NavTabConfig;
     setHoveredTab: React.Dispatch<React.SetStateAction<string | null>>;
     hoveredTab: string | null;
     onPress?: () => void;

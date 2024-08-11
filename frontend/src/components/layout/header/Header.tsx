@@ -4,7 +4,7 @@ import { Text, styled, View, XStack, Image, YStack } from 'tamagui';
 import { usePathname, useRouter } from 'next/navigation';
 import { useRef, useState, useEffect, useCallback, useMemo } from 'react';
 import HamburgerMenu from './HamburgerMenu';
-import { filterNavTabs } from '@/config/navTabs';
+import { filterNavTabs } from '@/config/pageConfig';
 import { useAuth } from '@/contexts/AuthContext';
 import NavTabComponent from './NavTabComponent';
 import Instagram from './Instagram';

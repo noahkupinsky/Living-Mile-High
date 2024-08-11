@@ -4,11 +4,13 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button, View, Text, styled, YStack, Label, Input, XStack, Select, ToggleGroup } from 'tamagui';
 import { House } from 'living-mile-high-lib';
-import { HouseQueryProvider, useHouseQuery } from '@/contexts/HouseQueryContext';
-import { Alert, AlertTitle, HouseCompare, HouseQuery, HouseSortBy } from '@/types';
+import { useHouseQuery } from '@/contexts/HouseQueryContext';
+import { Alert, AlertTitle, HouseQuery, HouseSortBy, HouseSortCriteria, PageConfig } from '@/types';
 import { useServices } from '@/contexts/ServiceContext';
 import { useAlert } from '@/contexts/AlertContext';
-import { reverseCompare } from '@/utils/sorting';
+import { HouseQuerySortProvider } from '@/providers/houseQuerySortProvider';
+import Pages from '@/config/pageConfig';
+import { useHouseSort } from '@/contexts/HouseSortContext';
 
 const COLUMNS = 2; // Define the number of columns here
 
@@ -98,54 +100,46 @@ const ToggleGroupItem = styled(ToggleGroup.Item, {
             },
         },
     },
-})
+});
 
-enum ToggleValue {
-    FOR_SALE = 'Projects For Sale',
-    SELECTED_WORK = 'Featured',
-    DEVELOPED = 'Our Work',
-    SOLD = 'Real Estate Sales',
-}
+type PageConfigWithQueries = PageConfig & { queries: HouseQuery[] }
+const QueryPages = Object.values(Pages).filter(page => page.queries !== undefined) as PageConfigWithQueries[]
+const BooleanQueryToggles = Object.fromEntries(QueryPages.map(page => [page.name, page.queries]))
 
-const ToggleQueries: Record<ToggleValue, HouseQuery> = {
-    [ToggleValue.FOR_SALE]: { isForSale: true },
-    [ToggleValue.SELECTED_WORK]: { isSelectedWork: true },
-    [ToggleValue.DEVELOPED]: { isDeveloped: true },
-    [ToggleValue.SOLD]: { isForSale: false },
-}
-
-const createAdminSorts = (houseSorts: { [key in HouseSortBy]: HouseCompare }) => {
-    return {
-        "By Address": [houseSorts[HouseSortBy.ADDRESS]],
-        "By Priority": [houseSorts[HouseSortBy.PRIORITY]],
-        "Default Main Images (last)": [houseSorts[HouseSortBy.NON_DEFAULT]],
-        "Default Main Images (first)": [reverseCompare(houseSorts[HouseSortBy.NON_DEFAULT])],
-        "Created At (newest)": [houseSorts[HouseSortBy.CREATED_AT]],
-        "Created At (oldest)": [reverseCompare(houseSorts[HouseSortBy.CREATED_AT])],
-        "Updated At (newest)": [houseSorts[HouseSortBy.UPDATED_AT]],
-        "Updated At (oldest)": [reverseCompare(houseSorts[HouseSortBy.UPDATED_AT])],
-    }
+const AdminSorts: { [key: string]: HouseSortCriteria[] } = {
+    "By Address": [{ sortBy: HouseSortBy.ADDRESS }],
+    "By Priority": [{ sortBy: HouseSortBy.PRIORITY }],
+    "Default Main Images (last)": [{ sortBy: HouseSortBy.NON_DEFAULT }],
+    "Default Main Images (first)": [{ sortBy: HouseSortBy.NON_DEFAULT, reverse: true }],
+    "Created At (newest)": [{ sortBy: HouseSortBy.CREATED_AT }],
+    "Created At (oldest)": [{ sortBy: HouseSortBy.CREATED_AT, reverse: true }],
+    "Updated At (newest)": [{ sortBy: HouseSortBy.UPDATED_AT }],
+    "Updated At (oldest)": [{ sortBy: HouseSortBy.UPDATED_AT, reverse: true }],
 }
 
 const AdminPanel = () => {
     const router = useRouter();
     const { withAlertAsync } = useAlert();
     const { apiService } = useServices();
-    const { houses, configure, houseSorts } = useHouseQuery();
-    const adminSorts = useMemo(() => createAdminSorts(houseSorts), [houseSorts]);
+    const { houses: unsortedHouses, setHouseQueries } = useHouseQuery();
+    const { sortHouses, setHouseSorts } = useHouseSort();
+    const houses = useMemo(() => sortHouses(unsortedHouses), [unsortedHouses, sortHouses]);
 
-    const [sortName, setSortName] = useState<any>(undefined);
+    const [sortName, setSortName] = useState<string & keyof typeof AdminSorts>("By Address");
     const [addressContains, setAddressContains] = React.useState('');
-    const [toggleValues, setToggleValues] = React.useState<ToggleValue[]>([]);
+    const [toggleKeys, setToggleKeys] = React.useState<string[]>([]);
 
 
     useEffect(() => {
-        const toggleQueries = toggleValues.length === 0 ? [{}] : toggleValues.map(v => ToggleQueries[v]);
-        const finalQueries = toggleQueries.map(q => ({ ...q, addressContains }));
-        configure({
-            query: finalQueries,
-        });
-    }, [configure, addressContains, toggleValues]);
+        const reducedQueries = toggleKeys.reduce((acc, key) => acc.concat(BooleanQueryToggles[key]), [] as HouseQuery[]);
+        const booleanQueries = toggleKeys.length === 0 ? [{}] : reducedQueries;
+        const finalQueries = booleanQueries.map(q => ({ ...q, addressContains }));
+        setHouseQueries(...finalQueries);
+    }, [setHouseQueries, addressContains, toggleKeys]);
+
+    useEffect(() => {
+        setHouseSorts(...AdminSorts[sortName]);
+    }, [sortName])
 
     const handleEdit = (id: string) => {
         router.push(`admin/upsert-house?id=${id}`);
@@ -170,7 +164,7 @@ const AdminPanel = () => {
     }
 
     const handleToggleValues = (values: string[]) => {
-        setToggleValues(values as ToggleValue[]);
+        setToggleKeys(values);
     }
 
     const handleDangerZone = () => {
@@ -195,9 +189,6 @@ const AdminPanel = () => {
 
     const handleSortChange = (value: any) => {
         setSortName(value);
-        configure({
-            sort: adminSorts[value as unknown as keyof typeof adminSorts],
-        });
     };
 
     const columns = getColumns(houses);
@@ -230,13 +221,13 @@ const AdminPanel = () => {
                         type='multiple'
                         onValueChange={handleToggleValues}
                     >
-                        {Object.values(ToggleValue).map(value => (
+                        {Object.keys(BooleanQueryToggles).map(key => (
                             <ToggleGroupItem
-                                key={value}
-                                value={value}
-                                active={toggleValues.includes(value)}
+                                key={key}
+                                value={key}
+                                active={toggleKeys.includes(key)}
                             >
-                                {value}
+                                {key}
                             </ToggleGroupItem>
                         ))}
                     </ToggleGroup>
@@ -249,7 +240,7 @@ const AdminPanel = () => {
                         </Select.Trigger>
                         <Select.Content>
                             <Select.Viewport>
-                                {Object.entries(adminSorts).map(([key, value], index) => (
+                                {Object.keys(AdminSorts).map((key, index) => (
                                     <Select.Item key={key} index={index} value={key}>
                                         <Select.ItemText>{key}</Select.ItemText>
                                     </Select.Item>
@@ -280,9 +271,9 @@ const AdminPanel = () => {
 
 const AdminPage = () => {
     return (
-        <HouseQueryProvider>
+        <HouseQuerySortProvider>
             <AdminPanel />
-        </HouseQueryProvider>
+        </HouseQuerySortProvider>
     )
 }
 
