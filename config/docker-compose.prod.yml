@@ -3,14 +3,14 @@ version: "3.9"
 services:
   caddy:
     build:
-      context: ./caddy
-      dockerfile: Dockerfile
+      context: ./config
+      dockerfile: Dockerfile.caddy
     container_name: caddy
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - ./caddy/Caddyfile.prod:/etc/caddy/Caddyfile
+      - ./config/Caddyfile.prod:/etc/caddy/Caddyfile
       - caddy_data_prod:/data
       - caddy_config_prod:/config
     environment:

@@ -5,22 +5,8 @@
   "repository": "https://github.com/noahkupinsky/Living-Mile-High.git",
   "author": "Noah Kupinsky <noah@kupinsky.com>",
   "private": true,
-  "workspaces": {
-    "packages": [
-      "lmh-cli"
-    ]
-  },
   "scripts": {
-    "test:backend": "yarn --cwd backend test",
-    "test:frontend": "yarn --cwd frontend test",
-    "test": "yarn test:backend && yarn test:frontend",
-    "dev:frontend": "yarn --cwd frontend dev",
-    "dev:backend": "yarn --cwd backend dev",
-    "dev": "concurrently \"yarn dev:frontend\" \"yarn dev:backend\"",
-    "cli": "yarn workspace lmh-cli run start"
+    "cli": "yarn --cwd packages/cli run start"
   },
-  "license": "MIT",
-  "devDependencies": {
-    "concurrently": "^8.2.2"
-  }
+  "license": "MIT"
 }

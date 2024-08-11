@@ -3,14 +3,14 @@ version: "3.9"
 services:
   caddy:
     build:
-      context: ./caddy
-      dockerfile: Dockerfile
+      context: ./config
+      dockerfile: Dockerfile.caddy
     container_name: caddy
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - ./caddy/Caddyfile.staging:/etc/caddy/Caddyfile
+      - ./config/Caddyfile.staging:/etc/caddy/Caddyfile
       - caddy_data_staging:/data
       - caddy_config_staging:/config
     environment:
@@ -85,16 +85,8 @@ networks:
 volumes:
   minio_data_staging:
     driver: local
-    driver_opts:
-      type: none
-      device: ./.local/minio/staging
-      o: bind
   mongo_data_staging:
     driver: local
-    driver_opts:
-      type: none
-      device: ./.local/mongo/staging
-      o: bind
   caddy_data_staging:
     driver: local
   caddy_config_staging:

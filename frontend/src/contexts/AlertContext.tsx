@@ -26,7 +26,7 @@ const AlertWidth: Record<AlertTitle, number> = {
     [AlertTitle.LOADING]: 10,
     [AlertTitle.SUCCESS]: 20,
     [AlertTitle.ERROR]: 25,
-    [AlertTitle.WARNING]: 30,
+    [AlertTitle.WARNING]: 25,
 }
 
 const AlertDefaultDuration: Record<AlertTitle, number> = {

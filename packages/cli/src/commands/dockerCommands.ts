@@ -1,9 +1,10 @@
 import { Command } from 'commander';
 import { dockerRun, dockerDownAll, dockerDown, dockerPush, dockerPull, dockerBuild } from '../utils/dockerUtils';
-import { config } from '../config';
-import { massUploadHouses, setupLocalServices } from '../utils/setupServices';
-import shell from 'shelljs';
-import { loadEnvFile, ROOT_PATH } from '../utils/envUtils';
+import { config, joinRoot } from '../config';
+import { setupLocalServices } from '../utils/setupLocalServices';
+import { massUploadHouses } from '../utils/upload';
+import { loadEnvFile } from '../utils/envUtils';
+import { execSync } from 'child_process';
 
 export function dockerCommands(program: Command) {
     registerDownCommand(program);
@@ -39,19 +40,11 @@ function registerProdCommands(program: Command) {
         });
 
     prod
-        .command('superadmin')
-        .description('Start superadmin service')
-        .action(() => {
-            dockerRun(config.composes.superadmin);
-        });
-
-    prod
         .command('push')
         .description('Build and push prod images')
         .action(() => {
-            dockerRun(config.composes.prodBuild);
+            dockerBuild(config.composes.prodBuild);
             dockerPush(config.composes.prodBuild);
-            dockerDown(config.composes.prodBuild);
         });
 
     prod
@@ -60,7 +53,6 @@ function registerProdCommands(program: Command) {
         .action(() => {
             dockerDown(config.composes.prod);
             dockerDown(config.composes.prodBuild);
-            dockerDown(config.composes.superadmin);
         });
 }
 
@@ -73,7 +65,6 @@ function registerStagingCommands(program: Command) {
         .command('up')
         .description('Start staging containers')
         .action(() => {
-            dockerDown(config.composes.staging);
             dockerRun(config.composes.staging);
         });
 
@@ -104,7 +95,9 @@ function registerDevCommands(program: Command) {
             const compose = config.composes.devServices;
             dockerRun(compose);
             const { FPORT, BPORT } = loadEnvFile(compose.envFile);
-            shell.exec(`cd ${ROOT_PATH} && FPORT=${FPORT} BPORT=${BPORT} yarn dev`);
+            const frontendDev = `cd ${joinRoot('./frontend')} && FPORT=${FPORT} yarn dev`;
+            const backendDev = `cd ${joinRoot('./backend')} && BPORT=${BPORT} yarn dev`;
+            execSync(`npx concurrently "${frontendDev}" "${backendDev}"`, { stdio: 'inherit' });
         });
 
     dev

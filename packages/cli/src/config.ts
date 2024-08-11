@@ -1,8 +1,20 @@
-import dotenv from 'dotenv';
 import path from 'path';
-import { joinRoot } from './utils/envUtils';
 
-dotenv.config({ path: joinRoot('.env') });
+export const ROOT_RELATIVE = '../../..'; // relative to package directory
+
+export const joinRoot = (rest: string) => {
+    return path.resolve(__dirname, ROOT_RELATIVE, rest);
+}
+
+export const ROOT_PATH = joinRoot('');
+
+export const joinEnv = (env: string) => {
+    return joinRoot(`.env.${env}`);
+}
+
+export const joinCompose = (composeFile: string) => {
+    return joinRoot(`config/${composeFile}`);
+}
 
 export class Compose {
     #composeFile: string;
@@ -14,18 +26,17 @@ export class Compose {
     }
 
     get composeFile() {
-        return joinRoot(this.#composeFile);
+        return joinCompose(this.#composeFile);
     }
 
     get envFile() {
-        return joinRoot(`.env.${this.#envFile}`);
+        return joinEnv(this.#envFile);
     }
 }
 
-type ComposeNames = 'superadmin' | 'prod' | 'staging' | 'devServices' | 'stagingServices' | 'prodBuild';
+type ComposeName = 'prod' | 'staging' | 'devServices' | 'stagingServices' | 'prodBuild';
 
-const composes: Record<ComposeNames, Compose> = {
-    superadmin: new Compose('docker-compose.prod-superadmin.yml', 'production'),
+const composes: { [key in ComposeName]: Compose } = {
     prod: new Compose('docker-compose.prod.yml', 'production'),
     prodBuild: new Compose('docker-compose.prod-build.yml', 'production'),
     staging: new Compose('docker-compose.staging.yml', 'staging'),

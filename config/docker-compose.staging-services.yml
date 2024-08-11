@@ -1,9 +1,9 @@
-version: "3.7"
+version: "3.9"
 
 services:
   minio:
     image: "minio/minio:latest"
-    container_name: minio_dev
+    container_name: minio_staging
     ports:
       - "9000:9000"
       - "9090:9090"
@@ -11,27 +11,20 @@ services:
       MINIO_ROOT_USER: "${CDN_KEY}"
       MINIO_ROOT_PASSWORD: "${CDN_SECRET}"
     volumes:
-      - "minio_data_dev:/data/minio"
+      - "minio_data_staging:/data/minio"
     command: minio server /data/minio --console-address ":9090"
 
   mongo:
     image: mongo:latest
-    container_name: mongo_dev
+    container_name: mongo_staging
     ports:
       - "27017:27017"
     volumes:
-      - mongo_data_dev:/data/db
+      - mongo_data_staging:/data/db
 
 volumes:
-  minio_data_dev:
+  minio_data_staging:
     driver: local
-    driver_opts:
-      type: none
-      device: ./.local/minio/development
-      o: bind
-  mongo_data_dev:
+
+  mongo_data_staging:
     driver: local
-    driver_opts:
-      type: none
-      device: ./.local/mongo/development
-      o: bind

@@ -1,11 +1,17 @@
 import { execSync } from 'child_process';
-import { Compose, config } from '../config';
+import { Compose, config, ROOT_PATH } from '../config';
+import shell from 'shelljs';
 
-export function dockerBuild(compose: Compose) {
+function execCompose(compose: Compose, command: string) {
     const composeFile = compose.composeFile;
     const envFile = compose.envFile;
+    shell.cd(ROOT_PATH);
+    shell.exec(`docker compose -f ${composeFile} --env-file ${envFile} ${command}`);
+}
+
+export function dockerBuild(compose: Compose) {
     console.log('Building Docker images...');
-    execSync(`docker compose -f ${composeFile} --env-file ${envFile} build`, { stdio: 'inherit' });
+    execCompose(compose, 'build');
 }
 
 export function dockerRun(compose: Compose) {
@@ -14,27 +20,18 @@ export function dockerRun(compose: Compose) {
     const composeFile = compose.composeFile;
     const envFile = compose.envFile;
     console.log(`Starting Docker containers using compose file ${composeFile} and env file ${envFile}...`);
-    console.log(`docker compose -f ${composeFile} --env-file ${envFile} up --build -d`);
-    execSync(`docker compose -f ${composeFile} --env-file ${envFile} up --build -d`, { stdio: 'inherit' });
+    execCompose(compose, 'up --build -d');
 }
 
 export function dockerDown(compose: Compose) {
     const composeFile = compose.composeFile;
-    const envFile = compose.envFile;
     console.log(`Shutting down Docker containers using ${composeFile}...`);
-    execSync(`docker compose -f ${composeFile} --env-file ${envFile} down`, { stdio: 'inherit' });
+    execCompose(compose, 'down');
 }
 
 export function dockerDownAll() {
     console.log('Shutting down all Docker containers...');
-    for (const compose of Object.values(config.composes)) {
-        dockerDown(compose);
-    }
-}
-
-export function dockerCleanup(images: string[]) {
-    console.log('Cleaning up Docker images...');
-    execSync(`docker rmi ${images.join(' ')}`, { stdio: 'inherit' });
+    Object.values(config.composes).forEach(dockerDown);
 }
 
 export function dockerRemoveVolumes() {
@@ -53,12 +50,21 @@ export function dockerPull(compose: Compose) {
     const composeFile = compose.composeFile;
     const envFile = compose.envFile;
     console.log(`Pulling Docker images using compose file ${composeFile}...`);
-    execSync(`docker-compose -f ${composeFile} --env-file ${envFile} pull`, { stdio: 'inherit' });
+    execCompose(compose, 'pull');
 }
 
 export function dockerPush(compose: Compose) {
     const composeFile = compose.composeFile;
     const envFile = compose.envFile;
     console.log(`Pushing Docker images using compose file ${composeFile} and env file ${envFile}...`);
-    execSync(`docker compose -f ${composeFile} --env-file ${envFile} push`, { stdio: 'inherit' });
+    execCompose(compose, 'push');
+}
+
+export function withCompose(compose: Compose, fn: () => void) {
+    dockerRun(compose);
+    try {
+        fn();
+    } finally {
+        dockerDown(compose);
+    }
 }

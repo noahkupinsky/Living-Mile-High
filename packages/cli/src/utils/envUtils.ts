@@ -1,23 +1,19 @@
 import { S3Client, GetObjectCommand, PutObjectCommand, GetObjectCommandOutput } from '@aws-sdk/client-s3';
 import fs from 'fs';
-import path from 'path';
 import { Readable } from 'stream';
 import dotenv from 'dotenv';
+import { joinEnv, joinRoot } from '../config';
 
-export const ROOT_PATH = '..'; // relative to package directory
-
-export const joinRoot = (rest: string) => {
-    return path.resolve(ROOT_PATH, rest);
-}
-
-export const loadEnvFile = (envFile: string) => {
-    const envConfig = dotenv.parse(fs.readFileSync(envFile));
+export const loadEnvFile = (envPath: string) => {
+    const envConfig = dotenv.parse(fs.readFileSync(envPath));
     return envConfig;
 };
 
 const prodEnvFile = joinRoot('.env.production');
 
-const { CDN_BUCKET, CDN_ENDPOINT, CDN_KEY, CDN_SECRET, CDN_REGION } = loadEnvFile(prodEnvFile);
+const { CDN_BUCKET, CDN_ENDPOINT, CDN_KEY, CDN_SECRET, CDN_REGION, MONGO_URI } = loadEnvFile(prodEnvFile);
+
+export const PROD_MONGO_URI = MONGO_URI;
 
 const cdnClient = new S3Client({
     endpoint: CDN_ENDPOINT,
@@ -39,10 +35,10 @@ async function streamToFile(stream: Readable, filePath: string) {
 }
 
 export async function pullEnv(env: string, doForce: boolean) {
-    const targetPath = joinRoot(env);
+    const targetPath = joinEnv(env);
 
     if (fs.existsSync(targetPath) && !doForce) {
-        console.log(`File ${env} already exists in the root directory. Use -f to overwrite.`);
+        console.log(`Env ${env} already. Use -f to overwrite.`);
         return;
     }
 
@@ -65,10 +61,10 @@ export async function pullEnv(env: string, doForce: boolean) {
 }
 
 export async function pushEnv(env: string) {
-    const targetPath = joinRoot(env);
+    const targetPath = joinEnv(env);
 
     if (!fs.existsSync(targetPath)) {
-        console.log(`File ${env} does not exist in the root directory.`);
+        console.log(`Env ${env} does not exist.`);
         return;
     }
 

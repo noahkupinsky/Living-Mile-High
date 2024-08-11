@@ -1,5 +1,5 @@
 {
-  "name": "lmh-cli",
+  "name": "cli",
   "version": "1.0.4",
   "description": "",
   "main": "dist/cli.js",
