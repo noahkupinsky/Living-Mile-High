@@ -1,16 +1,14 @@
-version: "3.9"
-
 services:
   caddy:
     build:
-      context: ./config
+      context: ./
       dockerfile: Dockerfile.caddy
     container_name: caddy
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - ./config/Caddyfile.prod:/etc/caddy/Caddyfile
+      - ./Caddyfile.prod:/etc/caddy/Caddyfile
       - caddy_data_prod:/data
       - caddy_config_prod:/config
     environment:
@@ -31,7 +29,7 @@ services:
     expose:
       - ${FPORT}
     env_file:
-      - .env.production
+      - ../.env.production
     networks:
       - internal
 
@@ -41,7 +39,7 @@ services:
     expose:
       - ${BPORT}
     env_file:
-      - .env.production
+      - ../.env.production
     networks:
       - internal
 

@@ -133,4 +133,4 @@ mocks
 .pnp.*
 
 # Ignore all files
-data-transfer/output
+*/data-transfer/output

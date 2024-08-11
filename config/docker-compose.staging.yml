@@ -1,16 +1,14 @@
-version: "3.9"
-
 services:
   caddy:
     build:
-      context: ./config
+      context: ./
       dockerfile: Dockerfile.caddy
     container_name: caddy
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - ./config/Caddyfile.staging:/etc/caddy/Caddyfile
+      - ./Caddyfile.staging:/etc/caddy/Caddyfile
       - caddy_data_staging:/data
       - caddy_config_staging:/config
     environment:
@@ -24,7 +22,7 @@ services:
 
   frontend:
     build:
-      context: ./frontend
+      context: ../frontend
       dockerfile: Dockerfile
     container_name: frontend
     depends_on:
@@ -32,19 +30,19 @@ services:
     expose:
       - ${FPORT}
     env_file:
-      - .env.staging
+      - ../.env.staging
     networks:
       - internal
 
   backend:
     build:
-      context: ./backend
+      context: ../backend
       dockerfile: Dockerfile
     container_name: backend
     expose:
       - "${BPORT}"
     env_file:
-      - .env.staging
+      - ../.env.staging
     depends_on:
       - mongo
       - minio
