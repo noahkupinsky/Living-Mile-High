@@ -32,7 +32,7 @@ const BooleanRow = styled(View, {
     marginBottom: 10,
 });
 
-const BooleanText = styled(Text, {
+const SmallText = styled(Text, {
     textAlign: 'center',
     fontSize: 10,
     color: '$darkGray',
@@ -66,7 +66,7 @@ const HouseFormClassification: React.FC<HouseFormClassificationProps> = ({ formD
             <ClassificationLabelContainer>
                 <ClassificationLabel>Booleans</ClassificationLabel>
             </ClassificationLabelContainer>
-            <BooleanText>{`(All houses NOT For Sale will be shown on ${Pages.SOLD.name})`}</BooleanText>
+            <SmallText>{`(All houses NOT For Sale will be shown on ${Pages.SOLD.name})`}</SmallText>
             {(Object.entries(HOUSE_BOOLEAN_LABELS) as [HouseBoolean, string][]).map(([key, label]) => (
                 <BooleanRow key={key}>
                     <FormLabel>{`${label}?`}</FormLabel>
@@ -81,14 +81,15 @@ const HouseFormClassification: React.FC<HouseFormClassificationProps> = ({ formD
             <ClassificationLabelContainer>
                 <ClassificationLabel>Priority</ClassificationLabel>
             </ClassificationLabelContainer>
+            <SmallText>{`(Priority 1 goes first, then 2, 3, etc.)`}</SmallText>
             <XStack
                 justifyContent='space-between'
                 marginBottom={5}>
-                <Label>Priority:</Label>
+                <Label>{'Priority:'}</Label>
                 <Input
                     value={formData.priority?.toString() ?? ''}
                     onChangeText={handlePriorityChange}
-                    width={100} />
+                    width={80} />
             </XStack>
         </ClassificationContainer>
     );
