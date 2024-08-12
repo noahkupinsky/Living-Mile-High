@@ -8,7 +8,7 @@ import { useAlert } from '@/contexts/AlertContext';
 import { useServices } from '@/contexts/ServiceContext';
 import { Input, Text, ListItem, XStack, YStack, styled, Button } from 'tamagui';
 
-export const BackupListItem = styled(ListItem, {
+const BackupListItem = styled(ListItem, {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -20,7 +20,7 @@ export const BackupListItem = styled(ListItem, {
     marginBottom: 8,
 });
 
-export const TitleArea = styled(XStack, {
+const TitleArea = styled(XStack, {
     flex: 1,
     justifyContent: 'flex-start',
     overflow: 'hidden',
@@ -29,13 +29,13 @@ export const TitleArea = styled(XStack, {
     width: '70%'
 });
 
-export const ButtonArea = styled(YStack, {
+const ButtonArea = styled(YStack, {
     justifyContent: 'flex-end',
     gap: 5, // Adjusted for smaller padding between buttons
     width: '26%',
 });
 
-export const StyledButton = styled(Button, {
+const StyledButton = styled(Button, {
     borderRadius: 8,
     padding: 0,
     borderWidth: 1,
