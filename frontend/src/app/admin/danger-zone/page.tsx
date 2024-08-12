@@ -1,15 +1,47 @@
 'use client';
 
 import React, { useCallback, useEffect, useState } from 'react';
-import services from '@/di';
-import { BackupIndex, EventMessage } from 'living-mile-high-lib';
-import BackupItem from './BackupItem';
+import { BackupIndex, BackupType, EventMessage } from 'living-mile-high-lib';
 import CreateBackupSection from './CreateBackupSection';
 import { Alert, AlertTitle, SiteEventHandler } from '@/types';
-
-import { Button, YStack, styled } from 'tamagui';
 import { useAlert } from '@/contexts/AlertContext';
 import { useServices } from '@/contexts/ServiceContext';
+import { Input, Text, ListItem, XStack, YStack, styled, Button } from 'tamagui';
+
+export const BackupListItem = styled(ListItem, {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 10,
+    width: '100%',
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    marginBottom: 8,
+});
+
+export const TitleArea = styled(XStack, {
+    flex: 1,
+    justifyContent: 'flex-start',
+    overflow: 'hidden',
+    flexGrow: 1,
+    flexShrink: 1,
+    width: '70%'
+});
+
+export const ButtonArea = styled(YStack, {
+    justifyContent: 'flex-end',
+    gap: 5, // Adjusted for smaller padding between buttons
+    width: '26%',
+});
+
+export const StyledButton = styled(Button, {
+    borderRadius: 8,
+    padding: 0,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    size: 20
+});
 
 const PageContainer = styled(YStack, {
     justifyContent: 'center',
@@ -162,7 +194,7 @@ const DangerZonePage = () => {
             'Caution! This will remove all expired automatic backups, ' +
             'and considerably consolidate the remaining automatic backups. ' +
             'It will then permanently delete all assets (images) that are no ' +
-            'longer used by neither the site nor a backup of the site. ' +
+            'longer used by either the site or a backup of the site. ' +
             'This operation is safe, with regard to the current data on the website. ' +
             'It will leave manual backups and currently used assets completely untouched. ' +
             'Are you sure that you want to proceed ? ');
@@ -178,6 +210,46 @@ const DangerZonePage = () => {
         }
     };
 
+    const renderBackup = (backup: BackupIndex) => {
+        const isEditing = editingBackupKey === backup.key;
+
+        return (
+            <BackupListItem key={backup.key}>
+                <TitleArea>
+                    {isEditing ? (
+                        <Input
+                            value={renameBackupName}
+                            onChangeText={setRenameBackupName}
+                            onBlur={handleRenameBackup}
+                            autoFocus
+                        />
+                    ) : (
+                        <Text numberOfLines={1} ellipsizeMode="tail" style={{ flexGrow: 1, flexShrink: 1 }}>{backup.name}</Text>
+                    )}
+                </TitleArea>
+                <ButtonArea>
+                    {backup.backupType === BackupType.MANUAL && (
+                        isEditing ? (
+                            <StyledButton onPress={() => {
+                                setEditingBackupKey('');
+                                setRenameBackupName('');
+                            }}>Cancel</StyledButton>
+                        ) : (
+                            <StyledButton onPress={() => {
+                                setEditingBackupKey(backup.key);
+                                setRenameBackupName(backup.name);
+                            }}>Rename</StyledButton>
+                        )
+                    )}
+                    <StyledButton onPress={() => handleRestoreBackup(backup.key)}>Restore</StyledButton>
+                    {backup.backupType === BackupType.MANUAL && (
+                        <StyledButton color="red" onPress={() => handleDeleteBackup(backup.key)}>Delete</StyledButton>
+                    )}
+                </ButtonArea>
+            </BackupListItem>
+        )
+    }
+
     return (
         <PageContainer>
             <CreateBackupSection
@@ -186,28 +258,7 @@ const DangerZonePage = () => {
                 handleCreateBackup={handleCreateBackup}
             />
 
-            {backups.map((backup) => (
-                <BackupItem
-                    key={backup.key}
-                    backup={backup}
-                    isEditing={editingBackupKey === backup.key}
-                    renameBackupName={renameBackupName}
-                    titleWidth="70%"
-                    buttonsWidth="26%"
-                    onRenameChange={setRenameBackupName}
-                    onRenameBlur={handleRenameBackup}
-                    onStartEditing={() => {
-                        setEditingBackupKey(backup.key);
-                        setRenameBackupName(backup.name);
-                    }}
-                    onCancelEditing={() => {
-                        setEditingBackupKey('');
-                        setRenameBackupName('');
-                    }}
-                    onRestore={() => handleRestoreBackup(backup.key)}
-                    onDelete={() => handleDeleteBackup(backup.key)}
-                />
-            ))}
+            {backups.map((backup) => renderBackup(backup))}
 
             <DangerButton onPress={handlePruneSiteData}>
                 Prune Site Data

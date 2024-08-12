@@ -10,11 +10,8 @@ import {
     DeleteObjectCommandOutput,
     GetObjectCommand,
     GetObjectCommandOutput,
-    CopyObjectCommand,
-    CopyObjectCommandOutput,
     HeadObjectCommand,
     HeadObjectCommandOutput,
-    MetadataDirective
 } from "@aws-sdk/client-s3";
 import { mockClient } from "aws-sdk-client-mock";
 import { Readable } from "stream";

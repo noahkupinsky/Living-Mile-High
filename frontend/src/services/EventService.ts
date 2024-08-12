@@ -42,11 +42,11 @@ export class EventService {
             this.websocket.onerror = (error) => {
                 console.error('WebSocket failed:', error);
                 this.websocket!.close();
-                this.websocket = null; // Reset the websocket so it can be recreated
+                this.websocket = null;
             };
 
             this.websocket.onclose = () => {
-                this.websocket = null; // Reset the websocket so it can be recreated
+                this.websocket = null;
             };
         }
     }

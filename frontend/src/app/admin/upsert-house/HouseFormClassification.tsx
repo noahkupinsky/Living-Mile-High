@@ -84,7 +84,7 @@ const HouseFormClassification: React.FC<HouseFormClassificationProps> = ({ formD
             <SmallText>{`(Priority 1 goes first, then 2, 3, etc.)`}</SmallText>
             <XStack
                 justifyContent='space-between'
-                marginBottom={5}>
+                marginBottom={15}>
                 <Label>{'Priority:'}</Label>
                 <Input
                     value={formData.priority?.toString() ?? ''}

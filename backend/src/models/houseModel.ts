@@ -28,63 +28,45 @@ const HouseModel = model<HouseDocument>('House', HouseSchema);
 
 export function houseDocumentToObject(doc: HouseDocument): House {
     const {
-        id,
-        isDeveloped,
-        isForSale,
-        isSelectedWork,
-        address,
-        mainImage,
-        images,
-        neighborhood,
+        id, createdAt, updatedAt,
+        isDeveloped, isForSale, isSelectedWork,
+        address, neighborhood,
+        mainImage, images,
         priority,
         stats,
-        createdAt,
-        updatedAt,
     } = doc;
     const createdAtString = createdAt?.toISOString();
     const updatedAtString = updatedAt?.toISOString();
 
     const house: House = {
-        id,
-        isDeveloped,
-        isForSale,
-        isSelectedWork,
-        address,
-        mainImage,
-        images,
-        neighborhood,
+        id, createdAt: createdAtString, updatedAt: updatedAtString,
+        isDeveloped, isForSale, isSelectedWork,
+        address, neighborhood,
+        mainImage, images,
         priority,
         stats,
-        createdAt: createdAtString,
-        updatedAt: updatedAtString,
     };
 
     return house;
 }
 
+// the Object -> Document direction omits id, createdAt, and updatedAt 
+// because it is assumed that these fields are handled by the database
 type HouseDocumentUpsert = Omit<HouseRecord, 'id' | 'createdAt' | 'updatedAt'>;
 
 export function houseObjectToDocument(house: House): HouseDocumentUpsert {
     const {
-        isDeveloped,
-        isForSale,
-        isSelectedWork,
-        address,
-        mainImage,
-        images,
-        neighborhood,
+        isDeveloped, isForSale, isSelectedWork,
+        address, neighborhood,
+        mainImage, images,
         priority,
         stats
     } = house;
 
     const doc = {
-        isDeveloped,
-        isForSale,
-        isSelectedWork,
-        address,
-        mainImage,
-        images,
-        neighborhood,
+        isDeveloped, isForSale, isSelectedWork,
+        address, neighborhood,
+        mainImage, images,
         priority,
         stats: stats || {},
     };

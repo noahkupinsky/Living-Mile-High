@@ -60,10 +60,10 @@ export function dockerPush(compose: Compose) {
     execCompose(compose, 'push');
 }
 
-export function withCompose(compose: Compose, fn: () => void) {
+export async function withCompose(compose: Compose, fn: () => Promise<void>) {
     dockerRun(compose);
     try {
-        fn();
+        await fn();
     } finally {
         dockerDown(compose);
     }

@@ -9,6 +9,8 @@ from io import BytesIO
 from PIL import Image
 from bs4 import BeautifulSoup
 
+# this file is a little gross, partially because the old website was too
+
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
 output_folder = os.path.join(script_dir, 'output')

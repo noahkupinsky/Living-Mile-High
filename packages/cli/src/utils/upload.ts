@@ -1,5 +1,5 @@
 import path from "path";
-import { joinEnv, joinRoot } from "../config";
+import { joinEnv } from "../config";
 import fs from "fs";
 import { House, LoginRequest, UploadAssetResponse, UpsertHouseRequest } from "living-mile-high-lib";
 import { loadEnvFile } from "./envUtils";

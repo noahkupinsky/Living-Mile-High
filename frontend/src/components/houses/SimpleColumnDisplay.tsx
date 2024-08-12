@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { styled, View, XStack, YStack } from 'tamagui';
+import { styled, XStack, YStack } from 'tamagui';
 import { House } from 'living-mile-high-lib';
 import { useSizing } from '@/contexts/SizingContext';
 import { calculateMaxHeight } from '@/utils/houseRendering';

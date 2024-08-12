@@ -1,3 +1,4 @@
+import { INSTA_URL } from "@/config/constants";
 import { View, Image } from "tamagui";
 
 type InstagramProps = {
@@ -9,7 +10,7 @@ const Instagram: React.FC<InstagramProps> = ({ size, ...props }) => {
     return (
         <View
             {...props}>
-            <a href="https://www.instagram.com/lmhdevelopmentco/" style={{ cursor: "pointer" }}>
+            <a href={INSTA_URL} style={{ cursor: "pointer" }}>
                 <Image
                     src="/instagram-logo.png"
                     alt="Instagram"

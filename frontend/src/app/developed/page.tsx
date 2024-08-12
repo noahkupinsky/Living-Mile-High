@@ -1,7 +1,6 @@
 'use client'
 
-import { useHouseQuery, HouseQueryProvider } from "@/contexts/HouseQueryContext";
-import React, { useEffect } from "react";
+import React from 'react';
 import SimpleColumnDisplay from "@/components/houses/SimpleColumnDisplay";
 import SiteDataLoader from "@/components/layout/SiteDataLoader";
 import { useCarousel } from "@/contexts/CarouselContext";

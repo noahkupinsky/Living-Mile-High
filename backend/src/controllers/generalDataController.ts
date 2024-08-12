@@ -1,7 +1,7 @@
 import { ExpressEndpoint } from "~/@types";
 import { services } from "~/di";
 import { updateSite } from "./updateController";
-import { generateEventId, UpdateGeneralDataRequest, UpdateGeneralDataResponse } from "living-mile-high-lib";
+import { UpdateGeneralDataRequest, UpdateGeneralDataResponse } from "living-mile-high-lib";
 
 const generalDataService = () => services().generalDataService;
 

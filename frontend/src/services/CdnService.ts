@@ -1,20 +1,9 @@
 'use client';
 
-import axios, { AxiosInstance } from 'axios';
 import { CdnFixedKey, SiteData } from 'living-mile-high-lib';
 import { env } from 'next-runtime-env';
 
 const cdnUrl = () => env('NEXT_PUBLIC_CDN_URL')!;
-
-async function fetchObject(objectKey: string, baseUrl: string) {
-
-
-    try {
-
-    } catch (error: any) {
-        console.error(`Failed to fetch object: ${objectKey}`, error.message);
-    }
-}
 
 export class CdnService {
     defaultHomePageImages(): string[] {

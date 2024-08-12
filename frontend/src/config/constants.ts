@@ -1,5 +1,4 @@
-import { Compare, HouseStatKeys } from "@/types";
-import { House } from "living-mile-high-lib";
+import { HouseStatKeys } from "@/types";
 
 export const HOME_PAGE_INTERVAL = 2000;
 
@@ -38,6 +37,7 @@ export const THEME_SEQUENCE = [
 export const SPLIT_CHAR = '$';
 export const PHONE_NUMBER = '303-819-5250';
 export const EMAIL_ADDRESS = 'tina@livingmilehigh.com';
+export const INSTA_URL = 'https://www.instagram.com/lmhdevelopmentco/';
 
 export const MAX_WIDTH = 150; //rem
 export const OUTER_BORDER = 2; //minV

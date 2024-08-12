@@ -31,7 +31,7 @@ const StatRow = styled(View, {
 });
 
 const StatInput = styled(Input, {
-    width: 100, // Reduce the width
+    width: 100,
 });
 
 type HouseFormStatsProps = {

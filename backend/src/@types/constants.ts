@@ -33,3 +33,5 @@ export enum AssetConfig {
 }
 
 export const REFRESH_CDN_CACHE_MAX_FREQUENCY = 1000;
+
+export const CONTACT_LOG_EXPIRES_IN_SECONDS = 60 * 60 * 24;

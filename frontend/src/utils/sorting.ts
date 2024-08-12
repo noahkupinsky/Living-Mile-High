@@ -1,5 +1,4 @@
-import { Compare, HouseCompare, HouseSortBy } from "@/types";
-import { House } from "living-mile-high-lib";
+import { Compare } from '@/types';
 
 export const createMultiCompare = <T extends any>(compareList: Compare<T>[]): Compare<T> => {
     const sortFromIndex = (a: T, b: T, compares: Compare<T>[], i: number): number => {

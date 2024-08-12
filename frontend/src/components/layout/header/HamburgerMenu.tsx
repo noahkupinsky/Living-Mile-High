@@ -78,7 +78,6 @@ const HamburgerMenuNavigation: React.FC<HamburgerMenuNavigationProps> = ({ tabs,
     );
 };
 
-// Inline SVG for Hamburger Icon
 const HamburgerIconContainer = styled(View, {
     cursor: 'pointer',
 });

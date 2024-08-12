@@ -13,6 +13,7 @@ const router = Router();
 // public routes
 
 router.use('/auth', authRouter);
+router.post('/send-contact-email', sendContactEmail);
 
 // protected routes
 
@@ -21,6 +22,5 @@ router.use('/general', verifyToken, generalDataRouter);
 router.use('/backup', verifyToken, backupRouter);
 router.use('/asset', verifyToken, assetRouter);
 router.post('/prune', verifyToken, pruneSite);
-router.post('/send-contact-email', sendContactEmail);
 
 export default router;

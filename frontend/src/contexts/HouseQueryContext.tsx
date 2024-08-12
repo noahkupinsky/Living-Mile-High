@@ -33,7 +33,7 @@ export const HouseQueryProvider = ({ children }: { children: React.ReactNode }) 
             if (query.isForSale !== undefined && house.isForSale !== query.isForSale) return false;
             if (query.isDeveloped !== undefined && house.isDeveloped !== query.isDeveloped) return false;
             if (query.addressContains && !caseInsensitiveContains(house.address, query.addressContains)) return false;
-            if (query.neighborhoodContains && house.neighborhood && !caseInsensitiveContains(house.neighborhood, query.neighborhoodContains)) return false;
+            if (query.neighborhoodContains && (!house.neighborhood || !caseInsensitiveContains(house.neighborhood, query.neighborhoodContains))) return false;
             return true;
         });
     }, []);

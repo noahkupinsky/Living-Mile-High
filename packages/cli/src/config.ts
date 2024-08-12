@@ -34,11 +34,12 @@ export class Compose {
     }
 }
 
-type ComposeName = 'prod' | 'staging' | 'devServices' | 'stagingServices' | 'prodBuild';
+type ComposeName = 'prod' | 'staging' | 'devServices' | 'stagingServices' | 'prodBuild' | 'prodServices';
 
 const composes: { [key in ComposeName]: Compose } = {
     prod: new Compose('docker-compose.prod.yml', 'production'),
     prodBuild: new Compose('docker-compose.prod-build.yml', 'production'),
+    prodServices: new Compose('docker-compose.prod-services.yml', 'production'),
     staging: new Compose('docker-compose.staging.yml', 'staging'),
     stagingServices: new Compose('docker-compose.staging-services.yml', 'staging'),
     devServices: new Compose('docker-compose.dev-services.yml', 'development'),

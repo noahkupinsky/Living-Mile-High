@@ -139,7 +139,7 @@ const AdminPanel = () => {
 
     useEffect(() => {
         setHouseSorts(...AdminSorts[sortName]);
-    }, [sortName])
+    }, [setHouseSorts, sortName])
 
     const handleEdit = (id: string) => {
         router.push(`admin/upsert-house?id=${id}`);

@@ -51,7 +51,7 @@ interface ForSaleHouseProps {
     maxHeight: number;
 }
 
-const IMAGE_PERCENTAGE = 0.7;
+const IMAGE_PERCENTAGE = 0.7; // how much of the horizontal space does the image take up
 const BOLD_PERCENTAGE = (1 - IMAGE_PERCENTAGE) * 0.075;
 const STAT_PERCENTAGE = (1 - IMAGE_PERCENTAGE) * 0.065;
 

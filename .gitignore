@@ -132,5 +132,9 @@ mocks
 .yarn/install-state.gz
 .pnp.*
 
+# ds store
+*/.DS_Store
+.DS_Store
+
 # Ignore all files
 */data-transfer/output

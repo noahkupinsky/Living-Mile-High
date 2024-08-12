@@ -6,7 +6,7 @@ import { useServices } from './ServiceContext';
 type AuthContextType = {
     isAuthenticated: boolean;
     login: (username: string, password: string) => Promise<boolean>;
-    checkAuthentication: () => Promise<void>; // Expose this method
+    checkAuthentication: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);

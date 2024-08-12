@@ -9,11 +9,9 @@ export const loadEnvFile = (envPath: string) => {
     return envConfig;
 };
 
-const prodEnvFile = joinRoot('.env.production');
+const prodEnvFile = joinEnv('production');
 
-const { CDN_BUCKET, CDN_ENDPOINT, CDN_KEY, CDN_SECRET, CDN_REGION, MONGO_URI } = loadEnvFile(prodEnvFile);
-
-export const PROD_MONGO_URI = MONGO_URI;
+const { CDN_BUCKET, CDN_ENDPOINT, CDN_KEY, CDN_SECRET, CDN_REGION } = loadEnvFile(prodEnvFile);
 
 const cdnClient = new S3Client({
     endpoint: CDN_ENDPOINT,

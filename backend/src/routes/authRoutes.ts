@@ -8,8 +8,4 @@ router.post('/login', login);
 
 router.get('/verify', verifyToken, verify);
 
-router.get('/data', verifyToken, async (req, res) => {
-    res.json({ data: 'yo' });
-});
-
 export default router;

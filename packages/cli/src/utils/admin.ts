@@ -1,7 +1,5 @@
 import { AdminSchema, hashPassword } from "living-mile-high-lib";
 import mongoose, { model } from "mongoose";
-import { loadEnvFile } from "./envUtils";
-import { joinEnv } from "../config";
 
 export const AdminModel = model('Admin', AdminSchema);
 

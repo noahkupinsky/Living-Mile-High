@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { styled, View, Text, Input, TextArea, Button, YStack, XStack, Checkbox } from 'tamagui';
+import { styled, View, Text, Input, TextArea, YStack, XStack } from 'tamagui';
 import { minV } from '@/utils/misc';
 import validator from 'validator';
 import { useAlert } from '@/contexts/AlertContext';

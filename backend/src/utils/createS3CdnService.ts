@@ -2,7 +2,7 @@ import { S3Client } from "@aws-sdk/client-s3";
 import { RefreshCdnCache, S3Config } from "~/@types";
 import { mockS3Cdn } from "./inMemoryCdn";
 import axios from "axios";
-import withLock, { limitFrequency } from "./locks";
+import { limitFrequency } from "./locks";
 import { REFRESH_CDN_CACHE_MAX_FREQUENCY } from "~/@types/constants";
 
 export async function createInMemoryS3CdnConfig(): Promise<S3Config> {

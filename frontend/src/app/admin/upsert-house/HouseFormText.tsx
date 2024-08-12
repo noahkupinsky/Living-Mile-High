@@ -18,12 +18,6 @@ const FormLabelText = styled(Label, {
     fontWeight: 'bold',
 });
 
-const FormLabel = ({ children }: { children: React.ReactNode }) => (
-    <FormLabelContainer>
-        <FormLabelText>{children}</FormLabelText>
-    </FormLabelContainer>
-)
-
 const TextInput = styled(Input, {
     flex: 1,
 });
@@ -90,13 +84,18 @@ const HouseFormText: React.FC<HouseFormTextProps> = ({ formData, setFormData, ho
 
     return (
         <TextContainer>
-            <FormLabel>Address</FormLabel>
+            <FormLabelContainer>
+                <FormLabelText>Address</FormLabelText>
+            </FormLabelContainer>
             <TextInput
                 value={formData.address}
                 onChange={(e: any) => handleInputChange('address', e.nativeEvent.text)}
             />
 
-            <FormLabel>Neighborhood</FormLabel>
+            <FormLabelContainer>
+                <FormLabelText>Neighborhood</FormLabelText>
+            </FormLabelContainer>
+
             <Row>
                 <DropdownButton onPress={handleDropdownToggle}>▼</DropdownButton>
                 <TextInput

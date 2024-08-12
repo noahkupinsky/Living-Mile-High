@@ -7,8 +7,8 @@ const server = getServer();
 
 const startServer = async () => {
     try {
-        const { MOCK, BPORT } = env();
-        await setupApp(MOCK === 'true');
+        const { BPORT } = env();
+        await setupApp();
 
         await ensureFixedKeysExist();
 

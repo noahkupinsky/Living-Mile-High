@@ -2,8 +2,7 @@
 
 import SelectedWorkDisplay from './SelectedWorkDisplay';
 import SiteDataLoader from '@/components/layout/SiteDataLoader';
-import { HouseQueryProvider, useHouseQuery } from '@/contexts/HouseQueryContext';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useSizing } from '@/contexts/SizingContext';
 import { HouseQuerySortProvider, useHouseQuerySort } from '@/providers/houseQuerySortProvider';
 import Pages from '@/config/pageConfig';

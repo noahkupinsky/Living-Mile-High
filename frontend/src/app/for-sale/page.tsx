@@ -1,8 +1,6 @@
 'use client'
 
 import SiteDataLoader from "@/components/layout/SiteDataLoader";
-import { HouseQueryProvider, useHouseQuery } from "@/contexts/HouseQueryContext";
-import { useEffect } from "react";
 import ForSaleHouse from "./ForSaleHouse";
 import { View } from "react-native";
 import { styled } from "tamagui";

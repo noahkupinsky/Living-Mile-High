@@ -25,18 +25,18 @@ export class RealServiceManager implements SiteServiceManager {
             DO_ENDPOINT_ID
         } = env();
 
-        await mongoose.connect(MONGODB_URI, {});
+        await mongoose.connect(MONGODB_URI!, {});
 
         const refreshCdnCache = DO_API_TOKEN && DO_ENDPOINT_ID ? createDORefreshCdnCache(DO_API_TOKEN, DO_ENDPOINT_ID) : undefined;
 
         const s3CdnConfig = createS3Config(
             {
-                endpoint: CDN_ENDPOINT,
-                region: CDN_REGION,
-                bucket: CDN_BUCKET,
-                key: CDN_KEY,
-                secret: CDN_SECRET,
-                baseUrl: NEXT_PUBLIC_CDN_URL,
+                endpoint: CDN_ENDPOINT!,
+                region: CDN_REGION!,
+                bucket: CDN_BUCKET!,
+                key: CDN_KEY!,
+                secret: CDN_SECRET!,
+                baseUrl: NEXT_PUBLIC_CDN_URL!,
                 refreshCache: refreshCdnCache
             }
         );

@@ -2,7 +2,6 @@
 
 import React, { createContext, useState, useEffect, useContext, useCallback } from 'react';
 import { EventMessage, GeneralData, House, SiteData } from 'living-mile-high-lib';
-import services from '@/di';
 import { SiteEventHandler } from '@/types';
 import { useServices } from './ServiceContext';
 

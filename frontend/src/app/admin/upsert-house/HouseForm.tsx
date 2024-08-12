@@ -6,7 +6,6 @@ import HouseFormClassification from './HouseFormClassification';
 import HouseFormStats from './HouseFormStats';
 import HouseFormImages from './HouseFormImages';
 import HouseFormText from './HouseFormText';
-import services from '@/di';
 import { objectsEqualTimestampless } from '@/utils/misc';
 import { useAlert } from '@/contexts/AlertContext';
 import { Alert, AlertTitle } from '@/types';

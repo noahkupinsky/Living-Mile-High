@@ -113,6 +113,7 @@ const HouseFormImages: React.FC<HouseFormImagesProps> = ({
                         src={mainImageUrl}
                         alt={'House main image'}
                         height={200}
+                        width={400}
                     />
                 )}
             </MainImageContainer>
