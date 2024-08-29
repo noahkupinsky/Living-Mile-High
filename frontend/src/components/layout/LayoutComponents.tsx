@@ -30,4 +30,4 @@ export const MaxWidthEnforcer = styled(YStack, {
 })
 
 export const HeaderFooterHorizontalLine = () =>
-    (<HorizontalLine width={'100%'} height={'4vh'} color={'$lightGray'} />);
+    (<HorizontalLine width={'100%'} height={'9vh'} color={'$lightBg'} />);

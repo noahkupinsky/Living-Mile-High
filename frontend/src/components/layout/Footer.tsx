@@ -7,8 +7,8 @@ import { HeaderFooterHorizontalLine } from './LayoutComponents';
 import useFadeIn from '@/utils/fadeIn';
 import { useSizing } from '@/contexts/SizingContext';
 
-const MAX_FONT_SIZE = 15;
-const FONT_PERCENTAGE = 0.03;
+const MAX_FONT_SIZE = 13;
+const FONT_PERCENTAGE = 0.02;
 
 const FooterContainer = styled(YStack, {
     width: '100%',
@@ -22,12 +22,13 @@ const FooterTextContainer = styled(XStack, {
     width: '100%',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    paddingLeft: '5%'
+    paddingLeft: '4%'
 })
 const FooterText = styled(Text, {
     fontFamily: '$caps',
     letterSpacing: '$2',
-    color: '$darkGray',
+    color: '$lightGray',
+    fontWeight: 600,
 });
 
 export default function Footer() {

@@ -42,7 +42,7 @@ const Pages: { [key: string]: PageConfig } = {
     SOLD: {
         name: 'Real Estate Sales',
         path: '/sold',
-        isAdmin: false,
+        isAdmin: true,
         queries: [{
             isForSale: false
         }],

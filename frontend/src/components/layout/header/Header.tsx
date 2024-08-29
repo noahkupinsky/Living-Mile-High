@@ -231,7 +231,6 @@ const Header = () => {
                             />)}
                         </XStack>
                         <Instagram
-                            transform={'translateY(-0.2rem)'}
                             paddingLeft={15}
                             size={INSTAGRAM_SIZE}
                         />

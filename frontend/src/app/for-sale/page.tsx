@@ -16,7 +16,7 @@ const ColumnContainer = styled(View, {
 });
 
 const WIDTH_PERCENTAGE = 0.9;
-const HEIGHT_PERCENTAGE = 0.9;
+const HEIGHT_PERCENTAGE = 0.85;
 
 const ForSaleComponent = () => {
     const houses = useHouseQuerySort(Pages.FOR_SALE);

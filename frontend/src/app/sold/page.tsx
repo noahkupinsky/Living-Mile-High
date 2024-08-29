@@ -6,6 +6,7 @@ import SiteDataLoader from "@/components/layout/SiteDataLoader";
 import SimpleColumnDisplay from "@/components/houses/SimpleColumnDisplay";
 import { HouseQuerySortProvider, useHouseQuerySort } from "@/providers/houseQuerySortProvider";
 import Pages from "@/config/pageConfig";
+import ProtectedRoute from "@/components/layout/ProtectedRoute";
 
 
 const SoldComponent: React.FC = () => {
@@ -17,11 +18,13 @@ const SoldComponent: React.FC = () => {
 };
 
 const SoldPage: React.FC = () => (
-    <SiteDataLoader>
-        <HouseQuerySortProvider>
-            <SoldComponent />
-        </HouseQuerySortProvider>
-    </SiteDataLoader>
+    <ProtectedRoute>
+        <SiteDataLoader>
+            <HouseQuerySortProvider>
+                <SoldComponent />
+            </HouseQuerySortProvider>
+        </SiteDataLoader>
+    </ProtectedRoute>
 );
 
 export default SoldPage;

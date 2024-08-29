@@ -10,8 +10,9 @@ const StyledTabContainer = styled(XStack, {
 
 const StyledTabText = styled(Text, {
     fontFamily: '$caps',
-    fontSize: '$2',
-    letterSpacing: '$2',
+    fontSize: 16,
+    fontWeight: 700,
+    letterSpacing: 1,
 });
 
 type NavTabComponentProps = {
@@ -45,7 +46,7 @@ const NavTabComponent: React.FC<NavTabComponentProps> = ({ tab, onPress, setHove
             {...props}
         >
             <StyledTabText color={color} style={{ transition: 'color 0.3s ease' }}>
-                {tab.name.toLocaleUpperCase()}
+                {tab.name}
             </StyledTabText>
         </StyledTabContainer>
     );
