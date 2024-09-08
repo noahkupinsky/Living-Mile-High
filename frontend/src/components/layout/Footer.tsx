@@ -25,7 +25,7 @@ const FooterTextContainer = styled(XStack, {
     paddingLeft: '4%'
 })
 const FooterText = styled(Text, {
-    fontFamily: '$caps',
+    fontFamily: '$sc',
     letterSpacing: '$2',
     color: '$lightGray',
     fontWeight: 600,

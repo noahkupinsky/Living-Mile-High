@@ -34,7 +34,7 @@ export const SizingProvider = ({ children }: { children: React.ReactNode }) => {
             const headerHeight = headerRef.current.offsetHeight;
             const footerHeight = footerRef.current.offsetHeight;
             const smallerDimension = Math.min(window.innerWidth, window.innerHeight);
-            const windowHeight = Math.floor(smallerDimension * (100 - 2 * (INNER_PADDING + OUTER_BORDER)) / 100);
+            const windowHeight = Math.floor(window.innerHeight - smallerDimension * 0.02 * (INNER_PADDING + OUTER_BORDER));
             effectiveBodyHeight = windowHeight - headerHeight - footerHeight;
         }
 

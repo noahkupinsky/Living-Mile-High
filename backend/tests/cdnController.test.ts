@@ -184,7 +184,8 @@ describe('pruning assets', () => {
                 lotSquareFeet: 3000,
                 bedrooms: 3,
                 bathrooms: 2,
-                garageSpaces: 2
+                garageSpaces: 2,
+                garageSquareFeet: 500
             }
         };
         await houseService.upsertHouse(mockHouse);

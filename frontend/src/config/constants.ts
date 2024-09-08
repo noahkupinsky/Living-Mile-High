@@ -21,6 +21,7 @@ export const STAT_TEMPLATES: [HouseStatKeys, string][] = [
     ["bedrooms", "$ bedrooms"],
     ["bathrooms", "$ bathrooms"],
     ["garageSpaces", "$ garage spaces"],
+    ["garageSquareFeet", "$ ft² garage"]
 ];
 
 // cheat code type beat so that you don't have to change the url manually

@@ -24,7 +24,8 @@ describe('HouseService get and save', () => {
                 lotSquareFeet: 3000,
                 bedrooms: 3,
                 bathrooms: 2,
-                garageSpaces: 2
+                garageSpaces: 2,
+                garageSquareFeet: 500
             }
         };
         const house = new HouseModel(mockHouseData);
@@ -49,7 +50,8 @@ describe('HouseService get and save', () => {
                 lotSquareFeet: 3000,
                 bedrooms: 3,
                 bathrooms: 2,
-                garageSpaces: 2
+                garageSpaces: 2,
+                garageSquareFeet: 500
             }
         };
 
@@ -73,7 +75,8 @@ describe('HouseService get and save', () => {
                 lotSquareFeet: 3000,
                 bedrooms: 3,
                 bathrooms: 2,
-                garageSpaces: 2
+                garageSpaces: 2,
+                garageSquareFeet: 500
             }
         };
         await houseService.upsertHouse(mockHouse);
@@ -109,6 +112,7 @@ describe('Other HouseService Methods', () => {
                     bedrooms: 3,
                     bathrooms: 2,
                     garageSpaces: 2,
+                    garageSquareFeet: 500
                 }
             },
             {
@@ -125,6 +129,7 @@ describe('Other HouseService Methods', () => {
                     bedrooms: 2,
                     bathrooms: 1,
                     garageSpaces: 1,
+                    garageSquareFeet: 500
                 }
             }
         ]);

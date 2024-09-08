@@ -37,33 +37,6 @@ export const garetFont = createFont({
     },
 });
 
-export const coutureFont = createFont({
-    family: 'Couture',
-    size: {
-        1: 12,
-        2: 14,
-        3: 16,
-        4: 18,
-        5: 20,
-        6: 24,
-        7: 28,
-        8: 32,
-        9: 36,
-    },
-    lineHeight: {
-        1: 1.2,
-        2: 1.5,
-        3: 1.8,
-    },
-    letterSpacing: {
-        1: 1,
-        2: 1.5,
-        3: 2.5,
-        4: 3.5,
-        5: 5,
-    },
-})
-
 export const ysabeauSCFont = createFont({
     family: 'YsabeauSC',
     size: {
@@ -94,8 +67,6 @@ const appConfig: any = createTamagui({
     tokens,
     fonts: {
         ...config.fonts,
-        //caps: coutureFont,
-        caps: ysabeauSCFont,
         form: garetFont,
         sc: ysabeauSCFont
     }

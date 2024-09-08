@@ -27727,7 +27727,6 @@ var require_cjs21 = __commonJS({
 // src/config/tamagui.config.ts
 var tamagui_config_exports = {};
 __export(tamagui_config_exports, {
-  coutureFont: () => coutureFont,
   default: () => tamagui_config_default,
   garetFont: () => garetFont,
   tokens: () => tokens2,
@@ -44567,10 +44566,10 @@ var import_core60 = require("@tamagui/core");
 var tokens2 = (0, import_core60.createTokens)({
   ...config.tokens,
   color: {
-    lightGray: "#b5b5b5",
-    darkGray: "#6b6b6b",
+    lightGray: "#d0d0d0",
+    darkGray: "#666666",
     whiteBg: "#f9f9f9",
-    lightBg: "#eeeeee",
+    lightBg: "#e3e3e3",
     black: "#000000"
   }
 });
@@ -44596,32 +44595,6 @@ var garetFont = (0, import_core60.createFont)({
     1: 0,
     2: 0.5,
     3: 1
-  }
-});
-var coutureFont = (0, import_core60.createFont)({
-  family: "Couture",
-  size: {
-    1: 12,
-    2: 14,
-    3: 16,
-    4: 18,
-    5: 20,
-    6: 24,
-    7: 28,
-    8: 32,
-    9: 36
-  },
-  lineHeight: {
-    1: 1.2,
-    2: 1.5,
-    3: 1.8
-  },
-  letterSpacing: {
-    1: 1,
-    2: 1.5,
-    3: 2.5,
-    4: 3.5,
-    5: 5
   }
 });
 var ysabeauSCFont = (0, import_core60.createFont)({
@@ -44653,7 +44626,6 @@ var appConfig = createTamagui({
   tokens: tokens2,
   fonts: {
     ...config.fonts,
-    caps: coutureFont,
     form: garetFont,
     sc: ysabeauSCFont
   }
@@ -44661,7 +44633,6 @@ var appConfig = createTamagui({
 var tamagui_config_default = appConfig;
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
-  coutureFont,
   garetFont,
   tokens,
   ysabeauSCFont

@@ -49,7 +49,7 @@ const HeaderRightContainer = styled(XStack, {
 })
 
 const HeaderText = styled(Text, {
-    fontFamily: '$caps',
+    fontFamily: '$sc',
     color: '$darkGray',
     position: 'absolute',
     top: '50%',
@@ -70,7 +70,7 @@ const SquareLogo: React.FC<any> = ({ size, ...props }) => {
         >
             <Image
                 source={{
-                    uri: "/company-logo.png",
+                    uri: "/company-logo.jpg",
                     width: size,
                     height: size
                 }}

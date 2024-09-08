@@ -45,6 +45,7 @@ const HOUSE_STAT_LABELS: Record<keyof HouseStats, string> = {
     bedrooms: 'Bedrooms',
     bathrooms: 'Bathrooms',
     garageSpaces: 'Garage Spaces',
+    garageSquareFeet: 'Garage Square Feet',
 }
 
 const HouseFormStats: React.FC<HouseFormStatsProps> = ({ formData, setFormData }) => {

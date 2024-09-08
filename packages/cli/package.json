@@ -16,7 +16,7 @@
     "dotenv": "^16.4.5",
     "formdata-node": "^6.0.3",
     "http-cookie-agent": "^6.0.5",
-    "living-mile-high-lib": "^1.0.83",
+    "living-mile-high-lib": "^1.0.84",
     "mongoose": "^8.4.4",
     "path": "^0.12.7",
     "shelljs": "^0.8.5",

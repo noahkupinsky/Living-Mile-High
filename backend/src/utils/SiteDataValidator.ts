@@ -68,7 +68,7 @@ function validateHouseStats(stats: any): void {
 
     const optionalProperties = [
         'houseSquareFeet', 'lotSquareFeet', 'bedrooms',
-        'bathrooms', 'garageSpaces'
+        'bathrooms', 'garageSpaces', 'garageSquareFeet'
     ];
 
     for (const prop of optionalProperties) {

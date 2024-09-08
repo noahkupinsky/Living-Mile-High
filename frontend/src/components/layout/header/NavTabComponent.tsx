@@ -9,7 +9,7 @@ const StyledTabContainer = styled(XStack, {
 });
 
 const StyledTabText = styled(Text, {
-    fontFamily: '$caps',
+    fontFamily: '$sc',
     fontSize: 16,
     fontWeight: 700,
     letterSpacing: 1,

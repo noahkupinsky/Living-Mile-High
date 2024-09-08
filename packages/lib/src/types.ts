@@ -21,6 +21,7 @@ export type HouseStats = {
     bedrooms?: number,
     bathrooms?: number,
     garageSpaces?: number,
+    garageSquareFeet?: number,
 }
 
 export type HouseBoolean = 'isDeveloped' | 'isForSale' | 'isSelectedWork'

@@ -13,7 +13,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <title>Living Mile High</title>
         <meta name="description" content="LMH Development website" />
+
+
         <link rel="icon" href="/favicon.ico" />
+
+        {/* Apple Touch Icon */}
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+        {/* Android Chrome Icons */}
+        <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png" />
+        <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png" />
+
+        {/* Web App Manifest */}
+        <link rel="manifest" href="/site.webmanifest" />
         <PublicEnvScript />
       </head>
       <body>

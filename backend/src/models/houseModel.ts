@@ -19,6 +19,7 @@ const HouseSchema = new Schema<HouseDocument>({
         bedrooms: { type: Number },
         bathrooms: { type: Number },
         garageSpaces: { type: Number },
+        garageSquareFeet: { type: Number },
     }
 }, {
     timestamps: true

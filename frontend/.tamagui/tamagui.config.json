@@ -34625,42 +34625,6 @@
           "16": -4
         }
       },
-      "caps": {
-        "family": "Couture",
-        "size": {
-          "1": 12,
-          "2": 14,
-          "3": 16,
-          "4": 18,
-          "5": 20,
-          "6": 24,
-          "7": 28,
-          "8": 32,
-          "9": 36
-        },
-        "lineHeight": {
-          "1": 1.2,
-          "2": 1.5,
-          "3": 1.8,
-          "4": 1.8,
-          "5": 1.8,
-          "6": 1.8,
-          "7": 1.8,
-          "8": 1.8,
-          "9": 1.8
-        },
-        "letterSpacing": {
-          "1": 1,
-          "2": 1.5,
-          "3": 2.5,
-          "4": 3.5,
-          "5": 5,
-          "6": 5,
-          "7": 5,
-          "8": 5,
-          "9": 5
-        }
-      },
       "form": {
         "family": "Garet",
         "size": {
@@ -45183,14 +45147,14 @@
           "isVar": true,
           "key": "$lightGray",
           "name": "color-1",
-          "val": "#b5b5b5",
+          "val": "#d0d0d0",
           "variable": "var(--color-1)"
         },
         "darkGray": {
           "isVar": true,
           "key": "$darkGray",
           "name": "color-2",
-          "val": "#6b6b6b",
+          "val": "#666666",
           "variable": "var(--color-2)"
         },
         "whiteBg": {
@@ -45204,7 +45168,7 @@
           "isVar": true,
           "key": "$lightBg",
           "name": "color-4",
-          "val": "#eeeeee",
+          "val": "#e3e3e3",
           "variable": "var(--color-4)"
         },
         "black": {
@@ -46077,14 +46041,14 @@
         "isVar": true,
         "key": "$lightGray",
         "name": "color-1",
-        "val": "#b5b5b5",
+        "val": "#d0d0d0",
         "variable": "var(--color-1)"
       },
       "$color.darkGray": {
         "isVar": true,
         "key": "$darkGray",
         "name": "color-2",
-        "val": "#6b6b6b",
+        "val": "#666666",
         "variable": "var(--color-2)"
       },
       "$color.whiteBg": {
@@ -46098,7 +46062,7 @@
         "isVar": true,
         "key": "$lightBg",
         "name": "color-4",
-        "val": "#eeeeee",
+        "val": "#e3e3e3",
         "variable": "var(--color-4)"
       },
       "$color.black": {

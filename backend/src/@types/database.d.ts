@@ -18,6 +18,7 @@ export type HouseRecord = {
         bedrooms?: number;
         bathrooms?: number;
         garageSpaces?: number;
+        garageSquareFeet?: number;
     };
     createdAt: Date;
     updatedAt: Date;
