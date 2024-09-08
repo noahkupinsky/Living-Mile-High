@@ -6,16 +6,19 @@ import Loader from "./Loader";
 
 const BodyContainer = styled(YStack, {
     width: '100%',
-    height: '100%',
-    flex: 1,
     alignItems: 'center',
 })
 
 const Body: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const { bodyRef, sizingLoading: bodyLoading } = useSizing();
+    const { bodyRef, sizingLoading, bodyHeight } = useSizing();
+
+
     return (
-        <BodyContainer ref={bodyRef}>
-            <Loader isLoading={bodyLoading}>
+        <BodyContainer
+            ref={bodyRef}
+            minHeight={bodyHeight}
+        >
+            <Loader isLoading={sizingLoading}>
                 {children}
             </Loader>
         </BodyContainer>

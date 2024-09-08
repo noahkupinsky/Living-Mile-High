@@ -23,11 +23,9 @@ export const SizingProvider = ({ children }: { children: React.ReactNode }) => {
     const [bodyHeight, setBodyHeight] = useState(0);
 
     const handleResize = useCallback(() => {
-        let actualBodyHeight: number | null = null;
         let effectiveBodyHeight: number | null = null;
         if (bodyRef.current) {
             setBodyWidth(bodyRef.current.offsetWidth);
-            actualBodyHeight = bodyRef.current.offsetHeight;
         }
 
         if (headerRef.current && footerRef.current && window) {
@@ -35,14 +33,19 @@ export const SizingProvider = ({ children }: { children: React.ReactNode }) => {
             const footerHeight = footerRef.current.offsetHeight;
             const smallerDimension = Math.min(window.innerWidth, window.innerHeight);
             const windowHeight = Math.floor(window.innerHeight - smallerDimension * 0.02 * (INNER_PADDING + OUTER_BORDER));
-            effectiveBodyHeight = windowHeight - headerHeight - footerHeight;
+
+            // Footer removed from effective height calculation 
+            // because it is intended to be seen AFTER scrolling down
+            effectiveBodyHeight = windowHeight - headerHeight; // - footerHeight;
+
+            setBodyHeight(effectiveBodyHeight);
         }
 
-        if (actualBodyHeight && effectiveBodyHeight) {
-            setBodyHeight(Math.min(actualBodyHeight, effectiveBodyHeight));
+
+        if (bodyWidth > 0 && bodyHeight > 0) {
             setSizingLoading(false);
         }
-    }, [bodyRef]);
+    }, [bodyRef, headerRef, footerRef, bodyWidth, bodyHeight]);
 
     useEffect(() => {
         const resizeObserver = new ResizeObserver(handleResize);

@@ -13,7 +13,7 @@ import { FADE_SHORT } from '@/config/constants';
 import { useSizing } from '@/contexts/SizingContext';
 import { minV } from '@/utils/misc';
 
-const LOGO_SIZE = minV(12);
+const LOGO_SIZE = minV(11);
 const HORIZONTAL_PADDING = '3vw';
 const TITLE_PERCENTAGE = 0.03;
 const SPACING_PERCENTAGE = 0.3;
